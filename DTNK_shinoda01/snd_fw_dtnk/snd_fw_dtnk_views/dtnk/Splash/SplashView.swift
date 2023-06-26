@@ -79,9 +79,10 @@ struct SplashView: View {
             // 匿名認証が成功した場合、ユーザー名の初期値を設定
             if let existingUser = userListViewModel.getUserByID(currentUserID: user.uid) {
                 self.userName = existingUser.name
-                print(userName)
             } else {
                 self.userName = "ゲスト"
+                self.userName = "icon-bot1"
+
                 // 新規登録の場合、ユーザー情報を保存
                 saveUserData(userID: user.uid)
             }
