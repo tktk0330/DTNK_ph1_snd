@@ -8,8 +8,8 @@ struct AccountView: View {
     @State private var isEditingName: Bool = false
     @StateObject private var userListViewModel = UserListViewModel()
     
-    let myNickname = appState.account.loginUser.name
-    let myIconUrl = appState.account.loginUser.iconURL
+    @State var myNickname = appState.account.loginUser.name
+    @State var myIconUrl = appState.account.loginUser.iconURL
 
     var body: some View {
         HStack {
@@ -33,7 +33,7 @@ struct AccountView: View {
         }
         .environmentObject(userListViewModel)
         .sheet(isPresented: $isEditingName) {
-            EditUserNameView(userName: $userName, isPresented: $isEditingName)
+            EditUserNameView(userName: $myNickname, isPresented: $isEditingName)
                 .environmentObject(userListViewModel)
         }
     }
@@ -110,6 +110,8 @@ extension UserListViewModel {
             if let error = error {
                 print("ユーザー名の変更に失敗しました: \(error.localizedDescription)")
             } else {
+                let User = self.getUserByID(currentUserID: userID)
+                appState.account.loginUser = User
                 print("ユーザー名を変更しました")
             }
         }

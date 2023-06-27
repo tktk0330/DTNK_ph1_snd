@@ -81,7 +81,9 @@ struct SplashView: View {
                 self.userName = existingUser.name
             } else {
                 self.userName = "ゲスト"
-                self.userName = "icon-bot1"
+                self.iconURL = "icon-bot1"
+                let User = userListViewModel.getUserByID(currentUserID: user.uid)
+                appState.account.loginUser = User
 
                 // 新規登録の場合、ユーザー情報を保存
                 saveUserData(userID: user.uid)
