@@ -56,6 +56,7 @@ struct SplashView: View {
                 // ユーザーが既にログインしている場合、ユーザー情報を表示
                 let User = userListViewModel.getUserByID(currentUserID: currentUser.uid)
                 appState.account.loginUser = User
+
                 } else {
                 // ユーザーがログインしていない場合、匿名認証を実行
                 authenticateAnonymously()
@@ -81,6 +82,7 @@ struct SplashView: View {
             } else {
                 self.userName = "ゲスト"
                 self.userName = "icon-bot1"
+
                 // 新規登録の場合、ユーザー情報を保存
                 saveUserData(userID: user.uid)
             }

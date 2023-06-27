@@ -20,6 +20,7 @@ struct GameRuleView: View {
                         .font(.system(size: 20))
                         .foregroundColor(Color.white)
                         .fontWeight(.bold)
+                    Text("ここにどてんこのルールを記載してくだい。他のゲームのルールを参考にしながらリスト形式で")
                     
                     
                     Button(action: {
