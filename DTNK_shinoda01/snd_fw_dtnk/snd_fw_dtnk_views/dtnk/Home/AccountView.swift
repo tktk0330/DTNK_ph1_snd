@@ -1,16 +1,14 @@
+
+
+
 import SwiftUI
 import Firebase
 import FirebaseDatabase
 
 struct AccountView: View {
-    @State private var userName: String = ""
-    @State private var iconURL: String = ""
-    @State private var isEditingName: Bool = false
-    @StateObject private var userListViewModel = UserListViewModel()
-    
-    @State var myNickname = appState.account.loginUser.name
+    @State var myNickname = appState.account.loginUser.editedName
     @State var myIconUrl = appState.account.loginUser.iconURL
-
+    
     var body: some View {
         HStack {
             
@@ -19,100 +17,48 @@ struct AccountView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
-
-            Text(myNickname)
+            
+            TextField("名前", text: $myNickname)
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .bold()
                 .padding()
                 .frame(width: 120, height: 50)
-                .onTapGesture {
-                    isEditingName = true
-                }
-        }
-        .environmentObject(userListViewModel)
-        .sheet(isPresented: $isEditingName) {
-            EditUserNameView(userName: $myNickname, isPresented: $isEditingName)
-                .environmentObject(userListViewModel)
-        }
-    }
-}
-
-class UserListViewModel: ObservableObject {
-    @Published var userList: [User] = []
-
-    private var databaseHandle: DatabaseHandle!
-    private var ref: DatabaseReference = Database.database().reference().child("users")
-
-    init() {
-        observeUserList()
-    }
-
-    private func observeUserList() {
-        databaseHandle = ref.observe(.value) { [weak self] snapshot in
-            var users: [User] = []
-            for child in snapshot.children {
-                if let snapshot = child as? DataSnapshot,
-                   let user = User(snapshot: snapshot) {
-                    users.append(user)
-                }
-            }
-            self?.userList = users
-        }
-    }
-    
-    func getUserByID(currentUserID: String) -> User? {
-        return userList.first { $0.userID == currentUserID }
-    }
-}
-
-struct EditUserNameView: View {
-    @EnvironmentObject var userListViewModel: UserListViewModel
-    @Binding var userName: String
-    @Binding var isPresented: Bool
-
-    var body: some View {
-        VStack {
-            TextField("新しいユーザー名", text: $userName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-
+            
             Button(action: {
-                saveUserName()
+                guard let loginUser = appState.account.loginUser else { return }
+                // 編集された名前とアイコンのURLを保存
+                saveUserData(userID: loginUser.userID, name: loginUser.editedName, iconURL: loginUser.editedIconURL)
             }) {
                 Text("保存")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
             }
+            
         }
-        .padding()
     }
-
-    private func saveUserName() {
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            print("ユーザーIDが取得できません")
-            return
-        }
-
-        userListViewModel.saveUserName(userID: currentUserID, name: userName)
-        isPresented = false
-    }
-}
-
-extension UserListViewModel {
-    func saveUserName(userID: String, name: String) {
-        guard let user = userList.first(where: { $0.userID == userID }) else {
-            print("ユーザーが見つかりません")
-            return
-        }
-
-        let ref = Database.database().reference().child("users").child(user.userID)
-        ref.updateChildValues(["name": name]) { (error, _) in
+    /**
+     編集保存
+     */
+    private func saveUserData(userID: String, name: String, iconURL: String) {
+        let ref = Database.database().reference().child("users").child(userID)
+        
+        let userData: [String: Any] = [
+            "name": name,
+            "iconURL": iconURL
+        ]
+        
+        ref.setValue(userData) { (error, _) in
             if let error = error {
-                print("ユーザー名の変更に失敗しました: \(error.localizedDescription)")
+                print("ユーザーデータの保存に失敗しました: \(error.localizedDescription)")
             } else {
-                let User = self.getUserByID(currentUserID: userID)
-                appState.account.loginUser = User
-                print("ユーザー名を変更しました")
+                print("ユーザーデータをFirebase Realtime Databaseに保存しました")
+                // 編集された名前とアイコンのURLを反映
+                appState.account.loginUser?.name = name
+                appState.account.loginUser?.iconURL = iconURL
             }
         }
     }

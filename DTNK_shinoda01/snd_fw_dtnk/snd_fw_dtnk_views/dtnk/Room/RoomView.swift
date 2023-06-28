@@ -1,15 +1,14 @@
-//
-//  RoomView.swift
-//  Dtnk-ver002
-//
-//  Created by Takuma Shinoda on 2023/06/23.
-//
+/**
+ ルーム
+ */
+
+
 
 import SwiftUI
 import Firebase
 
 struct RoomView: View {
-    @State private var user: String = "user"
+    @State private var user: String = appState.account.loginUser.name
     @State private var text: String = ""
     @State private var searchtext: String = ""
     @State private var roomData = Room(roomID: "", roomName: "", creatorName: "", participants: [])

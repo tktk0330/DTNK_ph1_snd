@@ -8,19 +8,16 @@ import FirebaseDatabase
 
 struct User {
     let userID: String
-    let name: String
-    let iconURL: String
-
-    init?(snapshot: DataSnapshot) {
-        guard let dict = snapshot.value as? [String: Any],
-              let name = dict["name"] as? String,
-              let iconURL = dict["iconURL"] as? String
-        else {
-            return nil
-        }
-
-        self.userID = snapshot.key
+    var name: String
+    var iconURL: String
+    var editedName: String // 編集用のプロパティ
+    var editedIconURL: String // 編集用のプロパティ
+    
+    init(userID: String, name: String, iconURL: String) {
+        self.userID = userID
         self.name = name
         self.iconURL = iconURL
+        self.editedName = name // 初期値は現在の名前
+        self.editedIconURL = iconURL // 初期値は現在のアイコンのURL
     }
 }
