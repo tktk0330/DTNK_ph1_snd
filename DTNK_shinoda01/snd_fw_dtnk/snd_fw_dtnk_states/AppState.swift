@@ -17,7 +17,8 @@ final class AppState {
     var home: HomeState
     // アカウント
     var account: AccountState
-    
+    // ルーム
+    var room: RoomState
     // マッチング
     var matching: MatchingState!
     
@@ -33,6 +34,7 @@ final class AppState {
         splash: SplashState?,
         home: HomeState,
         account: AccountState,
+        room: RoomState,
         matching: MatchingState?,
         gamesystem: GameSystemState?,
         gameUiState: GameUiState?,
@@ -43,6 +45,7 @@ final class AppState {
         self.splash = splash
         self.home = home
         self.account = account
+        self.room = room
         self.matching = matching
         self.gamesystem = gamesystem
         self.gameUiState = gameUiState
@@ -54,6 +57,7 @@ final class AppState {
         self.splash = SplashState()
         self.home = HomeState()
         self.account = AccountState()
+        self.room = RoomState()
         self.matching = nil
         self.gamesystem = nil
         self.gameUiState = GameUiState()

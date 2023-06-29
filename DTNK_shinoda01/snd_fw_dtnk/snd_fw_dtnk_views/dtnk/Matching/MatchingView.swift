@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct MatchingView: View {
+    
     @StateObject var matching: MatchingState = appState.matching
+    @StateObject var room: RoomState = appState.room
     
     //プレイヤー
     func item(nickname: String, iconUrl: String) -> some View {
@@ -75,19 +77,21 @@ struct MatchingView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.25)
                 
                 VStack(spacing: 20) {
-                    if !matching.players.isEmpty {
-                        ForEach(matching.players.indices, id: \.self) { index in
-                            item(nickname: matching.players[index].name, iconUrl: matching.players[index].icon_url)
+                    ForEach(0..<4) { index in
+                        if room.roomData.participants.count > index {
+                            item(nickname: room.roomData.participants[index], iconUrl: "")
+                        } else {
+                            placeHolder()
                         }
-                    } else {
-                        placeHolder()
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
 
             }
             .onAppear {
-                MatchingController().onRequest()
+                room.updateParticipants()
+//                MatchingController().onRequest()
+                MatchingController().vsFriendsMatching()
             }
         }
     }
