@@ -12,15 +12,26 @@ class FirebaseManager {
     static let shared = FirebaseManager()
     private let database = Database.database()
     
-    func createRoom(roomName: String, creatorName: String, completion: @escaping (String?) -> Void) {
+    /**
+     ルーム作成
+     */
+    func createRoom(roomName: String, creatorName: Player, completion: @escaping (String?) -> Void) {
+        
+        // Player →　JSON
+        let myAccountJSON: [String: Any] = [
+            "id": creatorName.id,
+            "side": creatorName.side,
+            "name": creatorName.name,
+            "icon_url": creatorName.icon_url
+        ]
+        
         let roomID = database.reference().child("rooms").childByAutoId().key ?? ""
         let roomData: [String: Any] = [
             "roomID": roomID,
             "roomName": roomName,
-            "creatorName": creatorName,
-            "participants": [creatorName]
+            "creatorName": creatorName.name,
+            "participants": [myAccountJSON]
         ]
-        
         database.reference().child("rooms").child(roomID).setValue(roomData) { (error, _) in
             if let error = error {
                 print("Failed to create room: \(error.localizedDescription)")
@@ -31,32 +42,50 @@ class FirebaseManager {
         }
     }
     
+    /**
+     検索
+     */
     func searchRoom(withRoomName roomName: String, completion: @escaping (Room?) -> Void) {
         let roomQuery = database.reference().child("rooms").queryOrdered(byChild: "roomName").queryEqual(toValue: roomName)
         
         roomQuery.observeSingleEvent(of: .value) { (snapshot) in
-            guard let roomData = snapshot.children.allObjects.first as? DataSnapshot,
-                  let roomDict = roomData.value as? [String: Any],
-                  let roomID = roomDict["roomID"] as? String,
-                  let roomName = roomDict["roomName"] as? String,
-                  let creatorName = roomDict["creatorName"] as? String,
-                  let participants = roomDict["participants"] as? [String]
+            guard let roomDict = snapshot.value as? [String: [String: Any]],
+                  let roomData = roomDict.values.first,
+                  let roomID = roomData["roomID"] as? String,
+                  let roomName = roomData["roomName"] as? String,
+                  let creatorName = roomData["creatorName"] as? String,
+                  let participantsDict = roomData["participants"] as? [[String: Any]]
             else {
                 completion(nil)
                 return
             }
-            
+
+            var participants: [Player] = []
+            for participantData in participantsDict {
+                if let id = participantData["id"] as? String,
+                   let side = participantData["side"] as? Int,
+                   let name = participantData["name"] as? String,
+                   let icon_url = participantData["icon_url"] as? String {
+                    let participant = Player(id: id, side: side, name: name, icon_url: icon_url)
+                    participants.append(participant)
+                }
+            }
+
             let room = Room(roomID: roomID, roomName: roomName, creatorName: creatorName, participants: participants)
+            print(room)
             completion(room)
         }
     }
-    
-    func joinRoom(room: Room, participantName: String, completion: @escaping (Bool) -> Void) {
+
+    /**
+     参加
+     */
+    func joinRoom(room: Room, participantName: Player, completion: @escaping (Bool) -> Void) {
         let participantData = ["participantName": participantName]
         
         let participantsRef = database.reference().child("rooms").child(room.roomID).child("participants")
         participantsRef.observeSingleEvent(of: .value) { (snapshot) in
-            if var participants = snapshot.value as? [String] {
+            if var participants = snapshot.value as? [Player] {
                 participants.append(participantName)
                 participantsRef.setValue(participants) { (error, _) in
                     if let error = error {
@@ -72,104 +101,3 @@ class FirebaseManager {
         }
     }
 }
-
-//class DatabaseMng {
-//
-//    static let shared = FirebaseManager()
-//    private let database = Database.database()
-//    let databaseRef = Database.database().reference()
-//
-//    //------------------------------------------------------------------------------------
-//    // Realtimedatabase
-//    //------------------------------------------------------------------------------------
-//
-//    /**
-//
-//     */
-//    func createRoom(roomName: String, creatorName: String, completion: @escaping (String?) -> Void) {
-//        let roomID = database.reference().child("rooms").childByAutoId().key ?? ""
-//        let roomData: [String: Any] = [
-//            "roomID": roomID,
-//            "roomName": roomName,
-//            "creatorName": creatorName,
-//            "participants": [creatorName]
-//        ]
-//
-//        database.reference().child("rooms").child(roomID).setValue(roomData) { (error, _) in
-//            if let error = error {
-//                print("Failed to create room: \(error.localizedDescription)")
-//                completion(nil)
-//            } else {
-//                completion(roomID)
-//            }
-//        }
-//    }
-//
-//    /**
-//
-//     */
-//    func searchRoom(withRoomName roomName: String, completion: @escaping (Room?) -> Void) {
-//        let roomQuery = database.reference().child("rooms").queryOrdered(byChild: "roomName").queryEqual(toValue: roomName)
-//
-//        roomQuery.observeSingleEvent(of: .value) { (snapshot) in
-//            guard let roomData = snapshot.children.allObjects.first as? DataSnapshot,
-//                  let roomDict = roomData.value as? [String: Any],
-//                  let roomID = roomDict["roomID"] as? String,
-//                  let roomName = roomDict["roomName"] as? String,
-//                  let creatorName = roomDict["creatorName"] as? String,
-//                  let participants = roomDict["participants"] as? [String]
-//            else {
-//                completion(nil)
-//                return
-//            }
-//
-//            let room = Room(roomID: roomID, roomName: roomName, creatorName: creatorName, participants: participants)
-//            completion(room)
-//        }
-//    }
-//
-//    /**
-//
-//     */
-//    func joinRoom(room: Room, participantName: String, completion: @escaping (Bool) -> Void) {
-////        let participantData = ["participantName": participantName]
-//
-//        let participantsRef = database.reference().child("rooms").child(room.roomID).child("participants")
-//        participantsRef.observeSingleEvent(of: .value) { (snapshot) in
-//            if var participants = snapshot.value as? [String] {
-//                participants.append(participantName)
-//                participantsRef.setValue(participants) { (error, _) in
-//                    if let error = error {
-//                        print("Failed to join room: \(error.localizedDescription)")
-//                        completion(false)
-//                    } else {
-//                        completion(true)
-//                    }
-//                }
-//            } else {
-//                completion(false)
-//            }
-//        }
-//    }
-//
-//    /**
-//
-//     */
-//    func registAccount(accountData: accountData) {
-//        let userID = database.reference().child("accounts").childByAutoId().key ?? ""
-//
-//        databaseRef.child("accounts").child(userID).setValue(accountData)
-//
-//    }
-//
-//}
-//
-//
-//struct  accountData {
-//    let user_id: String
-//    let nickname: String
-//    let icon_url: String
-//}
-//
-//
-//

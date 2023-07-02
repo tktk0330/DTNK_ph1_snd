@@ -110,6 +110,7 @@
 		5DDB61DD2A4C802300EB03F7 /* JoinPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DC2A4C802300EB03F7 /* JoinPopView.swift */; };
 		5DDB61DF2A4CF6E700EB03F7 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */; };
 		5DDB61E12A4D32EF00EB03F7 /* RoomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */; };
+		5DDB61E32A511AD100EB03F7 /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E22A511AD100EB03F7 /* RoomModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,6 +214,7 @@
 		5DDB61DC2A4C802300EB03F7 /* JoinPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinPopView.swift; sourceTree = "<group>"; };
 		5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomState.swift; sourceTree = "<group>"; };
 		5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomController.swift; sourceTree = "<group>"; };
+		5DDB61E22A511AD100EB03F7 /* RoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -362,6 +364,7 @@
 				5D8FA2C12A4823C50079F260 /* HomeMode.swift */,
 				5D8FA2BD2A48239A0079F260 /* ImageName.swift */,
 				5D8FA2BF2A4823B50079F260 /* Player.swift */,
+				5DDB61E22A511AD100EB03F7 /* RoomModel.swift */,
 			);
 			path = snd_fw_dtnk_models;
 			sourceTree = "<group>";
@@ -729,6 +732,7 @@
 				5D8FA2D22A4824DD0079F260 /* IconView.swift in Sources */,
 				5D8FA2982A4820EC0079F260 /* ScoreContoroller.swift in Sources */,
 				5D8FA2472A4814AD0079F260 /* ContentView.swift in Sources */,
+				5DDB61E32A511AD100EB03F7 /* RoomModel.swift in Sources */,
 				5D8FA2452A4814AD0079F260 /* DTNK_shinoda01App.swift in Sources */,
 				5D8FA3142A48281F0079F260 /* PlayerView.swift in Sources */,
 				5D8FA3202A4828A60079F260 /* GameResultView.swift in Sources */,

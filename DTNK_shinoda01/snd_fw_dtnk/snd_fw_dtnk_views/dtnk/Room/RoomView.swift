@@ -85,16 +85,21 @@ struct RoomView: View {
             }
         }
     }
+    
+    /**
+     作成＋参加
+     */
     func onTapCreate() {
         if text.isEmpty {
             message = "Room name cannot be empty"
-            print("Room name cannot be empty")
             return
         }
-        
         let roomName = text
-        let creatorName = user
-        FirebaseManager.shared.createRoom(roomName: roomName, creatorName: creatorName) { roomID in
+        let user = appState.account.loginUser
+        // Player準備
+        let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
+
+        FirebaseManager.shared.createRoom(roomName: roomName, creatorName: myaccount) { roomID in
             if let roomID = roomID {
                 // ルーム作成成功
                 print("Room created with ID: \(roomID)")
@@ -107,10 +112,12 @@ struct RoomView: View {
         }
     }
     
+    /**
+     検索
+     */
     func onTapSearch() {
         if text.isEmpty {
             message = "Room name cannot be empty"
-            print("Room name cannot be empty")
             return
         }
         let roomName = text
@@ -118,11 +125,9 @@ struct RoomView: View {
             if let roomData = roomData {
                 room.roomData = roomData
                 print("Room found: \(roomData)")
-                // ルームが見つかった後の処理を書く
-                // 参加する
+                // 参加可否POPへ
                 RoomController().onOpenMenu()
             } else {
-                print("Room not found")
                 message = "Room not found"
             }
         }

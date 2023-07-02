@@ -76,22 +76,22 @@ struct MatchingView: View {
                     .padding(5)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.25)
                 
-                VStack(spacing: 20) {
-                    ForEach(0..<4) { index in
-                        if room.roomData.participants.count > index {
-                            item(nickname: room.roomData.participants[index], iconUrl: "")
-                        } else {
-                            placeHolder()
-                        }
-                    }
-                }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
+//                VStack(spacing: 20) {
+//                    ForEach(0..<4) { index in
+//                        if room.roomData.participants.count > index {
+//                            item(nickname: room.roomData.participants[index], iconUrl: "")
+//                        } else {
+//                            placeHolder()
+//                        }
+//                    }
+//                }
+//                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
 
             }
             .onAppear {
                 room.updateParticipants()
 //                MatchingController().onRequest()
-                MatchingController().vsFriendsMatching()
+//                MatchingController().vsFriendsMatching()
             }
         }
     }

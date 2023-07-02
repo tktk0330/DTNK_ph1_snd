@@ -5,11 +5,6 @@ import SwiftUI
 import Firebase
 import FirebaseDatabase
 
-enum RoomMode: Int {
-    case base = 0
-    case pop = 1
-}
-
 class RoomState: ObservableObject {
     
     static let shared = FirebaseManager()
@@ -19,11 +14,16 @@ class RoomState: ObservableObject {
     @Published var isListening = false // realtime
     @Published var error_message = ""
     
+    /**
+     参加
+     */
     func join(user: String) {
+        let info = appState.account.loginUser
+        let myaccount = Player(id: info!.userID, side: 1, name: info!.name, icon_url: info!.iconURL)
         let creatorName = user
         let room = roomData
         
-        FirebaseManager.shared.joinRoom(room: room, participantName: creatorName) { [self] success in
+        FirebaseManager.shared.joinRoom(room: room, participantName: myaccount) { [self] success in
             if success {
                 // 参加に成功した場合の処理
                 print("参加成功")
@@ -37,19 +37,6 @@ class RoomState: ObservableObject {
                 print("参加失敗")
             }
         }
-        listenToRoomChanges(roomID: room.roomID)
-    }
-    
-    func listenToRoomChanges(roomID: String) {
-        let roomRef = database.reference().child("rooms").child(roomID)
-        roomRef.observe(.value) { snapshot in
-            guard let roomDict = snapshot.value as? [String: Any],
-                  let participants = roomDict["participants"] as? [String] else {
-                return
-            }
-            self.roomData.participants = participants
-        }
-        isListening = true
     }
     
     func updateParticipants() {
@@ -64,24 +51,7 @@ class RoomState: ObservableObject {
                 return
             }
             // 参加者のリストを更新
-            appState.room.roomData.participants = participantsData
+//            appState.room.roomData.participants = participantsData
         }
     }
-
-    
-    
 }
-
-
-
-
-/**
- RoomModel
- */
-struct Room {
-    let roomID: String
-    let roomName: String
-    let creatorName: String
-    var participants: [String]
-}
-
