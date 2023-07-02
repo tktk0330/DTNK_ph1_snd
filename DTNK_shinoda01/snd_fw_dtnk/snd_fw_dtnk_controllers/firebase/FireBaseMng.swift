@@ -1,6 +1,5 @@
 /**
  FireBaseManager
- 
  */
 
 import SwiftUI
@@ -13,23 +12,29 @@ class FirebaseManager {
     private let database = Database.database()
     
     /**
+     Convert JSON
+     */
+    func playerJSON(player: Player) -> [String: Any] {
+        let PlayerJSON: [String: Any] = [
+            "id": player.id,
+            "side": player.side,
+            "name": player.name,
+            "icon_url": player.icon_url
+        ]
+        return PlayerJSON
+    }
+    
+    /**
      ルーム作成
      */
-    func createRoom(roomName: String, creatorName: Player, completion: @escaping (String?) -> Void) {
-        
-        // Player →　JSON
-        let myAccountJSON: [String: Any] = [
-            "id": creatorName.id,
-            "side": creatorName.side,
-            "name": creatorName.name,
-            "icon_url": creatorName.icon_url
-        ]
-        
+    func createRoom(roomName: String, creator: Player, completion: @escaping (String?) -> Void) {
+                
+        let myAccountJSON = playerJSON(player: creator)
         let roomID = database.reference().child("rooms").childByAutoId().key ?? ""
         let roomData: [String: Any] = [
             "roomID": roomID,
             "roomName": roomName,
-            "creatorName": creatorName.name,
+            "creatorName": creator.name,
             "participants": [myAccountJSON]
         ]
         database.reference().child("rooms").child(roomID).setValue(roomData) { (error, _) in
@@ -37,13 +42,13 @@ class FirebaseManager {
                 print("Failed to create room: \(error.localizedDescription)")
                 completion(nil)
             } else {
-                completion(roomID)
+                completion(roomName)
             }
         }
     }
     
     /**
-     検索
+     ルーム検索
      */
     func searchRoom(withRoomName roomName: String, completion: @escaping (Room?) -> Void) {
         let roomQuery = database.reference().child("rooms").queryOrdered(byChild: "roomName").queryEqual(toValue: roomName)
@@ -78,15 +83,21 @@ class FirebaseManager {
     }
 
     /**
-     参加
+     ルーム参加
      */
-    func joinRoom(room: Room, participantName: Player, completion: @escaping (Bool) -> Void) {
-        let participantData = ["participantName": participantName]
+    func joinRoom(room: Room, participant: Player, completion: @escaping (Bool) -> Void) {
         
+        let myAccountJSON = playerJSON(player: participant)
         let participantsRef = database.reference().child("rooms").child(room.roomID).child("participants")
         participantsRef.observeSingleEvent(of: .value) { (snapshot) in
-            if var participants = snapshot.value as? [Player] {
-                participants.append(participantName)
+            if var participants = snapshot.value as? [[String: Any]] {
+                if participants.count < 4 {
+                    participants.append(myAccountJSON)
+                } else {
+                    // 人数Over
+                    completion(false)
+                    return
+                }
                 participantsRef.setValue(participants) { (error, _) in
                     if let error = error {
                         print("Failed to join room: \(error.localizedDescription)")
@@ -100,4 +111,67 @@ class FirebaseManager {
             }
         }
     }
+    
+    /**
+     ルーム退出
+     */
+    func leaveRoom(roomID: String, participantID: String, completion: @escaping (Bool) -> Void) {
+        let roomRef = database.reference().child("rooms").child(roomID)
+        
+        // パートicipantとルーム情報を取得して更新する
+        roomRef.observeSingleEvent(of: .value) { (snapshot) in
+            guard var roomData = snapshot.value as? [String: Any],
+                  var participants = roomData["participants"] as? [[String: Any]] else {
+                // ルームデータが取得できない場合は処理を終了
+                completion(false)
+                return
+            }
+            
+            // パートicipantを検索して削除する
+            for (index, participant) in participants.enumerated() {
+                if let id = participant["id"] as? String, id == participantID {
+                    participants.remove(at: index)
+                    break
+                }
+            }
+            
+            // 更新した参加者リストを保存する
+            roomData["participants"] = participants
+            roomRef.setValue(roomData) { (error, _) in
+                if let error = error {
+                    print("Failed to leave room: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+        }
+    }
+    
+    /**
+     ルーム削除
+     */
+    func deleteRoom(roomID: String, completion: @escaping (Bool) -> Void) {
+        let roomRef = database.reference().child("rooms").child(roomID)
+        
+        // ルームを削除する前に参加者を削除する
+        roomRef.child("participants").removeValue { (error, _) in
+            if let error = error {
+                print("Failed to delete participants: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                // 参加者の削除が成功したらルーム自体を削除する
+                roomRef.removeValue { (error, _) in
+                    if let error = error {
+                        print("Failed to delete room: \(error.localizedDescription)")
+                        completion(false)
+                    } else {
+                        completion(true)
+                    }
+                }
+            }
+        }
+    }
+
+
 }

@@ -1,14 +1,39 @@
-//
-//  MatchingController.swift
-//  Dtnk-ver002
-//
-//  Created by Takuma Shinoda on 2023/06/02.
-//
+
+
 
 import Foundation
 import SwiftUI
 
 class MatchingController {
+    
+    func backMatching(room: Room, user: User) {
+     
+        // ownerだったらルームを削除
+        // TODO: IDでやる
+        if room.creatorName == user.name {
+            FirebaseManager().deleteRoom(roomID: room.roomID) { success in
+                if success {
+                    print("Room deleted successfully")
+                    // ルーム削除後の処理
+                } else {
+                    print("Failed to delete the room")
+                }
+            }
+
+        } else {
+            // 参加者だった退出
+            FirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
+                if judge {
+                    print("sc")
+                    Router().pushBasePage(pageId: .room)
+                } else {
+                    print("er")
+
+                }
+            }
+        }
+    }
+    
     
     func onRequest() {
         // State を作成

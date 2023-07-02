@@ -88,6 +88,7 @@ struct RoomView: View {
     
     /**
      作成＋参加
+     挙動としては作成して検索かけて遷移
      */
     func onTapCreate() {
         if text.isEmpty {
@@ -97,14 +98,25 @@ struct RoomView: View {
         let roomName = text
         let user = appState.account.loginUser
         // Player準備
+        // 作成者なのでsideは1
         let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
 
-        FirebaseManager.shared.createRoom(roomName: roomName, creatorName: myaccount) { roomID in
-            if let roomID = roomID {
+        FirebaseManager.shared.createRoom(roomName: roomName, creator: myaccount) { roomName in
+            if let roomName = roomName {
                 // ルーム作成成功
-                print("Room created with ID: \(roomID)")
-                // 参加してマッチングへ
-//                room.join(user: user)
+                print("Room created with ID: \(roomName)")
+                // 検索
+                FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
+                    if let roomData = roomData {
+                        room.roomData = roomData
+                        print("Room found: \(roomData)")
+                        // マッチングへ
+                        RoomController().moveMatchingView()
+                        
+                    } else {
+                        message = "erroer"
+                    }
+                }
             } else {
                 // ルーム作成失敗
                 print("Failed to create room")
@@ -121,6 +133,7 @@ struct RoomView: View {
             return
         }
         let roomName = text
+        
         FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
             if let roomData = roomData {
                 room.roomData = roomData

@@ -380,8 +380,8 @@
 				5D8FA2A52A48219A0079F260 /* HomeState.swift */,
 				5D8FA2A72A4821A90079F260 /* MatchingState.swift */,
 				5D8FA2A92A4821BA0079F260 /* ResultState.swift */,
-				5D8FA2AB2A4821CB0079F260 /* SplashState.swift */,
 				5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */,
+				5D8FA2AB2A4821CB0079F260 /* SplashState.swift */,
 			);
 			path = snd_fw_dtnk_states;
 			sourceTree = "<group>";
@@ -453,10 +453,10 @@
 				5D8FA2912A4820AC0079F260 /* HomeController.swift */,
 				5D8FA2932A4820B90079F260 /* MatchingController.swift */,
 				5D8FA2952A4820D60079F260 /* ResultController.swift */,
+				5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */,
 				5D8FA2972A4820EC0079F260 /* ScoreContoroller.swift */,
 				5D8FA2992A4820FD0079F260 /* SplashController.swift */,
 				5D8FA29B2A4821160079F260 /* TopController.swift */,
-				5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */,
 			);
 			path = dtnk;
 			sourceTree = "<group>";

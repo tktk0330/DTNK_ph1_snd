@@ -32,4 +32,10 @@ struct RoomController {
             }
         }
     }
+    
+    func moveMatchingView() {
+        // Matchingへ
+        appState.matching = MatchingState(seatCount: 4, message: "プレイヤーを募集しています...")
+        Router().pushBasePage(pageId: .dtnkMatching)
+    }
 }

@@ -1,9 +1,5 @@
-//
-//  MatchingView.swift
-//  Dtnk-ver002
-//
-//  Created by Takuma Shinoda on 2023/05/26.
-//
+
+
 
 import SwiftUI
 
@@ -76,20 +72,60 @@ struct MatchingView: View {
                     .padding(5)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.25)
                 
-//                VStack(spacing: 20) {
-//                    ForEach(0..<4) { index in
-//                        if room.roomData.participants.count > index {
-//                            item(nickname: room.roomData.participants[index], iconUrl: "")
-//                        } else {
-//                            placeHolder()
-//                        }
+                VStack(spacing: 20) {
+                    ForEach(0..<4) { index in
+                        if room.roomData.participants.count > index {
+                            item(nickname: room.roomData.participants[index].name, iconUrl:  room.roomData.participants[index].icon_url)
+                        } else {
+                            placeHolder()
+                        }
+                    }
+                }
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
+                
+                
+                Group {
+                    Button(action: {
+                        MatchingController().backMatching(room: room.roomData, user: appState.account.loginUser)
+                        print(room.roomData)
+                    }) {
+                        Text("BACK")
+                            .font(.system(size: 20))
+                            .foregroundColor(Color.white)
+                            .fontWeight(.bold)
+                            .bold()
+                            .padding()
+                            .frame(width: 120, height: 50)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white, lineWidth: 3)
+                            )
+                    }
+                    .position(x: UIScreen.main.bounds.width / 4, y: geo.size.height * 0.90)
+                    
+//                    if room.startFlg {
+                        Button(action: {
+                            print(room.roomData)
+                        }) {
+                            Text("START")
+                                .font(.system(size: 20))
+                                .foregroundColor(Color.white)
+                                .fontWeight(.bold)
+                                .bold()
+                                .padding()
+                                .frame(width: 120, height: 50)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.white, lineWidth: 3)
+                                )
+                        }
+                        .position(x: UIScreen.main.bounds.width * 3 / 4, y: geo.size.height * 0.90)
 //                    }
-//                }
-//                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
+                }
 
             }
             .onAppear {
-                room.updateParticipants()
+                room.updateParticipants(roomID: room.roomData.roomID)
 //                MatchingController().onRequest()
 //                MatchingController().vsFriendsMatching()
             }

@@ -63,7 +63,7 @@ struct SplashView: View {
                 } else {
                     // ユーザーデータが存在しない場合、デフォルトの値を使用
                     let name = "ゲスト"
-                    let iconURL = "icon-bot"
+                    let iconURL = "icon-bot3"
                     
                     // ゲームを開始するためにデフォルトの値を使用する処理を追加
                     startGameWithUserData(name: name, iconURL: iconURL)

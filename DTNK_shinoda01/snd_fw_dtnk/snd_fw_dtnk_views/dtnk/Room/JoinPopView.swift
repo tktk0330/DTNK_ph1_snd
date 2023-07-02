@@ -1,9 +1,7 @@
-//
-//  JoinPopView.swift
-//  DTNK_shinoda01
-//
-//  Created by Takuma Shinoda on 2023/06/28.
-//
+/**
+ 参加可否を問うPOP
+ */
+
 
 import SwiftUI
 
@@ -57,7 +55,7 @@ struct JoinPopView: View {
                             
                             Button(action: {
                                 // 参加処理
-                                room.join(user: appState.account.loginUser.name)
+                                room.join(user: appState.account.loginUser)
                             }) {
                                 Text("JOIN")
                                     .font(.system(size: 20))

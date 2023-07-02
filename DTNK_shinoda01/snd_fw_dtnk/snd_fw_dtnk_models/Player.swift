@@ -20,9 +20,6 @@ class Player: Identifiable {
     var score = 0
     var dtnk: Bool
     var selectedCards: [Card] = []
-
-//    var lastPlayedCards: [Card]? // 最後に出したカード
-
     
     init(id: String, side: Int, name: String, icon_url: String) {
         self.id = id
@@ -32,20 +29,5 @@ class Player: Identifiable {
         self.score = 0
         self.dtnk = false
 
-    }
-    
-//    // 手札からカードを出す
-//    func playCards(cards: [Card]) {
-//        for card in cards {
-//            if let index = hand.firstIndex(of: card) {
-//                hand.remove(at: index)
-//            }
-//        }
-//        lastPlayedCards = cards
-//    }
-    
-    // スコアを計算する
-//    func calculateScore() {
-//        score = hand.reduce(0) { $0 + $1.rank.rawValue }
-//    }
+    }    
 }
