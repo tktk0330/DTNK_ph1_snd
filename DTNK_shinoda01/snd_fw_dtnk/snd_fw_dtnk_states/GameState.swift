@@ -93,6 +93,8 @@ class GameUiState: ObservableObject {
 
         }
     }
+    
+    // FRONT
     // カードは１ターン１
     @Published var canDraw = true
     // pass or play

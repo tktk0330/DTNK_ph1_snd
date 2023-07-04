@@ -6,8 +6,72 @@ import SwiftUI
 
 class MatchingController {
     
+    /**
+     GameInfoの設定
+     */
+    func generateGameInfo(players: [Player]) -> GameInfoModel {
+        
+        let players = players
+        let jorker = 2
+        let targetgamenum = 3
+        let rate = 10
+        
+        let gameInfo = GameInfoModel(
+            players: players,
+            joker: jorker,
+            targetgamenum: targetgamenum,
+            rate: rate)
+        
+        return gameInfo
+    }
+    
+    /**
+     vs Friends
+     */
+    func onTapStart(players: [Player], roomID: String) {
+        
+        // Game設定
+        let gameInfo = generateGameInfo(players: players)
+        // DBに保存
+        FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { success in
+            if success {
+                // matchingflgをOKに設定　その後遷移
+                FirebaseManager.shared.updateMatchingFlg(roomID: roomID)
+            } else {
+                print("Failed to save game info")
+            }
+        }
+    }
+    
+    /**
+     vsBot
+     */
+    func onRequest() {
+        // State を作成
+//        let state = GameRule.initialState
+        // プレイヤーをUIへ表示
+        appState.matching.message = "ゲームを開始します"
+        appState.matching.players = BotCreate().initialplayers()
+        //gameStateの作成
+//        let gameSystemState = GameSystemState(
+//            gameState: state,
+//            players: appState.matching.players
+//        )
+//        appState.gamesystem = gameSystemState
+                
+        // メインゲーム画面へ
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // gameUiStateにプレイヤーをセット
+            appState.gameUiState.players = appState.matching.players
+            Router().pushBasePage(pageId: .dtnkMain)
+        }
+    }
+    
+    /**
+     戻る
+     */
+    // TODO: できていない
     func backMatching(room: Room, user: User) {
-     
         // ownerだったらルームを削除
         // TODO: IDでやる
         if room.creatorName == user.name {
@@ -33,55 +97,13 @@ class MatchingController {
             }
         }
     }
-    
-    
-    func onRequest() {
-        // State を作成
-//        let state = GameRule.initialState
-        // プレイヤーをUIへ表示
-        appState.matching.message = "ゲームを開始します"
-        appState.matching.players = BotCreate().initialplayers()
-        //gameStateの作成
-//        let gameSystemState = GameSystemState(
-//            gameState: state,
-//            players: appState.matching.players
-//        )
-//        appState.gamesystem = gameSystemState
-                
-        // メインゲーム画面へ
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            // gameUiStateにプレイヤーをセット
-            appState.gameUiState.players = appState.matching.players
-            Router().pushBasePage(pageId: .dtnkMain)
-        }
-    }
-    
-//    func vsFriendsMatching() {
-//        let id = appState.account.loginUser.userID
-//        let name = appState.account.loginUser.name
-//        let icon_url = appState.account.loginUser.iconURL
-//        let side = getParticipantIndex(participantName: name)
-//        //myaccount
-//        let myaccount = Player(id: id, side: side!, name: name, icon_url: icon_url)
-//        appState.matching.players.append(myaccount)
-//        print(appState.matching.players)
-////        appState.gameUiState.players.append(myaccount)
-////        print()
-//
-//    }
-    
-//    func getParticipantIndex(participantName: String) -> Int? {
-//        let roomID = appState.room.roomData.roomID // 参加しているルームのIDを指定
-//        guard let index = appState.room.roomData.participants.firstIndex(of: participantName) else {
-//            // 参加者リストから自分の名前が見つからない場合は処理を終了
-//            return nil
-//        }
-//        return index
-//    }
-    
 
 }
 
+/**
+ vs Bot
+ bot生成
+ */
 class BotCreate {
     
     func initialplayers() -> [Player] {

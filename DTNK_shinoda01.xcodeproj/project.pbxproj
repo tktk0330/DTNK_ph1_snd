@@ -111,6 +111,7 @@
 		5DDB61DF2A4CF6E700EB03F7 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */; };
 		5DDB61E12A4D32EF00EB03F7 /* RoomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */; };
 		5DDB61E32A511AD100EB03F7 /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E22A511AD100EB03F7 /* RoomModel.swift */; };
+		5DDB61E52A53FF3A00EB03F7 /* GameInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -215,6 +216,7 @@
 		5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomState.swift; sourceTree = "<group>"; };
 		5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomController.swift; sourceTree = "<group>"; };
 		5DDB61E22A511AD100EB03F7 /* RoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModel.swift; sourceTree = "<group>"; };
+		5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,6 +367,7 @@
 				5D8FA2BD2A48239A0079F260 /* ImageName.swift */,
 				5D8FA2BF2A4823B50079F260 /* Player.swift */,
 				5DDB61E22A511AD100EB03F7 /* RoomModel.swift */,
+				5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */,
 			);
 			path = snd_fw_dtnk_models;
 			sourceTree = "<group>";
@@ -719,6 +722,7 @@
 				5D8FA2EC2A4826360079F260 /* HomeView.swift in Sources */,
 				5D8FA2A42A48218A0079F260 /* GameSystemState.swift in Sources */,
 				5D8FA2F42A4826950079F260 /* SelectIconView.swift in Sources */,
+				5DDB61E52A53FF3A00EB03F7 /* GameInfoModel.swift in Sources */,
 				5D8FA28C2A48205A0079F260 /* GameEventController.swift in Sources */,
 				5D8FA26B2A481D200079F260 /* PhotosView.swift in Sources */,
 				5D8FA2882A4820020079F260 /* BattleSelectController.swift in Sources */,

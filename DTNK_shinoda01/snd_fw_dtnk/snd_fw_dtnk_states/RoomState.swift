@@ -38,12 +38,13 @@ class RoomState: ObservableObject {
         }
     }
 
+    /**
+     参加者の更新
+     */
     func updateParticipants(roomID: String) {
-        // 取得したいルームのIDを指定
-        let roomID = roomID
+
         // データベースの参照を取得
         let roomRef = Database.database().reference().child("rooms").child(roomID)
-
         // 参加者のリストをリアルタイムで監視するリスナーを設定
         roomRef.child("participants").observe(.value) { [self] snapshot in
             guard let participantsData = snapshot.value as? [[String: Any]] else {
@@ -63,10 +64,15 @@ class RoomState: ObservableObject {
                 }
             }
             appState.room.roomData.participants = participants
-            if participants.count == 4 {
+            appState.matching.players = participants
+            
+            
+            if participants.count == 2 {
                 // start ok
                 startFlg = true
             }
         }
+        
+        FirebaseManager.shared.observeMatchingFlg(roomID: roomID)
     }
 }

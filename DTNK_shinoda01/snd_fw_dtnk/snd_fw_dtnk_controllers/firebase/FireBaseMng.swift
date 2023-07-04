@@ -11,6 +11,59 @@ class FirebaseManager {
     static let shared = FirebaseManager()
     private let database = Database.database()
     
+    
+    /**
+     ゲーム開始【参加者を遷移】
+     */
+    func moveGame() {
+        
+    }
+    
+    /**
+     Gameを保存
+     */
+    func saveGameInfo(_ gameInfo: GameInfoModel, roomID: String, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId()
+        let gameInfoDict: [String: Any] = [
+            "property1": "1",
+            "property2": "2",
+            // 他のプロパティも同様に追加
+        ]
+        gameInfoRef.setValue(gameInfoDict) { error, _ in
+            if let error = error {
+                print("Failed to save game info: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
+    
+    /**
+     Game開始の送信
+     */
+    func sendGameStartNotification(roomID: String) {
+        let roomRef = database.reference().child("rooms").child(roomID)
+        
+        // ルーム内の参加者リストを取得する
+        roomRef.child("participants").observeSingleEvent(of: .value) { snapshot in
+            guard let participantsData = snapshot.value as? [[String: Any]] else {
+                // 参加者データの取得に失敗した場合
+                return
+            }
+            
+            // 参加者ごとに通知を送信する
+            for participantData in participantsData {
+                if let playerID = participantData["id"] as? String {
+//                    sendNotification(to: playerID, message: "ゲームが開始しました")
+                }
+            }
+        }
+    }
+
+
+    
     /**
      Convert JSON
      */
@@ -35,7 +88,8 @@ class FirebaseManager {
             "roomID": roomID,
             "roomName": roomName,
             "creatorName": creator.name,
-            "participants": [myAccountJSON]
+            "participants": [myAccountJSON],
+            "matchingFlg": "yet"
         ]
         database.reference().child("rooms").child(roomID).setValue(roomData) { (error, _) in
             if let error = error {
@@ -81,6 +135,41 @@ class FirebaseManager {
             completion(room)
         }
     }
+    
+    /**
+     GameStates OK
+     ボタンを押したらmatchingFlgをOKにする
+     */
+    func updateMatchingFlg(roomID: String){
+        let roomRef = database.reference().child("rooms").child(roomID)
+        // ルームのmatchingFlgを「ok」に更新
+        roomRef.child("matchingFlg").setValue("ok") { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+            }
+        }
+    }
+    
+    /**
+     matchingFlgの監視
+     */
+
+    func observeMatchingFlg(roomID: String) {
+        let roomRef = database.reference().child("rooms").child(roomID)
+        let matchingFlgRef = roomRef.child("matchingFlg")
+        
+        // matchingFlgの値の変更を監視
+        matchingFlgRef.observe(.value) { snapshot in
+            if let matchingFlg = snapshot.value as? String {
+                if matchingFlg == "ok" {
+                    // 遷移
+                    Router().pushBasePage(pageId: .top)
+                }
+            }
+        }
+    }
+
 
     /**
      ルーム参加

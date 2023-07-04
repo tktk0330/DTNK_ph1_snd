@@ -103,28 +103,36 @@ struct MatchingView: View {
                     }
                     .position(x: UIScreen.main.bounds.width / 4, y: geo.size.height * 0.90)
                     
-//                    if room.startFlg {
-                        Button(action: {
-                            print(room.roomData)
-                        }) {
-                            Text("START")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding()
-                                .frame(width: 120, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.white, lineWidth: 3)
-                                )
+                    // 作成者のみStartボタン表示
+                    // TODO: IDでやる（名前だとなりすまし・誤認知する）
+                    if appState.account.loginUser.name == room.roomData.creatorName {
+                        // ４人揃ったら
+                        if room.startFlg {
+                            Button(action: {
+                                print(room.roomData)
+                                print(appState.matching.players)
+                                MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
+                            }) {
+                                Text("START")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.bold)
+                                    .bold()
+                                    .padding()
+                                    .frame(width: 120, height: 50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.white, lineWidth: 3)
+                                    )
+                            }
+                            .position(x: UIScreen.main.bounds.width * 3 / 4, y: geo.size.height * 0.90)
                         }
-                        .position(x: UIScreen.main.bounds.width * 3 / 4, y: geo.size.height * 0.90)
-//                    }
+                    }
                 }
 
             }
             .onAppear {
+                // 参加者の監視
                 room.updateParticipants(roomID: room.roomData.roomID)
 //                MatchingController().onRequest()
 //                MatchingController().vsFriendsMatching()
