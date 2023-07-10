@@ -8,19 +8,19 @@ struct AccountView: View {
     @State private var isEditingName: Bool = false
     @StateObject private var userListViewModel = UserListViewModel()
     
-    let myNickname = appState.account.loginUser.name
-    let myIconUrl = appState.account.loginUser.iconURL
+//    let myNickname = appState.account.loginUser.name
+//    let myIconUrl = appState.account.loginUser.iconURL
 
     var body: some View {
         HStack {
             
-            Image(myIconUrl)
+            Image(iconURL)
                 .resizable()
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
 
-            Text(myNickname)
+            Text(userName)
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
