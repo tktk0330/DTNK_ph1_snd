@@ -9,9 +9,9 @@ final class MatchingState: ObservableObject {
     let seatCount: Int
     @Published var message: String
     @Published var players: [Player]
-    @Published var vsInfo: String
+    @Published var vsInfo: Int
     
-    init(seatCount: Int, message: String, vsInfo: String) {
+    init(seatCount: Int, message: String, vsInfo: Int) {
         self.seatCount = seatCount
         self.message = message
         self.players = []

@@ -6,8 +6,12 @@ import Firebase
 import FirebaseDatabase
 
 struct AccountView: View {
-    @State var myNickname = appState.account.loginUser.editedName
-    @State var myIconUrl = appState.account.loginUser.iconURL
+//    @State var myNickname = appState.account.loginUser.editedName
+//    @State var myIconUrl = appState.account.loginUser.iconURL
+    
+    @State var myNickname = "asd"
+    @State var myIconUrl = "icon-bot1"
+
     
     var body: some View {
         HStack {

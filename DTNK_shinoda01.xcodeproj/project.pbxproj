@@ -112,6 +112,8 @@
 		5DDB61E12A4D32EF00EB03F7 /* RoomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */; };
 		5DDB61E32A511AD100EB03F7 /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E22A511AD100EB03F7 /* RoomModel.swift */; };
 		5DDB61E52A53FF3A00EB03F7 /* GameInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */; };
+		5DDB61E82A55841F00EB03F7 /* GameFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */; };
+		5DDB61EA2A5A4E1100EB03F7 /* GameUiStateBuildController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -217,6 +219,8 @@
 		5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomController.swift; sourceTree = "<group>"; };
 		5DDB61E22A511AD100EB03F7 /* RoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModel.swift; sourceTree = "<group>"; };
 		5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoModel.swift; sourceTree = "<group>"; };
+		5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFriendView.swift; sourceTree = "<group>"; };
+		5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUiStateBuildController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -460,6 +464,7 @@
 				5D8FA2972A4820EC0079F260 /* ScoreContoroller.swift */,
 				5D8FA2992A4820FD0079F260 /* SplashController.swift */,
 				5D8FA29B2A4821160079F260 /* TopController.swift */,
+				5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */,
 			);
 			path = dtnk;
 			sourceTree = "<group>";
@@ -491,6 +496,7 @@
 				5D8FA2E22A4825970079F260 /* Room */,
 				5D8FA2FB2A4826F40079F260 /* Matching */,
 				5D8FA2E32A48259E0079F260 /* GameMain */,
+				5DDB61E62A5583FD00EB03F7 /* GameFriend */,
 				5D8FA2E42A4825AC0079F260 /* GameResult */,
 			);
 			path = dtnk;
@@ -596,6 +602,14 @@
 				5D8FA31D2A48288A0079F260 /* ScoreItem.swift */,
 			);
 			path = Result;
+			sourceTree = "<group>";
+		};
+		5DDB61E62A5583FD00EB03F7 /* GameFriend */ = {
+			isa = PBXGroup;
+			children = (
+				5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */,
+			);
+			path = GameFriend;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -715,6 +729,7 @@
 				5D8FA2B62A4823530079F260 /* Deck.swift in Sources */,
 				5D8FA2AA2A4821BA0079F260 /* ResultState.swift in Sources */,
 				5D8FA3042A4827860079F260 /* CardView.swift in Sources */,
+				5DDB61E82A55841F00EB03F7 /* GameFriendView.swift in Sources */,
 				5D8FA3022A4827750079F260 /* BotView.swift in Sources */,
 				5D8FA2862A481FA50079F260 /* FireBaseMng.swift in Sources */,
 				5D8FA2CA2A4824780079F260 /* CallengePopView.swift in Sources */,
@@ -745,6 +760,7 @@
 				5D8FA2DE2A4825570079F260 /* Vibrate.swift in Sources */,
 				5D8FA2B82A4823660079F260 /* GamePhase.swift in Sources */,
 				5D8FA2A62A48219A0079F260 /* HomeState.swift in Sources */,
+				5DDB61EA2A5A4E1100EB03F7 /* GameUiStateBuildController.swift in Sources */,
 				5D8FA2692A481D100079F260 /* ShineColor.swift in Sources */,
 				5D8FA2A22A4821770079F260 /* GameState.swift in Sources */,
 				5D8FA27E2A481E600079F260 /* LoadingState.swift in Sources */,

@@ -20,13 +20,35 @@ class FirebaseManager {
     }
     
     /**
+     Convert JSON
+     */
+    func playersJSON(players: [Player]) -> [[String: Any]] {
+        var playersJSON: [[String: Any]] = []
+        for player in players {
+            let playerJSON: [String: Any] = [
+                "id": player.id,
+                "side": player.side,
+                "name": player.name,
+                "icon_url": player.icon_url,
+                "hand": player.hand,
+                "score": player.score,
+                "dtnk": player.dtnk,
+                "selectedCards": player.selectedCards
+            ]
+            playersJSON.append(playerJSON)
+        }
+        return playersJSON
+    }
+    
+    
+    /**
      Gameを保存
      */
     func saveGameInfo(_ gameInfo: GameInfoModel, roomID: String, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId()
+        let playersJSON = playersJSON(players: gameInfo.players)
         let gameInfoDict: [String: Any] = [
-            "property1": "1",
-            "property2": "2",
+            "players": playersJSON,
             // 他のプロパティも同様に追加
         ]
         gameInfoRef.setValue(gameInfoDict) { error, _ in
@@ -39,7 +61,43 @@ class FirebaseManager {
         }
     }
     
-    
+    /**
+     指定したルームIDのゲーム情報を検索して保存
+     */
+    func retrieveGameInfo(forRoom roomID: String, completion: @escaping (GameBase?) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo")
+        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+            guard let gameInfoDict = snapshot.value as? [String: [String: Any]],
+                  let gameData = gameInfoDict.values.first,
+                  let playersDict = gameData["players"] as? [[String: Any]]
+            else {
+                completion(nil)
+                return
+            }
+            
+            var players: [Player] = []
+            for playerDict in playersDict {
+                guard let id = playerDict["id"] as? String,
+                      let side = playerDict["side"] as? Int,
+                      let name = playerDict["name"] as? String,
+                      let iconURL = playerDict["icon_url"] as? String
+                else {
+                    // 必要な情報が欠落している場合はスキップ
+                    continue
+                }
+                
+                let player = Player(id: id, side: side, name: name, icon_url: iconURL)
+                players.append(player)
+            }
+            
+            let gameBase = GameBase(players: players)
+            completion(gameBase)
+        }
+    }
+
+    struct GameBase {
+        let players: [Player]
+    }
     /**
      Game開始の送信
      */
@@ -154,7 +212,6 @@ class FirebaseManager {
     /**
      matchingFlgの監視
      */
-
     func observeMatchingFlg(roomID: String) {
         let roomRef = database.reference().child("rooms").child(roomID)
         let matchingFlgRef = roomRef.child("matchingFlg")
@@ -163,14 +220,20 @@ class FirebaseManager {
         matchingFlgRef.observe(.value) { snapshot in
             if let matchingFlg = snapshot.value as? String {
                 if matchingFlg == "ok" {
-                    // 遷移
-                    Router().pushBasePage(pageId: .top)
+                    // stateの設定
+                    self.retrieveGameInfo(forRoom: roomID) { gameBase in
+                        appState.gameUiState.players = gameBase!.players
+                        
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        // 遷移
+                        Router().pushBasePage(pageId: .dtnkMain_friends)
+                    }
                 }
             }
         }
     }
-
-
+    
     /**
      ルーム参加
      */
@@ -261,6 +324,11 @@ class FirebaseManager {
             }
         }
     }
-
-
 }
+
+// パラメータ調整
+struct GameBase {
+    let players: [Player]
+}
+
+

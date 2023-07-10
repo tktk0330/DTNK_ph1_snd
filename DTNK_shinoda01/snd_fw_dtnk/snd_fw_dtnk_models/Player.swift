@@ -15,8 +15,8 @@ class Player: Identifiable {
     let id: String
     var side: Int
     var name: String
-    var hand: [Card] = []
     var icon_url: String
+    var hand: [Card] = []
     var score = 0
     var dtnk: Bool
     var selectedCards: [Card] = []

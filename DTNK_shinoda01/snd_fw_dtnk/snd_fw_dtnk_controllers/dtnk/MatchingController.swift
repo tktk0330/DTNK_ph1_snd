@@ -11,6 +11,7 @@ class MatchingController {
      */
     func generateGameInfo(players: [Player]) -> GameInfoModel {
         
+        // 参加者
         let players = players
         let jorker = 2
         let targetgamenum = 3
@@ -32,6 +33,14 @@ class MatchingController {
         
         // Game設定
         let gameInfo = generateGameInfo(players: players)
+        
+        // Stateの作成（バック）
+        // player
+        let players = appState.matching.players
+
+        // UIStateの作成（フロント）
+        appState.gameUiState.players = appState.matching.players
+        
         // DBに保存
         FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { success in
             if success {
@@ -47,18 +56,9 @@ class MatchingController {
      vsBot
      */
     func onRequest() {
-        // State を作成
-//        let state = GameRule.initialState
         // プレイヤーをUIへ表示
         appState.matching.message = "ゲームを開始します"
         appState.matching.players = BotCreate().initialplayers()
-        //gameStateの作成
-//        let gameSystemState = GameSystemState(
-//            gameState: state,
-//            players: appState.matching.players
-//        )
-//        appState.gamesystem = gameSystemState
-                
         // メインゲーム画面へ
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // gameUiStateにプレイヤーをセット

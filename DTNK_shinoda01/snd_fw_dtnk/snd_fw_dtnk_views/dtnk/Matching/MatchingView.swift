@@ -74,12 +74,19 @@ struct MatchingView: View {
                 
                 VStack(spacing: 20) {
                     ForEach(0..<4) { index in
-                        if room.roomData.participants.count > index {
-                            item(nickname: room.roomData.participants[index].name, iconUrl:  room.roomData.participants[index].icon_url)
+                        if matching.players.count > index {
+                            item(nickname: matching.players[index].name, iconUrl:  matching.players[index].icon_url)
                         } else {
                             placeHolder()
                         }
                     }
+//                    ForEach(0..<4) { index in
+//                        if room.roomData.participants.count > index {
+//                            item(nickname: room.roomData.participants[index].name, iconUrl:  room.roomData.participants[index].icon_url)
+//                        } else {
+//                            placeHolder()
+//                        }
+//                    }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
                 
@@ -103,38 +110,42 @@ struct MatchingView: View {
                     }
                     .position(x: UIScreen.main.bounds.width / 4, y: geo.size.height * 0.90)
                     
-                    // 作成者のみStartボタン表示
-                    // TODO: IDでやる（名前だとなりすまし・誤認知する）
-                    if appState.account.loginUser.name == room.roomData.creatorName {
-                        // ４人揃ったら
-                        if room.startFlg {
-                            Button(action: {
-                                print(room.roomData)
-                                print(appState.matching.players)
-                                MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
-                            }) {
-                                Text("START")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding()
-                                    .frame(width: 120, height: 50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.white, lineWidth: 3)
-                                    )
+                    if  matching.vsInfo == 02 {
+                        // 作成者のみStartボタン表示
+                        // TODO: IDでやる（名前だとなりすまし・誤認知する）
+                        if appState.account.loginUser.name == room.roomData.creatorName {
+                            // ４人揃ったら
+                            if room.startFlg {
+                                Button(action: {
+                                    print(room.roomData)
+                                    print(appState.matching.players)
+                                    MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
+                                }) {
+                                    Text("START")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(Color.white)
+                                        .fontWeight(.bold)
+                                        .bold()
+                                        .padding()
+                                        .frame(width: 120, height: 50)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.white, lineWidth: 3)
+                                        )
+                                }
+                                .position(x: UIScreen.main.bounds.width * 3 / 4, y: geo.size.height * 0.90)
                             }
-                            .position(x: UIScreen.main.bounds.width * 3 / 4, y: geo.size.height * 0.90)
                         }
                     }
                 }
-
             }
             .onAppear {
-                // 参加者の監視
-                room.updateParticipants(roomID: room.roomData.roomID)
-//                MatchingController().onRequest()
+                if matching.vsInfo == 01 {
+                    MatchingController().onRequest()
+                } else {
+                    // 参加者の監視
+                    room.updateParticipants(roomID: room.roomData.roomID)
+                }
 //                MatchingController().vsFriendsMatching()
             }
         }

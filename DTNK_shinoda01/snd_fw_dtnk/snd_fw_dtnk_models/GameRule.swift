@@ -14,19 +14,14 @@ struct GameRule {
      players :　参加者【固有情報】
      */
     static var initialState: GameLogicState {
-        let stateId = UUID().uuidString
         return GameLogicState(
-            
-            id: stateId,
             deck: Self.initialDeck,
-            sides: Self.initialSides,
-            gamestep: Self.initialgameStep
-
+            sides: Self.initialSides
             )
     }
 
     
-    //Deck
+    // Deck
     static var initialDeck: [CardId] {
         return [
             .spade1,

@@ -67,7 +67,7 @@ class RoomState: ObservableObject {
             appState.matching.players = participants
             
             
-            if participants.count == 2 {
+            if participants.count == 1 {
                 // start ok
                 startFlg = true
             }
