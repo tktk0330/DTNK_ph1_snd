@@ -14,7 +14,7 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @StateObject var home: HomeState = appState.home
+    @StateObject var home1: HomeState = appState.home
     
     
     let elements = [["0", ImageName.Home.vsbots.rawValue, "VS BOT"], ["1", ImageName.Home.vsfriends.rawValue, "VS FRIENDS"]]

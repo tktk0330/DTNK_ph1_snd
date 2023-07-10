@@ -12,17 +12,19 @@ struct AccountView: View {
     @State var myNickname = "asd"
     @State var myIconUrl = "icon-bot1"
 
+
     
     var body: some View {
         HStack {
             
-            Image(myIconUrl)
+            Image(iconURL)
                 .resizable()
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
-            
+          
             TextField("名前", text: $myNickname)
+
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
