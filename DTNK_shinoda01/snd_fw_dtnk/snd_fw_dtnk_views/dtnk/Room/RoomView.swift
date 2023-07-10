@@ -1,35 +1,18 @@
-//
-//  RoomView.swift
-//  Dtnk-ver002
-//
-//  Created by Takuma Shinoda on 2023/06/23.
-//
+/**
+ ルームView
+ */
 
 import SwiftUI
 import Firebase
+import FirebaseDatabase
 
 struct RoomView: View {
-    @State private var user: String = "user"
+    
+    @StateObject var room: RoomState = appState.room
+    @State private var user: String = appState.account.loginUser.name
     @State private var text: String = ""
-    @State private var searchtext: String = ""
-    @State private var roomData = Room(roomID: "", roomName: "", creatorName: "", participants: [])
-    
-    
-    func join() {
-        let creatorName = user
-        let room = roomData
-        
-        FirebaseManager.shared.joinRoom(room: room, participantName: creatorName) { success in
-            if success {
-                // 参加に成功した場合の処理
-                print("参加成功")
-            } else {
-                // 参加に失敗した場合の処理
-                print("参加失敗")
-            }
-        }
-    }
-    
+    @State private var message: String = ""
+
     var body: some View {
         GeometryReader { geo in
             ZStack{
@@ -54,142 +37,112 @@ struct RoomView: View {
                     .frame(width: 300)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.30)
                 
-                Text(roomData.participants.map { String($0) }.joined(separator: ", "))
-                
-                
-                Button(action: {
-                    
-                    if text.isEmpty {
-                        print("Room name cannot be empty")
-                        return
-                    }
+                Text(message)
+                    .foregroundColor(Color.red)
+                    .padding(5)
+                    .frame(width: 300)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.40)
 
-                    let roomName = text
-                    let creatorName = user
-                    FirebaseManager.shared.createRoom(roomName: roomName, creatorName: creatorName) { roomID in
-                        if let roomID = roomID {
-                            // ルーム作成成功
-                            print("Room created with ID: \(roomID)")
-                        } else {
-                            // ルーム作成失敗
-                            print("Failed to create room")
-                        }
+                HStack(spacing: 50) {
+                    Button(action: {
+                        onTapCreate()
+                    }) {
+                        Text("CREATE")
+                            .font(.system(size: 20))
+                            .foregroundColor(Color.white)
+                            .fontWeight(.bold)
+                            .bold()
+                            .padding()
+                            .frame(width: 120, height: 50)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white, lineWidth: 3)
+                            )
                     }
                     
-                }) {
-                    Text("CREATE")
-                        .font(.system(size: 20))
-                        .foregroundColor(Color.white)
-                        .fontWeight(.bold)
-                        .padding(5)
-                    
+                    Button(action: {
+                        onTapSearch()
+                    }) {
+                        Text("SEARCH")
+                            .font(.system(size: 20))
+                            .foregroundColor(Color.white)
+                            .fontWeight(.bold)
+                            .bold()
+                            .padding()
+                            .frame(width: 120, height: 50)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white, lineWidth: 3)
+                            )
+                    }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.50)
                 
-                Button(action: {
-                    
-                    if text.isEmpty {
-                        print("Room name cannot be empty")
-                        return
-                    }
-
-                    let roomName = text
-                    FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
-                        if let roomData = roomData {
-                            self.roomData = roomData
-                            print("Room found: \(roomData)")
-                            // ルームが見つかった後の処理を書く
-                            // 参加する
-                            join()
-                            
-                        } else {
-                            print("Room not found")
-                        }
-                    }
-                }) {
-                    Text("SEARCH")
-                        .font(.system(size: 20))
-                        .foregroundColor(Color.white)
-                        .fontWeight(.bold)
-                        .padding(5)
+                if room.roommode == .pop {
+                    JoinPopView()
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.50)
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.70)
-
-            }
-        }
-    }
-}
-
-            
-struct Room {
-    let roomID: String
-    let roomName: String
-    let creatorName: String
-    var participants: [String]
-}
-
-class FirebaseManager {
-    static let shared = FirebaseManager()
-    private let database = Database.database()
-    
-    func createRoom(roomName: String, creatorName: String, completion: @escaping (String?) -> Void) {
-        let roomID = database.reference().child("rooms").childByAutoId().key ?? ""
-        let roomData: [String: Any] = [
-            "roomID": roomID,
-            "roomName": roomName,
-            "creatorName": creatorName,
-            "participants": [creatorName]
-        ]
-        
-        database.reference().child("rooms").child(roomID).setValue(roomData) { (error, _) in
-            if let error = error {
-                print("Failed to create room: \(error.localizedDescription)")
-                completion(nil)
-            } else {
-                completion(roomID)
             }
         }
     }
     
-    func searchRoom(withRoomName roomName: String, completion: @escaping (Room?) -> Void) {
-        let roomQuery = database.reference().child("rooms").queryOrdered(byChild: "roomName").queryEqual(toValue: roomName)
-        
-        roomQuery.observeSingleEvent(of: .value) { (snapshot) in
-            guard let roomData = snapshot.children.allObjects.first as? DataSnapshot,
-                  let roomDict = roomData.value as? [String: Any],
-                  let roomID = roomDict["roomID"] as? String,
-                  let roomName = roomDict["roomName"] as? String,
-                  let creatorName = roomDict["creatorName"] as? String,
-                  let participants = roomDict["participants"] as? [String]
-            else {
-                completion(nil)
-                return
-            }
-            
-            let room = Room(roomID: roomID, roomName: roomName, creatorName: creatorName, participants: participants)
-            completion(room)
+    /**
+     作成＋参加
+     挙動としては作成して検索かけて遷移
+     */
+    func onTapCreate() {
+        if text.isEmpty {
+            message = "Room name cannot be empty"
+            return
         }
-    }
-    
-    func joinRoom(room: Room, participantName: String, completion: @escaping (Bool) -> Void) {
-        let participantData = ["participantName": participantName]
-        
-        let participantsRef = database.reference().child("rooms").child(room.roomID).child("participants")
-        participantsRef.observeSingleEvent(of: .value) { (snapshot) in
-            if var participants = snapshot.value as? [String] {
-                participants.append(participantName)
-                participantsRef.setValue(participants) { (error, _) in
-                    if let error = error {
-                        print("Failed to join room: \(error.localizedDescription)")
-                        completion(false)
+        let roomName = text
+        let user = appState.account.loginUser
+        // Player準備
+        // 作成者なのでsideは1
+        let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
+
+        FirebaseManager.shared.createRoom(roomName: roomName, creator: myaccount) { roomName in
+            if let roomName = roomName {
+                // ルーム作成成功
+                print("Room created with ID: \(roomName)")
+                // 検索
+                FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
+                    if let roomData = roomData {
+                        room.roomData = roomData
+                        print("Room found: \(roomData)")
+                        // マッチングへ
+                        RoomController().moveMatchingView()
+                        
                     } else {
-                        completion(true)
+                        message = "erroer"
                     }
                 }
             } else {
-                completion(false)
+                // ルーム作成失敗
+                print("Failed to create room")
+            }
+        }
+    }
+    
+    /**
+     検索
+     */
+    func onTapSearch() {
+        if text.isEmpty {
+            message = "Room name cannot be empty"
+            return
+        }
+        let roomName = text
+        
+        FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
+            if let roomData = roomData {
+                room.roomData = roomData
+                print("Room found: \(roomData)")
+                // 参加可否POPへ
+                RoomController().onOpenMenu()
+            } else {
+                message = "Room not found"
             }
         }
     }
 }
-

@@ -93,6 +93,8 @@ class GameUiState: ObservableObject {
 
         }
     }
+    
+    // FRONT
     // カードは１ターン１
     @Published var canDraw = true
     // pass or play
@@ -505,7 +507,7 @@ class GameUiState: ObservableObject {
                 self.decisionCards.append(contentsOf: cards)
                 switch card.cardid.rate()[1] {
                 case 50:
-                    self.magunigication = 2*self.magunigication
+                    self.magunigication = 2 * self.magunigication
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         self.drawLastCard()
                     }

@@ -14,10 +14,11 @@ import SwiftUI
  */
 
 struct GameLogicState {
-    let id: String
+//    let id: String
     var deck: [CardId]
     var sides: [GameSide]
-    var gamestep: GameStep
+    
+//    var gamestep: GameStep
 }
 
 /**

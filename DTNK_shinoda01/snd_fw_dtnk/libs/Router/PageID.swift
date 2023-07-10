@@ -16,6 +16,7 @@ enum PageId: Int, JSONSerializable {
     case room
     case dtnkMatching
     case dtnkMain
+    case dtnkMain_friends
     case dtnkResult
     case gameresult
     

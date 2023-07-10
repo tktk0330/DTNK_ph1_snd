@@ -19,7 +19,7 @@ class GameEventController {
         appState.gameUiState.rate = rate
         appState.gameUiState.jorker = jorker
         // matchingへ
-        appState.matching = MatchingState(seatCount: 4, message: "プレイヤーを募集しています...")
+        appState.matching = MatchingState(seatCount: 4, message: "プレイヤーを募集しています...", vsInfo: 01)
         Router().pushBasePage(pageId: .dtnkMatching)
 
     }
