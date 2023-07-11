@@ -10,7 +10,7 @@ struct AccountView: View {
 //    @State var myIconUrl = appState.account.loginUser.iconURL
     
     @State var myNickname = "asd"
-    @State var myIconUrl = "icon-bot1"
+    @State var iconURL = "icon-bot1"
 
 
     
