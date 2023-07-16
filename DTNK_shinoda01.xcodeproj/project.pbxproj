@@ -114,6 +114,8 @@
 		5DDB61E52A53FF3A00EB03F7 /* GameInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */; };
 		5DDB61E82A55841F00EB03F7 /* GameFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */; };
 		5DDB61EA2A5A4E1100EB03F7 /* GameUiStateBuildController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */; };
+		5DDB61EC2A5DA06B00EB03F7 /* ConvertJSONMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */; };
+		5DDB61F02A62609600EB03F7 /* GameUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61EF2A62609600EB03F7 /* GameUIState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -221,6 +223,8 @@
 		5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInfoModel.swift; sourceTree = "<group>"; };
 		5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFriendView.swift; sourceTree = "<group>"; };
 		5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUiStateBuildController.swift; sourceTree = "<group>"; };
+		5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertJSONMng.swift; sourceTree = "<group>"; };
+		5DDB61EF2A62609600EB03F7 /* GameUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUIState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -389,6 +393,7 @@
 				5D8FA2A92A4821BA0079F260 /* ResultState.swift */,
 				5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */,
 				5D8FA2AB2A4821CB0079F260 /* SplashState.swift */,
+				5DDB61EF2A62609600EB03F7 /* GameUIState.swift */,
 			);
 			path = snd_fw_dtnk_states;
 			sourceTree = "<group>";
@@ -445,6 +450,7 @@
 			isa = PBXGroup;
 			children = (
 				5D8FA2852A481FA50079F260 /* FireBaseMng.swift */,
+				5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */,
 			);
 			path = firebase;
 			sourceTree = "<group>";
@@ -737,6 +743,7 @@
 				5D8FA2EC2A4826360079F260 /* HomeView.swift in Sources */,
 				5D8FA2A42A48218A0079F260 /* GameSystemState.swift in Sources */,
 				5D8FA2F42A4826950079F260 /* SelectIconView.swift in Sources */,
+				5DDB61EC2A5DA06B00EB03F7 /* ConvertJSONMng.swift in Sources */,
 				5DDB61E52A53FF3A00EB03F7 /* GameInfoModel.swift in Sources */,
 				5D8FA28C2A48205A0079F260 /* GameEventController.swift in Sources */,
 				5D8FA26B2A481D200079F260 /* PhotosView.swift in Sources */,
@@ -775,6 +782,7 @@
 				5D8FA2AC2A4821CB0079F260 /* SplashState.swift in Sources */,
 				5D8FA2F22A4826830079F260 /* OptionView.swift in Sources */,
 				5D8FA2F02A4826500079F260 /* GameSettingView.swift in Sources */,
+				5DDB61F02A62609600EB03F7 /* GameUIState.swift in Sources */,
 				5DDB61DD2A4C802300EB03F7 /* JoinPopView.swift in Sources */,
 				5D8FA2742A481DC20079F260 /* PageID.swift in Sources */,
 				5D8FA2F82A4826AF0079F260 /* AccountView.swift in Sources */,

@@ -23,8 +23,11 @@ final class AppState {
     var matching: MatchingState!
     
     var gamesystem: GameSystemState!
-    
+    // old
     var gameUiState: GameUiState!
+    // new
+    var gameUIState: GameUIState!
+
 
     var resultState: ResultState!
     
@@ -38,6 +41,7 @@ final class AppState {
         matching: MatchingState?,
         gamesystem: GameSystemState?,
         gameUiState: GameUiState?,
+        gameUIState: GameUIState?,
         resultState: ResultState?
     ) {
         self.routing = pageRoute
@@ -49,6 +53,7 @@ final class AppState {
         self.matching = matching
         self.gamesystem = gamesystem
         self.gameUiState = gameUiState
+        self.gameUIState = gameUIState
         self.resultState = resultState
     }
     init() {
@@ -61,6 +66,7 @@ final class AppState {
         self.matching = nil
         self.gamesystem = nil
         self.gameUiState = GameUiState()
+        self.gameUIState = GameUIState()
         self.resultState = nil
     }
 }

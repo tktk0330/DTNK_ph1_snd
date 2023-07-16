@@ -33,7 +33,9 @@ enum Suit: String, CaseIterable {
  @func value [int]　手札値　1-13　Joker -1 0 1
  
  */
-enum CardId: Int, CaseIterable {
+enum CardId: Int, CaseIterable, JSONSerializable, Identifiable {
+    
+    var id: Int { self.rawValue }
     
     case spade1 = 101
     case spade2 = 102

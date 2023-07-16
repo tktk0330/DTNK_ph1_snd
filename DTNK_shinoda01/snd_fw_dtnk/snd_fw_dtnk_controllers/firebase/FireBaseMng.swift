@@ -10,48 +10,31 @@ class FirebaseManager {
     
     static let shared = FirebaseManager()
     private let database = Database.database()
+    // json変換用
+    let cjm = ConvertJSONMng()
+
+    //-------------------------------GAMEMAIN-------------------------------
+    //-------------------------------GAMEMAIN-------------------------------
+    //-------------------------------GAMEMAIN-------------------------------
     
-    
-    /**
-     ゲーム開始【参加者を遷移】
-     */
-    func moveGame() {
         
-    }
-    
     /**
-     Convert JSON
-     */
-    func playersJSON(players: [Player]) -> [[String: Any]] {
-        var playersJSON: [[String: Any]] = []
-        for player in players {
-            let playerJSON: [String: Any] = [
-                "id": player.id,
-                "side": player.side,
-                "name": player.name,
-                "icon_url": player.icon_url,
-                "hand": player.hand,
-                "score": player.score,
-                "dtnk": player.dtnk,
-                "selectedCards": player.selectedCards
-            ]
-            playersJSON.append(playerJSON)
-        }
-        return playersJSON
-    }
-    
-    
-    /**
-     Gameを保存
+     Gameの登録
      */
     func saveGameInfo(_ gameInfo: GameInfoModel, roomID: String, completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId()
-        let playersJSON = playersJSON(players: gameInfo.players)
+        
+        let gameID = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId().key ?? ""
+        let playersJSON = cjm.playersJSON(players: gameInfo.players)
+        let deckData = gameInfo.deck.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        }
         let gameInfoDict: [String: Any] = [
+            "gameID": gameID,
             "players": playersJSON,
+            "deck": deckData
             // 他のプロパティも同様に追加
         ]
-        gameInfoRef.setValue(gameInfoDict) { error, _ in
+        database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).setValue(gameInfoDict) { error, _ in
             if let error = error {
                 print("Failed to save game info: \(error.localizedDescription)")
                 completion(false)
@@ -60,87 +43,124 @@ class FirebaseManager {
             }
         }
     }
-    
     /**
-     指定したルームIDのゲーム情報を検索して保存
+     Gameの取得
      */
-    func retrieveGameInfo(forRoom roomID: String, completion: @escaping (GameBase?) -> Void) {
+    func getGameInfo(from roomID: String, completion: @escaping (GameState?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo")
-        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+        gameInfoRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let gameInfoDict = snapshot.value as? [String: [String: Any]],
                   let gameData = gameInfoDict.values.first,
-                  let playersDict = gameData["players"] as? [[String: Any]]
+                  let gameId = gameData["gameID"] as? String,
+                  let deckDict = gameData["deck"] as? [[String: Int]]
+            else {
+                return
+            }
+            var cardIds: [CardId] = []
+            for cardData in deckDict {
+                if let cardID = cardData["cardID"], let cardEnum = CardId(rawValue: cardID) {
+                    cardIds.append(cardEnum)
+                }
+            }
+            let gameState = GameState(gameID: gameId, deck: cardIds)
+            completion(gameState)
+        }
+    }
+    
+    /**
+     Deckの取得（リアルタイム）
+     */
+    func observeDeckInfo(from roomID: String, gameID: String, completion: @escaping ([CardId]?) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let deckRef = gameInfoRef.child("deck")
+        deckRef.observe(.value) { snapshot in
+            guard let deckDict = snapshot.value as? [[String: Any]] else {
+                completion(nil)
+                return
+            }
+            var cardIds: [CardId] = []
+            for cardData in deckDict {
+                if let cardID = cardData["cardID"] as? Int, let cardEnum = CardId(rawValue: cardID) {
+                    cardIds.append(cardEnum)
+                }
+            }
+            completion(cardIds)
+        }
+    }
+    
+    /**
+     Handの取得（リアルタイム）
+     */
+    func observeHandInfo(from roomID: String, gameID: String, playerID: String, completion: @escaping ([CardId]?) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let playerRef = gameInfoRef.child("players").child("0")
+        playerRef.observe(.value) { snapshot in
+            print(snapshot.value!)
+            guard let playerDict = snapshot.value as? [String: Any],
+                  let playerHandDicts = playerDict["hand"] as? [[String: Any]]
             else {
                 completion(nil)
                 return
             }
-            
-            var players: [Player] = []
-            for playerDict in playersDict {
-                guard let id = playerDict["id"] as? String,
-                      let side = playerDict["side"] as? Int,
-                      let name = playerDict["name"] as? String,
-                      let iconURL = playerDict["icon_url"] as? String
-                else {
-                    // 必要な情報が欠落している場合はスキップ
-                    continue
+            var playerHand: [CardId] = []
+            for cardDict in playerHandDicts {
+                if let cardID = cardDict["cardID"] as? Int, let card = CardId(rawValue: cardID) {
+                    playerHand.append(card)
                 }
-                
-                let player = Player(id: id, side: side, name: name, icon_url: iconURL)
-                players.append(player)
             }
-            
-            let gameBase = GameBase(players: players)
-            completion(gameBase)
+            completion(playerHand)
         }
     }
-
-    struct GameBase {
-        let players: [Player]
-    }
     /**
-     Game開始の送信
+     Draw
      */
-    func sendGameStartNotification(roomID: String) {
-        let roomRef = database.reference().child("rooms").child(roomID)
-        
-        // ルーム内の参加者リストを取得する
-        roomRef.child("participants").observeSingleEvent(of: .value) { snapshot in
-            guard let participantsData = snapshot.value as? [[String: Any]] else {
-                // 参加者データの取得に失敗した場合
+    func drawCard(roomID: String, playerID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+            guard var gameInfo = snapshot.value as? [String: Any],
+                  var deck = gameInfo["deck"] as? [[String: Int]],
+                  var players = gameInfo["players"] as? [[String: Any]]
+            else {
+                completion(false)
                 return
             }
-            
-            // 参加者ごとに通知を送信する
-            for participantData in participantsData {
-                if let playerID = participantData["id"] as? String {
-//                    sendNotification(to: playerID, message: "ゲームが開始しました")
+            // デッキからカードを引く
+            let drawnCard = deck.removeLast()
+            // デッキの更新
+            gameInfo["deck"] = deck
+            // プレイヤーの手札にカードを追加
+            for (index, player) in players.enumerated() {
+                if let id = player["id"] as? String, id == playerID {
+                    var hand = player["hand"] as? [[String: Int]] ?? []
+                    hand.append(drawnCard)
+                    players[index]["hand"] = hand
+                    break
+                }
+            }
+            gameInfo["players"] = players
+            // データの更新
+            gameInfoRef.setValue(gameInfo) { error, _ in
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(false)
+                } else {
+                    completion(true)
                 }
             }
         }
     }
 
+    //-------------------------------ROOM-------------------------------
+    //-------------------------------ROOM-------------------------------
+    //-------------------------------ROOM-------------------------------
 
-    
-    /**
-     Convert JSON
-     */
-    func playerJSON(player: Player) -> [String: Any] {
-        let PlayerJSON: [String: Any] = [
-            "id": player.id,
-            "side": player.side,
-            "name": player.name,
-            "icon_url": player.icon_url
-        ]
-        return PlayerJSON
-    }
     
     /**
      ルーム作成
      */
     func createRoom(roomName: String, creator: Player, completion: @escaping (String?) -> Void) {
                 
-        let myAccountJSON = playerJSON(player: creator)
+        let myAccountJSON = cjm.playerJSON(player: creator)
         let roomID = database.reference().child("rooms").childByAutoId().key ?? ""
         let roomData: [String: Any] = [
             "roomID": roomID,
@@ -158,7 +178,68 @@ class FirebaseManager {
             }
         }
     }
+
     
+    
+    /**
+     指定したルームIDのゲーム情報を検索して保存
+     */
+    func retrieveGameInfo(forRoom roomID: String, completion: @escaping (GameBase?) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo")
+        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+            guard let gameInfoDict = snapshot.value as? [String: [String: Any]],
+                  let gameData = gameInfoDict.values.first,
+                  let playersDict = gameData["players"] as? [[String: Any]]
+            else {
+                completion(nil)
+                return
+            }
+            
+            var players: [Player_f] = []
+            for playerDict in playersDict {
+                guard let id = playerDict["id"] as? String,
+                      let side = playerDict["side"] as? Int,
+                      let name = playerDict["name"] as? String,
+                      let iconURL = playerDict["icon_url"] as? String
+                else {
+                    // 必要な情報が欠落している場合はスキップ
+                    continue
+                }
+                
+                let player = Player_f(id: id, side: side, name: name, icon_url: iconURL)
+                players.append(player)
+            }
+            
+            let gameBase = GameBase(players: players)
+            completion(gameBase)
+        }
+    }
+
+    struct GameBase {
+        let players: [Player_f]
+    }
+    
+    /**
+     Game開始の送信
+     */
+    func sendGameStartNotification(roomID: String) {
+        let roomRef = database.reference().child("rooms").child(roomID)
+        
+        // ルーム内の参加者リストを取得する
+        roomRef.child("participants").observeSingleEvent(of: .value) { snapshot in
+            guard let participantsData = snapshot.value as? [[String: Any]] else {
+                // 参加者データの取得に失敗した場合
+                return
+            }
+            
+//            // 参加者ごとに通知を送信する
+//            for participantData in participantsData {
+//                if let playerID = participantData["id"] as? String {
+//                }
+//            }
+        }
+    }
+        
     /**
      ルーム検索
      */
@@ -222,7 +303,7 @@ class FirebaseManager {
                 if matchingFlg == "ok" {
                     // stateの設定
                     self.retrieveGameInfo(forRoom: roomID) { gameBase in
-                        appState.gameUiState.players = gameBase!.players
+                        appState.gameUIState.players = gameBase!.players
                         
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -239,7 +320,7 @@ class FirebaseManager {
      */
     func joinRoom(room: Room, participant: Player, completion: @escaping (Bool) -> Void) {
         
-        let myAccountJSON = playerJSON(player: participant)
+        let myAccountJSON = cjm.playerJSON(player: participant)
         let participantsRef = database.reference().child("rooms").child(room.roomID).child("participants")
         participantsRef.observeSingleEvent(of: .value) { (snapshot) in
             if var participants = snapshot.value as? [[String: Any]] {
@@ -331,4 +412,7 @@ struct GameBase {
     let players: [Player]
 }
 
-
+struct GameState {
+    let gameID: String
+    let deck: [CardId]
+}
