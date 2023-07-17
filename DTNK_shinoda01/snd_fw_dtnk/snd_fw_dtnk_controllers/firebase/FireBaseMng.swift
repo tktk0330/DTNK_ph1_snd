@@ -17,7 +17,6 @@ class FirebaseManager {
     //-------------------------------GAMEMAIN-------------------------------
     //-------------------------------GAMEMAIN-------------------------------
     
-        
     /**
      Gameの登録
      */
@@ -89,13 +88,35 @@ class FirebaseManager {
     }
     
     /**
+     Tableの取得（リアルタイム）
+     */
+    func observeTableInfo(from roomID: String, gameID: String, completion: @escaping ([CardId]?) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let deckRef = gameInfoRef.child("table")
+        deckRef.observe(.value) { snapshot in
+            guard let tableDict = snapshot.value as? [[String: Any]] else {
+                completion(nil)
+                return
+            }
+            var cardIds: [CardId] = []
+            for cardData in tableDict {
+                if let cardID = cardData["cardID"] as? Int, let cardEnum = CardId(rawValue: cardID) {
+                    cardIds.append(cardEnum)
+                }
+            }
+            completion(cardIds)
+        }
+    }
+
+    
+    /**
      Handの取得（リアルタイム）
      */
     func observeHandInfo(from roomID: String, gameID: String, playerID: String, completion: @escaping ([CardId]?) -> Void) {
+        // TODO: 0以外も対応して
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let playerRef = gameInfoRef.child("players").child("0")
         playerRef.observe(.value) { snapshot in
-            print(snapshot.value!)
             guard let playerDict = snapshot.value as? [String: Any],
                   let playerHandDicts = playerDict["hand"] as? [[String: Any]]
             else {
@@ -149,7 +170,58 @@ class FirebaseManager {
             }
         }
     }
+    
+    /**
+     PlayCards
+     */
+    func playCard(roomID: String, playerID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+            guard var gameInfo = snapshot.value as? [String: Any],
+                  var players = gameInfo["players"] as? [[String: Any]]
+            else {
+                completion(false)
+                return
+            }
+            
+            // プレイヤーの手札からカードを出す
+            var playedCard: [String: Int] = [:]
+            for (index, player) in players.enumerated() {
+                if let id = player["id"] as? String, id == playerID {
+                    var hand = player["hand"] as? [[String: Int]] ?? []
+                    guard !hand.isEmpty else {
+                        print("No more cards in hand!")
+                        completion(false)
+                        return
+                    }
+                    playedCard = hand.removeLast()
+                    players[index]["hand"] = hand
+                    break
+                }
+            }
+            
+            // テーブルにカードを追加
+            var table = gameInfo["table"] as? [[String: Int]] ?? []
+            table.append(playedCard)
+            gameInfo["table"] = table
+            
+            // プレイヤーのデータを更新
+            gameInfo["players"] = players
+            
+            // データの更新
+            gameInfoRef.setValue(gameInfo) { error, _ in
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+        }
+    }
 
+    
+    
     //-------------------------------ROOM-------------------------------
     //-------------------------------ROOM-------------------------------
     //-------------------------------ROOM-------------------------------

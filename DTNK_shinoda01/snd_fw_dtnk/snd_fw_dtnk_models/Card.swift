@@ -94,7 +94,30 @@ enum CardId: Int, CaseIterable, JSONSerializable, Identifiable {
     case back = 900
 }
 
+
+enum CardLocation: Equatable {
+    case deck
+    case table
+    case hand(playerIndex: Int)
+}
+
+
 extension CardId {
+    
+    // 座標
+    func location(for location: CardLocation, total: Int) -> CGSize {
+        let cardSpacingDegrees: Double = 5
+        switch location {
+        case .deck:
+            return .zero
+        case .table:
+            return CGSize(width: 0, height: 100)
+        case .hand(let index):
+            let x = CGFloat(cardSpacingDegrees * (Double(index) - Double(total - 1) / 2))
+            let y = CGFloat(pow((Double(index) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.30)
+            return CGSize(width: x, height: y)
+        }
+    }
     
     //　手札で取りうる値
     func value() -> [Int] {

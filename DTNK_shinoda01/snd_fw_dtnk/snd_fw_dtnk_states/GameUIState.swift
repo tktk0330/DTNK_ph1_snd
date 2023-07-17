@@ -12,6 +12,7 @@ class GameUIState: ObservableObject {
     @Published var gameID: String = ""
     @Published var players: [Player_f] = []
     @Published var deck: [CardId] = []
+    @Published var table: [CardId] = []
 
 }
 
