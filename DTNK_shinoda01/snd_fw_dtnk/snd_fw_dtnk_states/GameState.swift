@@ -42,6 +42,10 @@ class GameUiState: ObservableObject {
     @Published var dtnkPlayer: Player?
     // どてんこした人のIndex
     @Published var dtnkPlayerIndex: Int = 99
+    //バーストした人
+    @Published var burstPlayer: Player?
+    //バーストした人のIndex
+    @Published var burstPlayerIndex: Int = 88
     // Game進行
     @Published var progress: String = ""
     // Deck
@@ -142,6 +146,8 @@ class GameUiState: ObservableObject {
         case .dtnk:
             changeddtnk()
             //　チャレンジするか質問
+        case .burst:
+            print(phase)
         case .q_challenge:
             changeq_challenge()
             //　チャレンジモード
@@ -387,7 +393,12 @@ class GameUiState: ObservableObject {
             loosers.append(contentsOf: otherPlayers)
             // Revenge対策
             currentPlayerIndex = dtnkPlayerIndex
-        } else {
+        } else if currentPlayerIndex == 88{
+            loosers.append(burstPlayer!)
+            let otherPlayers = players.filter { $0.side != burstPlayer!.side }
+            winers.append(contentsOf: otherPlayers)
+        }
+          else {
             //　勝敗決定
             winers.append(dtnkPlayer!)
             loosers.append(lastPlayCardsPlayer!)
@@ -576,10 +587,18 @@ class GameUiState: ObservableObject {
             }
         } else {
             // Burst
-            print("Burst")
+            
+            burstPlayer = players[currentPlayerIndex]
+            currentPlayerIndex = burstPlayerIndex
+            self.gamePhase = .burst
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) {
+                self.gamePhase = .decisionrate_pre
+            }
         }
     }
     
+
     /**
      カードを出す
      @Index : Int　出すプレイヤー
@@ -799,7 +818,7 @@ class GameUiState: ObservableObject {
      @Index : Int　Pyaler Index
      return [Card]
      */
-    
+
     func BotAction(Index: Int, tablelast: [Card], completion: @escaping (Bool) -> Void){
         print("Bot \(currentPlayerIndex)’s Turn ")
         
@@ -916,13 +935,30 @@ class GameUiState: ObservableObject {
                         completion(true)
                     }
                 } else {
-                    //　引いても出せない場合　パス
-                    self.pass()
-                    print("can not play so I'll pass")
-                    print("Next Turn")
-                    completion(true)
+                   
+                    if bot.hand.count == 7 && reCanPlay.isEmpty{
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 ) { [self] in
+                            self.burstPlayer = players[currentPlayerIndex]
+                            currentPlayerIndex = burstPlayerIndex
+                            self.gamePhase = .burst
+                        }
+                       
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5 ) {
+                            self.gamePhase = .decisionrate_pre
+                            completion(true)
+                        }
+                    }else{
+                        //　引いても出せない場合　パス
+                        self.pass()
+                        print("can not play so I'll pass")
+                        print("Next Turn")
+                        completion(true)
+                        
+                    }
                 }
             }
         }
     }
+    
 }

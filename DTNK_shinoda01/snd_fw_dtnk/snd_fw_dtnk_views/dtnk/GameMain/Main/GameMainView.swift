@@ -181,6 +181,11 @@ struct GameMain: View {
                         if game.gamePhase == .revenge {
                             RevengeView(text: "REVENGE")
                         }
+                        
+                        //BurstView
+                        if game.gamePhase == .burst{
+                            BurstView(text: "BURST")
+                        }
                                                 
                         if game.gamePhase == .q_challenge && game.challengeFlag[0] == 0 {
                             CallengePopView(game: game, index: 0)
