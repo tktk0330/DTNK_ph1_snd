@@ -571,12 +571,13 @@ class GameUiState: ObservableObject {
         deck.shuffle()
         print("デッキが再構築されました")
     }
+
     
-    /**
+    /*
      パスする
      */
     func pass() {
-        if players[0].hand.count != 7{
+        if players[currentPlayerIndex].hand.count != 4{
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(1.0)){ [self] in
                 players[currentPlayerIndex].selectedCards = []
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.count
@@ -585,6 +586,7 @@ class GameUiState: ObservableObject {
                 canDraw = true
                 canTurn = true
             }
+            
         } else {
             // Burst
             
@@ -619,6 +621,7 @@ class GameUiState: ObservableObject {
                     return
                 }
             }
+        
             if gamePhase == .main || gamePhase == .gamefirst {
                 if currentPlayerIndex == Index || currentPlayerIndex == 99 {
                     players[Index].hand.removeAll(where: { cardsToPlay.contains($0) })
@@ -636,6 +639,7 @@ class GameUiState: ObservableObject {
                     }
                     botTurn(Index: 0)
                 }
+                
             }
 //        }
     }
@@ -935,7 +939,7 @@ class GameUiState: ObservableObject {
                         completion(true)
                     }
                 } else {
-                   
+                   /*
                     if bot.hand.count == 7 && reCanPlay.isEmpty{
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 ) { [self] in
@@ -948,14 +952,14 @@ class GameUiState: ObservableObject {
                             self.gamePhase = .decisionrate_pre
                             completion(true)
                         }
-                    }else{
+                    }else{*/
                         //　引いても出せない場合　パス
                         self.pass()
                         print("can not play so I'll pass")
                         print("Next Turn")
                         completion(true)
                         
-                    }
+                    
                 }
             }
         }

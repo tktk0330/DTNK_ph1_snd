@@ -66,26 +66,27 @@ struct GameMain: View {
                     .animation(.easeInOut(duration: speed), value: game.gamePhase == .challenge)
 
                     Group {
-                        // Dtnk
-                        Button(action: {
-                            game.dtnkevent(Index: 0)
-                        }) {
-                            Text(game.isfirstplayer ? "DOTENKO" : "SYOTENKO")
-                                .font(.system(size: 25))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding()
-                                .frame(width: 170, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.yellow, lineWidth: 3)
-                                )
-                                .saturation(!game.dtnkJudge(playerAllCards: game.players[0].hand, table: game.table) ? 0.0: 1.0)
+                        if game.dtnkJudge(playerAllCards: game.players[0].hand, table: game.table) == true{
+                            // Dtnk
+                            Button(action: {
+                                game.dtnkevent(Index: 0)
+                            }) {
+                                Text(game.isfirstplayer ? "DOTENKO" : "SYOTENKO")
+                                    .font(.system(size: 25))
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.bold)
+                                    .bold()
+                                    .padding()
+                                    .frame(width: 170, height: 50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.yellow, lineWidth: 3)
+                                    )
+                                    .saturation(!game.dtnkJudge(playerAllCards: game.players[0].hand, table: game.table) ? 0.0: 1.0)
+                            }
+                            .position(x: (game.gamePhase != .challenge) ? UIScreen.main.bounds.width / 2 : -200, y:  geo.size.height * 0.85)
+                            .disabled(!game.dtnkJudge(playerAllCards: game.players[0].hand, table: game.table))
                         }
-                        .position(x: (game.gamePhase != .challenge) ? UIScreen.main.bounds.width / 2 : -200, y:  geo.size.height * 0.85)
-                        .disabled(!game.dtnkJudge(playerAllCards: game.players[0].hand, table: game.table))
-                        
                         //action btn
                         HStack(spacing: 10){
                             Button(action: {
@@ -155,6 +156,11 @@ struct GameMain: View {
                             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.13)
                     }
                     
+                    //バースト注意
+                    if  game.players[0].hand.count == 4 && game.gamePhase != .burst{
+                        BurstCoutionView(text: "BURST COUTION!").position(x: geo.size.width * 0.68, y: geo.size.height * 1.08)
+                    }
+                    
                     Group {
                         // Game number View
                         if game.gamePhase == .gamenum {
@@ -186,7 +192,8 @@ struct GameMain: View {
                         if game.gamePhase == .burst{
                             BurstView(text: "BURST")
                         }
-                                                
+                        
+                                               
                         if game.gamePhase == .q_challenge && game.challengeFlag[0] == 0 {
                             CallengePopView(game: game, index: 0)
                                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)

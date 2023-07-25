@@ -115,6 +115,7 @@
 		5DDB61E82A55841F00EB03F7 /* GameFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */; };
 		5DDB61EA2A5A4E1100EB03F7 /* GameUiStateBuildController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */; };
 		CA5C5DEC2A67D911006D7C01 /* BurstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5C5DEB2A67D911006D7C01 /* BurstView.swift */; };
+		CA5C5DEE2A7032D2006D7C01 /* BurstCoutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5C5DED2A7032D2006D7C01 /* BurstCoutionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -223,6 +224,7 @@
 		5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFriendView.swift; sourceTree = "<group>"; };
 		5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUiStateBuildController.swift; sourceTree = "<group>"; };
 		CA5C5DEB2A67D911006D7C01 /* BurstView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BurstView.swift; path = ../../../../../../../../Downloads/BurstView.swift; sourceTree = "<group>"; };
+		CA5C5DED2A7032D2006D7C01 /* BurstCoutionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstCoutionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -579,6 +581,7 @@
 				5D8FA3052A4827960079F260 /* DeckView.swift */,
 				5D8FA3072A4827AA0079F260 /* DTNKView.swift */,
 				CA5C5DEB2A67D911006D7C01 /* BurstView.swift */,
+				CA5C5DED2A7032D2006D7C01 /* BurstCoutionView.swift */,
 				5D8FA3092A4827B90079F260 /* EffectView.swift */,
 				5D8FA30B2A4827C80079F260 /* FieldView.swift */,
 				5D8FA30F2A4827EC0079F260 /* HandView.swift */,
@@ -788,6 +791,7 @@
 				5D8FA2D02A4824CE0079F260 /* Flip.swift in Sources */,
 				5D8FA29A2A4820FD0079F260 /* SplashController.swift in Sources */,
 				5D8FA2672A481D010079F260 /* BlinkEffect.swift in Sources */,
+				CA5C5DEE2A7032D2006D7C01 /* BurstCoutionView.swift in Sources */,
 				5D8FA2942A4820B90079F260 /* MatchingController.swift in Sources */,
 				5D8FA2BA2A48237A0079F260 /* GameScore.swift in Sources */,
 				5D8FA2FD2A4827100079F260 /* MatchingView.swift in Sources */,
