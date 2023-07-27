@@ -13,10 +13,6 @@ class GameUIState: ObservableObject {
 
 }
 
-struct N_Card {
-    let id: CardId
-    var location: CardLocation
-}
 
 class Player_f: Identifiable {
     let id: String
@@ -26,7 +22,7 @@ class Player_f: Identifiable {
     var hand: [CardId] = []
     var score = 0
     var dtnk: Bool
-    var selectedCards: [CardId] = []
+    var selectedCards: [N_Card] = []
     
     init(id: String, side: Int, name: String, icon_url: String) {
         self.id = id
@@ -104,24 +100,6 @@ var cards: [N_Card] = [
     N_Card(id: .whiteJocker, location: .deck),
 
 ]
-
-struct N_CardView: View {
-    var card: N_Card
-    let location: CardLocation
-    let total: Int // 新しいプロパティを追加
-
-    
-    var body: some View {
-        // ここでCardの内容を表示する
-        Image(card.id.imageName())
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 60)
-            .rotationEffect(Angle(degrees: card.id.angle(for: location, total: total)))
-            .offset(card.id.location(for: location, total: total)) // 'total'を引数として渡す
-
-    }
-}
 
 enum CardLocation: Equatable {
     case deck

@@ -171,10 +171,22 @@ class FirebaseManager {
         }
     }
     
+    func convertToDictArray(cards: [N_Card]) -> [[String: Int]] {
+        return cards.map { card in
+            ["cardID": card.id.rawValue]
+            
+        }
+    }
+
+    
     /**
      PlayCards
      */
-    func playCard(roomID: String, playerID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+    func playCards(roomID: String, playerID: String, gameID: String, baseselectedCards: [N_Card], completion: @escaping (Bool) -> Void) {
+        print(baseselectedCards)
+        
+        var selectedCards = convertToDictArray(cards: baseselectedCards)
+        
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.observeSingleEvent(of: .value) { snapshot in
             guard var gameInfo = snapshot.value as? [String: Any],
@@ -185,16 +197,20 @@ class FirebaseManager {
             }
             
             // プレイヤーの手札からカードを出す
-            var playedCard: [String: Int] = [:]
             for (index, player) in players.enumerated() {
                 if let id = player["id"] as? String, id == playerID {
                     var hand = player["hand"] as? [[String: Int]] ?? []
-                    guard !hand.isEmpty else {
-                        print("No more cards in hand!")
-                        completion(false)
-                        return
+                    
+                    for selectedCard in selectedCards {
+                        if let cardIndex = hand.firstIndex(where: { $0 == selectedCard }) {
+                            hand.remove(at: cardIndex)
+                        } else {
+                            print("Selected card not found in hand!")
+                            completion(false)
+                            return
+                        }
                     }
-                    playedCard = hand.removeLast()
+                    
                     players[index]["hand"] = hand
                     break
                 }
@@ -202,7 +218,7 @@ class FirebaseManager {
             
             // テーブルにカードを追加
             var table = gameInfo["table"] as? [[String: Int]] ?? []
-            table.append(playedCard)
+            table.append(contentsOf: selectedCards)
             gameInfo["table"] = table
             
             // プレイヤーのデータを更新
@@ -219,6 +235,52 @@ class FirebaseManager {
             }
         }
     }
+
+//    func playCard(roomID: String, playerID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+//        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+//        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+//            guard var gameInfo = snapshot.value as? [String: Any],
+//                  var players = gameInfo["players"] as? [[String: Any]]
+//            else {
+//                completion(false)
+//                return
+//            }
+//
+//            // プレイヤーの手札からカードを出す
+//            var playedCard: [String: Int] = [:]
+//            for (index, player) in players.enumerated() {
+//                if let id = player["id"] as? String, id == playerID {
+//                    var hand = player["hand"] as? [[String: Int]] ?? []
+//                    guard !hand.isEmpty else {
+//                        print("No more cards in hand!")
+//                        completion(false)
+//                        return
+//                    }
+//                    playedCard = hand.removeLast()
+//                    players[index]["hand"] = hand
+//                    break
+//                }
+//            }
+//
+//            // テーブルにカードを追加
+//            var table = gameInfo["table"] as? [[String: Int]] ?? []
+//            table.append(playedCard)
+//            gameInfo["table"] = table
+//
+//            // プレイヤーのデータを更新
+//            gameInfo["players"] = players
+//
+//            // データの更新
+//            gameInfoRef.setValue(gameInfo) { error, _ in
+//                if let error = error {
+//                    print(error.localizedDescription)
+//                    completion(false)
+//                } else {
+//                    completion(true)
+//                }
+//            }
+//        }
+//    }
 
     
     

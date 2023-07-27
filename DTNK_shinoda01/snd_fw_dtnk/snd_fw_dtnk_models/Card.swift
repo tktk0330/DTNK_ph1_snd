@@ -113,13 +113,13 @@ extension CardId {
         let cardSpacingDegrees: Double = 30
         switch location {
         case .deck:
-            return .zero
+            return CGSize(width: UIScreen.main.bounds.width / 128 - 35, height: 0)
         case .table:
-            return CGSize(width: 0, height: 300)
+            return CGSize(width: UIScreen.main.bounds.width / 128 + 35, height: 0)
         case .hand(let playerIndex, let cardIndex):
-            print("kokokara")
-            print("index: \(cardIndex)")
-            print("total: \(total)")
+//            print("kokokara")
+//            print("index: \(cardIndex)")
+//            print("total: \(total)")
             let x = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
             let y = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.10)// 30
             return CGSize(width: x, height: y + CGFloat(resize_y))
