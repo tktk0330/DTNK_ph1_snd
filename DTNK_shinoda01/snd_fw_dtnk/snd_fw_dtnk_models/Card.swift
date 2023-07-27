@@ -95,29 +95,50 @@ enum CardId: Int, CaseIterable, JSONSerializable, Identifiable {
 }
 
 
-enum CardLocation: Equatable {
-    case deck
-    case table
-    case hand(playerIndex: Int)
-}
-
-
 extension CardId {
     
-    // 座標
+    // ロケーション合計 deck total : 0, hand: その手札合計
+//    func total(for location: CardLocation, playerIndex: Int) -> Int {
+//        switch location {
+//        case .deck, .table:
+//            return 0
+//        case .hand(playerIndex: _):
+//            return appState.gameUIState.players[playerIndex].hand.count
+//        }
+//    }
+    
+    // 座標　total: 手札合計, index: 何枚目のカードか
     func location(for location: CardLocation, total: Int) -> CGSize {
-        let cardSpacingDegrees: Double = 5
+        let resize_y = 200
+        let cardSpacingDegrees: Double = 30
         switch location {
         case .deck:
             return .zero
         case .table:
-            return CGSize(width: 0, height: 100)
-        case .hand(let index):
-            let x = CGFloat(cardSpacingDegrees * (Double(index) - Double(total - 1) / 2))
-            let y = CGFloat(pow((Double(index) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.30)
-            return CGSize(width: x, height: y)
+            return CGSize(width: 0, height: 300)
+        case .hand(let playerIndex, let cardIndex):
+            print("kokokara")
+            print("index: \(cardIndex)")
+            print("total: \(total)")
+            let x = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+            let y = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.10)// 30
+            return CGSize(width: x, height: y + CGFloat(resize_y))
         }
     }
+    
+    // 角度を計算 total: 手札合計, index: 何枚目のカードか
+    func angle(for location: CardLocation, total: Int) -> Double {
+        let cardSpacingDegrees: Double = 10
+        switch location {
+        case .deck:
+            return 0
+        case .table:
+            return 0
+        case .hand(let playerIndex, let cardIndex):
+            return (cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2)) // 手札の角度を計算
+        }
+    }
+
     
     //　手札で取りうる値
     func value() -> [Int] {

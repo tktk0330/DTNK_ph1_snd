@@ -1,9 +1,5 @@
-//
-//  GameUIState.swift
-//  DTNK_shinoda01
-//
-//  Created by Takuma Shinoda on 2023/07/15.
-//
+
+
 
 import SwiftUI
 
@@ -12,8 +8,14 @@ class GameUIState: ObservableObject {
     @Published var gameID: String = ""
     @Published var players: [Player_f] = []
     @Published var deck: [CardId] = []
+    @Published var deckUI: [N_Card] = []
     @Published var table: [CardId] = []
 
+}
+
+struct N_Card {
+    let id: CardId
+    var location: CardLocation
 }
 
 class Player_f: Identifiable {
@@ -34,5 +36,112 @@ class Player_f: Identifiable {
         self.score = 0
         self.dtnk = false
 
+    }
+}
+
+var cards: [N_Card] = [
+    
+    N_Card(id: .back, location: .deck),
+    
+    N_Card(id: .spade1, location: .deck),
+    N_Card(id: .spade2, location: .deck),
+    N_Card(id: .spade3, location: .deck),
+    N_Card(id: .spade4, location: .deck),
+    N_Card(id: .spade5, location: .deck),
+    N_Card(id: .spade6, location: .deck),
+    N_Card(id: .spade7, location: .deck),
+    N_Card(id: .spade8, location: .deck),
+    N_Card(id: .spade9, location: .deck),
+    N_Card(id: .spade10, location: .deck),
+    N_Card(id: .spade11, location: .deck),
+    N_Card(id: .spade12, location: .deck),
+    N_Card(id: .spade13, location: .deck),
+    
+    N_Card(id: .diamond1, location: .deck),
+    N_Card(id: .diamond2, location: .deck),
+    N_Card(id: .diamond3, location: .deck),
+    N_Card(id: .diamond4, location: .deck),
+    N_Card(id: .diamond5, location: .deck),
+    N_Card(id: .diamond6, location: .deck),
+    N_Card(id: .diamond7, location: .deck),
+    N_Card(id: .diamond8, location: .deck),
+    N_Card(id: .diamond9, location: .deck),
+    N_Card(id: .diamond10, location: .deck),
+    N_Card(id: .diamond11, location: .deck),
+    N_Card(id: .diamond12, location: .deck),
+    N_Card(id: .diamond13, location: .deck),
+    
+    N_Card(id: .club1, location: .deck),
+    N_Card(id: .club2, location: .deck),
+    N_Card(id: .club3, location: .deck),
+    N_Card(id: .club4, location: .deck),
+    N_Card(id: .club5, location: .deck),
+    N_Card(id: .club6, location: .deck),
+    N_Card(id: .club7, location: .deck),
+    N_Card(id: .club8, location: .deck),
+    N_Card(id: .club9, location: .deck),
+    N_Card(id: .club10, location: .deck),
+    N_Card(id: .club11, location: .deck),
+    N_Card(id: .club12, location: .deck),
+    N_Card(id: .club13, location: .deck),
+
+    N_Card(id: .heart1, location: .deck),
+    N_Card(id: .heart2, location: .deck),
+    N_Card(id: .heart3, location: .deck),
+    N_Card(id: .heart4, location: .deck),
+    N_Card(id: .heart5, location: .deck),
+    N_Card(id: .heart6, location: .deck),
+    N_Card(id: .heart7, location: .deck),
+    N_Card(id: .heart8, location: .deck),
+    N_Card(id: .heart9, location: .deck),
+    N_Card(id: .heart10, location: .deck),
+    N_Card(id: .heart11, location: .deck),
+    N_Card(id: .heart12, location: .deck),
+    N_Card(id: .heart13, location: .deck),
+
+    // TODO: Jorker 4?
+    N_Card(id: .blackJocker, location: .deck),
+    N_Card(id: .whiteJocker, location: .deck),
+
+]
+
+struct N_CardView: View {
+    var card: N_Card
+    let location: CardLocation
+    let total: Int // 新しいプロパティを追加
+
+    
+    var body: some View {
+        // ここでCardの内容を表示する
+        Image(card.id.imageName())
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 60)
+            .rotationEffect(Angle(degrees: card.id.angle(for: location, total: total)))
+            .offset(card.id.location(for: location, total: total)) // 'total'を引数として渡す
+
+    }
+}
+
+enum CardLocation: Equatable {
+    case deck
+    case table
+    // playerIndex　誰か [0 1 2 3]    cardIndex　何枚目か [0 1 2 3 4 5 6]
+    case hand(playerIndex: Int, cardIndex: Int)
+}
+
+extension CardLocation {
+    func offset(total: Int, index: Int) -> CGSize {
+        let cardSpacingDegrees: Double = 5
+        switch self {
+        case .deck:
+            return .zero
+        case .table:
+            return CGSize(width: 0, height: 300)
+        case .hand:
+            let x = CGFloat(cardSpacingDegrees * (Double(index) - Double(total - 1) / 2))
+            let y = CGFloat(pow((Double(index) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.30)
+            return CGSize(width: x, height: y)
+        }
     }
 }

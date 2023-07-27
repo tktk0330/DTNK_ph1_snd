@@ -5,7 +5,16 @@ struct GameFriendView: View {
     @StateObject var room: RoomState = appState.room
     let fbm = FirebaseManager()
     let cardSpacingDegrees: Double = 5 // カード間の間隔（度数法）
+    @State var cardUI: [N_Card] = cards
+
+
     
+    @State var test: [CardId] = [.spade1, .spade2, .spade3, .spade4, .spade5, .spade6, .spade7]
+    @State var loc: CardLocation = .deck
+    @State var test1: [N_Card] = cards
+//    @State var i = 0
+
+
     var body: some View {
         GeometryReader { geo in
             
@@ -17,30 +26,90 @@ struct GameFriendView: View {
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.3)
             
+
+            //---------testspace----------
+            
+            Group {
+                
+                VStack {
+//                    ALLCardView(card: test, degree: 0, width: 60, location: loc, total: 0)
+//                        .animation(.easeInOut(duration: 0.5), value: loc)
+
+                    Button(action: {
+                        let caaa: CardId = test.first!
+                        //                        self.loc = .hand(playerIndex: 5)  // 手札に移動
+                        test1 = test1.map { card in
+                            if card.id == caaa {
+                                var newCard = card
+                                game.players[0].hand.append(caaa)
+                                //indexはそいつの手札参照していれる
+//                                newCard.location = .hand(playerIndex: 0, cardIndex: i)
+//                                i += 1;
+                                return newCard
+                            } else {
+                                return card
+                            }
+                        }
+                        test.removeFirst()
+                        
+                        
+                    }) {
+                        Text("引く")
+                            .font(.system(size: 25))
+                            .foregroundColor(Color.white)
+                            .fontWeight(.bold)
+                            .bold()
+                            .padding()
+                            .frame(width: 100, height: 50)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.yellow, lineWidth: 3)
+                            )
+                    }
+                }
+            }
+            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.3)
+
+            //---------testspace----------
+
+            
+            
+            
             // Field
             // TODO: 別でまとめる
             HStack() {
-                // Deck
-                ZStack() {
-                    ForEach(game.deck, id: \.self) { card in
-                        ALLCardView(card: card, degree: 0, width: 60, location: .deck, total: 0)
-                            .animation(.easeInOut(duration: 0.5), value: game.deck)
-                    }
-                }
                 
-                // Table
+//                // Deck
+//                ZStack() {
+//                    ForEach(game.deck, id: \.self) { card in
+//                        ALLCardView(card: card, degree: 0, width: 60, location: .deck, total: 0)
+//                            .animation(.easeInOut(duration: 0.5), value: game.deck)
+//                    }
+//                }
+//
+//                // Table
+//                ZStack {
+//                    if game.table.isEmpty {
+//                        Rectangle()
+//                            .foregroundColor(Color.clear)
+//                            .frame(width: 60, height: 1)
+//                    }
+//                    else{
+//                        ForEach(game.table) { card in
+//                            FieldCardView(card: card, degree: 0, width: 60)
+//                        }
+//                    }
+//                }
+                
                 ZStack {
-                    if game.table.isEmpty {
-                        Rectangle()
-                            .foregroundColor(Color.clear)
-                            .frame(width: 60, height: 1)
-                    }
-                    else{
-                        ForEach(game.table) { card in
-                            FieldCardView(card: card, degree: 0, width: 60)
-                        }
+                    ForEach(cardUI, id: \.id) { card in
+                        // totalもdeckに依存
+                        N_CardView(card: card, location: card.location, total: game.players[0].hand.count)
+                            .animation(.easeInOut(duration: 0.5), value: card.location)
                     }
                 }
+
+                
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
 
@@ -53,9 +122,9 @@ struct GameFriendView: View {
                     // TODO: 対戦相手は-50にする
                     HStack(spacing: -30) {
                         ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
-                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
-                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
-                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
+//                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
+//                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
+//                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
                         }
                     }
                 }
@@ -63,62 +132,62 @@ struct GameFriendView: View {
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.7)
 
             
-            // 正面
-            ZStack {
-                if game.players[myside()].hand.isEmpty {
-                    // 手札無
-                }
-                else{
-                    // TODO: 対戦相手は-50にする
-                    HStack(spacing: -50) {
-                        ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
-                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
-                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
-                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
-                        }
-                    }
-                    .rotationEffect(.degrees(180))
-                }
-            }
-            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.10)
-            
-            // 左
-            ZStack {
-                if game.players[myside()].hand.isEmpty {
-                    // 手札無
-                }
-                else{
-                    // TODO: 対戦相手は-50にする
-                    HStack(spacing: -50) {
-                        ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
-                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
-                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
-                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
-                        }
-                    }
-                    .rotationEffect(.degrees(90))
-                }
-            }
-            .position(x: UIScreen.main.bounds.width * 0.01, y:  geo.size.height * 0.30)
-            
-            // 右
-            ZStack {
-                if game.players[myside()].hand.isEmpty {
-                    // 手札無
-                }
-                else{
-                    // TODO: 対戦相手は-50にする
-                    HStack(spacing: -50) {
-                        ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
-                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
-                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
-                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
-                        }
-                    }
-                    .rotationEffect(.degrees(-90))
-                }
-            }
-            .position(x: UIScreen.main.bounds.width * (1.00 - 0.01), y:  geo.size.height * 0.30)
+//            // 正面
+//            ZStack {
+//                if game.players[myside()].hand.isEmpty {
+//                    // 手札無
+//                }
+//                else{
+//                    // TODO: 対戦相手は-50にする
+//                    HStack(spacing: -50) {
+//                        ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
+//                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
+//                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
+//                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
+//                        }
+//                    }
+//                    .rotationEffect(.degrees(180))
+//                }
+//            }
+//            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.10)
+//
+//            // 左
+//            ZStack {
+//                if game.players[myside()].hand.isEmpty {
+//                    // 手札無
+//                }
+//                else{
+//                    // TODO: 対戦相手は-50にする
+//                    HStack(spacing: -50) {
+//                        ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
+//                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
+//                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
+//                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
+//                        }
+//                    }
+//                    .rotationEffect(.degrees(90))
+//                }
+//            }
+//            .position(x: UIScreen.main.bounds.width * 0.01, y:  geo.size.height * 0.30)
+//
+//            // 右
+//            ZStack {
+//                if game.players[myside()].hand.isEmpty {
+//                    // 手札無
+//                }
+//                else{
+//                    // TODO: 対戦相手は-50にする
+//                    HStack(spacing: -50) {
+//                        ForEach(Array(game.players[0].hand.enumerated()), id: \.offset) { index, card in
+//                            ALLCardView(card: card, degree: 0, width: 60, location: .hand(playerIndex: index), total: game.players[0].hand.count)
+//                                .rotationEffect(Angle.degrees(cardSpacingDegrees * (Double(index) - Double(game.players[0].hand.count - 1) / 2))) // Rotate the cards properly
+//                                .animation(.easeInOut(duration: 0.5), value: game.players[0].hand) // And this
+//                        }
+//                    }
+//                    .rotationEffect(.degrees(-90))
+//                }
+//            }
+//            .position(x: UIScreen.main.bounds.width * (1.00 - 0.01), y:  geo.size.height * 0.30)
 
 
 
@@ -128,6 +197,7 @@ struct GameFriendView: View {
                 HStack(spacing: 50) {
                     
                     Button(action: {
+                        print(game.players[0].hand.count)
                         fbm.drawCard(
                             roomID: room.roomData.roomID,
                             playerID: game.players[0].id,
@@ -191,9 +261,9 @@ struct GameFriendView: View {
             }
             
             //Exit btn
-            Header()
-                .frame(width: UIScreen.main.bounds.width , height: 40)
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.13)
+//            Header()
+//                .frame(width: UIScreen.main.bounds.width , height: 40)
+//                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.13)
             
 
 
@@ -203,16 +273,16 @@ struct GameFriendView: View {
                 game.gameID = info!.gameID
                 game.deck = info!.deck
                 
-                fbm.observeDeckInfo(
+                fbm.observeDeckInfo (
                     from: room.roomData.roomID,
                     gameID: game.gameID) { cards in
                         if (cards != nil) {
-                            game.deck = cards!
-                        } else{
+                            game.deck = cards!                            
+                            } else{
                             print("erroer1")
                         }
                     }
-                fbm.observeTableInfo(
+                fbm.observeTableInfo (
                     from: room.roomData.roomID,
                     gameID: game.gameID) { cards in
                         if (cards != nil) {
@@ -221,15 +291,34 @@ struct GameFriendView: View {
                             print("erroer2")
                         }
                     }
-                fbm.observeHandInfo(
+                fbm.observeHandInfo (
                     from: room.roomData.roomID,
                     gameID: game.gameID,
                     playerID: game.players[0].id) { cards in
-                        if (cards != nil) {
+                        
+                        var i = 0
+                        if let cardsUnwrapped = cards {  // unwrap optional here
+                            for newhandcard in cardsUnwrapped {  // use unwrapped variable in loop
+                                
+                                cardUI = cardUI.map { check in
+                                    if check.id.rawValue == newhandcard.id {
+                                        var newCard = check
+                                        //indexはそいつの手札参照していれる
+                                        newCard.location = .hand(playerIndex: 0, cardIndex: i)
+                                        i += 1;
+
+                                        return newCard
+                                    } else {
+                                        return check
+                                    }
+                                }
+                            }
                             game.players[0].hand = cards!
+                            
                         } else{
                             game.players[0].hand = []
                         }
+                        
                     }
             }
         }
@@ -285,5 +374,7 @@ struct ALLCardView: View {
         )
         .frame(width: width)
         .offset(card.location(for: location, total: total)) // 'total'を引数として渡す
+        .animation(.easeInOut(duration: 0.5), value: location)
+
     }
 }
