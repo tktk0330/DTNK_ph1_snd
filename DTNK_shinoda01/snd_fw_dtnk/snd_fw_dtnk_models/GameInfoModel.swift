@@ -1,4 +1,6 @@
-
+/**
+ PlayUIState
+ */
 
 
 import SwiftUI
@@ -8,7 +10,7 @@ struct GameInfoModel {
     // 参加者
     let players: [Player]
     // deck
-    var deck = Deck()
+    var deck: [CardId]
     // jorker
     let joker: Int
     // table

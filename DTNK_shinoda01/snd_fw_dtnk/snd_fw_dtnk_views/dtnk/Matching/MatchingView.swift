@@ -148,6 +148,9 @@ struct MatchingView: View {
                 }
 //                MatchingController().vsFriendsMatching()
             }
+            .onDisappear {
+
+            }
         }
     }
 }

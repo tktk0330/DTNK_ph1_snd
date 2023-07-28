@@ -13,12 +13,16 @@ class MatchingController {
         
         // 参加者
         let players = players
+        let deck = GameRule.initialDeck.shuffled
+        
+        
         let jorker = 2
         let targetgamenum = 3
         let rate = 10
         
         let gameInfo = GameInfoModel(
             players: players,
+            deck: deck(),
             joker: jorker,
             targetgamenum: targetgamenum,
             rate: rate)
@@ -31,15 +35,21 @@ class MatchingController {
      */
     func onTapStart(players: [Player], roomID: String) {
         
-        // Game設定
+        // Game初期設定
         let gameInfo = generateGameInfo(players: players)
         
         // Stateの作成（バック）
         // player
         let players = appState.matching.players
+        // deck
+        let deck = appState.gameUIState.deck
 
+        var quick:[Player_f] = []
+        var matchingplayer = players.last!
+        
+        quick.append(Player_f(id: matchingplayer.id, side: matchingplayer.side, name: matchingplayer.name, icon_url: matchingplayer.icon_url))
         // UIStateの作成（フロント）
-        appState.gameUiState.players = appState.matching.players
+        appState.gameUIState.players = quick
         
         // DBに保存
         FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { success in
