@@ -112,10 +112,9 @@ class FirebaseManager {
     /**
      Handの取得（リアルタイム）
      */
-    func observeHandInfo(from roomID: String, gameID: String, playerID: String, completion: @escaping ([CardId]?) -> Void) {
-        // TODO: 0以外も対応して
+    func observeHandInfo(from roomID: String, gameID: String, playerIndex: String, completion: @escaping ([CardId]?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        let playerRef = gameInfoRef.child("players").child("0")
+        let playerRef = gameInfoRef.child("players").child(playerIndex)
         playerRef.observe(.value) { snapshot in
             guard let playerDict = snapshot.value as? [String: Any],
                   let playerHandDicts = playerDict["hand"] as? [[String: Any]]

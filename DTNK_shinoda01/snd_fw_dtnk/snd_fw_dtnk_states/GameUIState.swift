@@ -10,6 +10,7 @@ class GameUIState: ObservableObject {
     @Published var deck: [CardId] = []
     @Published var deckUI: [N_Card] = []
     @Published var table: [CardId] = []
+    @Published var myside: Int = 99
 
 }
 

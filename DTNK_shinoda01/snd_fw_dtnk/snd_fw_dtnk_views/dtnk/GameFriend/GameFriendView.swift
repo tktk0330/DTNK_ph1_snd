@@ -1,13 +1,22 @@
+
+
+
 import SwiftUI
 
 struct GameFriendView: View {
     @StateObject var game: GameUIState = appState.gameUIState
     @StateObject var room: RoomState = appState.room
     let fbm = FirebaseManager()
-    let cardSpacingDegrees: Double = 5 // カード間の間隔（度数法）
     // CardPool
     @State var cardUI: [N_Card] = cards
-
+    // mysideをプロパティとして定義します
+    var myside: Int {
+        let id = appState.account.loginUser.userID
+        let players =  appState.gameUIState.players
+        let myIndex = players.firstIndex(where: { $0.id == id })
+        return myIndex!
+    }
+    
     var body: some View {
         GeometryReader { geo in
             
@@ -24,7 +33,7 @@ struct GameFriendView: View {
                 ZStack {
                     ForEach(Array(cardUI.enumerated()), id: \.1.id) { index, card in
                         // totalもdeckに依存
-                        N_CardView(card: card, location: card.location, total: game.players[0].hand.count, selectedCards: $game.players[0].selectedCards)
+                        N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
                             .animation(.easeInOut(duration: 0.3))
                     }
                 }
@@ -36,10 +45,9 @@ struct GameFriendView: View {
                 HStack(spacing: 50) {
                     
                     Button(action: {
-                        print(game.players[0].hand.count)
                         fbm.drawCard(
                             roomID: room.roomData.roomID,
-                            playerID: game.players[0].id,
+                            playerID: game.players[myside].id,
                             gameID: game.gameID) { bool in
                                 print("Draw")
                             }
@@ -60,12 +68,12 @@ struct GameFriendView: View {
                     Button(action: {
                         fbm.playCards(
                             roomID: room.roomData.roomID,
-                            playerID: game.players[0].id,
+                            playerID: game.players[myside].id,
                             gameID: game.gameID,
-                            baseselectedCards: game.players[0].selectedCards
+                            baseselectedCards: game.players[myside].selectedCards
                         ) { bool in
                                 print("Play")
-                            game.players[0].selectedCards = []
+                            game.players[myside].selectedCards = []
 
                             }
                         
@@ -110,6 +118,11 @@ struct GameFriendView: View {
 
 
         }.onAppear {
+            //
+            game.myside = self.myside
+            print(game.myside)
+            
+            
             // ゲーム情報取得
             fbm.getGameInfo(from: room.roomData.roomID) { info in
                 game.gameID = info!.gameID
@@ -143,63 +156,52 @@ struct GameFriendView: View {
                             print("テーブル取得エラー")
                         }
                     }
-                fbm.observeHandInfo (
-                    from: room.roomData.roomID,
-                    gameID: game.gameID,
-                    playerID: game.players[0].id) { cards in
-                        var i = 0
-                        if let cardsUnwrapped = cards {
-                            for newhandcard in cardsUnwrapped {
-                                // まず新しい手札を配列から見つけ出し
-                                if let index = cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
-                                    var newCard = cardUI.remove(at: index)
-                                    // 新しい位置を設定
-                                    newCard.location = .hand(playerIndex: 0, cardIndex: i)
-                                    i += 1;
-                                    // 新しい手札を一番最後に追加
-                                    cardUI.append(newCard)
+                for s in 0..<game.players.count {
+                    fbm.observeHandInfo (
+                        from: room.roomData.roomID,
+                        gameID: game.gameID,
+                        playerIndex: String(s)) { cards in
+                            var i = 0
+                            if let cardsUnwrapped = cards {
+                                for newhandcard in cardsUnwrapped {
+                                    // まず新しい手札を配列から見つけ出し
+                                    if let index = cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
+                                        var newCard = cardUI.remove(at: index)
+                                        // 新しい位置を設定
+                                        newCard.location = .hand(playerIndex: s, cardIndex: i)
+                                        i += 1;
+                                        // 新しい手札を一番最後に追加
+                                        cardUI.append(newCard)
+                                    }
                                 }
+                                game.players[s].hand = cards!
+                            } else{
+                                game.players[s].hand = []
                             }
-                            game.players[0].hand = cards!
-                        } else{
-                            game.players[0].hand = []
                         }
-                    }
+                }
             }
         }
-    }
-    // 自分のサイドを探索
-    func myside() -> Int {
-        let id = appState.account.loginUser.userID
-        let players =  appState.gameUIState.players
-        let myIndex = players.firstIndex(where: { $0.id == id })
-        return myIndex!
     }
 }
 
 struct N_CardView: View {
     var card: N_Card
     let location: CardLocation
-    let total: Int // 新しいプロパティを追加
     @Binding var selectedCards: [N_Card]
     
     var body: some View {
-        // ここでCardの内容を表示する
         Image(card.id.imageName())
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 60)
-            .rotationEffect(Angle(degrees: card.id.angle(for: location, total: total)))
-            .offset(card.id.location(for: location, total: total)) // 'total'を引数として渡す
-            .offset(y: selectedCards.contains(card) ? -20 : 0) // <- Here
-
+            .rotationEffect(Angle(degrees: card.id.angle(for: location, total: card.id.total(for: card.location))))
+            .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
+            .offset(y: selectedCards.contains(card) ? -20 : 0)
             .onTapGesture {
-                // タップ時にカードの選択状態を更新
                 if let index = selectedCards.firstIndex(of: card) {
-                    // カードが既に選択されている場合は選択を解除
                     selectedCards.remove(at: index)
                 } else {
-                    // それ以外の場合は選択
                     selectedCards.append(card)
                 }
             }

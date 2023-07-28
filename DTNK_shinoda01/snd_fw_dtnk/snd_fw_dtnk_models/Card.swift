@@ -11,12 +11,10 @@ import SwiftUI
  */
 
 struct Card: Hashable, Identifiable {
-    
     let id = UUID()
     let suit: Suit
     let number: Int
     let cardid: CardId
-    
 }
 
 enum Suit: String, CaseIterable {
@@ -98,46 +96,97 @@ enum CardId: Int, CaseIterable, JSONSerializable, Identifiable {
 extension CardId {
     
     // ロケーション合計 deck total : 0, hand: その手札合計
-//    func total(for location: CardLocation, playerIndex: Int) -> Int {
-//        switch location {
-//        case .deck, .table:
-//            return 0
-//        case .hand(playerIndex: _):
-//            return appState.gameUIState.players[playerIndex].hand.count
-//        }
-//    }
-    
+    func total(for location: CardLocation) -> Int {
+        switch location {
+        case .deck, .table:
+            return 0
+        case .hand(let playerIndex, _):
+            return appState.gameUIState.players[playerIndex].hand.count
+        }
+    }
+        
     // 座標　total: 手札合計, index: 何枚目のカードか
     func location(for location: CardLocation, total: Int) -> CGSize {
-        let resize_y = 200
-        let cardSpacingDegrees: Double = 30
+        let resize = CGFloat(200)
+        let game = appState.gameUIState
+        
         switch location {
         case .deck:
             return CGSize(width: UIScreen.main.bounds.width / 128 - 35, height: 0)
         case .table:
             return CGSize(width: UIScreen.main.bounds.width / 128 + 35, height: 0)
         case .hand(let playerIndex, let cardIndex):
-//            print("kokokara")
-//            print("index: \(cardIndex)")
-//            print("total: \(total)")
-            let x = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
-            let y = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.10)// 30
-            return CGSize(width: x, height: y + CGFloat(resize_y))
+            let cardSpacingDegrees: Double = playerIndex == game!.myside ? 30 : 10
+            var prex = CGFloat(0)
+            var prey = CGFloat(0)
+            
+            if  playerIndex == (game!.myside + 2) % game!.players.count {
+                // 正面
+                prex = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+                prey = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * -0.10)// 30
+            } else {
+                prex = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+                prey = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.10)// 30
+            }
+            
+            let x = prex
+            let y = prey
+
+            // 自分のサイドのプレイヤーの座標
+            if playerIndex == game!.myside {
+                return CGSize(width: x, height: y + resize)
+            }
+            // 自分のサイドの次のプレイヤーの座標(左)
+            else if playerIndex == (game!.myside + 1) % game!.players.count {
+                return CGSize(width: -y - resize, height: x)
+            }
+            // 自分のサイドの次の次のプレイヤーの座標(正面)
+            else if playerIndex == (game!.myside + 2) % game!.players.count {
+                return CGSize(width: -x, height: y - CGFloat(300))
+            }
+            // 自分のサイドの次の次の次のプレイヤーの座標(右)
+            else if playerIndex == (game!.myside + 3) % game!.players.count {
+                return CGSize(width: y + resize, height: -x)
+            }
+            else {
+                return .zero
+            }
         }
     }
-    
+
     // 角度を計算 total: 手札合計, index: 何枚目のカードか
     func angle(for location: CardLocation, total: Int) -> Double {
         let cardSpacingDegrees: Double = 10
+        let game = appState.gameUIState
+
         switch location {
         case .deck:
             return 0
         case .table:
             return 0
         case .hand(let playerIndex, let cardIndex):
-            return (cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2)) // 手札の角度を計算
+            // 自分のサイドのプレイヤーの角度
+            if playerIndex == game!.myside {
+                return (cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+            }
+            // 自分のサイドの次のプレイヤーの角度
+            else if playerIndex == (game!.myside + 1) % game!.players.count {
+                return 90 + (cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+            }
+            // 自分のサイドの次の次のプレイヤーの角度
+            else if playerIndex == (game!.myside + 2) % game!.players.count {
+                return 180 + (cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+            }
+            // 自分のサイドの次の次の次のプレイヤーの角度
+            else if playerIndex == (game!.myside + 3) % game!.players.count {
+                return -90 + (cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
+            }
+            else {
+                return .zero
+            }
         }
     }
+
 
     
     //　手札で取りうる値

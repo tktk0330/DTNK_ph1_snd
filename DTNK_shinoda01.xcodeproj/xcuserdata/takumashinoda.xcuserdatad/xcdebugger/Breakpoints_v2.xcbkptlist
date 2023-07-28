@@ -169,10 +169,10 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "380"
-            endingLineNumber = "380"
-            landmarkName = "FirebaseManager"
-            landmarkType = "3">
+            startingLineNumber = "379"
+            endingLineNumber = "379"
+            landmarkName = "searchRoom(withRoomName:completion:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "6F9C8F89-6483-4B90-8E6D-A6C7A72FB1B8 - 12d8f70ca9aaef55"
@@ -360,8 +360,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "439"
-            endingLineNumber = "439"
+            startingLineNumber = "438"
+            endingLineNumber = "438"
             landmarkName = "observeMatchingFlg(roomID:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -497,54 +497,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C2330E93-FA10-439B-83D9-BC31EC1D2605"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "observeHandInfo(from:gameID:playerID:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C2330E93-FA10-439B-83D9-BC31EC1D2605 - 269cad300047f2f5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.FirebaseManager.observeHandInfo(from: Swift.String, gameID: Swift.String, playerID: Swift.String, completion: (Swift.Optional&lt;Swift.Array&lt;DTNK_shinoda01.CardId&gt;&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "132">
-               </Location>
-               <Location
-                  uuid = "C2330E93-FA10-439B-83D9-BC31EC1D2605 - 269cad300047f2f5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.FirebaseManager.observeHandInfo(from: Swift.String, gameID: Swift.String, playerID: Swift.String, completion: (Swift.Optional&lt;Swift.Array&lt;DTNK_shinoda01.CardId&gt;&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "124">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "70A544CF-19FF-41FF-BFE7-3365D9A4E0AD"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -552,9 +504,9 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
-            landmarkName = "observeHandInfo(from:gameID:playerID:completion:)"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "observeHandInfo(from:gameID:playerIndex:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -568,9 +520,9 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "observeHandInfo(from:gameID:playerID:completion:)"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "observeHandInfo(from:gameID:playerIndex:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -616,8 +568,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
             landmarkName = "FirebaseManager"
             landmarkType = "3">
             <Locations>
@@ -664,8 +616,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
             landmarkName = "FirebaseManager"
             landmarkType = "3">
             <Locations>
@@ -712,8 +664,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
             landmarkName = "FirebaseManager"
             landmarkType = "3">
          </BreakpointContent>
@@ -728,8 +680,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "FirebaseManager"
             landmarkType = "3">
             <Locations>
@@ -776,8 +728,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_views/dtnk/GameFriend/GameFriendView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
