@@ -20,7 +20,6 @@ enum GamePhase: Int {
     case gamefirst_sub = 6
     case main = 7
     case dtnk = 8
-    case burst = 15
     case revenge = 14
     case q_challenge = 9
     case challenge = 10
