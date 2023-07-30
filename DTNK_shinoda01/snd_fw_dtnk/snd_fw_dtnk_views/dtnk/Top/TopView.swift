@@ -7,7 +7,6 @@ struct TopView: View {
     
     var body: some View {
         GeometryReader { geo in
-            
             // 広告用
             Rectangle()
                 .foregroundColor(Color.white.opacity(0.3))
@@ -15,14 +14,12 @@ struct TopView: View {
                 .frame(maxWidth: .infinity, maxHeight: 50)
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
 
-            
             Text("DOTENKO")
-                .font(.custom(FontName.font01, size: 65))
+                .font(.custom(FontName.font01, size: UIScreen.main.bounds.width * 0.15))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .padding(5)
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.20)
-            
 
             Image(ImageName.Top.topicon.rawValue)
                 .resizable()

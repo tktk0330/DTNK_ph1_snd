@@ -5,8 +5,7 @@
  ゲーム選択
  ルール選択
  その他Info share
- 
- 
+
  */
 
 import SwiftUI
@@ -30,17 +29,27 @@ struct HomeView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
                        
                 // Life
-                HStack() {
-                    ForEach(0..<5) {_ in
-                        Image(systemName: "heart.fill")
+                HStack(spacing: 10) {
+                    HStack {
+                        ForEach(0..<5) {_ in
+                            Image(systemName: "heart.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.red)
+                        }
+                    }
+                    
+                    Button(action: {
+                        print("ハートの購入")
+                    }) {
+                        Image(ImageName.Home.healbox.rawValue)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.red)
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.30)
-                
                 
                 // Game List
                 VStack (spacing: 40){
@@ -71,10 +80,8 @@ struct HomeView: View {
                     }) {
                         Btnwb(btnText: "Option", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
-                    
                     Button(action: {
                         HomeController().onTapShop()
-                        
                     }) {
                         Btnwb(btnText: "Shop", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }

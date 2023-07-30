@@ -312,6 +312,7 @@
 		5D8FA2532A481AEB0079F260 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				5D8FA2BD2A48239A0079F260 /* ImageName.swift */,
 				5D8FA2482A4814AF0079F260 /* Assets.xcassets */,
 			);
 			path = images;
@@ -394,7 +395,6 @@
 				5D8FA2B92A48237A0079F260 /* GameScore.swift */,
 				5D8FA2BB2A4823890079F260 /* GameUiSide.swift */,
 				5D8FA2C12A4823C50079F260 /* HomeMode.swift */,
-				5D8FA2BD2A48239A0079F260 /* ImageName.swift */,
 				5D8FA2BF2A4823B50079F260 /* Player.swift */,
 				5DDB61E22A511AD100EB03F7 /* RoomModel.swift */,
 				5DDB61E42A53FF3A00EB03F7 /* GameInfoModel.swift */,

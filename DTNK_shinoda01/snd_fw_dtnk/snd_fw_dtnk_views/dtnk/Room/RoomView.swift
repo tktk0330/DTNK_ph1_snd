@@ -23,9 +23,21 @@ struct RoomView: View {
                     .frame(maxWidth: .infinity, maxHeight: 50)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
+                // back
+                Button(action: {
+                    Router().setBasePages(stack: [.home])
+                }) {
+                    Image(ImageName.Common.back.rawValue)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40)
+                }
+                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
+
+                
                 // title
                 Text("ROOM")
-                    .font(.system(size: 45))
+                    .font(.custom(FontName.font01, size: 45))
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .padding(5)
@@ -43,40 +55,20 @@ struct RoomView: View {
                     .frame(width: 300)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.40)
 
-                HStack(spacing: 50) {
+                VStack(spacing: 50) {
                     Button(action: {
                         onTapCreate()
                     }) {
-                        Text("CREATE")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .bold()
-                            .padding()
-                            .frame(width: 120, height: 50)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.white, lineWidth: 3)
-                            )
+                        Btnwb(btnText: "Create", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                     }
                     
                     Button(action: {
                         onTapSearch()
                     }) {
-                        Text("SEARCH")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .bold()
-                            .padding()
-                            .frame(width: 120, height: 50)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.white, lineWidth: 3)
-                            )
+                        Btnwb(btnText: "Search", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                     }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.50)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
                 
                 if room.roommode == .pop {
                     JoinPopView()
