@@ -10,6 +10,8 @@
 		5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */; };
 		5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0522A761F1B00E59A69 /* CustomFont.swift */; };
 		5D51C0552A7620A800E59A69 /* ButtonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0542A7620A800E59A69 /* ButtonText.swift */; };
+		5D51C0582A76756300E59A69 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5D51C0572A76756300E59A69 /* RealmSwift */; };
+		5D51C05B2A7695F800E59A69 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C05A2A7695F800E59A69 /* RealmUser.swift */; };
 		5D8FA2452A4814AD0079F260 /* DTNK_shinoda01App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2442A4814AD0079F260 /* DTNK_shinoda01App.swift */; };
 		5D8FA2472A4814AD0079F260 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2462A4814AD0079F260 /* ContentView.swift */; };
 		5D8FA2492A4814AF0079F260 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FA2482A4814AF0079F260 /* Assets.xcassets */; };
@@ -126,6 +128,7 @@
 		5D51C0512A761C9C00E59A69 /* DTNK-shinoda01-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DTNK-shinoda01-Info.plist"; sourceTree = SOURCE_ROOT; };
 		5D51C0522A761F1B00E59A69 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
 		5D51C0542A7620A800E59A69 /* ButtonText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonText.swift; sourceTree = "<group>"; };
+		5D51C05A2A7695F800E59A69 /* RealmUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
 		5D8FA2412A4814AD0079F260 /* DTNK_shinoda01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DTNK_shinoda01.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D8FA2442A4814AD0079F260 /* DTNK_shinoda01App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTNK_shinoda01App.swift; sourceTree = "<group>"; };
 		5D8FA2462A4814AD0079F260 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -242,6 +245,7 @@
 				5D8FA32D2A482B960079F260 /* FirebaseDatabase in Frameworks */,
 				5D8FA32F2A482B960079F260 /* FirebaseFirestore in Frameworks */,
 				5D8FA3292A482B960079F260 /* FirebaseAnalytics in Frameworks */,
+				5D51C0582A76756300E59A69 /* RealmSwift in Frameworks */,
 				5D8FA32B2A482B960079F260 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +253,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D51C0592A7695DE00E59A69 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				5D51C05A2A7695F800E59A69 /* RealmUser.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
 		5D8FA2382A4814AD0079F260 = {
 			isa = PBXGroup;
 			children = (
@@ -372,6 +384,7 @@
 		5D8FA25A2A481BEB0079F260 /* snd_fw_dtnk_models */ = {
 			isa = PBXGroup;
 			children = (
+				5D51C0592A7695DE00E59A69 /* Realm */,
 				5D8FA2AD2A48229E0079F260 /* AccountUser.swift */,
 				5D8FA2AF2A4822EC0079F260 /* BotUserList.swift */,
 				5D8FA2B12A4823040079F260 /* Card.swift */,
@@ -650,6 +663,7 @@
 				5D8FA32A2A482B960079F260 /* FirebaseAuth */,
 				5D8FA32C2A482B960079F260 /* FirebaseDatabase */,
 				5D8FA32E2A482B960079F260 /* FirebaseFirestore */,
+				5D51C0572A76756300E59A69 /* RealmSwift */,
 			);
 			productName = DTNK_shinoda01;
 			productReference = 5D8FA2412A4814AD0079F260 /* DTNK_shinoda01.app */;
@@ -681,6 +695,7 @@
 			mainGroup = 5D8FA2382A4814AD0079F260;
 			packageReferences = (
 				5D8FA3272A482B950079F260 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5D51C0562A76756300E59A69 /* XCRemoteSwiftPackageReference "realm-cocoa" */,
 			);
 			productRefGroup = 5D8FA2422A4814AD0079F260 /* Products */;
 			projectDirPath = "";
@@ -769,6 +784,7 @@
 				5D8FA2DA2A48252E0079F260 /* RelaunchView.swift in Sources */,
 				5D8FA2C22A4823C50079F260 /* HomeMode.swift in Sources */,
 				5D8FA2D22A4824DD0079F260 /* IconView.swift in Sources */,
+				5D51C05B2A7695F800E59A69 /* RealmUser.swift in Sources */,
 				5D8FA2982A4820EC0079F260 /* ScoreContoroller.swift in Sources */,
 				5D8FA2472A4814AD0079F260 /* ContentView.swift in Sources */,
 				5DDB61E32A511AD100EB03F7 /* RoomModel.swift in Sources */,
@@ -1018,6 +1034,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5D51C0562A76756300E59A69 /* XCRemoteSwiftPackageReference "realm-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-cocoa.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		5D8FA3272A482B950079F260 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1029,6 +1053,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5D51C0572A76756300E59A69 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D51C0562A76756300E59A69 /* XCRemoteSwiftPackageReference "realm-cocoa" */;
+			productName = RealmSwift;
+		};
 		5D8FA3282A482B960079F260 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5D8FA3272A482B950079F260 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
