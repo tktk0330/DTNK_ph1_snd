@@ -1,6 +1,14 @@
 
 import SwiftUI
 
+
+extension Color {
+    static let casinoGreen = Color(red: 8/255, green: 82/255, blue: 20/255)
+    static let casinoLightGreen = Color(red: 195/255, green: 242/255, blue: 203/255)
+    static let casinoShadow = Color(red: 7/255, green: 61/255, blue: 14/255)
+
+}
+
 extension Color {
     static let plusAutoWhite = Color("AutoWhite")
     static let plusAutoBlack = Color("AutoBlack")

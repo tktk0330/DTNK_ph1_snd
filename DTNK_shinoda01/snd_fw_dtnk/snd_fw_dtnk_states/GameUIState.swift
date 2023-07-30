@@ -108,19 +108,3 @@ enum CardLocation: Equatable {
     // playerIndex　誰か [0 1 2 3]    cardIndex　何枚目か [0 1 2 3 4 5 6]
     case hand(playerIndex: Int, cardIndex: Int)
 }
-
-extension CardLocation {
-    func offset(total: Int, index: Int) -> CGSize {
-        let cardSpacingDegrees: Double = 5
-        switch self {
-        case .deck:
-            return .zero
-        case .table:
-            return CGSize(width: 0, height: 300)
-        case .hand:
-            let x = CGFloat(cardSpacingDegrees * (Double(index) - Double(total - 1) / 2))
-            let y = CGFloat(pow((Double(index) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.30)
-            return CGSize(width: x, height: y)
-        }
-    }
-}

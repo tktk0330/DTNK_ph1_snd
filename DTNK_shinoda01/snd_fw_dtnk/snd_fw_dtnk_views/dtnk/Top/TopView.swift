@@ -17,7 +17,7 @@ struct TopView: View {
 
             
             Text("DOTENKO")
-                .font(.system(size: 65))
+                .font(.custom(FontName.font01, size: 65))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .padding(5)
@@ -34,11 +34,7 @@ struct TopView: View {
                 // Home画面へ
                 TopController().onTapPlay()
             }) {
-                Text("START")
-                    .font(.system(size: 45))
-                    .foregroundColor(Color.white)
-                    .fontWeight(.bold)
-                    .padding(5)
+                Btnwb(btnText: "Tap", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
             .blinkEffect(animating: true)
