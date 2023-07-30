@@ -1,6 +1,10 @@
 
 enum ImageName {
     
+    enum Common: String {
+        case back = "arrow-back"
+    }
+    
     enum Splash: String {
         case splash = "splash"
     }
@@ -12,6 +16,7 @@ enum ImageName {
     enum Home: String {
         case vsbots = "icon-solo"
         case vsfriends = "icon-team"
+        case healbox = "box-yellow"
     }
 
     enum Card: String {

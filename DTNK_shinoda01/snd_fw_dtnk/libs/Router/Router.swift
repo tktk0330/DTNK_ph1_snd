@@ -7,8 +7,10 @@ struct Router {
     
     /**
      基本の画面遷移
+     trueにすると画面が残るような繊維になる
+     push set違いいまいちわかっていない
      */
-    func setBasePages(stack: [PageId], animated: Bool = true) {
+    func setBasePages(stack: [PageId], animated: Bool = false) {
         DispatchQueue.main.async {
             if animated {
                 withAnimation {
@@ -20,7 +22,7 @@ struct Router {
         }
     }
     
-    func pushBasePage(pageId: PageId, animated: Bool = true) {
+    func pushBasePage(pageId: PageId, animated: Bool = false) {
         DispatchQueue.main.async {
             if animated {
                 withAnimation {

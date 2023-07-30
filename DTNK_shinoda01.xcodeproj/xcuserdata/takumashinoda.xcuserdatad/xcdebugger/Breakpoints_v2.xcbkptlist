@@ -280,10 +280,10 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_views/dtnk/Room/RoomView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "onTapCreate()"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -296,10 +296,10 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_views/dtnk/Room/RoomView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "onTapCreate()"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
