@@ -10,8 +10,8 @@ enum ImageName {
     }
     
     enum Home: String {
-        case vsbots = "home_vsbot"
-        case vsfriends = "home_vsfriends"
+        case vsbots = "icon-solo"
+        case vsfriends = "icon-team"
     }
 
     enum Card: String {

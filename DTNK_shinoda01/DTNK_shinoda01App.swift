@@ -32,7 +32,7 @@ struct DTNK_shinoda01App: App {
             }
             .background(
                 //basebackgroundが設定される
-                Color.plusDarkGreen
+                Color.casinoGreen
                     .ignoresSafeArea(.all)
             )
         }

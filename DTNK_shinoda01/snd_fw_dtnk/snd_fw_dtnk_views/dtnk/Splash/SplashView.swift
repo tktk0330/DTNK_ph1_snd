@@ -30,7 +30,7 @@ struct SplashView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
                 Text("IWM")
-                    .font(.system(size: 100))
+                    .font(.custom(FontName.font01, size: 100))
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .bold()

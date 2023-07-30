@@ -17,9 +17,6 @@ struct HomeView: View {
     @StateObject var home: HomeState = appState.home
     
     
-    let elements = [["0", ImageName.Home.vsbots.rawValue, "VS BOT"], ["1", ImageName.Home.vsfriends.rawValue, "VS FRIENDS"]]
-
-    
     var body: some View {
         GeometryReader { geo in
             ZStack{
@@ -30,11 +27,12 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity, maxHeight: 50)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
-                
+                // Account
                 AccountView()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
 
-                
+                       
+                // Life
                 HStack() {
                     ForEach(0..<5) {_ in
                         Image(systemName: "heart.fill")
@@ -47,111 +45,44 @@ struct HomeView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.30)
                 
                 
-                
                 // Game List
-                PhotosView(width: 300, height: 300) {
-                    ForEach(elements, id: \.self) { ele in
-                        Button(action: {
-                            if ele[0] == "0" {
-                                HomeController().onTapPlay()
-                            } else {
-                                Router().pushBasePage(pageId: .room)
-                            }
-                        }) {
-                            ZStack{
-                                Image(ele[1])
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 150)
-                                    .padding(10)
-                                    .scaledToFit()
-                                
-                                Text(ele[2])
-                                    .font(.system(size: 40))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .padding(5)
-                            }
-                        }
+                VStack (spacing: 40){
+                    Button(action: {
+                        HomeController().onTapPlay()
+                    }) {
+                        Btnlgb(imageName: ImageName.Home.vsbots.rawValue, btnText: "ひとりでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120)
                     }
+                    
+                    Button(action: {
+                        Router().pushBasePage(pageId: .room)
+                    }) {
+                        Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120)
+                    }
+
                 }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.white, lineWidth: 5)
-                )
-                .cornerRadius(10)
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.55)
-                
-                
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
+
                 // Info List
-                VStack(spacing: 20) {
-                    HStack(spacing: 40) {
-                        Button(action: {
-                            HomeController().onTapRule()
-                        }) {
-                            Text("RULE")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding()
-                                .frame(width: 120, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.white, lineWidth: 3)
-                                )
-                        }
-                        
-                        Button(action: {
-                            HomeController().onTapShop()
-                            
-                        }) {
-                            Text("SHOP")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding()
-                                .frame(width: 120, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.white, lineWidth: 3)
-                                )
-                        }
+                HStack(spacing: 20) {
+                    Button(action: {
+                        HomeController().onTapRule()
+                    }) {
+                        Btnwb(btnText: "Rule", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
-                    HStack(spacing: 40) {
-                        Button(action: {
-                            HomeController().onTapOption()
-                        }) {
-                            Text("OPTION")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding()
-                                .frame(width: 120, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.white, lineWidth: 3)
-                                )
-                        }
-                        Button(action: {
-                        }) {
-                            Text("OTHER")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding()
-                                .frame(width: 120, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.white, lineWidth: 3)
-                                )
-                        }
+                    Button(action: {
+                        HomeController().onTapOption()
+                    }) {
+                        Btnwb(btnText: "Option", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
+                    }
+                    
+                    Button(action: {
+                        HomeController().onTapShop()
+                        
+                    }) {
+                        Btnwb(btnText: "Shop", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.87)
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.90)
              
                 Group{
                     if home.mode == .edittingNickname {
