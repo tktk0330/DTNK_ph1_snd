@@ -9,13 +9,11 @@
  
  */
 
-
 import SwiftUI
 
 struct HomeView: View {
     
     @StateObject var home: HomeState = appState.home
-    
     
     var body: some View {
         GeometryReader { geo in
@@ -30,7 +28,6 @@ struct HomeView: View {
                 // Account
                 AccountView()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
-
                        
                 // Life
                 HStack() {
