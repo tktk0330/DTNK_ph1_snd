@@ -112,9 +112,9 @@ extension CardId {
         
         switch location {
         case .deck:
-            return CGSize(width: UIScreen.main.bounds.width / 128 - 35, height: 0)
+            return CGSize(width: UIScreen.main.bounds.width / 128 - 38, height: 0)
         case .table:
-            return CGSize(width: UIScreen.main.bounds.width / 128 + 35, height: 0)
+            return CGSize(width: UIScreen.main.bounds.width / 128 + 32, height: 0)
         case .hand(let playerIndex, let cardIndex):
             let cardSpacingDegrees: Double = playerIndex == game!.myside ? 30 : 10
             var prex = CGFloat(0)

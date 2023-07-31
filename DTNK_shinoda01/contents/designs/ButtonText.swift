@@ -7,6 +7,29 @@
 
 import SwiftUI
 
+
+struct Btnaction: View {
+    var btnText: String
+    var btnTextSize: CGFloat
+    var btnWidth: CGFloat
+    var btnHeight: CGFloat
+    var btnColor: Color
+    
+    var body: some View {
+        
+        Text(btnText)
+            .font(.custom(FontName.font01, size: btnTextSize))
+            .fontWeight(.heavy)
+            .padding()
+            .frame(width: btnWidth, height: btnHeight)
+            .foregroundColor(Color.white)
+            .background(btnColor)
+            .cornerRadius(10)
+            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+
+    }
+}
+
 struct Btnwb: View {
     var btnText: String
     var btnTextSize: CGFloat
