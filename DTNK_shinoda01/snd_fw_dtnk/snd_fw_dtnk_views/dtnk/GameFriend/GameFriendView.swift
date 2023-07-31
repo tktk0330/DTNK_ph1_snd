@@ -118,11 +118,9 @@ struct GameFriendView: View {
 
 
         }.onAppear {
-            //
+            // サイド設定
             game.myside = self.myside
-            print(game.myside)
-            
-            
+                        
             // ゲーム情報取得
             fbm.getGameInfo(from: room.roomData.roomID) { info in
                 game.gameID = info!.gameID
@@ -180,6 +178,14 @@ struct GameFriendView: View {
                             }
                         }
                 }
+                // オブザーバーの方が配布
+                if game.myside == 0 {
+                    //　カード配布
+                    GameObserber().dealFirst(roomID: room.roomData.roomID, players: game.players, gameID: game.gameID) { result in
+                        
+                    }
+                }
+
             }
         }
     }

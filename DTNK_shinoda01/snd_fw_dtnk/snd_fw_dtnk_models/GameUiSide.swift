@@ -20,7 +20,6 @@ final class GameUiSide: ObservableObject {
 
 }
 
-
 //人数に伴って増やす
 enum PlayerSeat: Int {
     case s1 = 1

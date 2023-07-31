@@ -12,8 +12,7 @@ struct BotUserList {
             .init(id: "ccc", side: 99, name: "こんどう", icon_url: "icon-bot3"),
             .init(id: "ddd", side: 99, name: "SHIGEM", icon_url: "icon-bot4"),
             .init(id: "eee", side: 99, name: "シノダ", icon_url: "icon-bot5"),
-            .init(id: "fff", side: 99, name: "maxnam", icon_url: "icon-bot9")
-            
+            .init(id: "fff", side: 99, name: "maxnam", icon_url: "icon-bot5")
         ]
     }
 }

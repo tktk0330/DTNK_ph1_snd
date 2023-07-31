@@ -12,6 +12,7 @@
 		5D51C0552A7620A800E59A69 /* ButtonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0542A7620A800E59A69 /* ButtonText.swift */; };
 		5D51C0582A76756300E59A69 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5D51C0572A76756300E59A69 /* RealmSwift */; };
 		5D51C05B2A7695F800E59A69 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C05A2A7695F800E59A69 /* RealmUser.swift */; };
+		5D51C05D2A77E29800E59A69 /* GameObserber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C05C2A77E29800E59A69 /* GameObserber.swift */; };
 		5D8FA2452A4814AD0079F260 /* DTNK_shinoda01App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2442A4814AD0079F260 /* DTNK_shinoda01App.swift */; };
 		5D8FA2472A4814AD0079F260 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2462A4814AD0079F260 /* ContentView.swift */; };
 		5D8FA2492A4814AF0079F260 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FA2482A4814AF0079F260 /* Assets.xcassets */; };
@@ -129,6 +130,7 @@
 		5D51C0522A761F1B00E59A69 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
 		5D51C0542A7620A800E59A69 /* ButtonText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonText.swift; sourceTree = "<group>"; };
 		5D51C05A2A7695F800E59A69 /* RealmUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
+		5D51C05C2A77E29800E59A69 /* GameObserber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObserber.swift; sourceTree = "<group>"; };
 		5D8FA2412A4814AD0079F260 /* DTNK_shinoda01.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DTNK_shinoda01.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D8FA2442A4814AD0079F260 /* DTNK_shinoda01App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTNK_shinoda01App.swift; sourceTree = "<group>"; };
 		5D8FA2462A4814AD0079F260 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				5D8FA2992A4820FD0079F260 /* SplashController.swift */,
 				5D8FA29B2A4821160079F260 /* TopController.swift */,
 				5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */,
+				5D51C05C2A77E29800E59A69 /* GameObserber.swift */,
 			);
 			path = dtnk;
 			sourceTree = "<group>";
@@ -781,6 +784,7 @@
 				5D8FA2EE2A4826440079F260 /* GameRuleView.swift in Sources */,
 				5D8FA3122A48280F0079F260 /* HeaderView.swift in Sources */,
 				5D8FA2D42A4824EE0079F260 /* InitialFlip.swift in Sources */,
+				5D51C05D2A77E29800E59A69 /* GameObserber.swift in Sources */,
 				5D8FA2DA2A48252E0079F260 /* RelaunchView.swift in Sources */,
 				5D8FA2C22A4823C50079F260 /* HomeMode.swift in Sources */,
 				5D8FA2D22A4824DD0079F260 /* IconView.swift in Sources */,
