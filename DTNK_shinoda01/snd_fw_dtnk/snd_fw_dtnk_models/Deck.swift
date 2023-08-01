@@ -1,7 +1,8 @@
 
+
+
 import SwiftUI
 import Foundation
-
 
 struct Deck: Equatable {
     var cards: [Card]
