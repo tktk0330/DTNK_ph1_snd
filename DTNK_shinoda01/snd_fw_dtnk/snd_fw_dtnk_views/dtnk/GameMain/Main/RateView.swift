@@ -2,6 +2,7 @@
  rate
  text　と　数字分ける
  */
+
 import SwiftUI
 
 struct rateBtnView: View {
@@ -11,7 +12,7 @@ struct rateBtnView: View {
     var body: some View {
 
         Text(text)
-            .font(.system(size: 25))
+            .font(.custom(FontName.font01, size: 25))
             .foregroundColor(Color.white)
             .fontWeight(.bold)
             .padding(5)
@@ -27,9 +28,9 @@ struct RateView: View {
     var body: some View {
         VStack {
             HStack {
-                rateBtnView(text: "GAME \(gamenum)")
-                rateBtnView(text: "RATE \(rate)")
-                rateBtnView(text: "✖️ \(magnification)")
+                rateBtnView(text: "Game \(gamenum)")
+                rateBtnView(text: "Rate \(rate)")
+                rateBtnView(text: "✖︎ \(magnification)")
             }
         }
     }

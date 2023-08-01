@@ -11,7 +11,7 @@ class GameUIState: ObservableObject {
     @Published var deckUI: [N_Card] = []
     @Published var table: [CardId] = []
     @Published var myside: Int = 99
-
+    @Published var gamePhase: GamePhase = .dealcard
 }
 
 

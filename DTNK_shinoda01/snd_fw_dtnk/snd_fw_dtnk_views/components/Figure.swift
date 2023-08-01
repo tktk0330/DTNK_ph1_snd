@@ -9,3 +9,16 @@ struct Figure: View {
     }
 }
 
+// Game スコア表示バー
+struct ScoreBar: View {
+    var body: some View {
+        Rectangle()
+            .fill(Color.clear)
+            .frame(width: 150, height: 115)
+            .overlay(
+                Rectangle()
+                    .stroke(Color.casinoShadow, lineWidth: 20)
+            )
+    }
+}
+

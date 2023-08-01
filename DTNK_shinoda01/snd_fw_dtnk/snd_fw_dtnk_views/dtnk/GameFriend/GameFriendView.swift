@@ -16,9 +16,20 @@ struct GameFriendView: View {
         let myIndex = players.firstIndex(where: { $0.id == id })
         return myIndex!
     }
+    @State var startFlag: Bool = false
     
     var body: some View {
         GeometryReader { geo in
+            
+            Group {
+                TargetPlayerView()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
+            
+            // Score
+            ScoreBar()
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+
             
             // プレイヤーのアイコンをループで表示
             HStack(spacing: 30) {
@@ -42,7 +53,13 @@ struct GameFriendView: View {
 
             // Btn
             Group {
-                HStack(spacing: 50) {
+                HStack(spacing: 15) {
+                    
+                    // TODO: ボタンだしわけ
+//                    Button(action: {
+//                    }) {
+//                        Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+//                    }
                     
                     Button(action: {
                         fbm.drawCard(
@@ -52,17 +69,20 @@ struct GameFriendView: View {
                                 print("Draw")
                             }
                     }) {
-                        Text("引く")
-                            .font(.system(size: 25))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .bold()
-                            .padding()
-                            .frame(width: 100, height: 50)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.yellow, lineWidth: 3)
-                            )
+                        Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
+                    }
+                    
+                    // testようにボタンとして動かしておく
+                    Button(action: {
+                    }) {
+                        // icon
+                        // TODO: 磨き上げ
+                        Image(game.players[myside].icon_url)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 60)
+                            .cornerRadius(10)
+                            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
                     }
                     
                     Button(action: {
@@ -74,24 +94,33 @@ struct GameFriendView: View {
                         ) { bool in
                                 print("Play")
                             game.players[myside].selectedCards = []
-
                             }
-                        
                     }) {
-                        Text("出す")
-                            .font(.system(size: 25))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .bold()
-                            .padding()
-                            .frame(width: 100, height: 50)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.yellow, lineWidth: 3)
-                            )
+                        Btnaction(btnText: "出す", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.9)
+            }
+            
+            // 開始ボタン
+            if startFlag {
+                Button(action: {
+                    startFlag = false
+                    fbm.updateGamePhase(roomID: room.roomData.roomID, gameID: game.gameID, gamePhase: .countdown) { result in
+                    }
+                }) {
+                    Text("Start")
+                }
+                .buttonStyle(ShadowButtonStyle())
+                .frame(width: 200, height: 100)
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
+            
+            // CountDown
+            if game.gamePhase == .countdown {
+                Countdown02View()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+
             }
             
             
@@ -101,32 +130,35 @@ struct GameFriendView: View {
                     .foregroundColor(Color.white.opacity(0.3))
                     .shadow(color: .gray, radius: 10, x: 0, y: 5)
                     .frame(maxWidth: .infinity, maxHeight: 50)
-                    .background(Color.plusDarkGreen)
+                    .background(Color.casinoGreen)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
                 //Rate
                 RateView(gamenum: 1, rate: 10, magnification: 10)
-                    .background(Color.plusDarkGreen)
+                    .background(Color.casinoGreen)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.09)
             }
             
-            //Exit btn
+//            //Exit btn
 //            Header()
 //                .frame(width: UIScreen.main.bounds.width , height: 40)
 //                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.13)
             
-
-
-        }.onAppear {
-            //
+            
+        } .onAppear {
+            // サイド設定
             game.myside = self.myside
-            print(game.myside)
-            
-            
+                        
             // ゲーム情報取得
             fbm.getGameInfo(from: room.roomData.roomID) { info in
                 game.gameID = info!.gameID
                 game.deck = info!.deck
+                
+                fbm.observeGamePhase(roomID: room.roomData.roomID, gameID: game.gameID) { gamePhase in
+                    if (gamePhase != nil) {
+                        game.gamePhase = gamePhase!
+                    }
+                }
                 
                 fbm.observeDeckInfo (
                     from: room.roomData.roomID,
@@ -179,6 +211,17 @@ struct GameFriendView: View {
                                 game.players[s].hand = []
                             }
                         }
+                }
+                
+                // オブザーバーの方が配布
+                if game.myside == 0 {
+                    //　カード配布
+                    GameObserber().dealFirst(roomID: room.roomData.roomID, players: game.players, gameID: game.gameID) { result in
+                        startFlag = true
+                    }
+                    GameObserber().fbm.moveTopCardToTable(roomID: room.roomData.roomID, gameID: game.gameID) { result in
+                        
+                    }
                 }
             }
         }
