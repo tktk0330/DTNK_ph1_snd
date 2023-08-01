@@ -121,6 +121,8 @@
 		5DDB61EA2A5A4E1100EB03F7 /* GameUiStateBuildController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */; };
 		5DDB61EC2A5DA06B00EB03F7 /* ConvertJSONMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */; };
 		5DDB61F02A62609600EB03F7 /* GameUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61EF2A62609600EB03F7 /* GameUIState.swift */; };
+		CA5C5DF22A794497006D7C01 /* BurstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5C5DF12A794497006D7C01 /* BurstView.swift */; };
+		CA5C5DF42A7944F0006D7C01 /* BurstCoutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5C5DF32A7944F0006D7C01 /* BurstCoutionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -235,6 +237,8 @@
 		5DDB61E92A5A4E1100EB03F7 /* GameUiStateBuildController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUiStateBuildController.swift; sourceTree = "<group>"; };
 		5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertJSONMng.swift; sourceTree = "<group>"; };
 		5DDB61EF2A62609600EB03F7 /* GameUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUIState.swift; sourceTree = "<group>"; };
+		CA5C5DF12A794497006D7C01 /* BurstView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstView.swift; sourceTree = "<group>"; };
+		CA5C5DF32A7944F0006D7C01 /* BurstCoutionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstCoutionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -606,6 +610,8 @@
 				5D8FA3032A4827860079F260 /* CardView.swift */,
 				5D8FA3052A4827960079F260 /* DeckView.swift */,
 				5D8FA3072A4827AA0079F260 /* DTNKView.swift */,
+				CA5C5DF32A7944F0006D7C01 /* BurstCoutionView.swift */,
+				CA5C5DF12A794497006D7C01 /* BurstView.swift */,
 				5D8FA3092A4827B90079F260 /* EffectView.swift */,
 				5D8FA30B2A4827C80079F260 /* FieldView.swift */,
 				5D8FA30F2A4827EC0079F260 /* HandView.swift */,
@@ -737,6 +743,7 @@
 				5D8FA2DC2A48253C0079F260 /* TargetPlayerView.swift in Sources */,
 				5D8FA2BE2A48239A0079F260 /* ImageName.swift in Sources */,
 				5D8FA2902A48209E0079F260 /* GameResultController.swift in Sources */,
+				CA5C5DF22A794497006D7C01 /* BurstView.swift in Sources */,
 				5D8FA30C2A4827C80079F260 /* FieldView.swift in Sources */,
 				5D8FA2622A481C740079F260 /* StringExtension.swift in Sources */,
 				5D8FA3062A4827960079F260 /* DeckView.swift in Sources */,
@@ -814,6 +821,7 @@
 				5DDB61F02A62609600EB03F7 /* GameUIState.swift in Sources */,
 				5DDB61DD2A4C802300EB03F7 /* JoinPopView.swift in Sources */,
 				5D8FA2742A481DC20079F260 /* PageID.swift in Sources */,
+				CA5C5DF42A7944F0006D7C01 /* BurstCoutionView.swift in Sources */,
 				5D8FA2F82A4826AF0079F260 /* AccountView.swift in Sources */,
 				5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */,
 				5D8FA2BC2A4823890079F260 /* GameUiSide.swift in Sources */,
