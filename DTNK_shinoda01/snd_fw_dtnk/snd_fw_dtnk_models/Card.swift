@@ -123,10 +123,10 @@ extension CardId {
             if  playerIndex == (game!.myside + 2) % game!.players.count {
                 // 正面
                 prex = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
-                prey = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * -0.10)// 30
+                prey = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * -0.10)
             } else {
                 prex = CGFloat(cardSpacingDegrees * (Double(cardIndex) - Double(total - 1) / 2))
-                prey = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.10)// 30
+                prey = CGFloat(pow((Double(cardIndex) - Double(total - 1) / 2), 2) * cardSpacingDegrees * 0.10)
             }
             
             let x = prex

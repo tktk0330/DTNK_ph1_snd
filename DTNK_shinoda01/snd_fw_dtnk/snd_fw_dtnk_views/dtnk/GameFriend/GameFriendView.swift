@@ -16,10 +16,15 @@ struct GameFriendView: View {
         let myIndex = players.firstIndex(where: { $0.id == id })
         return myIndex!
     }
+    @State var startFlag: Bool = false
     
     var body: some View {
         GeometryReader { geo in
             
+            Group {
+                TargetPlayerView()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
             
             // Score
             ScoreBar()
@@ -97,6 +102,27 @@ struct GameFriendView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.9)
             }
             
+            // 開始ボタン
+            if startFlag {
+                Button(action: {
+                    startFlag = false
+                    fbm.updateGamePhase(roomID: room.roomData.roomID, gameID: game.gameID, gamePhase: .countdown) { result in
+                    }
+                }) {
+                    Text("Start")
+                }
+                .buttonStyle(ShadowButtonStyle())
+                .frame(width: 200, height: 100)
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
+            
+            // CountDown
+            if game.gamePhase == .countdown {
+                Countdown02View()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+
+            }
+            
             
             Group {
                 // 広告用
@@ -127,6 +153,12 @@ struct GameFriendView: View {
             fbm.getGameInfo(from: room.roomData.roomID) { info in
                 game.gameID = info!.gameID
                 game.deck = info!.deck
+                
+                fbm.observeGamePhase(roomID: room.roomData.roomID, gameID: game.gameID) { gamePhase in
+                    if (gamePhase != nil) {
+                        game.gamePhase = gamePhase!
+                    }
+                }
                 
                 fbm.observeDeckInfo (
                     from: room.roomData.roomID,
@@ -180,14 +212,17 @@ struct GameFriendView: View {
                             }
                         }
                 }
+                
                 // オブザーバーの方が配布
                 if game.myside == 0 {
                     //　カード配布
                     GameObserber().dealFirst(roomID: room.roomData.roomID, players: game.players, gameID: game.gameID) { result in
+                        startFlag = true
+                    }
+                    GameObserber().fbm.moveTopCardToTable(roomID: room.roomData.roomID, gameID: game.gameID) { result in
                         
                     }
                 }
-
             }
         }
     }

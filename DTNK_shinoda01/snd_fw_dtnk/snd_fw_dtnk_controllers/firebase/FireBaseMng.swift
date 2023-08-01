@@ -12,6 +12,11 @@ class FirebaseManager {
     private let database = Database.database()
     // json変換用
     let cjm = ConvertJSONMng()
+    
+    @StateObject var game: GameUIState = appState.gameUIState
+    @StateObject var room: RoomState = appState.room
+    let roomID = appState.room.roomData.roomID
+    let gameID = appState.gameUIState.gameID
 
     //-------------------------------GAMEMAIN-------------------------------
     //-------------------------------GAMEMAIN-------------------------------
@@ -30,7 +35,9 @@ class FirebaseManager {
         let gameInfoDict: [String: Any] = [
             "gameID": gameID,
             "players": playersJSON,
-            "deck": deckData
+            "deck": deckData,
+            "gamePhase": GamePhase.dealcard.rawValue,
+            "currentPlayerIndex": 99
             // 他のプロパティも同様に追加
         ]
         database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).setValue(gameInfoDict) { error, _ in
@@ -107,7 +114,6 @@ class FirebaseManager {
             completion(cardIds)
         }
     }
-
     
     /**
      Handの取得（リアルタイム）
@@ -131,6 +137,88 @@ class FirebaseManager {
             completion(playerHand)
         }
     }
+    
+    /**
+     GamePhaseの取得（リアルタイム）
+     */
+    func observeGamePhase(roomID: String, gameID: String, completion: @escaping (GamePhase?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("gamePhase")
+        ref.observe(.value) { (snapshot) in
+            guard let gamePhaseValue = snapshot.value as? Int else {
+                print("Could not cast snapshot value to an integer")
+                return
+            }
+
+            guard let gamePhase = GamePhase(rawValue: gamePhaseValue) else {
+                print("Invalid gamePhase value: \(gamePhaseValue)")
+                return
+            }
+
+            // gamePhase is the updated value.
+            print("Updated gamePhase: \(gamePhase)")
+            completion(gamePhase)
+        }
+    }
+    
+    /**
+     GamePhase変更
+     */
+    func updateGamePhase(roomID: String, gameID: String, gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("gamePhase").setValue(gamePhase.rawValue) { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+            }
+        }
+    }
+    
+    /**
+     currentPlayerIndexのセット
+     */
+    func setCurrentPlayerIndex(roomID: String, gameID: String, currentplayerIndex: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("currentPlayerIndex").setValue(currentplayerIndex) { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+            }
+        }
+    }
+
+    
+    /**
+     初期カードめくり
+     */
+    func moveTopCardToTable(roomID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+            guard var gameInfo = snapshot.value as? [String: Any],
+                  var deck = gameInfo["deck"] as? [[String: Int]]
+            else {
+                completion(false)
+                return
+            }
+            // デッキからカードを引く
+            let drawnCard = deck.removeLast()
+            // デッキの更新
+            gameInfo["deck"] = deck
+            // テーブルにカードを追加
+            var table = gameInfo["table"] as? [[String: Int]] ?? []
+            table.append(drawnCard)
+            gameInfo["table"] = table
+            // データの更新
+            gameInfoRef.setValue(gameInfo) { error, _ in
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+        }
+    }
+
     /**
      Draw
      */
@@ -177,15 +265,11 @@ class FirebaseManager {
         }
     }
 
-    
     /**
      PlayCards
      */
     func playCards(roomID: String, playerID: String, gameID: String, baseselectedCards: [N_Card], completion: @escaping (Bool) -> Void) {
-        print(baseselectedCards)
-        
-        var selectedCards = convertToDictArray(cards: baseselectedCards)
-        
+        let selectedCards = convertToDictArray(cards: baseselectedCards)
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.observeSingleEvent(of: .value) { snapshot in
             guard var gameInfo = snapshot.value as? [String: Any],
@@ -194,7 +278,6 @@ class FirebaseManager {
                 completion(false)
                 return
             }
-            
             // プレイヤーの手札からカードを出す
             for (index, player) in players.enumerated() {
                 if let id = player["id"] as? String, id == playerID {
@@ -209,7 +292,6 @@ class FirebaseManager {
                             return
                         }
                     }
-                    
                     players[index]["hand"] = hand
                     break
                 }
@@ -234,60 +316,11 @@ class FirebaseManager {
             }
         }
     }
-
-//    func playCard(roomID: String, playerID: String, gameID: String, completion: @escaping (Bool) -> Void) {
-//        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-//        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
-//            guard var gameInfo = snapshot.value as? [String: Any],
-//                  var players = gameInfo["players"] as? [[String: Any]]
-//            else {
-//                completion(false)
-//                return
-//            }
-//
-//            // プレイヤーの手札からカードを出す
-//            var playedCard: [String: Int] = [:]
-//            for (index, player) in players.enumerated() {
-//                if let id = player["id"] as? String, id == playerID {
-//                    var hand = player["hand"] as? [[String: Int]] ?? []
-//                    guard !hand.isEmpty else {
-//                        print("No more cards in hand!")
-//                        completion(false)
-//                        return
-//                    }
-//                    playedCard = hand.removeLast()
-//                    players[index]["hand"] = hand
-//                    break
-//                }
-//            }
-//
-//            // テーブルにカードを追加
-//            var table = gameInfo["table"] as? [[String: Int]] ?? []
-//            table.append(playedCard)
-//            gameInfo["table"] = table
-//
-//            // プレイヤーのデータを更新
-//            gameInfo["players"] = players
-//
-//            // データの更新
-//            gameInfoRef.setValue(gameInfo) { error, _ in
-//                if let error = error {
-//                    print(error.localizedDescription)
-//                    completion(false)
-//                } else {
-//                    completion(true)
-//                }
-//            }
-//        }
-//    }
-
-    
     
     //-------------------------------ROOM-------------------------------
     //-------------------------------ROOM-------------------------------
     //-------------------------------ROOM-------------------------------
 
-    
     /**
      ルーム作成
      */
@@ -360,16 +393,10 @@ class FirebaseManager {
         
         // ルーム内の参加者リストを取得する
         roomRef.child("participants").observeSingleEvent(of: .value) { snapshot in
-            guard let participantsData = snapshot.value as? [[String: Any]] else {
+            guard snapshot.value is [[String: Any]] else {
                 // 参加者データの取得に失敗した場合
                 return
             }
-            
-//            // 参加者ごとに通知を送信する
-//            for participantData in participantsData {
-//                if let playerID = participantData["id"] as? String {
-//                }
-//            }
         }
     }
         
@@ -403,7 +430,7 @@ class FirebaseManager {
             }
 
             let room = Room(roomID: roomID, roomName: roomName, creatorName: creatorName, participants: participants)
-            print(room)
+//            print(room)
             completion(room)
         }
     }

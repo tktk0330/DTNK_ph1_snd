@@ -54,5 +54,13 @@ struct GameObserber {
         }
     }
     
+    /**
+     初期カードめくり
+     */
+    func firstCard(roomID: String, gameID: String) {
+        fbm.moveTopCardToTable(roomID: roomID, gameID: gameID) { result in
+            
+        }
+    }
     
 }

@@ -24,7 +24,7 @@ struct Countdown02View: View {
                 VStack {
                     Text("\(game.remainingSeconds)")
                         .foregroundColor(game.remainingSeconds <= 3 ? .red : .black)
-                        .font(.custom("DS-Digital", size: 150))
+                        .font(.custom(FontName.font02, size: 150))
                 }
                 .onAppear {
                     startCountdown()

@@ -1,12 +1,35 @@
-//
-//  ButtonText.swift
-//  DTNK_shinoda01
-//
-//                      .font(.custom(FontName.font01, size: 45))
-//
+/**
+ カスタムフォント使い方　.font(.custom(FontName.font01, size: 45))
+ */
 
 import SwiftUI
 
+// 浮いてる感じのボタン
+struct ShadowButtonStyle: ButtonStyle {
+    
+    func makeBody(configuration: Configuration) -> some View {
+        GeometryReader { proxy in
+            configuration.label
+                .foregroundColor(Color.white)
+                .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(
+                            LinearGradient(gradient:
+                                Gradient(colors: [
+                                    Color(red: 0.0, green: 0.6, blue: 1.0),
+                                    Color(red: 0.0, green: 0.5, blue: 1.0)
+                                ]), startPoint: .top, endPoint: .bottom))
+                        .shadow(color: Color(.sRGBLinear, white: 0, opacity: configuration.isPressed ? 0.5 : 0.3),
+                                radius: configuration.isPressed ? 2 : 10,
+                                y: configuration.isPressed ? 1 : 5)
+                )
+                .contentShape(Rectangle())
+                .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+        }
+    }
+    
+}
 
 struct Btnaction: View {
     var btnText: String

@@ -42,10 +42,10 @@ class MatchingController {
         // player
         let players = appState.matching.players
         // deck
-        let deck = appState.gameUIState.deck
+        _ = appState.gameUIState.deck
 
         var quick:[Player_f] = []
-        var matchingplayer = players.last!
+        let matchingplayer = players.last!
         
         quick.append(Player_f(id: matchingplayer.id, side: matchingplayer.side, name: matchingplayer.name, icon_url: matchingplayer.icon_url))
         // UIStateの作成（フロント）

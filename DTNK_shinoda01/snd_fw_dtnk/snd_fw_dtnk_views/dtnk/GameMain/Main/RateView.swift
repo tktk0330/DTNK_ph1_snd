@@ -29,7 +29,7 @@ struct RateView: View {
         VStack {
             HStack {
                 rateBtnView(text: "Game \(gamenum)")
-                rateBtnView(text: "Rame \(rate)")
+                rateBtnView(text: "Rate \(rate)")
                 rateBtnView(text: "✖︎ \(magnification)")
             }
         }
