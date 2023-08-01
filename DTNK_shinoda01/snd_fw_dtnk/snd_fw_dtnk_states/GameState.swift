@@ -577,7 +577,7 @@ class GameUiState: ObservableObject {
      パスする
      */
     func pass() {
-        if players[currentPlayerIndex].hand.count != 4{
+        if players[currentPlayerIndex].hand.count != 7{
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(1.0)){ [self] in
                 players[currentPlayerIndex].selectedCards = []
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.count
