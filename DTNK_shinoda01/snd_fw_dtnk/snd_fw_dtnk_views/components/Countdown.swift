@@ -41,6 +41,7 @@ struct Countdown02View: View {
             if game.remainingSeconds <= 0 {
                 timer?.invalidate()
                 isCountdownFinished = true
+                appState.gameUIState.counter = true
             }
         }
     }

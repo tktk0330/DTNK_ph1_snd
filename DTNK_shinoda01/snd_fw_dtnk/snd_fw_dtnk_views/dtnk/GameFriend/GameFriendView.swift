@@ -17,33 +17,46 @@ struct GameFriendView: View {
         return myIndex!
     }
     @State var startFlag: Bool = false
-    
+
     var body: some View {
         GeometryReader { geo in
             
             Group {
-                TargetPlayerView()
+                
+                // 仮想View 初期カード設置
+                Text("").onReceive(game.$counter) { newValue in
+                    if newValue {
+                        GameObserber().fbm.moveTopCardToTable(roomID: room.roomData.roomID, gameID: game.gameID) { result in
+                        }
+                    }
+                }
+                
+                // ForcusAnimation
+                if game.currentPlayerIndex != 99 {
+                    TargetPlayerView()
+                        .position(x: TargetPlayerView().focusPosition(side: game.currentPlayerIndex).x,
+                                  y: geo.size.height * TargetPlayerView().focusPosition(side: game.currentPlayerIndex).y)
+                        .animation(.easeInOut(duration: 0.5), value: game.currentPlayerIndex)
+                }
+                
+                // ScoreBar
+                ScoreBar()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+                
             }
             
-            // Score
-            ScoreBar()
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-
-            
-            // プレイヤーのアイコンをループで表示
-            HStack(spacing: 30) {
+//            // プレイヤーのアイコンをループで表示
+//            HStack(spacing: 30) {
 //                ForEach(game.players.indices, id: \.self) { index in
 //                    BotIconView(player: game.players[(myside() + index) % game.players.count])
 //                }
-            }
-            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.3)
+//            }
+//            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.3)
             
             // Card Pool
             HStack() {
                 ZStack {
                     ForEach(Array(cardUI.enumerated()), id: \.1.id) { index, card in
-                        // totalもdeckに依存
                         N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
                             .animation(.easeInOut(duration: 0.3))
                     }
@@ -74,6 +87,8 @@ struct GameFriendView: View {
                     
                     // testようにボタンとして動かしておく
                     Button(action: {
+                        // count変数にする（人数変動対応）
+                        GameFriendEventController().pass(passPayerIndex: game.currentPlayerIndex, playersCount: 4)
                     }) {
                         // icon
                         // TODO: 磨き上げ
@@ -120,9 +135,7 @@ struct GameFriendView: View {
             if game.gamePhase == .countdown {
                 Countdown02View()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-
             }
-            
             
             Group {
                 // 広告用
@@ -157,6 +170,11 @@ struct GameFriendView: View {
                 fbm.observeGamePhase(roomID: room.roomData.roomID, gameID: game.gameID) { gamePhase in
                     if (gamePhase != nil) {
                         game.gamePhase = gamePhase!
+                    }
+                }
+                fbm.getCurrentPlayerIndex(roomID: room.roomData.roomID, gameID: game.gameID) { currentPlayerIndex in
+                    if (currentPlayerIndex != nil) {
+                        game.currentPlayerIndex = currentPlayerIndex!
                     }
                 }
                 
@@ -218,9 +236,6 @@ struct GameFriendView: View {
                     //　カード配布
                     GameObserber().dealFirst(roomID: room.roomData.roomID, players: game.players, gameID: game.gameID) { result in
                         startFlag = true
-                    }
-                    GameObserber().fbm.moveTopCardToTable(roomID: room.roomData.roomID, gameID: game.gameID) { result in
-                        
                     }
                 }
             }

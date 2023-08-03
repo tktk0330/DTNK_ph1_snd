@@ -12,6 +12,14 @@ class GameUIState: ObservableObject {
     @Published var table: [CardId] = []
     @Published var myside: Int = 99
     @Published var gamePhase: GamePhase = .dealcard
+    // 現在プレイしている人
+    @Published var currentPlayerIndex: Int = 99
+    
+    
+    // カウンター
+    @Published var counter: Bool = false
+
+
 }
 
 

@@ -161,6 +161,20 @@ class FirebaseManager {
     }
     
     /**
+     currentPlayerIndexの取得（リアルタイム）
+     */
+    func getCurrentPlayerIndex(roomID: String, gameID: String, completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("currentPlayerIndex")
+        ref.observe(.value) { (snapshot) in
+            guard let currentplayerIndex = snapshot.value as? Int else {
+                print("Could not cast snapshot value to an integer")
+                return
+            }
+            completion(currentplayerIndex)
+        }
+    }
+    
+    /**
      GamePhase変更
      */
     func updateGamePhase(roomID: String, gameID: String, gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
@@ -169,6 +183,7 @@ class FirebaseManager {
             if let error = error {
                 print("Failed to update room status: \(error.localizedDescription)")
             } else {
+                completion(true)
             }
         }
     }
@@ -182,6 +197,7 @@ class FirebaseManager {
             if let error = error {
                 print("Failed to update room status: \(error.localizedDescription)")
             } else {
+                completion(true)
             }
         }
     }
