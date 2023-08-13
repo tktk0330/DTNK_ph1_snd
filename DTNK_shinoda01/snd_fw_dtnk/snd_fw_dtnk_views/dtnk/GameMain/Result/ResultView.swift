@@ -10,13 +10,20 @@
 
 import SwiftUI
 
+// 統合
 struct ResultView: View {
 //    @ObservedObject var resultState: ResultState = appState.resultState
 //    @StateObject var game: GameUiState = appState.gameUiState
     var body: some View {
         GeometryReader { geo in
-            
             ZStack() {
+                // Game
+                // TODO: 反映
+                Text("Game 10")
+                    .font(.custom(FontName.font01, size: 30))
+                    .foregroundColor(Color.white)
+                    .padding(5)
+                    .position(x: UIScreen.main.bounds.width * 0.50, y:  geo.size.height * 0.15)
                 
                 MidResultItem()
                     .position(x: UIScreen.main.bounds.width * 0.2, y:  geo.size.height * 0.5)
@@ -33,6 +40,7 @@ struct ResultView: View {
                 
                 // 次へボタン
                 Button(action: {
+                    // 次ゲームに向けた処理
 //                    ScoreContoroller().onTapScoreOK()
 //                    appState.gameUIState.gamePhase = .dealcard
                     GameFriendEventController().onTapOKButton(gamePhase: .dealcard)
@@ -40,16 +48,11 @@ struct ResultView: View {
                     Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 50, btnColor: Color.clear)
                 }
                 .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.9)
-
-                
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .background(
-                Color.black.opacity(0.93)
+                Color.black.opacity(0.80)
             )
-
-            
-            
         }
     }
 }

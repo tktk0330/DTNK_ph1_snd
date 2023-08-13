@@ -35,6 +35,8 @@ struct TopView: View {
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
             .blinkEffect(animating: true)
+            
+            ResultView()
         }
     }
 }

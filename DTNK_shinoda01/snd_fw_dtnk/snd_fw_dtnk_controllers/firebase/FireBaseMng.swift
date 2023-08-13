@@ -1,7 +1,6 @@
 /**
  FireBaseManager
  */
-
 import SwiftUI
 import Firebase
 import FirebaseDatabase
@@ -12,26 +11,21 @@ class FirebaseManager {
     private let database = Database.database()
     // json変換用
     let cjm = ConvertJSONMng()
-    
-//    @StateObject var game: GameUIState = appState.gameUIState
-//    @StateObject var room: RoomState = appState.room
     var roomID: String = ""
     var gameID: String = ""
-    
-    // Use this function to set IDs when they are available
     func setIDs(roomID: String, gameID: String) {
         self.roomID = roomID
         self.gameID = gameID
     }
 
-    //-------------------------------GAMEMAIN-------------------------------
-    //-------------------------------GAMEMAIN-------------------------------
-    //-------------------------------GAMEMAIN-------------------------------
+    //-------------------------------GAME-SET-AND-GET-------------------------------
+    //-------------------------------GAME-SET-AND-GET-------------------------------
+    //-------------------------------GAME-SET-AND-GET-------------------------------
     
     /**
-     Gameの登録
+     GameInfoのセット
      */
-    func saveGameInfo(_ gameInfo: GameInfoModel, roomID: String, completion: @escaping (String?) -> Void) {
+    func setGameInfo(gameInfo: GameInfoModel, roomID: String, completion: @escaping (String?) -> Void) {
         let gameID = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId().key ?? ""
         let playersJSON = cjm.playersJSON(players: gameInfo.players)
         let deckData = gameInfo.deck.map { card -> [String: Any] in
@@ -55,9 +49,8 @@ class FirebaseManager {
             }
         }
     }
-    
     /**
-     Gameの取得
+     GameInfoの取得
      */
     func getGameInfo(from roomID: String, completion: @escaping (GameState?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo")
@@ -81,6 +74,22 @@ class FirebaseManager {
     }
     
     /**
+     Deckのセット
+     */
+    func setDeck(deck: [CardId], completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let deckData = deck.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        }
+        gameInfoRef.child("deck").setValue(deckData) { error, _ in
+            if let error = error {
+                print("Failed to update deck regeneration: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
      Deckの取得（リアルタイム）
      */
     func observeDeckInfo(completion: @escaping ([CardId]?) -> Void) {
@@ -102,6 +111,22 @@ class FirebaseManager {
         }
     }
     
+    /**
+     Tableのセット
+     */
+    func setTable(table: [CardId], completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let tableData = table.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        }
+        gameInfoRef.child("table").setValue(tableData) { error, _ in
+            if let error = error {
+                print("Failed to update table regeneration: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
     /**
      Tableの取得（リアルタイム）
      */
@@ -148,6 +173,19 @@ class FirebaseManager {
     }
     
     /**
+     GamePhaseのセット
+     */
+    func setGamePhase(gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("gamePhase").setValue(gamePhase.rawValue) { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
      GamePhaseの取得（リアルタイム）
      */
     func observeGamePhase(completion: @escaping (GamePhase?) -> Void) {
@@ -169,6 +207,25 @@ class FirebaseManager {
         }
     }
     
+    /**
+     DTNKInfoのセット　Index  Player
+     */
+    func setDTNKInfo(Index: Int, dtnkPlayer: Player_f, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let playersJSON = cjm.player_fJSON(player: dtnkPlayer)
+        let valuesToUpdate: [String: Any] = [
+            "dtnkIndex": Index,
+            "dtnkPlayer": playersJSON,
+        ]
+        gameInfoRef.updateChildValues(valuesToUpdate) { error, _ in
+            if let error = error {
+                print("Failed to update DTNK info: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
     /**
      DTNKInfoの取得（リアルタイム） Index  Player
      */
@@ -205,9 +262,22 @@ class FirebaseManager {
     }
 
     /**
+     currentPlayerIndexのセット
+     */
+    func setCurrentPlayerIndex(currentplayerIndex: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("currentPlayerIndex").setValue(currentplayerIndex) { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
      currentPlayerIndexの取得（リアルタイム）
      */
-    func getCurrentPlayerIndex(completion: @escaping (Int?) -> Void) {
+    func observeCurrentPlayerIndex(completion: @escaping (Int?) -> Void) {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("currentPlayerIndex")
         ref.observe(.value) { (snapshot) in
             guard let currentplayerIndex = snapshot.value as? Int else {
@@ -234,7 +304,20 @@ class FirebaseManager {
 
     
     /**
-     observeChallengeAnswerの取得（リアルタイム）
+     ChallengeAnserのセット
+     */
+    func setChallengeAnswer(index: Int, answer: ChallengeAnswer, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("challengeAnswer/\(index)").setValue(answer.rawValue) { error, _ in
+            if let error = error {
+                print("Failed: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     ChallengeAnserの取得（リアルタイム）
      */
     func observeChallengeAnswer(completion: @escaping ([ChallengeAnswer?]) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
@@ -249,102 +332,6 @@ class FirebaseManager {
         }
     }
 
-    /**
-     GamePhaseのセット
-     */
-    func setGamePhase(gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        gameInfoRef.child("gamePhase").setValue(gamePhase.rawValue) { error, _ in
-            if let error = error {
-                print("Failed to update room status: \(error.localizedDescription)")
-            } else {
-                completion(true)
-            }
-        }
-    }
-    
-    /**
-     ChallengeAnserのセット
-     */
-    func setChallengeAnswer(index: Int, answer: ChallengeAnswer, completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        gameInfoRef.child("challengeAnswer/\(index)").setValue(answer.rawValue) { error, _ in
-            if let error = error {
-                print("Failed: \(error.localizedDescription)")
-            } else {
-                completion(true)
-            }
-        }
-    }
-    
-    /**
-     currentPlayerIndexのセット
-     */
-    func setCurrentPlayerIndex(currentplayerIndex: Int, completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        gameInfoRef.child("currentPlayerIndex").setValue(currentplayerIndex) { error, _ in
-            if let error = error {
-                print("Failed to update room status: \(error.localizedDescription)")
-            } else {
-                completion(true)
-            }
-        }
-    }
-    
-    /**
-     dtnkIndex dtnkPlayerのセット
-     */
-    func setDTNKInfo(Index: Int, dtnkPlayer: Player_f, completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        let playersJSON = cjm.player_fJSON(player: dtnkPlayer)
-        let valuesToUpdate: [String: Any] = [
-            "dtnkIndex": Index,
-            "dtnkPlayer": playersJSON,
-        ]
-        gameInfoRef.updateChildValues(valuesToUpdate) { error, _ in
-            if let error = error {
-                print("Failed to update DTNK info: \(error.localizedDescription)")
-                completion(false)
-            } else {
-                completion(true)
-            }
-        }
-    }
-
-    /**
-     Deckのセット
-     */
-    func setDeck(deck: [CardId], completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        let deckData = deck.map { card -> [String: Any] in
-            return ["cardID": card.rawValue]  // Cardを辞書に変換
-        }
-        gameInfoRef.child("deck").setValue(deckData) { error, _ in
-            if let error = error {
-                print("Failed to update deck regeneration: \(error.localizedDescription)")
-            } else {
-                completion(true)
-            }
-        }
-    }
-    
-    /**
-     Tableのセット
-     */
-    func setTable(table: [CardId], completion: @escaping (Bool) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        let tableData = table.map { card -> [String: Any] in
-            return ["cardID": card.rawValue]  // Cardを辞書に変換
-        }
-        gameInfoRef.child("table").setValue(tableData) { error, _ in
-            if let error = error {
-                print("Failed to update table regeneration: \(error.localizedDescription)")
-            } else {
-                completion(true)
-            }
-        }
-    }
-    
     /**
      勝者・敗者のセット
      */
@@ -413,7 +400,9 @@ class FirebaseManager {
         }
     }
 
-    
+    //-------------------------------GAME-ACTION-------------------------------
+    //-------------------------------GAME-ACTION-------------------------------
+    //-------------------------------GAME-ACTION-------------------------------
     /**
      初期カードめくり
      */
@@ -524,7 +513,6 @@ class FirebaseManager {
                     break
                 }
             }
-            
             // テーブルにカードを追加
             var table = gameInfo["table"] as? [[String: Int]] ?? []
             table.append(contentsOf: selectedCards)
@@ -732,6 +720,7 @@ class FirebaseManager {
     }
 }
 
+// TODO: 整理
 // パラメータ調整
 struct GameBase {
     let players: [Player]

@@ -1,8 +1,13 @@
-
+/**
+ 最終スコア決定画面
+ */
 
 
 import SwiftUI
-
+/**
+友達対戦
+ */
+// TODO: 統合
 struct DecisionScoreView: View {
     var body: some View {
         GeometryReader { geo in
@@ -11,30 +16,69 @@ struct DecisionScoreView: View {
                 HStack(spacing: 30) {
                     VStack() {
                         Text("Winer")
-                            .font(.custom(FontName.font01, size: 30))
-                            .foregroundColor(Color.white)
-                            .padding(5)
-
+                            .modifier(DecisionScoreViewModifier(fontSize: 30))
+                        // TODO: 名前反映
                         Text("Maxname")
-                            .font(.custom(FontName.font01, size: 20))
-                            .foregroundColor(Color.white)
-                            .padding(5)
-
+                            .modifier(DecisionScoreViewModifier(fontSize: 20))
                     }
                     VStack() {
                         Text("Loser")
-                            .font(.custom(FontName.font01, size: 30))
-                            .foregroundColor(Color.white)
-                            .padding(5)
-
+                            .modifier(DecisionScoreViewModifier(fontSize: 30))
+                        // TODO: 名前反映
                         Text("Maxname")
-                            .font(.custom(FontName.font01, size: 20))
-                            .foregroundColor(Color.white)
-                            .padding(5)
-
+                            .modifier(DecisionScoreViewModifier(fontSize: 20))
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
+                
+                // 決定アクション
+                // TODO: 処理
+                VStack(spacing: 40) {
+                    Image(ImageName.Card.back.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60)
+                    
+                    HStack() {
+                        Image(ImageName.Card.spade1.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 90)
+                        Image(ImageName.Card.spade1.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 90)
+                        Image(ImageName.Card.spade1.rawValue)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 90)
+                    }
+                }
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.45)
+                
+                // 最終スコア要素
+                // TODO: 反映
+                VStack(alignment: .leading) {
+                    Text("初期レート：100")
+                        .modifier(DecisionScoreViewModifier(fontSize: 20))
+                    Text("上昇レート：✖︎ 32")
+                        .modifier(DecisionScoreViewModifier(fontSize: 20))
+                    Text("最終　数字：✖︎ 30")
+                        .modifier(DecisionScoreViewModifier(fontSize: 20))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, geo.size.width * 0.1)
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.70)
+                
+                // 最終スコア
+                // TODO: 名前反映
+                VStack(alignment: .trailing) {
+                    Text("＝　10000000")
+                        .modifier(DecisionScoreViewModifier(fontSize: 20))
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.trailing, geo.size.width * 0.1)
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
                 
                 // 次へボタン
                 Button(action: {
@@ -43,8 +87,7 @@ struct DecisionScoreView: View {
                 }) {
                     Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 50, btnColor: Color.clear)
                 }
-                .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.9)
-
+                .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.90)
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .background(
@@ -54,6 +97,15 @@ struct DecisionScoreView: View {
     }
 }
 
+struct DecisionScoreViewModifier: ViewModifier {
+    var fontSize: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(FontName.font01, size: fontSize))
+            .foregroundColor(Color.white)
+            .padding(5)
+    }
+}
 
 struct DecisionView: View {
     

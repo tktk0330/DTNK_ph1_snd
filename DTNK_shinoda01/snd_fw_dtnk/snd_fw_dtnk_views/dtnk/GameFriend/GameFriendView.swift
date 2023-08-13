@@ -29,7 +29,6 @@ struct GameFriendView: View {
                 Text("").onReceive(game.$counter) { newValue in
                     if newValue {
                         gameObserber.firstCard(roomID: room.roomData.roomID, gameID: game.gameID)
-                        
                     }
                 }
                 
@@ -44,7 +43,6 @@ struct GameFriendView: View {
                 // ScoreBar
                 ScoreBar()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-                
             }
             
 //            // プレイヤーのアイコンをループで表示
@@ -249,7 +247,7 @@ struct GameFriendView: View {
             }
         }
         // currentPlayerIndex
-        fbms.getCurrentPlayerIndex() { currentPlayerIndex in
+        fbms.observeCurrentPlayerIndex() { currentPlayerIndex in
             if (currentPlayerIndex != nil) {
                 game.currentPlayerIndex = currentPlayerIndex!
             }

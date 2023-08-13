@@ -52,7 +52,7 @@ class MatchingController {
         appState.gameUIState.players = quick
         
         // DBに保存
-        FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { gameID in
+        FirebaseManager.shared.setGameInfo(gameInfo: gameInfo, roomID: roomID) { gameID in
             if (gameID != nil) {
                 // matchingflgをOKに設定　その後遷移
                 FirebaseManager.shared.updateMatchingFlg(roomID: roomID)
