@@ -113,7 +113,7 @@ struct MatchingView: View {
                     if  matching.vsInfo == 02 {
                         // 作成者のみStartボタン表示
                         // TODO: IDでやる（名前だとなりすまし・誤認知する）
-                        if appState.account.loginUser.name == room.roomData.creatorName {
+                        if appState.account.loginUser.userID == room.roomData.hostID {
                             // ４人揃ったら
                             if room.startFlg {
                                 Button(action: {

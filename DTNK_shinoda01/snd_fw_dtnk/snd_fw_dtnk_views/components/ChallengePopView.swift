@@ -1,7 +1,62 @@
-
+/**
+ チャレンジ可否ポップアップ
+ */
 
 
 import SwiftUI
+
+
+struct ChallengePopView: View {
+    
+    let index: Int
+
+    var body: some View {
+        GeometryReader { geo in
+            
+            Image("challenge-2") // Replace with your image name
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.20)
+
+            Text("説明文をここに書いてください")
+                .font(.system(size: 20))
+                .foregroundColor(Color.white)
+                .fontWeight(.bold)
+                .padding(5)
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.35 )
+
+            
+            HStack(spacing: 20) {
+                
+                Button(action: {
+                    // 参加可否通知を送る
+                    GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .nochallenge)
+                }) {
+                    Btnaction(btnText: "辞退", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+                }
+                
+                Button(action: {
+                    // 参加可否通知を送る
+                    GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                }) {
+                    Btnaction(btnText: "参加", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                }
+            }
+            .position(x: geo.size.width / 2, y: geo.size.height * 0.75)
+        }
+        .frame(width: 350, height: 350)
+        .background(
+            Color.black.opacity(0.85)
+            )
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.white, lineWidth: 3)
+        )
+    }
+}
+
+
 
 struct CallengePopView: View {
     
@@ -70,8 +125,6 @@ struct CallengePopView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white, lineWidth: 3)
         )
-
-
     }
 }
 

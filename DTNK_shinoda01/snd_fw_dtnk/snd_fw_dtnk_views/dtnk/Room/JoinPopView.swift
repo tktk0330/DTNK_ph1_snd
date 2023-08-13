@@ -23,11 +23,11 @@ struct JoinPopView: View {
                             .fontWeight(.bold)
                             .bold()
                         
-                        Text("Creator: \(room.roomData.creatorName)")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .bold()
+//                        Text("Creator: \(room.roomData)")
+//                            .font(.system(size: 20))
+//                            .foregroundColor(Color.white)
+//                            .fontWeight(.bold)
+//                            .bold()
                         
                         // errore
                         Text("\(room.error_message)")

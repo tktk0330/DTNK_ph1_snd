@@ -1,20 +1,48 @@
-
+/**
+ Hostのみが行う処理を記載
+ */
 
 
 
 import Foundation
+import SwiftUI
+import Firebase
+import FirebaseDatabase
 
-struct GameObserber {
+
+class GameObserber {
     
+    @StateObject var game: GameUIState = appState.gameUIState
     let fbm = FirebaseManager()
-
+    let fbms = FirebaseManager.shared
+    var hostID: String = ""
+    
+    // 初期化時にホストIDをセットします
+    init(hostID: String) {
+        self.hostID = hostID
+    }
+    
+    /**
+     自分がHostかチェックする
+     */
+    func checkHost() -> Bool {
+        guard let currentUserId = Auth.auth().currentUser?.uid, currentUserId == hostID else {
+            print("You're not authorized to use this method!")
+            return false
+        }
+        return true
+    }
+    
     /**
      初期カード配布
      */
     func dealFirst(roomID: String, players: [Player_f], gameID: String, completion: @escaping (Bool) -> Void) {
+        guard checkHost() else {
+            return
+        }
         dealToPlayers(roomID: roomID, players: players, gameID: gameID, index: 0, completion: completion)
     }
-
+    
     private func dealToPlayers(roomID: String, players: [Player_f], gameID: String, index: Int, completion: @escaping (Bool) -> Void) {
         // All players dealt with, return true
         if index >= players.count {
@@ -23,7 +51,7 @@ struct GameObserber {
         }
         
         let player = players[index]
-
+        
         // Deal 2 cards
         dealCards(roomID: roomID, player: player, gameID: gameID, remaining: 2) { (success) in
             if success {
@@ -35,15 +63,15 @@ struct GameObserber {
             }
         }
     }
-
+    
     private func dealCards(roomID: String, player: Player_f, gameID: String, remaining: Int, completion: @escaping (Bool) -> Void) {
         // If no more cards to deal, return true
         if remaining <= 0 {
             completion(true)
             return
         }
-
-        fbm.drawCard(roomID: roomID, playerID: player.id, gameID: gameID) { bool in
+        
+        fbms.drawCard(playerID: player.id) { bool in
             if bool {
                 // Once drawCard is done, deal the next card
                 self.dealCards(roomID: roomID, player: player, gameID: gameID, remaining: remaining - 1, completion: completion)
@@ -58,9 +86,181 @@ struct GameObserber {
      初期カードめくり
      */
     func firstCard(roomID: String, gameID: String) {
-        fbm.moveTopCardToTable(roomID: roomID, gameID: gameID) { result in
-            
+        
+        guard checkHost() else {
+            return
+        }
+
+        fbms.moveTopCardToTable() { cardInt in
+            if let cardId = CardId(rawValue: cardInt!) {
+                // レートカードの場合
+                if cardId.rate()[0] == 50 {
+                    
+                    // アナウンス処理
+                    
+                    // TODO: アナウンス処理終わったらに変更
+                    // 2秒後にfirstCard関数を再実行
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        self.firstCard(roomID: roomID, gameID: gameID)
+                    }
+                }
+            } else {
+            }
         }
     }
     
+    /**
+     チャレンジ時のカード配布
+     ・どてんこの次の順番のチャレンジャーからカードを引いてく
+     */
+    func challengeEvent() {
+        guard checkHost() else {
+            return
+        }
+        // dtnkIndexを取得　2
+        let dtnkIndex = game.dtnkPlayerIndex
+        // 参加者を取得 [0,2,3]
+        let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
+            return value!.rawValue > 1 ? index : nil
+        }
+        // 次のIndexを決める 3
+        let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
+        let dtnkCardNumber = game.table.last?.number()
+        // 手札とどてんこカードを比較して、行動する 3
+        challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+    }
+    
+    // 次のプレイヤーを返す
+    func getNextChallenger(nowIndex: Int, players: [Int]) -> Int? {
+        // targetのインデックスを見つけます。
+        guard let targetIndex = players.firstIndex(of: nowIndex) else {
+            return nil
+        }
+        // 次のインデックスを計算します。
+        let nextIndex = (targetIndex + 1) % players.count
+        // 新しいインデックスのプレイヤーを返します。
+        return players[nextIndex]
+    }
+    
+    // 手札の合計を返す
+    func countHand(hand: [CardId]) -> Int {
+        var sum = 0
+        for card in hand {
+            sum += card.number()
+        }
+        return sum
+    }
+    
+    // 指定したIndexがどてんこカードより大きくなるまで引く
+    func challengeIndex(challengerIndex: Int, dtnkCardNumber: Int, dtnkIndex: Int, challengers: [Int]) {
+        // 自分がdtnkIndexだったら終了
+        if challengerIndex == dtnkIndex {
+            print("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
+            fbms.setGamePhase(gamePhase: .decisionrate_pre) { result in }
+            return
+        }
+        
+        // 手札とどてんこカードを比較
+        let challenger = appState.gameUIState.players[challengerIndex]
+        let handSum = countHand(hand: challenger.hand)
+        
+        // TODO: jokerを考慮させる
+        // チャンスがあれば引く
+        if (dtnkCardNumber - handSum) > 0 {
+            // チャンスあり 一枚引く
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+                fbms.drawCard(playerID: challenger.id) { result in
+                    print("challenger \(challenger.side) draw")
+                    // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+                    self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+                }
+            }
+            // loop
+        } else if (dtnkCardNumber - handSum) == 0 {
+            // リベンジ成功 animation
+            print("revenge")
+            // 処理
+            appState.gameUIState.players[dtnkIndex].hand.removeAll()
+            print(appState.gameUIState.players[dtnkIndex].hand)
+            // Viewも
+
+            // 次の人へ
+            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+//            print("\(nextChallenger!) : \(dtnkCardNumber) : \(challengerIndex) : \(challengers)")
+            // dtnkIndexをrevengerに変更
+            let revengerIndex = challengerIndex
+            self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: revengerIndex, challengers: challengers)
+            return
+
+        } else {
+            // overしたら次の人へ
+            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                print("next challenger")
+                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+            }
+            return
+        }
+        
+    }
+    
+    /**
+     challengeAnswersが揃ったらchallengeに移す
+     */
+    func challengeAnswers() {
+        guard checkHost() else {
+            return
+        }
+        // challengeに移す
+        fbms.setGamePhase(gamePhase: .challenge) { result in
+        }
+    }
+    
+    /**
+     デッキの再生成
+     */
+    func regenerateDeck(table: [CardId]) {
+        guard checkHost() else {
+            return
+        }
+        var table = table
+        let newDeck = Array(table.prefix(table.count - 1)).shuffled()
+        table.removeSubrange(0..<table.count - 1) // tableの最後のカード以外を削除
+        let newTable = table
+        // deck更新
+        fbms.setDeck(deck: newDeck) { result in }
+        // table
+        fbms.setTable(table: newTable) { result in }
+    }
+    
+    /**
+     勝敗を決める
+     */
+    func decideWinnersLosers() {
+        guard checkHost() else {
+            return
+        }
+//        // 勝者・敗者の初期化
+//        game.winners.removeAll()
+//        game.losers.removeAll()
+//        // 勝者・敗者を決める
+//        if game.currentPlayerIndex == 99 {
+//            // しょてんこの場合
+//
+//        } else if game.currentPlayerIndex == 88 {
+//            // バーストの場合
+//
+//        } else {
+//            // 通常時
+//            game.winners.append(game.dtnkPlayer!)
+//            game.losers.append(game.lastPlayCardsPlayer!)
+//        }
+//        // FBに登録
+//        fbms.setWinnersLosers(winners: game.winners, losers: game.losers) { result in }
+        // X秒後にratefirst
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+            fbms.setGamePhase(gamePhase: .decisionrate) { result in }
+        }
+    }
 }

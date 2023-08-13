@@ -384,6 +384,7 @@ class GameUiState: ObservableObject {
      勝敗を決める
      */
     func winloos() {
+        // 勝者・敗者の初期化
         winers.removeAll()
         loosers.removeAll()
         // SYOTENKO

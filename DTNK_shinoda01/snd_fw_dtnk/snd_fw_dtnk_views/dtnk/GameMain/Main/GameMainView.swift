@@ -205,7 +205,7 @@ struct GameMain: View {
                             DecisionView(game: game, deck: $game.deck.cards)
                         }
                         if appState.resultState != nil {
-                            ResultView(game: game)
+//                            ResultView(game: game)
                         }
                     }
                 }
