@@ -11,14 +11,69 @@ class GameUIState: ObservableObject {
     @Published var deckUI: [N_Card] = []
     @Published var table: [CardId] = []
     @Published var myside: Int = 99
-    @Published var gamePhase: GamePhase = .dealcard
+    @Published var gamePhase: GamePhase = .dealcard {
+        didSet {
+            gamePhaseAction(phase: gamePhase)
+        }
+    }
     // 現在プレイしている人
     @Published var currentPlayerIndex: Int = 99
-    
+    // 最後にカードを出した人
+    @Published var lastPlayCardsPlayer: Player_f?
+    // どてんこした人
+    @Published var dtnkPlayer: Player_f?
+    // どてんこした人のIndex
+    @Published var dtnkPlayerIndex: Int = 99
+    // チャレンジ通知
+    @Published var challengeAnswers: [ChallengeAnswer?] = []
+    // 勝者：オールの場合もある
+    @Published var winners: [Player_f] = []
+    // 負者：オールの場合もある
+    @Published var losers: [Player_f] = []
     
     // カウンター
     @Published var counter: Bool = false
 
+    
+    func gamePhaseAction(phase: GamePhase) {
+        switch phase {
+            
+        case .dealcard:
+            print(phase)
+        case .gamenum:
+            print(phase)
+        case .countdown:
+            print(phase)
+        case .ratefirst:
+            print(phase)
+        case .gamefirst:
+            print(phase)
+        case .decisioninitialplayer:
+            print(phase)
+        case .gamefirst_sub:
+            print(phase)
+        case .main:
+            print(phase)
+        case .dtnk:
+            print(phase)
+        case .burst:
+            print(phase)
+        case .revenge:
+            print(phase)
+        case .q_challenge:
+            print(phase)
+        case .challenge:
+            GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
+        case .decisionrate_pre:
+            GameObserber(hostID: appState.room.roomData.hostID).decideWinnersLosers()
+        case .decisionrate:
+            print(phase)
+        case .result:
+            print(phase)
+        case .other:
+            print(phase)
+        }
+    }
 
 }
 

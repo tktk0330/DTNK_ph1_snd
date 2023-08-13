@@ -7,10 +7,10 @@ import FirebaseDatabase
 
 class RoomState: ObservableObject {
     
-    static let shared = FirebaseManager()
-    let database = Database.database()
+//    static let shared = FirebaseManager()
+//    let database = Database.database()
     @Published var roommode: RoomMode = .base
-    @Published var roomData = Room(roomID: "", roomName: "", creatorName: "", participants: [])
+    @Published var roomData = Room(roomID: "", roomName: "", hostID: "", participants: [])
     @Published var error_message = ""
     @Published var startFlg = false // realtime
 
@@ -73,6 +73,6 @@ class RoomState: ObservableObject {
             }
         }
         
-        FirebaseManager.shared.observeMatchingFlg(roomID: roomID)
+        RoomFirebaseManager.shared.observeMatchingFlg(roomID: roomID)
     }
 }

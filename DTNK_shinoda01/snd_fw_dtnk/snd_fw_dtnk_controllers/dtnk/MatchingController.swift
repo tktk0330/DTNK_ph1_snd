@@ -52,8 +52,8 @@ class MatchingController {
         appState.gameUIState.players = quick
         
         // DBに保存
-        FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { success in
-            if success {
+        FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { gameID in
+            if (gameID != nil) {
                 // matchingflgをOKに設定　その後遷移
                 FirebaseManager.shared.updateMatchingFlg(roomID: roomID)
             } else {
@@ -83,8 +83,7 @@ class MatchingController {
     // TODO: できていない
     func backMatching(room: Room, user: User) {
         // ownerだったらルームを削除
-        // TODO: IDでやる
-        if room.creatorName == user.name {
+        if room.hostID == user.userID {
             FirebaseManager().deleteRoom(roomID: room.roomID) { success in
                 if success {
                     print("Room deleted successfully")

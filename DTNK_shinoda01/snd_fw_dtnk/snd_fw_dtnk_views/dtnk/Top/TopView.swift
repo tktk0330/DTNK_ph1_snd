@@ -26,10 +26,6 @@ struct TopView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 300)
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.50)
-            
-            sample01()
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.50)
-
 
             Button(action: {
                 // Home画面へ

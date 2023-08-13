@@ -13,10 +13,16 @@ class FirebaseManager {
     // json変換用
     let cjm = ConvertJSONMng()
     
-    @StateObject var game: GameUIState = appState.gameUIState
-    @StateObject var room: RoomState = appState.room
-    let roomID = appState.room.roomData.roomID
-    let gameID = appState.gameUIState.gameID
+//    @StateObject var game: GameUIState = appState.gameUIState
+//    @StateObject var room: RoomState = appState.room
+    var roomID: String = ""
+    var gameID: String = ""
+    
+    // Use this function to set IDs when they are available
+    func setIDs(roomID: String, gameID: String) {
+        self.roomID = roomID
+        self.gameID = gameID
+    }
 
     //-------------------------------GAMEMAIN-------------------------------
     //-------------------------------GAMEMAIN-------------------------------
@@ -25,8 +31,7 @@ class FirebaseManager {
     /**
      Gameの登録
      */
-    func saveGameInfo(_ gameInfo: GameInfoModel, roomID: String, completion: @escaping (Bool) -> Void) {
-        
+    func saveGameInfo(_ gameInfo: GameInfoModel, roomID: String, completion: @escaping (String?) -> Void) {
         let gameID = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId().key ?? ""
         let playersJSON = cjm.playersJSON(players: gameInfo.players)
         let deckData = gameInfo.deck.map { card -> [String: Any] in
@@ -37,18 +42,20 @@ class FirebaseManager {
             "players": playersJSON,
             "deck": deckData,
             "gamePhase": GamePhase.dealcard.rawValue,
-            "currentPlayerIndex": 99
+            "currentPlayerIndex": 99,
+            "challengeAnswer": Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
             // 他のプロパティも同様に追加
         ]
         database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).setValue(gameInfoDict) { error, _ in
             if let error = error {
                 print("Failed to save game info: \(error.localizedDescription)")
-                completion(false)
+                completion(nil)
             } else {
-                completion(true)
+                completion(gameID)
             }
         }
     }
+    
     /**
      Gameの取得
      */
@@ -76,7 +83,7 @@ class FirebaseManager {
     /**
      Deckの取得（リアルタイム）
      */
-    func observeDeckInfo(from roomID: String, gameID: String, completion: @escaping ([CardId]?) -> Void) {
+    func observeDeckInfo(completion: @escaping ([CardId]?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let deckRef = gameInfoRef.child("deck")
         deckRef.observe(.value) { snapshot in
@@ -86,7 +93,8 @@ class FirebaseManager {
             }
             var cardIds: [CardId] = []
             for cardData in deckDict {
-                if let cardID = cardData["cardID"] as? Int, let cardEnum = CardId(rawValue: cardID) {
+                if let cardID = cardData["cardID"] as? Int,
+                    let cardEnum = CardId(rawValue: cardID) {
                     cardIds.append(cardEnum)
                 }
             }
@@ -97,7 +105,7 @@ class FirebaseManager {
     /**
      Tableの取得（リアルタイム）
      */
-    func observeTableInfo(from roomID: String, gameID: String, completion: @escaping ([CardId]?) -> Void) {
+    func observeTableInfo(completion: @escaping ([CardId]?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let deckRef = gameInfoRef.child("table")
         deckRef.observe(.value) { snapshot in
@@ -118,7 +126,7 @@ class FirebaseManager {
     /**
      Handの取得（リアルタイム）
      */
-    func observeHandInfo(from roomID: String, gameID: String, playerIndex: String, completion: @escaping ([CardId]?) -> Void) {
+    func observeHandInfo(playerIndex: String, completion: @escaping ([CardId]?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let playerRef = gameInfoRef.child("players").child(playerIndex)
         playerRef.observe(.value) { snapshot in
@@ -130,7 +138,8 @@ class FirebaseManager {
             }
             var playerHand: [CardId] = []
             for cardDict in playerHandDicts {
-                if let cardID = cardDict["cardID"] as? Int, let card = CardId(rawValue: cardID) {
+                if let cardID = cardDict["cardID"] as? Int,
+                    let card = CardId(rawValue: cardID) {
                     playerHand.append(card)
                 }
             }
@@ -141,7 +150,7 @@ class FirebaseManager {
     /**
      GamePhaseの取得（リアルタイム）
      */
-    func observeGamePhase(roomID: String, gameID: String, completion: @escaping (GamePhase?) -> Void) {
+    func observeGamePhase(completion: @escaping (GamePhase?) -> Void) {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("gamePhase")
         ref.observe(.value) { (snapshot) in
             guard let gamePhaseValue = snapshot.value as? Int else {
@@ -161,9 +170,44 @@ class FirebaseManager {
     }
     
     /**
+     DTNKInfoの取得（リアルタイム） Index  Player
+     */
+    func observeDTNKInfo(completion: @escaping (Int?, Player_f?) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let indexRef = gameInfoRef.child("dtnkIndex")
+        let playerRef = gameInfoRef.child("dtnkPlayer")
+
+        indexRef.observe(.value) { (snapshot) in
+            guard let newindex = snapshot.value as? Int else {
+                print("Could not cast snapshot value to an integer")
+                return
+            }
+
+            playerRef.observeSingleEvent(of: .value) { (playerSnapshot) in
+                guard let playerData = playerSnapshot.value as? [String: Any] else {
+                    print("Could not cast snapshot value to dictionary")
+                    completion(newindex, nil) // indexは有効ですが、Playerデータは無効な場合
+                    return
+                }
+                
+                if let id = playerData["id"] as? String,
+                    let side = playerData["side"] as? Int,
+                    let name = playerData["name"] as? String,  // 注意: "id"から"name"に変更しました
+                    let icon_url = playerData["icon_url"] as? String {
+                    
+                    let newPlayer = Player_f(id: id, side: side, name: name, icon_url: icon_url)
+                    completion(newindex, newPlayer)
+                } else {
+                    completion(newindex, nil)  // indexは有効ですが、Playerデータは無効な場合
+                }
+            }
+        }
+    }
+
+    /**
      currentPlayerIndexの取得（リアルタイム）
      */
-    func getCurrentPlayerIndex(roomID: String, gameID: String, completion: @escaping (Int?) -> Void) {
+    func getCurrentPlayerIndex(completion: @escaping (Int?) -> Void) {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("currentPlayerIndex")
         ref.observe(.value) { (snapshot) in
             guard let currentplayerIndex = snapshot.value as? Int else {
@@ -175,9 +219,40 @@ class FirebaseManager {
     }
     
     /**
-     GamePhase変更
+     lastPlayCardsPlayerIndexの取得（リアルタイム）
      */
-    func updateGamePhase(roomID: String, gameID: String, gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
+    func observeLastPlayCardsPlayerIndex(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("lastPlayCardsPlayerIndex")
+        ref.observe(.value) { (snapshot) in
+            guard let lastPlayCardsPlayerIndex = snapshot.value as? Int else {
+                print("errore")
+                return
+            }
+            completion(lastPlayCardsPlayerIndex)
+        }
+    }
+
+    
+    /**
+     observeChallengeAnswerの取得（リアルタイム）
+     */
+    func observeChallengeAnswer(completion: @escaping ([ChallengeAnswer?]) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let challengeAnswerRef = gameInfoRef.child("challengeAnswer")
+        challengeAnswerRef.observe(.value) { (snapshot) in
+            guard let rawValues = snapshot.value as? [Int] else {
+                print("Could not cast snapshot value to [Int]")
+                return
+            }
+            let answers = rawValues.map { ChallengeAnswer(rawValue: $0) }
+            completion(answers)
+        }
+    }
+
+    /**
+     GamePhaseのセット
+     */
+    func setGamePhase(gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.child("gamePhase").setValue(gamePhase.rawValue) { error, _ in
             if let error = error {
@@ -189,9 +264,23 @@ class FirebaseManager {
     }
     
     /**
+     ChallengeAnserのセット
+     */
+    func setChallengeAnswer(index: Int, answer: ChallengeAnswer, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("challengeAnswer/\(index)").setValue(answer.rawValue) { error, _ in
+            if let error = error {
+                print("Failed: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
+    /**
      currentPlayerIndexのセット
      */
-    func setCurrentPlayerIndex(roomID: String, gameID: String, currentplayerIndex: Int, completion: @escaping (Bool) -> Void) {
+    func setCurrentPlayerIndex(currentplayerIndex: Int, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.child("currentPlayerIndex").setValue(currentplayerIndex) { error, _ in
             if let error = error {
@@ -201,22 +290,145 @@ class FirebaseManager {
             }
         }
     }
+    
+    /**
+     dtnkIndex dtnkPlayerのセット
+     */
+    func setDTNKInfo(Index: Int, dtnkPlayer: Player_f, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let playersJSON = cjm.player_fJSON(player: dtnkPlayer)
+        let valuesToUpdate: [String: Any] = [
+            "dtnkIndex": Index,
+            "dtnkPlayer": playersJSON,
+        ]
+        gameInfoRef.updateChildValues(valuesToUpdate) { error, _ in
+            if let error = error {
+                print("Failed to update DTNK info: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+
+    /**
+     Deckのセット
+     */
+    func setDeck(deck: [CardId], completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let deckData = deck.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        }
+        gameInfoRef.child("deck").setValue(deckData) { error, _ in
+            if let error = error {
+                print("Failed to update deck regeneration: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
+    /**
+     Tableのセット
+     */
+    func setTable(table: [CardId], completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let tableData = table.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        }
+        gameInfoRef.child("table").setValue(tableData) { error, _ in
+            if let error = error {
+                print("Failed to update table regeneration: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
+    /**
+     勝者・敗者のセット
+     */
+    func setWinnersLosers(winners: [Player_f],  losers: [Player_f], completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let winnersData = cjm.players_fJSON(players: winners)
+        let losersData = cjm.players_fJSON(players: losers)
+        // winnersとlosersをセットする
+        gameInfoRef.child("winners").setValue(winnersData) { (error, _) in
+            if let error = error {
+                print("Error saving winners: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+            gameInfoRef.child("losers").setValue(losersData) { (error, _) in
+                if let error = error {
+                    print("Error saving losers: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+        }
+    }
+    /**
+     勝者・敗者の取得（リアルタイム)
+     */
+    func observeWinnersLosers(completion: @escaping ([Player_f], [Player_f]) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let winnersRef = gameInfoRef.child("winners")
+        let losersRef = gameInfoRef.child("losers")
+        
+        winnersRef.observe(.value) { (winnersSnapshot) in
+            guard let winnersDatas = winnersSnapshot.value as? [[String: Any]] else {
+                print("Error getting winnersRef")
+                return
+            }
+            var winners: [Player_f] = []
+            for winnersData in winnersDatas {
+                if let id = winnersData["id"] as? String,
+                   let side = winnersData["side"] as? Int,
+                   let name = winnersData["name"] as? String,
+                   let icon_url = winnersData["icon_url"] as? String {
+                    let player = Player_f(id: id, side: side, name: name, icon_url: icon_url)
+                    winners.append(player)
+                }
+            }
+            
+            losersRef.observe(.value) { (losersSnapshot) in
+                guard let losersDatas = losersSnapshot.value as? [[String: Any]] else {
+                    print("Error getting losersRef")
+                    return
+                }
+                var losers: [Player_f] = []
+                for losersData in losersDatas {
+                    if let id = losersData["id"] as? String,
+                       let side = losersData["side"] as? Int,
+                       let name = losersData["name"] as? String,
+                       let icon_url = losersData["icon_url"] as? String {
+                        let player = Player_f(id: id, side: side, name: name, icon_url: icon_url)
+                        losers.append(player)
+                    }
+                }
+                completion(winners, losers)
+            }
+        }
+    }
 
     
     /**
      初期カードめくり
      */
-    func moveTopCardToTable(roomID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+    func moveTopCardToTable(completion: @escaping (Int?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.observeSingleEvent(of: .value) { snapshot in
             guard var gameInfo = snapshot.value as? [String: Any],
                   var deck = gameInfo["deck"] as? [[String: Int]]
             else {
-                completion(false)
+                completion(nil)
                 return
             }
             // デッキからカードを引く
             let drawnCard = deck.removeLast()
+            let drawnCardValue = drawnCard.values.first
             // デッキの更新
             gameInfo["deck"] = deck
             // テーブルにカードを追加
@@ -227,9 +439,9 @@ class FirebaseManager {
             gameInfoRef.setValue(gameInfo) { error, _ in
                 if let error = error {
                     print(error.localizedDescription)
-                    completion(false)
+                    completion(nil)
                 } else {
-                    completion(true)
+                    completion(drawnCardValue)
                 }
             }
         }
@@ -238,7 +450,7 @@ class FirebaseManager {
     /**
      Draw
      */
-    func drawCard(roomID: String, playerID: String, gameID: String, completion: @escaping (Bool) -> Void) {
+    func drawCard(playerID: String, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.observeSingleEvent(of: .value) { snapshot in
             guard var gameInfo = snapshot.value as? [String: Any],
@@ -284,7 +496,7 @@ class FirebaseManager {
     /**
      PlayCards
      */
-    func playCards(roomID: String, playerID: String, gameID: String, baseselectedCards: [N_Card], completion: @escaping (Bool) -> Void) {
+    func playCards(playerID: String, baseselectedCards: [N_Card], completion: @escaping (Bool) -> Void) {
         let selectedCards = convertToDictArray(cards: baseselectedCards)
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.observeSingleEvent(of: .value) { snapshot in
@@ -320,6 +532,8 @@ class FirebaseManager {
             
             // プレイヤーのデータを更新
             gameInfo["players"] = players
+            // カードを最後に出した人を更新
+            gameInfo["lastPlayCardsPlayerIndex"] = playerID
             
             // データの更新
             gameInfoRef.setValue(gameInfo) { error, _ in
@@ -347,7 +561,7 @@ class FirebaseManager {
         let roomData: [String: Any] = [
             "roomID": roomID,
             "roomName": roomName,
-            "creatorName": creator.name,
+            "hostID": creator.id,
             "participants": [myAccountJSON],
             "matchingFlg": "yet"
         ]
@@ -359,46 +573,6 @@ class FirebaseManager {
                 completion(roomName)
             }
         }
-    }
-
-    
-    
-    /**
-     指定したルームIDのゲーム情報を検索して保存
-     */
-    func retrieveGameInfo(forRoom roomID: String, completion: @escaping (GameBase?) -> Void) {
-        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo")
-        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
-            guard let gameInfoDict = snapshot.value as? [String: [String: Any]],
-                  let gameData = gameInfoDict.values.first,
-                  let playersDict = gameData["players"] as? [[String: Any]]
-            else {
-                completion(nil)
-                return
-            }
-            
-            var players: [Player_f] = []
-            for playerDict in playersDict {
-                guard let id = playerDict["id"] as? String,
-                      let side = playerDict["side"] as? Int,
-                      let name = playerDict["name"] as? String,
-                      let iconURL = playerDict["icon_url"] as? String
-                else {
-                    // 必要な情報が欠落している場合はスキップ
-                    continue
-                }
-                
-                let player = Player_f(id: id, side: side, name: name, icon_url: iconURL)
-                players.append(player)
-            }
-            
-            let gameBase = GameBase(players: players)
-            completion(gameBase)
-        }
-    }
-
-    struct GameBase {
-        let players: [Player_f]
     }
     
     /**
@@ -427,7 +601,7 @@ class FirebaseManager {
                   let roomData = roomDict.values.first,
                   let roomID = roomData["roomID"] as? String,
                   let roomName = roomData["roomName"] as? String,
-                  let creatorName = roomData["creatorName"] as? String,
+                  let hostID = roomData["hostID"] as? String,
                   let participantsDict = roomData["participants"] as? [[String: Any]]
             else {
                 completion(nil)
@@ -445,7 +619,7 @@ class FirebaseManager {
                 }
             }
 
-            let room = Room(roomID: roomID, roomName: roomName, creatorName: creatorName, participants: participants)
+            let room = Room(roomID: roomID, roomName: roomName, hostID: hostID, participants: participants)
 //            print(room)
             completion(room)
         }
@@ -465,32 +639,7 @@ class FirebaseManager {
             }
         }
     }
-    
-    /**
-     matchingFlgの監視
-     */
-    func observeMatchingFlg(roomID: String) {
-        let roomRef = database.reference().child("rooms").child(roomID)
-        let matchingFlgRef = roomRef.child("matchingFlg")
         
-        // matchingFlgの値の変更を監視
-        matchingFlgRef.observe(.value) { snapshot in
-            if let matchingFlg = snapshot.value as? String {
-                if matchingFlg == "ok" {
-                    // stateの設定
-                    self.retrieveGameInfo(forRoom: roomID) { gameBase in
-                        appState.gameUIState.players = gameBase!.players
-                        
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        // 遷移
-                        Router().pushBasePage(pageId: .dtnkMain_friends)
-                    }
-                }
-            }
-        }
-    }
-    
     /**
      ルーム参加
      */

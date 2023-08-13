@@ -1,5 +1,59 @@
 
+
+
 import SwiftUI
+
+struct DecisionScoreView: View {
+    var body: some View {
+        GeometryReader { geo in
+            ZStack {
+                // 勝者・敗者
+                HStack(spacing: 30) {
+                    VStack() {
+                        Text("Winer")
+                            .font(.custom(FontName.font01, size: 30))
+                            .foregroundColor(Color.white)
+                            .padding(5)
+
+                        Text("Maxname")
+                            .font(.custom(FontName.font01, size: 20))
+                            .foregroundColor(Color.white)
+                            .padding(5)
+
+                    }
+                    VStack() {
+                        Text("Loser")
+                            .font(.custom(FontName.font01, size: 30))
+                            .foregroundColor(Color.white)
+                            .padding(5)
+
+                        Text("Maxname")
+                            .font(.custom(FontName.font01, size: 20))
+                            .foregroundColor(Color.white)
+                            .padding(5)
+
+                    }
+                }
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
+                
+                // 次へボタン
+                Button(action: {
+                    // 途中結果へ
+                    GameFriendEventController().onTapOKButton(gamePhase: .result)
+                }) {
+                    Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 50, btnColor: Color.clear)
+                }
+                .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.9)
+
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+            .background(
+                Color.black.opacity(0.93)
+            )
+        }
+    }
+}
+
 
 struct DecisionView: View {
     
@@ -58,7 +112,7 @@ struct DecisionView: View {
                     }
 
                     VStack() {
-                        Text("LOOSER")
+                        Text("LOSER")
                             .font(.system(size: 30))
                             .foregroundColor(Color.white)
                             .fontWeight(.bold)
@@ -133,9 +187,6 @@ struct DecisionView: View {
         }
     }
 }
-
-
-
 
 struct DecisionCardsView: View {
     
