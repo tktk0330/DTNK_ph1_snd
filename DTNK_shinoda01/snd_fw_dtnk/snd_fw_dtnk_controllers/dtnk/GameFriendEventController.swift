@@ -1,4 +1,6 @@
-
+/**
+ Gameに関する処理
+ */
 
 
 import SwiftUI
@@ -9,7 +11,7 @@ struct GameFriendEventController {
     let fbms = FirebaseManager.shared
     
     func play(playerID: String, selectCrads: [N_Card], passPayerIndex: Int, completion: @escaping (Bool) -> Void) {
-        fbms.playCards(playerID: playerID, baseselectedCards: selectCrads) { result in
+        fbms.playCards(playerIndex: passPayerIndex, playerID: playerID, baseselectedCards: selectCrads) { result in
             if result {
                 print("Play")
                 pass(passPayerIndex: passPayerIndex, playersCount: 4)

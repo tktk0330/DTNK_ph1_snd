@@ -5,6 +5,7 @@ import SwiftUI
 
 class GameUIState: ObservableObject {
     
+    // FB必要あり
     @Published var gameID: String = ""
     @Published var players: [Player_f] = []
     @Published var deck: [CardId] = []
@@ -16,10 +17,13 @@ class GameUIState: ObservableObject {
             gamePhaseAction(phase: gamePhase)
         }
     }
+    // TargetGame
+    // Game
+    // 出さないことを通知
     // 現在プレイしている人
     @Published var currentPlayerIndex: Int = 99
     // 最後にカードを出した人
-    @Published var lastPlayCardsPlayer: Player_f?
+    @Published var lastPlayerIndex: Int = 99
     // どてんこした人
     @Published var dtnkPlayer: Player_f?
     // どてんこした人のIndex
@@ -30,10 +34,19 @@ class GameUIState: ObservableObject {
     @Published var winners: [Player_f] = []
     // 負者：オールの場合もある
     @Published var losers: [Player_f] = []
+    // 裏のカードたち
+    @Published var decisionScoreCards: [CardId] = []
+    // 初期レート
+    @Published var initialRate: Int = 1
+    // 上昇レート
+    @Published var ascendingRate: Int = 1
+    // 決定数
+    // ゲームスコア
+    @Published var gameScore: Int = 1
     
+    // FB必要なし
     // カウンター
     @Published var counter: Bool = false
-
     
     func gamePhaseAction(phase: GamePhase) {
         switch phase {
@@ -65,7 +78,7 @@ class GameUIState: ObservableObject {
         case .challenge:
             GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
         case .decisionrate_pre:
-            GameObserber(hostID: appState.room.roomData.hostID).decideWinnersLosers()
+            GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
         case .decisionrate:
             print(phase)
         case .result:

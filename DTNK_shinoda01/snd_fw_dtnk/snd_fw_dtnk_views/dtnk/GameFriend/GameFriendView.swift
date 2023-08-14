@@ -149,14 +149,16 @@ struct GameFriendView: View {
                 if game.gamePhase == .challenge {
                     MovingImage()
                 }
+                                
+//                if game.gamePhase == .decisionrate {
+                if appState.subState != nil && game.gamePhase == .decisionrate {
+                    DecisionScoreView()
+                }
                 
                 if game.gamePhase == .result {
                     ResultView()
                 }
-                if game.gamePhase == .decisionrate {
-                    DecisionScoreView()
-                    
-                }
+
 
                 // 開始ボタン
                 if startFlag {
@@ -275,6 +277,10 @@ struct GameFriendView: View {
                     }
                 }
         }
+        // lastPlayerIndex
+        fbms.observeLastPlayerIndex() { lastPlayerIndex in
+            game.lastPlayerIndex = lastPlayerIndex!
+        }
         // DTNKInfo
         fbms.observeDTNKInfo() { Index, player in
             game.dtnkPlayerIndex = Index!
@@ -289,12 +295,13 @@ struct GameFriendView: View {
                 
             }
         }
-        // winners losers
-        fbms.observeWinnersLosers() { winners, losers in
-            game.winners = winners
-            game.losers = losers
-            print(losers)
-        }
+        // スコア決定・途中結果 Item
+        fbms.observeResultItem() { resultItem in
+            if let result = resultItem {
+                appState.subState = SubState(resultItem: result)
+            } else {
+//                print("Error retrieving result item.")
+            }        }
     }
 }
 

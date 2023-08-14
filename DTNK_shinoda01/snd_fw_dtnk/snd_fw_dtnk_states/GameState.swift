@@ -63,7 +63,7 @@ class GameUiState: ObservableObject {
             gamePhaseAction(phase: gamePhase)
         }
     }
-    //　どてんこ判定：誰かがどてんこしたかどうか
+    // どてんこ判定：誰かがどてんこしたかどうか
     @Published var gamedtnk: Bool = false
     // 出さないことを通知
     @Published var initialAction: [Bool] = [true, true, true, true] {

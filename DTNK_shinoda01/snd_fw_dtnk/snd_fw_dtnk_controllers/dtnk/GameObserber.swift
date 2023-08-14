@@ -2,17 +2,14 @@
  Hostのみが行う処理を記載
  */
 
-
-
 import Foundation
 import SwiftUI
 import Firebase
 import FirebaseDatabase
 
-
 class GameObserber {
     
-    @StateObject var game: GameUIState = appState.gameUIState
+    var game: GameUIState = appState.gameUIState
     let fbm = FirebaseManager()
     let fbms = FirebaseManager.shared
     var hostID: String = ""
@@ -159,7 +156,6 @@ class GameObserber {
             fbms.setGamePhase(gamePhase: .decisionrate_pre) { result in }
             return
         }
-        
         // 手札とどてんこカードを比較
         let challenger = appState.gameUIState.players[challengerIndex]
         let handSum = countHand(hand: challenger.hand)
@@ -170,7 +166,7 @@ class GameObserber {
             // チャンスあり 一枚引く
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
                 fbms.drawCard(playerID: challenger.id) { result in
-                    print("challenger \(challenger.side) draw")
+                    print("challenger \(challenger.side-1) draw")
                     // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
                     self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
                 }
@@ -181,7 +177,6 @@ class GameObserber {
             print("revenge")
             // 処理
             appState.gameUIState.players[dtnkIndex].hand.removeAll()
-            print(appState.gameUIState.players[dtnkIndex].hand)
             // Viewも
 
             // 次の人へ
@@ -235,32 +230,94 @@ class GameObserber {
     }
     
     /**
-     勝敗を決める
+     最終画面に向けた準備
      */
-    func decideWinnersLosers() {
+    func preparationFinalPhase() {
         guard checkHost() else {
             return
         }
-//        // 勝者・敗者の初期化
-//        game.winners.removeAll()
-//        game.losers.removeAll()
-//        // 勝者・敗者を決める
-//        if game.currentPlayerIndex == 99 {
-//            // しょてんこの場合
-//
-//        } else if game.currentPlayerIndex == 88 {
-//            // バーストの場合
-//
-//        } else {
-//            // 通常時
-//            game.winners.append(game.dtnkPlayer!)
-//            game.losers.append(game.lastPlayCardsPlayer!)
-//        }
-//        // FBに登録
-//        fbms.setWinnersLosers(winners: game.winners, losers: game.losers) { result in }
-        // X秒後にratefirst
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-            fbms.setGamePhase(gamePhase: .decisionrate) { result in }
+        // 勝敗の決定
+        decideWinnersLosers() { result in }
+        // スコア決定
+        decideScore() { result in }
+        // FB登録
+        let item = ResultItem(
+            winners: game.winners,
+            losers: game.losers,
+            decisionScoreCards: game.decisionScoreCards,
+            ascendingRate: game.ascendingRate,
+            gameScore: game.gameScore)
+        
+        fbms.setPrepareFinalPhase(item: item) { [self] result in
+            if result {
+                fbms.setGamePhase(gamePhase: .decisionrate) { result in }
+            }
         }
+        
+    }
+    
+    /**
+     勝敗を決める
+     */
+    func decideWinnersLosers(completion: @escaping (Bool) -> Void) {
+        guard checkHost() else {
+            return
+        }
+        // 勝者・敗者の初期化
+        game.winners.removeAll()
+        game.losers.removeAll()
+        // 勝者・敗者を決める
+        if game.currentPlayerIndex == 99 {
+            // しょてんこの場合
+
+        } else if game.currentPlayerIndex == 88 {
+            // バーストの場合
+
+        } else {
+            // 通常時
+            let winer = game.players[game.dtnkPlayerIndex]
+            game.winners.append(winer)
+            let loser = game.players[game.lastPlayerIndex]
+            game.losers.append(loser)
+        }
+    }
+    
+    /**
+     スコア決定の処理（裏のカードの確認）
+     */
+    func decideScore(completion: @escaping (Bool) -> Void) {
+        guard checkHost() else {
+            return
+        }
+        // 山札の裏からカードを一枚引く
+        var cards: [CardId] = []
+        var keepDrawing = true
+        
+        while keepDrawing {
+            if let card = game.deck.popLast() {
+                cards.append(card)
+                switch card.rate()[1] {
+                // 黒３：勝敗逆転＋引く
+                case 20:
+//                    let quick = game.winners
+//                    game.winners = game.losers
+//                    game.losers = quick
+                    keepDrawing = true
+                // ダイヤ３：３０
+                case 30:
+                    keepDrawing = false
+                    // 1,2,jorker：倍＋引く
+                case 50:
+                    game.ascendingRate *= 2
+                    keepDrawing = true
+                    // その他普通の数字は終了
+                default:
+                    keepDrawing = false
+                }
+            }
+        }
+        game.decisionScoreCards = cards
+        // score計算
+        game.gameScore = game.initialRate * game.ascendingRate * (game.decisionScoreCards.last?.rate()[1])!
     }
 }

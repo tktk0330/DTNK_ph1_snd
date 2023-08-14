@@ -9,6 +9,9 @@ import SwiftUI
  */
 // TODO: 統合
 struct DecisionScoreView: View {
+    @StateObject var game: GameUIState = appState.gameUIState
+    @StateObject var sub: SubState = appState.subState
+
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -18,14 +21,14 @@ struct DecisionScoreView: View {
                         Text("Winer")
                             .modifier(DecisionScoreViewModifier(fontSize: 30))
                         // TODO: 名前反映
-                        Text("Maxname")
+                        Text(sub.resultItem.winners[0].name)
                             .modifier(DecisionScoreViewModifier(fontSize: 20))
                     }
                     VStack() {
                         Text("Loser")
                             .modifier(DecisionScoreViewModifier(fontSize: 30))
                         // TODO: 名前反映
-                        Text("Maxname")
+                        Text(sub.resultItem.losers[0].name)
                             .modifier(DecisionScoreViewModifier(fontSize: 20))
                     }
                 }
@@ -38,32 +41,26 @@ struct DecisionScoreView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 60)
-                    
+
                     HStack() {
-                        Image(ImageName.Card.spade1.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 90)
-                        Image(ImageName.Card.spade1.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 90)
-                        Image(ImageName.Card.spade1.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 90)
+                        ForEach(sub.resultItem.decisionScoreCards) { card in
+                            Image(card.imageName())
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 90)
+                        }
                     }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.45)
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.40)
                 
                 // 最終スコア要素
                 // TODO: 反映
                 VStack(alignment: .leading) {
-                    Text("初期レート：100")
+                    Text("初期レート：\(game.initialRate)")
                         .modifier(DecisionScoreViewModifier(fontSize: 20))
-                    Text("上昇レート：✖︎ 32")
+                    Text("上昇レート：✖︎ \(sub.resultItem.ascendingRate)")
                         .modifier(DecisionScoreViewModifier(fontSize: 20))
-                    Text("最終　数字：✖︎ 30")
+                    Text("最終　数字：✖︎ \(sub.resultItem.decisionScoreCards.last!.rate()[1])")
                         .modifier(DecisionScoreViewModifier(fontSize: 20))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -73,7 +70,7 @@ struct DecisionScoreView: View {
                 // 最終スコア
                 // TODO: 名前反映
                 VStack(alignment: .trailing) {
-                    Text("＝　10000000")
+                    Text("＝　\(sub.resultItem.gameScore)")
                         .modifier(DecisionScoreViewModifier(fontSize: 20))
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)

@@ -4,7 +4,6 @@
 import SwiftUI
 
 struct TopView: View {
-    
     var body: some View {
         GeometryReader { geo in
             // 広告用
@@ -35,8 +34,6 @@ struct TopView: View {
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
             .blinkEffect(animating: true)
-            
-            ResultView()
         }
     }
 }

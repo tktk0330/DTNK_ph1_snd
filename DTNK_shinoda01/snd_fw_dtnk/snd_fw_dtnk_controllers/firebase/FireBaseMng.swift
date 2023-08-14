@@ -195,14 +195,10 @@ class FirebaseManager {
                 print("Could not cast snapshot value to an integer")
                 return
             }
-
             guard let gamePhase = GamePhase(rawValue: gamePhaseValue) else {
                 print("Invalid gamePhase value: \(gamePhaseValue)")
                 return
             }
-
-            // gamePhase is the updated value.
-            print("Updated gamePhase: \(gamePhase)")
             completion(gamePhase)
         }
     }
@@ -289,19 +285,18 @@ class FirebaseManager {
     }
     
     /**
-     lastPlayCardsPlayerIndexの取得（リアルタイム）
+     lastPlayerIndexの取得（リアルタイム）
      */
-    func observeLastPlayCardsPlayerIndex(completion: @escaping (Int?) -> Void) {
-        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("lastPlayCardsPlayerIndex")
+    func observeLastPlayerIndex(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("lastPlayerIndex")
         ref.observe(.value) { (snapshot) in
-            guard let lastPlayCardsPlayerIndex = snapshot.value as? Int else {
+            guard let lastPlayerIndex = snapshot.value as? Int else {
                 print("errore")
                 return
             }
-            completion(lastPlayCardsPlayerIndex)
+            completion(lastPlayerIndex)
         }
     }
-
     
     /**
      ChallengeAnserのセット
@@ -363,40 +358,139 @@ class FirebaseManager {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let winnersRef = gameInfoRef.child("winners")
         let losersRef = gameInfoRef.child("losers")
-        
+
+        var winners: [Player_f] = []
+        var losers: [Player_f] = []
+
         winnersRef.observe(.value) { (winnersSnapshot) in
             guard let winnersDatas = winnersSnapshot.value as? [[String: Any]] else {
-                print("Error getting winnersRef")
+//                print("Error getting winnersRef")
+                return
+            }
+            winners = winnersDatas.compactMap { data in
+                guard let id = data["id"] as? String,
+                      let side = data["side"] as? Int,
+                      let name = data["name"] as? String,
+                      let icon_url = data["icon_url"] as? String else {
+                    return nil
+                }
+                return Player_f(id: id, side: side, name: name, icon_url: icon_url)
+            }
+
+            losersRef.observe(.value) { (losersSnapshot) in
+                guard let losersDatas = losersSnapshot.value as? [[String: Any]] else {
+                    // TODO: ここ通るけど取得はできてそう
+//                    print("Error getting losersRef \(losersSnapshot)")
+                    return
+                }
+                losers = losersDatas.compactMap { data in
+                    guard let id = data["id"] as? String,
+                          let side = data["side"] as? Int,
+                          let name = data["name"] as? String,
+                          let icon_url = data["icon_url"] as? String else {
+                        return nil
+                    }
+                    return Player_f(id: id, side: side, name: name, icon_url: icon_url)
+                }
+
+                completion(winners, losers)
+            }
+        }
+    }
+
+    /**
+     ResultItemのセット
+     */
+    func setPrepareFinalPhase(item: ResultItem, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let decisionScoreCardsData = item.decisionScoreCards.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        }
+        let winnersData = cjm.players_fJSON(players: item.winners)
+        let losersData = cjm.players_fJSON(players: item.losers)
+        let updateData: [String: Any] = [
+            "winners": winnersData,
+            "losers": losersData,
+            "decisionScoreCards": decisionScoreCardsData,
+            "ascendingRate": item.ascendingRate,
+            "score": item.gameScore
+        ]
+        gameInfoRef.updateChildValues(updateData) { error, _ in
+            if let error = error {
+                print("Failed: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     ResultItemの取得（リアルタイム）
+     */
+    func observeDecisionScoreCards(completion: @escaping ([CardId]) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let elementRef = ref.child("decisionScoreCards")
+        elementRef.observe(.value) { (snapshot) in
+            guard let cardsDict = snapshot.value as? [[String: Any]] else {
+//                completion(nil)
+                return
+            }
+            var decisionScoreCards: [CardId] = []
+            for cardData in cardsDict {
+                if let cardID = cardData["cardID"] as? Int,
+                    let cardEnum = CardId(rawValue: cardID) {
+                    decisionScoreCards.append(cardEnum)
+                }
+            }
+            completion(decisionScoreCards)
+        }
+    }
+    func observeResultItem(completion: @escaping (ResultItem?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        ref.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                // データの形式が期待通りでない場合、エラー処理を行います。
+                return
+            }
+            guard let winnersDict = data["winners"] as? [[String: Any]],
+                  let losersDict = data["losers"] as? [[String: Any]],
+                  let decisionScoreCardsDict = data["decisionScoreCards"] as? [[String: Any]],
+                  let ascendingRate = data["ascendingRate"] as? Int,
+                  let gameScore = data["score"] as? Int else {
+                completion(nil)
                 return
             }
             var winners: [Player_f] = []
-            for winnersData in winnersDatas {
-                if let id = winnersData["id"] as? String,
-                   let side = winnersData["side"] as? Int,
-                   let name = winnersData["name"] as? String,
-                   let icon_url = winnersData["icon_url"] as? String {
-                    let player = Player_f(id: id, side: side, name: name, icon_url: icon_url)
-                    winners.append(player)
+            var losers: [Player_f] = []
+
+            winners = winnersDict.compactMap { data in
+                guard let id = data["id"] as? String,
+                      let side = data["side"] as? Int,
+                      let name = data["name"] as? String,
+                      let icon_url = data["icon_url"] as? String else {
+                    return nil
+                }
+                return Player_f(id: id, side: side, name: name, icon_url: icon_url)
+            }
+            losers = losersDict.compactMap { data in
+                guard let id = data["id"] as? String,
+                      let side = data["side"] as? Int,
+                      let name = data["name"] as? String,
+                      let icon_url = data["icon_url"] as? String else {
+                    return nil
+                }
+                return Player_f(id: id, side: side, name: name, icon_url: icon_url)
+            }
+            var decisionScoreCards: [CardId] = []
+            for cardData in decisionScoreCardsDict {
+                if let cardID = cardData["cardID"] as? Int,
+                    let cardEnum = CardId(rawValue: cardID) {
+                    decisionScoreCards.append(cardEnum)
                 }
             }
             
-            losersRef.observe(.value) { (losersSnapshot) in
-                guard let losersDatas = losersSnapshot.value as? [[String: Any]] else {
-                    print("Error getting losersRef")
-                    return
-                }
-                var losers: [Player_f] = []
-                for losersData in losersDatas {
-                    if let id = losersData["id"] as? String,
-                       let side = losersData["side"] as? Int,
-                       let name = losersData["name"] as? String,
-                       let icon_url = losersData["icon_url"] as? String {
-                        let player = Player_f(id: id, side: side, name: name, icon_url: icon_url)
-                        losers.append(player)
-                    }
-                }
-                completion(winners, losers)
-            }
+            let result = ResultItem(winners: winners, losers: losers, decisionScoreCards: decisionScoreCards, ascendingRate: ascendingRate, gameScore: gameScore)
+            completion(result)
         }
     }
 
@@ -485,7 +579,7 @@ class FirebaseManager {
     /**
      PlayCards
      */
-    func playCards(playerID: String, baseselectedCards: [N_Card], completion: @escaping (Bool) -> Void) {
+    func playCards(playerIndex: Int, playerID: String, baseselectedCards: [N_Card], completion: @escaping (Bool) -> Void) {
         let selectedCards = convertToDictArray(cards: baseselectedCards)
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.observeSingleEvent(of: .value) { snapshot in
@@ -521,7 +615,7 @@ class FirebaseManager {
             // プレイヤーのデータを更新
             gameInfo["players"] = players
             // カードを最後に出した人を更新
-            gameInfo["lastPlayCardsPlayerIndex"] = playerID
+            gameInfo["lastPlayerIndex"] = playerIndex
             
             // データの更新
             gameInfoRef.setValue(gameInfo) { error, _ in
