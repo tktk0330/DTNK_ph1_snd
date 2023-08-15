@@ -89,6 +89,7 @@ class PlayerResultItem: ObservableObject {
     
     // Player別
     let rank: Int
+    let index: Int
     let iconUrl: String
     let name: String
     let score: Int
@@ -96,16 +97,18 @@ class PlayerResultItem: ObservableObject {
     
     init(
         rank: Int,
+        index: Int,
         iconUrl: String,
         name: String,
         score: Int,
         changed: Double
     ){
         self.rank = rank
+        self.index = index
         self.iconUrl = iconUrl
         self.name = name
         self.score = score
         self.changed = changed
     }
-    
+
 }

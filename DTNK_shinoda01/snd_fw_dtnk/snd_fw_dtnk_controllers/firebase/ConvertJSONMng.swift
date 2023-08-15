@@ -29,7 +29,6 @@ struct ConvertJSONMng {
                 "icon_url": player.icon_url,
                 "hand": player.hand,
                 "score": player.score,
-                "dtnk": player.dtnk,
                 "selectedCards": player.selectedCards
             ]
             playersJSON.append(playerJSON)
@@ -45,7 +44,7 @@ struct ConvertJSONMng {
             "icon_url": player.icon_url,
             //                "hand": player.hand,
             "score": player.score,
-            "dtnk": player.dtnk,
+            "rank": player.rank,
             "selectedCards": player.selectedCards
         ]
         return playerJSON
@@ -62,7 +61,7 @@ struct ConvertJSONMng {
                 "icon_url": player.icon_url,
                 //                "hand": player.hand,
                 "score": player.score,
-                "dtnk": player.dtnk,
+                "rank": player.rank,
                 "selectedCards": player.selectedCards
             ]
             playersJSON.append(playerJSON)

@@ -117,8 +117,8 @@ struct MatchingView: View {
                             // ４人揃ったら
                             if room.startFlg {
                                 Button(action: {
-                                    print(room.roomData)
-                                    print(appState.matching.players)
+//                                    print(room.roomData)
+//                                    print(appState.matching.players)
                                     MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
                                 }) {
                                     Text("START")

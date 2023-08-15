@@ -55,7 +55,7 @@ class MatchingController {
         FirebaseManager.shared.setGameInfo(gameInfo: gameInfo, roomID: roomID) { gameID in
             if (gameID != nil) {
                 // matchingflgをOKに設定　その後遷移
-                FirebaseManager.shared.updateMatchingFlg(roomID: roomID)
+                RoomFirebaseManager.shared.updateMatchingFlg(roomID: roomID)
             } else {
                 print("Failed to save game info")
             }
@@ -84,7 +84,7 @@ class MatchingController {
     func backMatching(room: Room, user: User) {
         // ownerだったらルームを削除
         if room.hostID == user.userID {
-            FirebaseManager().deleteRoom(roomID: room.roomID) { success in
+            RoomFirebaseManager().deleteRoom(roomID: room.roomID) { success in
                 if success {
                     print("Room deleted successfully")
                     // ルーム削除後の処理
@@ -95,7 +95,7 @@ class MatchingController {
 
         } else {
             // 参加者だった退出
-            FirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
+            RoomFirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
                 if judge {
                     print("sc")
                     Router().pushBasePage(pageId: .room)

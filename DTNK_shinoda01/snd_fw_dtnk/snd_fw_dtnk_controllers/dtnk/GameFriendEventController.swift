@@ -60,7 +60,8 @@ struct GameFriendEventController {
      途中結果画面へ
      */
     func onTapOKButton(gamePhase: GamePhase) {
-        fbms.setGamePhase(gamePhase: gamePhase) { result in }
+        appState.gameUIState.gamePhase = gamePhase
+//        fbms.setGamePhase(gamePhase: gamePhase) { result in }
     }
 }
 

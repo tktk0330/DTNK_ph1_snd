@@ -25,16 +25,16 @@ struct ResultView: View {
                     .padding(5)
                     .position(x: UIScreen.main.bounds.width * 0.50, y:  geo.size.height * 0.15)
                 
-                MidResultItem()
+                MidResultItem(index: 1)
                     .position(x: UIScreen.main.bounds.width * 0.2, y:  geo.size.height * 0.5)
                 
-                MidResultItem()
+                MidResultItem(index: 2)
                     .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.3)
                 
-                MidResultItem()
+                MidResultItem(index: 3)
                     .position(x: UIScreen.main.bounds.width * 0.8, y:  geo.size.height * 0.5)
 
-                MidResultItem()
+                MidResultItem(index: 0)
                     .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.7)
                 
                 
@@ -134,12 +134,16 @@ struct ResultView01: View {
 }
 
 struct MidResultItem: View {
+    
+    @StateObject var game: GameUIState = appState.gameUIState
+    let index: Int
+    
     var body: some View {
         GeometryReader { geo in
             VStack() {
                 HStack(spacing: 7) {
                     // icon
-                    Image("icon-bot1")
+                    Image(game.players[index].icon_url)
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .aspectRatio(contentMode: .fit)
@@ -147,7 +151,7 @@ struct MidResultItem: View {
 //                        .offset(x: 5)
 
                     // name
-                    Text("username")
+                    Text(game.players[index].name)
                         .font(.custom(FontName.font01, size: 15))
                         .foregroundColor(Color.white)
                         .frame(width: geo.size.width * 0.2, alignment: .trailing)
@@ -158,7 +162,7 @@ struct MidResultItem: View {
                 HStack {
                     
                     // rank
-                    Text("1")
+                    Text(game.players[index].name)
                         .font(.custom(FontName.font02, size: 40))
                         .foregroundColor(Color.white)
                         .frame(width: geo.size.width * 0.05)
@@ -174,7 +178,7 @@ struct MidResultItem: View {
 //                            .border(Color.red)
 
                         // point
-                        Text("1200000")// 1200000
+                        Text(String(game.players[index].score))// 1200000
                             .font(.custom(FontName.font02, size: 30))
                             .foregroundColor(Color.white)
                             .frame(width: geo.size.width * 0.28, alignment: .trailing)

@@ -90,28 +90,6 @@ class GameUIState: ObservableObject {
 
 }
 
-
-class Player_f: Identifiable {
-    let id: String
-    var side: Int
-    var name: String
-    var icon_url: String
-    var hand: [CardId] = []
-    var score = 0
-    var dtnk: Bool
-    var selectedCards: [N_Card] = []
-    
-    init(id: String, side: Int, name: String, icon_url: String) {
-        self.id = id
-        self.side = side
-        self.name = name
-        self.icon_url = icon_url
-        self.score = 0
-        self.dtnk = false
-
-    }
-}
-
 var cards: [N_Card] = [
     
     N_Card(id: .back, location: .deck),

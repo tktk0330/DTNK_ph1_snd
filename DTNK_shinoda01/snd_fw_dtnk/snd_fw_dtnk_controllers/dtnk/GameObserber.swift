@@ -240,6 +240,8 @@ class GameObserber {
         decideWinnersLosers() { result in }
         // スコア決定
         decideScore() { result in }
+        // スコア移動
+        scoreCalculate()
         // FB登録
         let item = ResultItem(
             winners: game.winners,
@@ -299,9 +301,9 @@ class GameObserber {
                 switch card.rate()[1] {
                 // 黒３：勝敗逆転＋引く
                 case 20:
-//                    let quick = game.winners
-//                    game.winners = game.losers
-//                    game.losers = quick
+                    let quick = game.winners
+                    game.winners = game.losers
+                    game.losers = quick
                     keepDrawing = true
                 // ダイヤ３：３０
                 case 30:
@@ -319,5 +321,35 @@ class GameObserber {
         game.decisionScoreCards = cards
         // score計算
         game.gameScore = game.initialRate * game.ascendingRate * (game.decisionScoreCards.last?.rate()[1])!
+    }
+    /**
+     スコア移動
+     */
+    func scoreCalculate() -> [PlayerResultItem] {
+        // Score移動
+        for winner in game.winners {
+            winner.score += game.gameScore * game.losers.count
+        }
+        for loser in game.losers {
+            loser.score -= game.gameScore * game.winners.count
+        }
+        // Player結果情報
+        let sorted: [Player_f] = game.players.sorted(by: {
+            return  $0.score > $1.score
+        })
+
+        let playerItems = sorted.enumerated().map { (index, player) -> PlayerResultItem in
+            let rank = index + 1
+            let item = PlayerResultItem(
+                rank: rank,
+                index: player.side - 1,
+                iconUrl: player.icon_url,
+                name: player.name,
+                score: player.score,
+                changed: 0
+            )
+            return item
+        }
+        return playerItems
     }
 }

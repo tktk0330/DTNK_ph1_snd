@@ -444,6 +444,7 @@ class GameUiState: ObservableObject {
             let rank = index + 1
             let item = PlayerResultItem(
                 rank: rank,
+                index: player.side - 1,
                 iconUrl: player.icon_url,
                 name: player.name,
                 score: player.score,

@@ -23,256 +23,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A3F1D604-28AA-4D8C-8E23-63BE9C14890E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "join(user:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "join(user:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 823f0363ef2496c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "80">
-               </Location>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 823f0363ef2496c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "124">
-               </Location>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 823f0363ef2496c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "152">
-               </Location>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 480c91cd3533a632"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "60">
-               </Location>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 823f0363ef2494f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "896">
-               </Location>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 823f0363ef2494f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "924">
-               </Location>
-               <Location
-                  uuid = "15F8CC16-8243-4DC5-8A12-D6118A5357A2 - 480c91cd3533a6d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "29"
-                  endingLineNumber = "29"
-                  offsetFromSymbolStart = "60">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6F9C8F89-6483-4B90-8E6D-A6C7A72FB1B8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "678"
-            endingLineNumber = "678"
-            landmarkName = "searchRoom(withRoomName:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6F9C8F89-6483-4B90-8E6D-A6C7A72FB1B8 - 12d8f70ca9aaef55"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;, __C.FIRDatabaseReference) -&gt; () in DTNK_shinoda01.FirebaseManager.createRoom(roomName: Swift.String, creatorName: Swift.String, completion: (Swift.Optional&lt;Swift.String&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "1344">
-               </Location>
-               <Location
-                  uuid = "6F9C8F89-6483-4B90-8E6D-A6C7A72FB1B8 - 81d86fbdb50fbccd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.FirebaseManager.searchRoom(withRoomName: Swift.String, completion: (Swift.Optional&lt;DTNK_shinoda01.Room&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35"
-                  offsetFromSymbolStart = "76">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "157E0C37-D74E-4C7D-BEE7-0C444C5CDFFF"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "join(user:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "157E0C37-D74E-4C7D-BEE7-0C444C5CDFFF - 823f0363ef2494f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "896">
-               </Location>
-               <Location
-                  uuid = "157E0C37-D74E-4C7D-BEE7-0C444C5CDFFF - 823f0363ef2494f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "924">
-               </Location>
-               <Location
-                  uuid = "157E0C37-D74E-4C7D-BEE7-0C444C5CDFFF - 480c91cd3533a6d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in DTNK_shinoda01.RoomState.join(user: Swift.String) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/RoomState.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "29"
-                  endingLineNumber = "29"
-                  offsetFromSymbolStart = "60">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "13CC61D1-6A82-4963-AD83-35D209618FE4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -600,8 +350,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/GameState.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "581"
-            endingLineNumber = "581"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
             landmarkName = "pass()"
             landmarkType = "7">
          </BreakpointContent>
@@ -902,8 +652,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "527"
-            endingLineNumber = "527"
+            startingLineNumber = "533"
+            endingLineNumber = "533"
             landmarkName = "moveTopCardToTable(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1046,8 +796,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "decideWinnersLosers(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1062,8 +812,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "267"
-            endingLineNumber = "267"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "decideWinnersLosers(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1206,9 +956,89 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/GameState.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "455"
-            endingLineNumber = "455"
+            startingLineNumber = "456"
+            endingLineNumber = "456"
             landmarkName = "finishEvent()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C83B6984-6AFC-42F1-B0E7-FBE2A320B23D - 6fb824c767f8704c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DTNK_shinoda01.GameUiState.finishEvent() -&gt; ()"
+                  moduleName = "DTNK_shinoda01"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/GameState.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "456"
+                  endingLineNumber = "456"
+                  offsetFromSymbolStart = "1508">
+               </Location>
+               <Location
+                  uuid = "C83B6984-6AFC-42F1-B0E7-FBE2A320B23D - 6fb824c767f8704c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DTNK_shinoda01.GameUiState.finishEvent() -&gt; ()"
+                  moduleName = "DTNK_shinoda01"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/GameState.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "456"
+                  endingLineNumber = "456"
+                  offsetFromSymbolStart = "1464">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7ACDC5F2-2919-4828-834E-3009C39807EE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
+            landmarkName = "decideScore(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C5BBE955-27F1-42E4-A340-18F8999DEC51"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_models/Player.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "init(id:side:name:icon_url:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EC50DBF2-2856-444F-BC54-E34968388BDF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_models/Player.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "init(id:side:name:icon_url:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
