@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GameSettingView: View {
+    var heartsController = HeartsRecoverController.shared
     
     let gamenum = [1, 2, 3, 5, 10]
     @State private var selec_1 = 4
@@ -114,6 +115,7 @@ struct GameSettingView: View {
 
                         Button(action: {
                             HomeController().onTapStart(gamenum: gamenum[selec_1], rate: gamerate[selec_2], jorker: gamejorker[selec_3])
+                            appState.home.heartsData.heartsCount -= 1
                         }) {
                             Text("START")
                                 .font(.system(size: 30))

@@ -6,7 +6,9 @@ struct GameResultView: View {
     @ObservedObject var resultState: ResultState = appState.resultState
     @StateObject var game: GameUiState = appState.gameUiState
 
+    
     var body: some View {
+
         GeometryReader { geo in
             ZStack(alignment: .center) {
                 
@@ -91,5 +93,6 @@ struct GameResultView: View {
             }
         }
     }
+    
 }
 

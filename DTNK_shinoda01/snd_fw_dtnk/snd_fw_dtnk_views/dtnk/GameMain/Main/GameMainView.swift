@@ -157,7 +157,7 @@ struct GameMain: View {
                     }
                     
                     //バースト注意
-                    if  game.players[0].hand.count == 4 && game.gamePhase == .main{
+                    if  game.players[0].hand.count == 7 && game.gamePhase == .main{
                         BurstCoutionView(text: "BURST COUTION!").position(x: geo.size.width * 0.68, y: geo.size.height * 1.08)
                     }
                     

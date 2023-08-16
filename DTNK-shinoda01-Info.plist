@@ -7,5 +7,18 @@
 		<string>DS-DIGIB.TTF</string>
 		<string>AlfaSlabOne-Regular.ttf</string>
 	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.exampleapp.LearnBackgroundTasks.maintenance
+</string>
+		<string>com.exampleapp.LearnBackgroundTasks.apprefresh
+com.exampleapp.LearnBackgroundTasks.apprefresh
+</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+	</array>
 </dict>
 </plist>
