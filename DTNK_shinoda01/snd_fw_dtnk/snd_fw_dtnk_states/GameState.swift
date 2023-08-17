@@ -166,6 +166,9 @@ class GameUiState: ObservableObject {
             print(phase)
         case .revenge:
             changedrevenge()
+        case .waiting:
+            print(phase)
+
         }
     }
     

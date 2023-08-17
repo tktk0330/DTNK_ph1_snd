@@ -158,6 +158,10 @@ struct GameFriendView: View {
                 if game.gamePhase == .result {
                     ResultView()
                 }
+                
+                if game.gamePhase == .waiting {
+                    WaitingView()
+                }
 
 
                 // 開始ボタン
@@ -290,11 +294,17 @@ struct GameFriendView: View {
         fbms.observeChallengeAnswer() { challengeAnswers in
             game.challengeAnswers = challengeAnswers
             if challengeAnswers.allSatisfy({ $0 != .initial }) {
-                // challengeAnswersが全部入ったら処理する
                 gameObserber.challengeAnswers()
                 
             }
         }
+        fbms.observeNextGameAnnouns() { announce in
+            game.nextGameAnnouns = announce
+            if announce.allSatisfy({ $0 != .initial }) {
+                gameObserber.nextGameAnnounce()
+            }
+        }
+
         // スコア決定・途中結果 Item
         fbms.observeResultItem() { resultItem in
             if let result = resultItem {

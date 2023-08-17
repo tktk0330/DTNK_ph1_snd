@@ -19,6 +19,7 @@ class GameUIState: ObservableObject {
     }
     // TargetGame
     // Game
+    @Published var gamenum: Int = 1
     // 出さないことを通知
     // 現在プレイしている人
     @Published var currentPlayerIndex: Int = 99
@@ -30,6 +31,8 @@ class GameUIState: ObservableObject {
     @Published var dtnkPlayerIndex: Int = 99
     // チャレンジ通知
     @Published var challengeAnswers: [ChallengeAnswer?] = []
+    // 完了通知
+    @Published var nextGameAnnouns: [NextGameAnnouns?] = []
     // 勝者：オールの場合もある
     @Published var winners: [Player_f] = []
     // 負者：オールの場合もある
@@ -84,6 +87,8 @@ class GameUIState: ObservableObject {
         case .result:
             print(phase)
         case .other:
+            print(phase)
+        case .waiting:
             print(phase)
         }
     }

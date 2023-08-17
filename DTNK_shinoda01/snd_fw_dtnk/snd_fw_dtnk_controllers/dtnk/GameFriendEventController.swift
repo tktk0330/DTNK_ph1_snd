@@ -52,16 +52,58 @@ struct GameFriendEventController {
      challengeするかしないかを報告
      */
     func moveChallenge(index: Int, ans: ChallengeAnswer) {
-        fbms.setChallengeAnswer(index: index, answer: ans) { result in
-        }
+        fbms.setChallengeAnswer(index: index, answer: ans) { result in }
+    }
+    /**
+     準備ができているかを報告
+     */
+    func moveNextGame(index: Int, ans: NextGameAnnouns) {
+        fbms.setNextGameAnnouns(index: index, answer: ans) { result in}
     }
     
     /**
-     途中結果画面へ
+     次の画面へ
      */
     func onTapOKButton(gamePhase: GamePhase) {
-        appState.gameUIState.gamePhase = gamePhase
-//        fbms.setGamePhase(gamePhase: gamePhase) { result in }
+        switch gamePhase {
+        case .result:
+            // スコア確定→途中結果
+            appState.gameUIState.gamePhase = gamePhase
+        case .waiting:
+            // 途中結果→新ゲーム
+            appState.gameUIState.gamePhase = gamePhase
+//            setGame()
+        default:
+            break
+
+        }
+    }
+    
+    func setGame() {
+        // 初期化処理
+        appState.gameUIState.gamenum += 1
+        appState.gameUIState.gamePhase = .dealcard
+        appState.gameUIState.currentPlayerIndex = 99
+        appState.gameUIState.lastPlayerIndex = 99
+        appState.gameUIState.dtnkPlayer = nil
+        appState.gameUIState.dtnkPlayerIndex = 99
+        appState.gameUIState.challengeAnswers = []
+        appState.gameUIState.winners = []
+        appState.gameUIState.losers = []
+        appState.gameUIState.decisionScoreCards = []
+        appState.gameUIState.ascendingRate = 1
+        appState.gameUIState.gameScore = 1
+        appState.gameUIState.counter = false
+        // 山札リセット
+        appState.gameUIState.deck.removeAll()
+        let deck = GameRule.initialDeck.shuffled
+        // 場リセット
+        appState.gameUIState.table.removeAll()
+        // 手札リセット
+        appState.gameUIState.players.forEach { player in
+            player.hand.removeAll()
+        }
+        
     }
 }
 

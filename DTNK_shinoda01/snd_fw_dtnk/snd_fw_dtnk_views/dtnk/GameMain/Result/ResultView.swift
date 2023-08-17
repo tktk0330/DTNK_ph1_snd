@@ -41,9 +41,8 @@ struct ResultView: View {
                 // 次へボタン
                 Button(action: {
                     // 次ゲームに向けた処理
-//                    ScoreContoroller().onTapScoreOK()
-//                    appState.gameUIState.gamePhase = .dealcard
-                    GameFriendEventController().onTapOKButton(gamePhase: .dealcard)
+                    GameFriendEventController().moveNextGame(index: appState.gameUIState.myside, ans: .waiting)
+                    GameFriendEventController().onTapOKButton(gamePhase: .waiting)
                 }) {
                     Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 50, btnColor: Color.clear)
                 }
@@ -162,7 +161,7 @@ struct MidResultItem: View {
                 HStack {
                     
                     // rank
-                    Text(game.players[index].name)
+                    Text(String(game.players[index].rank))
                         .font(.custom(FontName.font02, size: 40))
                         .foregroundColor(Color.white)
                         .frame(width: geo.size.width * 0.05)

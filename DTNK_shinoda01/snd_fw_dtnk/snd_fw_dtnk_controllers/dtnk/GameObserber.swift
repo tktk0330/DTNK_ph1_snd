@@ -208,8 +208,16 @@ class GameObserber {
             return
         }
         // challengeに移す
-        fbms.setGamePhase(gamePhase: .challenge) { result in
+        fbms.setGamePhase(gamePhase: .challenge) { result in }
+    }
+    /**
+     nextGameAnnounceが揃ったら次のゲームへ
+     */
+    func nextGameAnnounce() {
+        guard checkHost() else {
+            return
         }
+        fbms.setGamePhase(gamePhase: .dealcard) { result in }
     }
     
     /**

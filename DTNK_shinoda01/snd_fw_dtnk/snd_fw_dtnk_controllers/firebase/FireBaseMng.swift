@@ -37,7 +37,8 @@ class FirebaseManager {
             "deck": deckData,
             "gamePhase": GamePhase.dealcard.rawValue,
             "currentPlayerIndex": 99,
-            "challengeAnswer": Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
+            "challengeAnswer": Array(repeating: ChallengeAnswer.initial.rawValue, count: 4),
+            "nextGameAnnouns": Array(repeating: NextGameAnnouns.initial.rawValue, count: 4)
             // 他のプロパティも同様に追加
         ]
         database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).setValue(gameInfoDict) { error, _ in
@@ -326,6 +327,36 @@ class FirebaseManager {
             completion(answers)
         }
     }
+    
+    /**
+     NextGameAnnounsのセット
+     */
+    func setNextGameAnnouns(index: Int, answer: NextGameAnnouns, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("nextGameAnnouns/\(index)").setValue(answer.rawValue) { error, _ in
+            if let error = error {
+                print("Failed: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     NextGameAnnounsの取得（リアルタイム）
+     */
+    func observeNextGameAnnouns(completion: @escaping ([NextGameAnnouns?]) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let nextGameAnnounsRef = gameInfoRef.child("nextGameAnnouns")
+        nextGameAnnounsRef.observe(.value) { (snapshot) in
+            guard let rawValues = snapshot.value as? [Int] else {
+                print("Could not cast snapshot value to [Int]")
+                return
+            }
+            let answers = rawValues.map { NextGameAnnouns(rawValue: $0) }
+            completion(answers)
+        }
+    }
+
 
     /**
      勝者・敗者のセット
