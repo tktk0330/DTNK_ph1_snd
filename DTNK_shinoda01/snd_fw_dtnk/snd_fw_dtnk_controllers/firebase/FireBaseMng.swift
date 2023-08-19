@@ -70,7 +70,9 @@ class FirebaseManager {
         gameInfoRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let gameInfoDict = snapshot.value as? [String: [String: Any]],
                   let gameData = gameInfoDict.values.first,
-                  let gameId = gameData["gameID"] as? String,
+                  let gameID = gameData["gameID"] as? String,
+                  let gameNum = gameData["gameNum"] as? Int,
+                  let gameTarget = gameData["gameTarget"] as? Int,
                   let deckDict = gameData["deck"] as? [[String: Int]]
             else {
                 return
@@ -81,7 +83,11 @@ class FirebaseManager {
                     cardIds.append(cardEnum)
                 }
             }
-            let gameState = GameState(gameID: gameId, deck: cardIds)
+            let gameState = GameState(
+                gameID: gameID,
+                gameNum: gameNum,
+                gameTarget: gameTarget,
+                deck: cardIds)
             completion(gameState)
         }
     }
@@ -184,6 +190,23 @@ class FirebaseManager {
             completion(playerHand)
         }
     }
+    /**
+     Rank Scoreの取得
+     */
+    func observeRankAndScore(playerIndex: String, completion: @escaping (Int, Int) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let playerRef = gameInfoRef.child("players").child(playerIndex)
+        playerRef.observe(.value) { snapshot in
+            guard let playerDict = snapshot.value as? [String: Any] else {
+                completion(0, 0)
+                return
+            }
+            let rank = playerDict["rank"] as? Int ?? 0
+            let score = playerDict["score"] as? Int ?? 0
+            completion(rank, score)
+        }
+    }
+
     
     /**
      GamePhaseのセット
@@ -270,6 +293,7 @@ class FirebaseManager {
         }
     }
 
+    
     /**
      currentPlayerIndexのセット
      */
@@ -434,9 +458,22 @@ class FirebaseManager {
                     }
                     return Player_f(id: id, side: side, name: name, icon_url: icon_url)
                 }
-
                 completion(winners, losers)
             }
+        }
+    }
+
+    /**
+     currentPlayerIndexの取得（リアルタイム）
+     */
+    func observeGameNum(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("gameNum")
+        ref.observe(.value) { (snapshot) in
+            guard let gameNum = snapshot.value as? Int else {
+                print("Could not cast snapshot value to an integer")
+                return
+            }
+            completion(gameNum)
         }
     }
 
@@ -446,7 +483,7 @@ class FirebaseManager {
     func setPrepareFinalPhase(item: ResultItem, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let decisionScoreCardsData = item.decisionScoreCards.map { card -> [String: Any] in
-            return ["cardID": card.rawValue]  // Cardを辞書に変換
+            return ["cardID": card.rawValue]
         }
         let winnersData = cjm.players_fJSON(players: item.winners)
         let losersData = cjm.players_fJSON(players: item.losers)
@@ -455,7 +492,11 @@ class FirebaseManager {
             "losers": losersData,
             "decisionScoreCards": decisionScoreCardsData,
             "ascendingRate": item.ascendingRate,
-            "score": item.gameScore
+            "gameScore": item.gameScore,
+            "players/0/rank": item.playersRank[0],
+            "players/1/rank": item.playersRank[1],
+            "players/2/rank": item.playersRank[2],
+            "players/3/rank": item.playersRank[3],
         ]
         
         for player in item.winners + item.losers {
@@ -496,21 +537,22 @@ class FirebaseManager {
     func observeResultItem(completion: @escaping (ResultItem?) -> Void) {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         ref.observe(.value) { (snapshot) in
-            guard let data = snapshot.value as? [String: Any] else {
-                // データの形式が期待通りでない場合、エラー処理を行います。
+            guard snapshot.exists(),
+                  let data = snapshot.value as? [String: Any] else {
+                completion(nil)
                 return
             }
             guard let winnersDict = data["winners"] as? [[String: Any]],
                   let losersDict = data["losers"] as? [[String: Any]],
                   let decisionScoreCardsDict = data["decisionScoreCards"] as? [[String: Any]],
                   let ascendingRate = data["ascendingRate"] as? Int,
-                  let gameScore = data["score"] as? Int else {
+                  let gameScore = data["gameScore"] as? Int else {
                 completion(nil)
                 return
             }
             var winners: [Player_f] = []
             var losers: [Player_f] = []
-
+            
             winners = winnersDict.compactMap { data in
                 guard let id = data["id"] as? String,
                       let side = data["side"] as? Int,
@@ -532,12 +574,11 @@ class FirebaseManager {
             var decisionScoreCards: [CardId] = []
             for cardData in decisionScoreCardsDict {
                 if let cardID = cardData["cardID"] as? Int,
-                    let cardEnum = CardId(rawValue: cardID) {
+                   let cardEnum = CardId(rawValue: cardID) {
                     decisionScoreCards.append(cardEnum)
                 }
             }
-            
-            let result = ResultItem(winners: winners, losers: losers, decisionScoreCards: decisionScoreCards, ascendingRate: ascendingRate, gameScore: gameScore)
+            let result = ResultItem(playersRank: [0, 0, 0, 0], winners: winners, losers: losers, decisionScoreCards: decisionScoreCards, ascendingRate: ascendingRate, gameScore: gameScore)
             completion(result)
         }
     }
@@ -551,7 +592,7 @@ class FirebaseManager {
             return ["cardID": card.rawValue]
         }
         let resetData: [String: Any] = [
-            "gameNum": item.gamenum,
+            "gameNum": item.gameNum,
             "deck": deckdata,
             "table": item.table,
             "gamePhase": item.gamePhase.rawValue,
@@ -724,5 +765,7 @@ struct GameBase {
 
 struct GameState {
     let gameID: String
+    let gameNum: Int
+    let gameTarget: Int
     let deck: [CardId]
 }

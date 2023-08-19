@@ -23,7 +23,10 @@ struct GameRule {
     static var initialState: GameState {
         
         return GameState(
-            gameID: "", deck:  self.initialDeck)
+            gameID: "",
+            gameNum: 1,
+            gameTarget: 1,
+            deck:  self.initialDeck)
     }
     
     // Deck

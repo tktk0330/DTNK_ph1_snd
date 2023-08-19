@@ -12,37 +12,40 @@ import SwiftUI
 
 // 統合
 struct ResultView: View {
-//    @ObservedObject var resultState: ResultState = appState.resultState
-//    @StateObject var game: GameUiState = appState.gameUiState
+    @StateObject var game: GameUIState = appState.gameUIState
+
     var body: some View {
         GeometryReader { geo in
             ZStack() {
                 // Game
                 // TODO: 反映
-                Text("Game 10")
+                Text("Game \(game.gameNum)")
                     .font(.custom(FontName.font01, size: 30))
                     .foregroundColor(Color.white)
                     .padding(5)
                     .position(x: UIScreen.main.bounds.width * 0.50, y:  geo.size.height * 0.15)
                 
-                MidResultItem(index: 1)
+                MidResultItem(player: game.players[(game.myside + 1) % game.players.count])
                     .position(x: UIScreen.main.bounds.width * 0.2, y:  geo.size.height * 0.5)
                 
-                MidResultItem(index: 2)
+                MidResultItem(player: game.players[(game.myside + 2) % game.players.count])
                     .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.3)
                 
-                MidResultItem(index: 3)
+                MidResultItem(player: game.players[(game.myside + 3) % game.players.count])
                     .position(x: UIScreen.main.bounds.width * 0.8, y:  geo.size.height * 0.5)
 
-                MidResultItem(index: 0)
+                MidResultItem(player: game.players[game.myside])
                     .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.7)
-                
                 
                 // 次へボタン
                 Button(action: {
                     // 次ゲームに向けた処理
-                    GameFriendEventController().moveNextGame(index: appState.gameUIState.myside, ans: .waiting)
-                    GameFriendEventController().onTapOKButton(gamePhase: .waiting)
+                    if appState.gameUIState.gameNum == appState.gameUIState.gameTarget {
+                        Router().setBasePages(stack: [.gameresult])
+                    } else {
+                        GameFriendEventController().moveNextGame(index: appState.gameUIState.myside, ans: .waiting)
+                        GameFriendEventController().onTapOKButton(gamePhase: .waiting)
+                    }
                 }) {
                     Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 50, btnColor: Color.clear)
                 }
@@ -133,65 +136,63 @@ struct ResultView01: View {
 }
 
 struct MidResultItem: View {
-    
     @StateObject var game: GameUIState = appState.gameUIState
-    let index: Int
+    let player: Player_f
     
     var body: some View {
         GeometryReader { geo in
             VStack() {
                 HStack(spacing: 7) {
                     // icon
-                    Image(game.players[index].icon_url)
+                    Image(player.icon_url)
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40, height: 40)
-//                        .offset(x: 5)
-
                     // name
-                    Text(game.players[index].name)
+                    Text(player.name)
                         .font(.custom(FontName.font01, size: 15))
                         .foregroundColor(Color.white)
                         .frame(width: geo.size.width * 0.2, alignment: .trailing)
                         .offset(x: -2, y: 5)
-//                        .border(Color.red)
-                    
                 }
                 HStack {
-                    
                     // rank
-                    Text(String(game.players[index].rank))
+                    Text(String(player.rank))
                         .font(.custom(FontName.font02, size: 40))
                         .foregroundColor(Color.white)
                         .frame(width: geo.size.width * 0.05)
-                        .position(x: 7, y: -15)
-                        .border(Color.red)
-                    
+                        .position(x: 9, y: -13)
+                    // point
                     VStack(alignment: .trailing) {
-                        // point
-                        Text("+12000")// 1200000
-                            .font(.custom(FontName.font02, size: 15))
-                            .foregroundColor(Color.red)
-                            .frame(width: geo.size.width * 0.28, alignment: .trailing)
-//                            .border(Color.red)
-
-                        // point
-                        Text(String(game.players[index].score))// 1200000
+                        if game.winners.contains(where: { $0.id == player.id }) {
+                            Text("+\(game.gameScore * game.losers.count)")
+                                .font(.custom(FontName.font02, size: 15))
+                                .foregroundColor(Color.casinoLightGreen)
+                                .frame(width: geo.size.width * 0.28, alignment: .trailing)
+                        } else if game.losers.contains(where: { $0.id == player.id }) {
+                            Text("-\(game.gameScore * game.winners.count)")
+                                .font(.custom(FontName.font02, size: 15))
+                                .foregroundColor(Color.plusRed)
+                                .frame(width: geo.size.width * 0.28, alignment: .trailing)
+                        } else {
+                            Text("")
+                                .font(.custom(FontName.font02, size: 15))
+                                .foregroundColor(Color.plusRed)
+                                .frame(width: geo.size.width * 0.28, alignment: .trailing)
+                        }
+                        Text(String(player.score))// 1200000
                             .font(.custom(FontName.font02, size: 30))
                             .foregroundColor(Color.white)
                             .frame(width: geo.size.width * 0.28, alignment: .trailing)
-//                            .border(Color.red)
                     }
-
                 }
-                Spacer().frame(height: geo.size.height * 0.02) // 追加されたスペーサー
-
+                Spacer().frame(height: geo.size.height * 0.02)
             }
             .frame(width: UIScreen.main.bounds.width * 0.25, height: geo.size.height * 0.065)
-            .padding() // 内部要素との間のスペースを追加するためのパディング
-            .background(RoundedRectangle(cornerRadius: 20) // 角の丸みを調整する場合はこの行を変更してください
-                            .fill(Color.casinoGreen)) // RoundedRectangleの色を変更する場合はこの行を変更してください
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 20)
+                .fill(Color.casinoGreen))
             .position(x: UIScreen.main.bounds.width * 0.5, y:  geo.size.height * 0.5)
 
         }

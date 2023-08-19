@@ -534,9 +534,9 @@
 				5D8FA2D12A4824DD0079F260 /* IconView.swift */,
 				5D8FA2D32A4824EE0079F260 /* InitialFlip.swift */,
 				5D8FA2D52A4825020079F260 /* NothingPlayView.swift */,
-				5D8FA2D72A48251B0079F260 /* ViewComponents.swift */,
 				5D8FA2D92A48252E0079F260 /* RelaunchView.swift */,
 				5D8FA2DB2A48253C0079F260 /* TargetPlayerView.swift */,
+				5D8FA2D72A48251B0079F260 /* ViewComponents.swift */,
 				5DCD27C12A8E4E6800778980 /* WaitingView.swift */,
 			);
 			path = components;
@@ -628,11 +628,11 @@
 			children = (
 				5D8FA30D2A4827D70079F260 /* GameMainView.swift */,
 				5D8FA3012A4827750079F260 /* BotView.swift */,
+				CA5C5DF72A794E21006D7C01 /* BurstCoutionViewswift.swift */,
+				CA5C5DF12A794497006D7C01 /* BurstView.swift */,
 				5D8FA3032A4827860079F260 /* CardView.swift */,
 				5D8FA3052A4827960079F260 /* DeckView.swift */,
 				5D8FA3072A4827AA0079F260 /* DTNKView.swift */,
-				CA5C5DF12A794497006D7C01 /* BurstView.swift */,
-				CA5C5DF72A794E21006D7C01 /* BurstCoutionViewswift.swift */,
 				5D8FA3092A4827B90079F260 /* EffectView.swift */,
 				5D8FA30B2A4827C80079F260 /* FieldView.swift */,
 				5D8FA30F2A4827EC0079F260 /* HandView.swift */,

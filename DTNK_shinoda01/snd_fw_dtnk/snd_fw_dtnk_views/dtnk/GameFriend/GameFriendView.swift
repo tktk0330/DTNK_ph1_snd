@@ -9,9 +9,6 @@ struct GameFriendView: View {
     let gameObserber = GameObserber(hostID: appState.room.roomData.hostID)
     let fbm = FirebaseManager()
     let fbms = FirebaseManager.shared
-
-    // CardPool
-//    @State var cardUI: [N_Card] = cards
     // mysideをプロパティとして定義します
     var myside: Int {
         let id = appState.account.loginUser.userID
@@ -22,7 +19,6 @@ struct GameFriendView: View {
 
     var body: some View {
         GeometryReader { geo in
-            
             Group {
                 // 仮想View 初期カード設置
                 Text("").onReceive(game.$counter) { newValue in
@@ -43,15 +39,7 @@ struct GameFriendView: View {
                 ScoreBar()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
             }
-            
-//            // プレイヤーのアイコンをループで表示
-//            HStack(spacing: 30) {
-//                ForEach(game.players.indices, id: \.self) { index in
-//                    BotIconView(player: game.players[(myside() + index) % game.players.count])
-//                }
-//            }
-//            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.3)
-            
+                        
             // Card Pool
             HStack() {
                 ZStack {
@@ -116,13 +104,12 @@ struct GameFriendView: View {
                 // 広告用
                 Rectangle()
                     .foregroundColor(Color.white.opacity(0.3))
-                    .shadow(color: .gray, radius: 10, x: 0, y: 5)
                     .frame(maxWidth: .infinity, maxHeight: 50)
                     .background(Color.casinoGreen)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
                 // Rate
-                RateView(gamenum: 1, rate: 10, magnification: 10)
+                RateView(gamenum: game.gameNum, rate: game.initialRate, magnification: game.ascendingRate)
                     .background(Color.casinoGreen)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.09)
                 
@@ -183,6 +170,8 @@ struct GameFriendView: View {
             // ゲーム情報取得
             fbm.getGameInfo(from: room.roomData.roomID) { info in
                 game.gameID = info!.gameID
+                game.gameNum = info!.gameNum
+                game.gameTarget = info!.gameTarget
                 game.deck = info!.deck
                 FirebaseManager.shared.setIDs(roomID: room.roomData.roomID, gameID: info!.gameID)
                 // 情報取得
@@ -243,8 +232,13 @@ struct GameFriendView: View {
                 game.currentPlayerIndex = currentPlayerIndex!
             }
         }
-        // hand
         for s in 0..<game.players.count {
+            // rank & score
+            fbms.observeRankAndScore(playerIndex: String(s)) { rank, score in
+                game.players[s].rank = rank
+                game.players[s].score = score
+            }
+            // hand
             fbms.observeHandInfo (
                 playerIndex: String(s)) { cards in
                     var i = 0
@@ -261,6 +255,7 @@ struct GameFriendView: View {
                             }
                         }
                         game.players[s].hand = cards!
+                        
                     } else{
                         game.players[s].hand = []
                     }
@@ -289,14 +284,22 @@ struct GameFriendView: View {
                 gameObserber.nextGameAnnounce()
             }
         }
-
         // スコア決定・途中結果 Item
         fbms.observeResultItem() { resultItem in
             if let result = resultItem {
                 appState.subState = SubState(resultItem: result)
+                game.gameScore = resultItem!.gameScore
             } else {
 //                print("Error retrieving result item.")
-            }        }
+            }
+        }
+        fbms.observeGameNum() { gameNum in
+            game.gameNum = gameNum!
+        }
+        fbms.observeWinnersLosers() { winners, losers in
+            game.winners = winners
+            game.losers = losers
+        }
     }
 }
 
