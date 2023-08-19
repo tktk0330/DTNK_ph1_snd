@@ -34,9 +34,8 @@ struct RoomView: View {
                 }
                 .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
 
-                
                 // title
-                Text("ROOM")
+                Text("Room")
                     .font(.custom(FontName.font01, size: 45))
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)

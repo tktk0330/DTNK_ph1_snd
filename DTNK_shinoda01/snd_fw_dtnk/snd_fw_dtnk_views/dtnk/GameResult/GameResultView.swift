@@ -1,15 +1,17 @@
+/**
+ 最終結果画面
+ */
 
 import SwiftUI
 
 struct GameResultView: View {
     
-    @ObservedObject var resultState: ResultState = appState.resultState
-    @StateObject var game: GameUiState = appState.gameUiState
-
+    @StateObject var game: GameUIState = appState.gameUIState
+    let sortedPlayers = appState.gameUIState.players.sorted(by: { $0.rank < $1.rank })
     var body: some View {
+        
         GeometryReader { geo in
             ZStack(alignment: .center) {
-                
                 // 広告用
                 Rectangle()
                     .foregroundColor(Color.white.opacity(0.3))
@@ -18,8 +20,8 @@ struct GameResultView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
                 // title
-                Text("FINAL RESULT")
-                    .font(.system(size: 45))
+                Text("Result")
+                    .font(.custom(FontName.font01, size: UIScreen.main.bounds.width * 0.15))
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .padding(5)
@@ -27,8 +29,8 @@ struct GameResultView: View {
 
                 
                 // TOTAL GAME
-                Text("TOTAL GAME 10")
-                    .font(.system(size: 30))
+                Text("Total Game \(game.gameTarget)")
+                    .font(.custom(FontName.font01, size: UIScreen.main.bounds.width * 0.08))
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .padding(5)
@@ -37,33 +39,33 @@ struct GameResultView: View {
                 
                 VStack(spacing: 30){
                     // 個人成績
-                    ForEach(resultState.playeritems.indices, id: \.self) { index in
+                    ForEach(sortedPlayers) { player in
                         HStack(spacing: 10){
-                            Text(String(resultState.playeritems[index].rank))
-                                .font(.system(size: 30))
+                            Text(String(player.rank))
+                                .font(.custom(FontName.font01, size: 30))
                                 .foregroundColor(Color.white)
                                 .fontWeight(.bold)
                                 .padding(5)
                                 .frame(width: geo.size.width * 0.1)
-                            
-                            Image(resultState.playeritems[index].iconUrl)
+
+                            Image(player.icon_url)
                                 .resizable()
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 50, height: 50)
                                 .frame(width: geo.size.width * 0.1)
-                            
-                            Text(resultState.playeritems[index].name)
-                                .font(.system(size: 30))
+
+                            Text(player.name)
+                                .font(.custom(FontName.font01, size: 30))
                                 .foregroundColor(Color.white)
                                 .fontWeight(.bold)
                                 .padding(5)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.3)
                                 .frame(width: geo.size.width * 0.3)
-                            
-                            Text(String(resultState.playeritems[index].score))
-                                .font(.system(size: 30))
+
+                            Text(String(player.score))
+                                .font(.custom(FontName.font01, size: 30))
                                 .foregroundColor(Color.white)
                                 .fontWeight(.bold)
                                 .padding(5)
@@ -79,15 +81,14 @@ struct GameResultView: View {
                     // Home画面へ
                     GameResultController().onTapPlay()
                 }) {
-                    Text("HOME")
-                        .font(.system(size: 45))
+                    Text("Home")
+                        .font(.custom(FontName.font01, size: UIScreen.main.bounds.width * 0.10))
                         .foregroundColor(Color.white)
                         .fontWeight(.bold)
                         .padding(5)
                 }
                 .blinkEffect(animating: true)
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.85)
-                
             }
         }
     }

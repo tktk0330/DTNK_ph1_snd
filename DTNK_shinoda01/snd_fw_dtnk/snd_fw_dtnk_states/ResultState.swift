@@ -16,6 +16,7 @@ class SubState: ObservableObject {
  */
 class ResultItem: ObservableObject {
     
+    let playersRank: [Int]
     let winners: [Player_f]
     let losers: [Player_f]
     let decisionScoreCards: [CardId]
@@ -23,12 +24,14 @@ class ResultItem: ObservableObject {
     let gameScore: Int
     
     init(
+        playersRank: [Int],
         winners: [Player_f],
         losers: [Player_f],
         decisionScoreCards: [CardId],
         ascendingRate: Int,
         gameScore: Int
     ){
+        self.playersRank = playersRank
         self.winners = winners
         self.losers = losers
         self.decisionScoreCards = decisionScoreCards

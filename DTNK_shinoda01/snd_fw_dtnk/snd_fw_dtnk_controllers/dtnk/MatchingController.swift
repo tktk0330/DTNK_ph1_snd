@@ -14,7 +14,7 @@ class MatchingController {
         // 参加者
         let players = players
         let jorker = 2
-        let gameTarget = 3
+        let gameTarget = 5
         let initialRate = 10
         
         let gameInfo = GameInfoModel(

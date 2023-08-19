@@ -5,21 +5,24 @@ import SwiftUI
 
 class GameUIState: ObservableObject {
     
-    // FB必要あり
+    // ID
     @Published var gameID: String = ""
-    @Published var players: [Player_f] = []
-    @Published var deck: [CardId] = []
-    @Published var cardUI: [N_Card] = cards
-    @Published var table: [CardId] = []
-    @Published var myside: Int = 99
+    // Game
+    @Published var gameNum: Int = 1
+    // TargetGame
+    @Published var gameTarget: Int = 1
+    // ゲーム状態を示す
     @Published var gamePhase: GamePhase = .dealcard {
         didSet {
             gamePhaseAction(phase: gamePhase)
         }
     }
-    // TargetGame
-    // Game
-    @Published var gamenum: Int = 1
+    @Published var deck: [CardId] = []
+    @Published var cardUI: [N_Card] = cards
+    @Published var table: [CardId] = []
+    @Published var jorker: Int = 2
+    @Published var players: [Player_f] = []
+    @Published var myside: Int = 99
     // 出さないことを通知
     // 現在プレイしている人
     @Published var currentPlayerIndex: Int = 99
@@ -33,17 +36,16 @@ class GameUIState: ObservableObject {
     @Published var challengeAnswers: [ChallengeAnswer?] = []
     // 完了通知
     @Published var nextGameAnnouns: [NextGameAnnouns?] = []
-    // 勝者：オールの場合もある
-    @Published var winners: [Player_f] = []
-    // 負者：オールの場合もある
-    @Published var losers: [Player_f] = []
     // 裏のカードたち
     @Published var decisionScoreCards: [CardId] = []
     // 初期レート
     @Published var initialRate: Int = 1
     // 上昇レート
     @Published var ascendingRate: Int = 1
-    // 決定数
+    // 勝者：オールの場合もある
+    @Published var winners: [Player_f] = []
+    // 負者：オールの場合もある
+    @Published var losers: [Player_f] = []
     // ゲームスコア
     @Published var gameScore: Int = 1
     

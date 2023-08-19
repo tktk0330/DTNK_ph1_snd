@@ -83,7 +83,6 @@ class GameObserber {
      初期カードめくり
      */
     func firstCard() {
-        
         guard checkHost() else {
             return
         }
@@ -251,9 +250,10 @@ class GameObserber {
         // スコア決定
         decideScore() { result in }
         // スコア移動
-        scoreCalculate()
+        let rank = scoreCalculate()
         // FB登録
         let item = ResultItem(
+            playersRank: rank,
             winners: game.winners,
             losers: game.losers,
             decisionScoreCards: game.decisionScoreCards,
@@ -335,7 +335,7 @@ class GameObserber {
     /**
      スコア移動
      */
-    func scoreCalculate(){
+    func scoreCalculate() -> [Int] {
         // Score移動
         for winner in game.winners {
             winner.score += game.gameScore * game.losers.count
@@ -343,25 +343,35 @@ class GameObserber {
         for loser in game.losers {
             loser.score -= game.gameScore * game.winners.count
         }
-        // Player結果情報
-        let sorted: [Player_f] = game.players.sorted(by: {
-            return  $0.score > $1.score
-        })
-
-        let playerItems = sorted.enumerated().map { (index, player) -> PlayerResultItem in
-            let rank = index + 1
-            let item = PlayerResultItem(
-                rank: rank,
-                index: player.side - 1,
-                iconUrl: player.icon_url,
-                name: player.name,
-                score: player.score,
-                changed: 0
-            )
-            return item
-        }
+        // rank計算
+        return calculateRanks(players: game.players)
     }
     
+    // 順位決定
+    func calculateRanks(players: [Player_f]) -> [Int] {
+        let sortedPlayers = players.sorted(by: { $0.score > $1.score })
+        
+        var ranks: [Int] = Array(repeating: 0, count: sortedPlayers.count)
+        
+        for (index, player) in sortedPlayers.enumerated() {
+            if index == 0 {
+                ranks[index] = 1
+            } else if player.score == sortedPlayers[index - 1].score {
+                ranks[index] = ranks[index - 1]
+            } else {
+                ranks[index] = index + 1
+            }
+        }
+        // 元のplayersの順番で順位を抽出
+        var orderedRanks: [Int] = []
+        for player in players {
+            if let index = sortedPlayers.firstIndex(where: { $0.id == player.id }) {
+                orderedRanks.append(ranks[index])
+            }
+        }
+        return orderedRanks
+    }
+
     /**
      次ゲーム処理
      */

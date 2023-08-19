@@ -53,7 +53,7 @@ struct GameInfoModel {
  */
 struct GameResetItem {
     // 現在のゲーム数
-    var gamenum: Int = appState.gameUIState.gamenum + 1
+    var gameNum: Int = appState.gameUIState.gameNum + 1
     // ゲーム状態を示す
     var gamePhase: GamePhase = .dealcard
     // deck
