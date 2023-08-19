@@ -9,7 +9,7 @@ class GameUIState: ObservableObject {
     @Published var gameID: String = ""
     @Published var players: [Player_f] = []
     @Published var deck: [CardId] = []
-    @Published var deckUI: [N_Card] = []
+    @Published var cardUI: [N_Card] = cards
     @Published var table: [CardId] = []
     @Published var myside: Int = 99
     @Published var gamePhase: GamePhase = .dealcard {
@@ -50,12 +50,16 @@ class GameUIState: ObservableObject {
     // FB必要なし
     // カウンター
     @Published var counter: Bool = false
+    @Published var startFlag: Bool = false
+
     
     func gamePhaseAction(phase: GamePhase) {
         switch phase {
             
         case .dealcard:
-            print(phase)
+            GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
+                startFlag = true
+            }
         case .gamenum:
             print(phase)
         case .countdown:

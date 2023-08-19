@@ -72,38 +72,10 @@ struct GameFriendEventController {
         case .waiting:
             // 途中結果→新ゲーム
             appState.gameUIState.gamePhase = gamePhase
-//            setGame()
         default:
             break
 
         }
-    }
-    
-    func setGame() {
-        // 初期化処理
-        appState.gameUIState.gamenum += 1
-        appState.gameUIState.gamePhase = .dealcard
-        appState.gameUIState.currentPlayerIndex = 99
-        appState.gameUIState.lastPlayerIndex = 99
-        appState.gameUIState.dtnkPlayer = nil
-        appState.gameUIState.dtnkPlayerIndex = 99
-        appState.gameUIState.challengeAnswers = []
-        appState.gameUIState.winners = []
-        appState.gameUIState.losers = []
-        appState.gameUIState.decisionScoreCards = []
-        appState.gameUIState.ascendingRate = 1
-        appState.gameUIState.gameScore = 1
-        appState.gameUIState.counter = false
-        // 山札リセット
-        appState.gameUIState.deck.removeAll()
-        let deck = GameRule.initialDeck.shuffled
-        // 場リセット
-        appState.gameUIState.table.removeAll()
-        // 手札リセット
-        appState.gameUIState.players.forEach { player in
-            player.hand.removeAll()
-        }
-        
     }
 }
 

@@ -11,7 +11,7 @@ struct GameFriendView: View {
     let fbms = FirebaseManager.shared
 
     // CardPool
-    @State var cardUI: [N_Card] = cards
+//    @State var cardUI: [N_Card] = cards
     // mysideをプロパティとして定義します
     var myside: Int {
         let id = appState.account.loginUser.userID
@@ -19,7 +19,6 @@ struct GameFriendView: View {
         let myIndex = players.firstIndex(where: { $0.id == id })
         return myIndex!
     }
-    @State var startFlag: Bool = false
 
     var body: some View {
         GeometryReader { geo in
@@ -28,7 +27,7 @@ struct GameFriendView: View {
                 // 仮想View 初期カード設置
                 Text("").onReceive(game.$counter) { newValue in
                     if newValue {
-                        gameObserber.firstCard(roomID: room.roomData.roomID, gameID: game.gameID)
+                        gameObserber.firstCard()
                     }
                 }
                 
@@ -56,7 +55,7 @@ struct GameFriendView: View {
             // Card Pool
             HStack() {
                 ZStack {
-                    ForEach(Array(cardUI.enumerated()), id: \.1.id) { index, card in
+                    ForEach(Array(game.cardUI.enumerated()), id: \.1.id) { index, card in
                         N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
                             .animation(.easeInOut(duration: 0.3))
                     }
@@ -163,11 +162,10 @@ struct GameFriendView: View {
                     WaitingView()
                 }
 
-
                 // 開始ボタン
-                if startFlag {
+                if game.startFlag {
                     Button(action: {
-                        startFlag = false
+                        game.startFlag = false
                         fbms.setGamePhase(gamePhase: .countdown) { result in
                         }
                     }) {
@@ -178,13 +176,7 @@ struct GameFriendView: View {
                     .frame(width: 100, height: 100)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
                 }
-//                //Exit btn
-//                Header()
-//                    .frame(width: UIScreen.main.bounds.width , height: 40)
-//                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.13)
             }
-            
-            
         } .onAppear {
             // サイド設定
             game.myside = self.myside
@@ -195,13 +187,6 @@ struct GameFriendView: View {
                 FirebaseManager.shared.setIDs(roomID: room.roomData.roomID, gameID: info!.gameID)
                 // 情報取得
                 getGameInfo()
-                // オブザーバーが配布
-                if game.myside == 0 {
-                    //　カード配布
-                    gameObserber.dealFirst(roomID: room.roomData.roomID, players: game.players, gameID: game.gameID) { result in
-                        startFlag = true
-                    }
-                }
             }
         }
     }
@@ -212,20 +197,20 @@ struct GameFriendView: View {
             if (cards != nil) {
                 if let cardsUnwrapped = cards {
                     for deckCard in cardsUnwrapped {
-                        if let index = cardUI.firstIndex(where: { $0.id.rawValue == deckCard.id }) {
-                            var newCard = cardUI.remove(at: index)
+                        if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == deckCard.id }) {
+                            var newCard = game.cardUI.remove(at: index)
                             // 新しい位置を設定
                             newCard.location = .deck
-                            cardUI.append(newCard)
+                            game.cardUI.append(newCard)
                         }
                     }
                 }
                 game.deck = cards!
             } else {
-                // 再生成します
-                if game.table.count > 1 {
-                    gameObserber.regenerateDeck(table: game.table)
-                }
+                // ゲーム中であれば再生成します
+//                if game.table.count > 1 {
+//                    gameObserber.regenerateDeck(table: game.table)
+//                }
             }
         }
         // table
@@ -233,11 +218,11 @@ struct GameFriendView: View {
             if (cards != nil) {
                 if let cardsUnwrapped = cards {
                     for tableCard in cardsUnwrapped {
-                        if let index = cardUI.firstIndex(where: { $0.id.rawValue == tableCard.id }) {
-                            var newCard = cardUI.remove(at: index)
+                        if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == tableCard.id }) {
+                            var newCard = game.cardUI.remove(at: index)
                             // 新しい位置を設定
                             newCard.location = .table
-                            cardUI.append(newCard)
+                            game.cardUI.append(newCard)
                         }
                     }
                 }
@@ -266,13 +251,13 @@ struct GameFriendView: View {
                     if let cardsUnwrapped = cards {
                         for newhandcard in cardsUnwrapped {
                             // まず新しい手札を配列から見つけ出し
-                            if let index = cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
-                                var newCard = cardUI.remove(at: index)
+                            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
+                                var newCard = game.cardUI.remove(at: index)
                                 // 新しい位置を設定
                                 newCard.location = .hand(playerIndex: s, cardIndex: i)
                                 i += 1;
                                 // 新しい手札を一番最後に追加
-                                cardUI.append(newCard)
+                                game.cardUI.append(newCard)
                             }
                         }
                         game.players[s].hand = cards!

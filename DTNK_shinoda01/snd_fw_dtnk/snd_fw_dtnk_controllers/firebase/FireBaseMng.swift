@@ -25,21 +25,33 @@ class FirebaseManager {
     /**
      GameInfoのセット
      */
-    func setGameInfo(gameInfo: GameInfoModel, roomID: String, completion: @escaping (String?) -> Void) {
+    func setGameInfo(item: GameInfoModel, roomID: String, completion: @escaping (String?) -> Void) {
         let gameID = database.reference().child("rooms").child(roomID).child("gameInfo").childByAutoId().key ?? ""
-        let playersJSON = cjm.playersJSON(players: gameInfo.players)
-        let deckData = gameInfo.deck.map { card -> [String: Any] in
-            return ["cardID": card.rawValue]  // Cardを辞書に変換
+        let playersJSON = cjm.playersJSON(players: item.players)
+        let deckdata = item.deck.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]
         }
         let gameInfoDict: [String: Any] = [
             "gameID": gameID,
+            "gameNum": item.gameNum,
+            "gameTarget": item.gameTarget,
+            "gamePhase": item.gamePhase.rawValue,
+            "deck": deckdata,
+            "table": item.table,
+            "jorker": item.joker,
             "players": playersJSON,
-            "deck": deckData,
-            "gamePhase": GamePhase.dealcard.rawValue,
-            "currentPlayerIndex": 99,
-            "challengeAnswer": Array(repeating: ChallengeAnswer.initial.rawValue, count: 4),
-            "nextGameAnnouns": Array(repeating: NextGameAnnouns.initial.rawValue, count: 4)
-            // 他のプロパティも同様に追加
+            "currentPlayerIndex": item.currentPlayerIndex,
+            "lastPlayerIndex": item.lastPlayerIndex,
+            "dtnkPlayer": item.dtnkPlayer,
+            "dtnkPlayerIndex": item.dtnkPlayerIndex,
+            "challengeAnswer": item.challengeAnswers,
+            "nextGameAnnouns": item.nextGameAnnouns,
+            "initialRate": item.initialRate,
+            "ascendingRate": item.ascendingRate,
+            "decisionScoreCards": item.decisionScoreCards,
+            "winners": item.winners,
+            "losers": item.losers,
+            "gameScore": item.gameScore
         ]
         database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).setValue(gameInfoDict) { error, _ in
             if let error = error {
@@ -357,7 +369,6 @@ class FirebaseManager {
         }
     }
 
-
     /**
      勝者・敗者のセット
      */
@@ -528,6 +539,44 @@ class FirebaseManager {
             
             let result = ResultItem(winners: winners, losers: losers, decisionScoreCards: decisionScoreCards, ascendingRate: ascendingRate, gameScore: gameScore)
             completion(result)
+        }
+    }
+    
+    /**
+     ゲームリセット（次ゲームに向けた処理）
+     */
+    func resetGame(item: GameResetItem, completion: @escaping (Bool) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let deckdata = item.deck.map { card -> [String: Any] in
+            return ["cardID": card.rawValue]
+        }
+        let resetData: [String: Any] = [
+            "gameNum": item.gamenum,
+            "deck": deckdata,
+            "table": item.table,
+            "gamePhase": item.gamePhase.rawValue,
+            "players/0/hand": item.hand[0],
+            "players/1/hand": item.hand[1],
+            "players/2/hand": item.hand[2],
+            "players/3/hand": item.hand[3],
+            "currentPlayerIndex": item.currentPlayerIndex,
+            "lastPlayerIndex": item.lastPlayerIndex,
+            "dtnkPlayer": item.dtnkPlayer,
+            "dtnkPlayerIndex": item.dtnkPlayerIndex,
+            "challengeAnswer": item.challengeAnswers,
+            "nextGameAnnouns": item.nextGameAnnouns,
+            "ascendingRate": item.ascendingRate,
+            "decisionScoreCards": item.decisionScoreCards,
+            "winners": item.winners,
+            "losers": item.losers,
+            "gameScore": item.gameScore
+        ]
+        ref.updateChildValues(resetData) { (error, _) in
+            if let error = error {
+                print("Error resetting game state: \(error.localizedDescription)")
+            } else {
+                print("Game state reset successfully!")
+            }
         }
     }
 

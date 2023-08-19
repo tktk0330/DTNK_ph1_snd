@@ -33,14 +33,14 @@ class GameObserber {
     /**
      初期カード配布
      */
-    func dealFirst(roomID: String, players: [Player_f], gameID: String, completion: @escaping (Bool) -> Void) {
+    func dealFirst(players: [Player_f], completion: @escaping (Bool) -> Void) {
         guard checkHost() else {
             return
         }
-        dealToPlayers(roomID: roomID, players: players, gameID: gameID, index: 0, completion: completion)
+        dealToPlayers(players: players, index: 0, completion: completion)
     }
     
-    private func dealToPlayers(roomID: String, players: [Player_f], gameID: String, index: Int, completion: @escaping (Bool) -> Void) {
+    private func dealToPlayers(players: [Player_f], index: Int, completion: @escaping (Bool) -> Void) {
         // All players dealt with, return true
         if index >= players.count {
             completion(true)
@@ -50,10 +50,10 @@ class GameObserber {
         let player = players[index]
         
         // Deal 2 cards
-        dealCards(roomID: roomID, player: player, gameID: gameID, remaining: 2) { (success) in
+        dealCards(player: player, remaining: 2) { (success) in
             if success {
                 // After the current player is done, deal to the next player
-                self.dealToPlayers(roomID: roomID, players: players, gameID: gameID, index: index + 1, completion: completion)
+                self.dealToPlayers(players: players, index: index + 1, completion: completion)
             } else {
                 // If there was an error dealing cards, call completion with false
                 completion(false)
@@ -61,7 +61,7 @@ class GameObserber {
         }
     }
     
-    private func dealCards(roomID: String, player: Player_f, gameID: String, remaining: Int, completion: @escaping (Bool) -> Void) {
+    private func dealCards(player: Player_f, remaining: Int, completion: @escaping (Bool) -> Void) {
         // If no more cards to deal, return true
         if remaining <= 0 {
             completion(true)
@@ -71,7 +71,7 @@ class GameObserber {
         fbms.drawCard(playerID: player.id) { bool in
             if bool {
                 // Once drawCard is done, deal the next card
-                self.dealCards(roomID: roomID, player: player, gameID: gameID, remaining: remaining - 1, completion: completion)
+                self.dealCards(player: player, remaining: remaining - 1, completion: completion)
             } else {
                 // If there was an error in drawCard, call completion with false
                 completion(false)
@@ -82,7 +82,7 @@ class GameObserber {
     /**
      初期カードめくり
      */
-    func firstCard(roomID: String, gameID: String) {
+    func firstCard() {
         
         guard checkHost() else {
             return
@@ -98,7 +98,7 @@ class GameObserber {
                     // TODO: アナウンス処理終わったらに変更
                     // 2秒後にfirstCard関数を再実行
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        self.firstCard(roomID: roomID, gameID: gameID)
+                        self.firstCard()
                     }
                 }
             } else {
@@ -217,7 +217,9 @@ class GameObserber {
         guard checkHost() else {
             return
         }
-        fbms.setGamePhase(gamePhase: .dealcard) { result in }
+        setGame()
+        let Item = GameResetItem()
+        fbms.resetGame(item: Item) { result in }
     }
     
     /**
@@ -333,7 +335,7 @@ class GameObserber {
     /**
      スコア移動
      */
-    func scoreCalculate() -> [PlayerResultItem] {
+    func scoreCalculate(){
         // Score移動
         for winner in game.winners {
             winner.score += game.gameScore * game.losers.count
@@ -358,6 +360,14 @@ class GameObserber {
             )
             return item
         }
-        return playerItems
+    }
+    
+    /**
+     次ゲーム処理
+     */
+    func setGame() {
+        // フロント初期化アイテム
+        game.counter = false
+        game.startFlag = false
     }
 }
