@@ -27,7 +27,7 @@ final class AppState {
     var gameUiState: GameUiState!
     // new
     var gameUIState: GameUIState!
-
+    var subState: SubState!
 
     var resultState: ResultState!
     
@@ -42,6 +42,7 @@ final class AppState {
         gamesystem: GameSystemState?,
         gameUiState: GameUiState?,
         gameUIState: GameUIState?,
+        subState: SubState?,
         resultState: ResultState?
     ) {
         self.routing = pageRoute
@@ -54,6 +55,7 @@ final class AppState {
         self.gamesystem = gamesystem
         self.gameUiState = gameUiState
         self.gameUIState = gameUIState
+        self.subState = subState
         self.resultState = resultState
     }
     init() {
@@ -67,6 +69,7 @@ final class AppState {
         self.gamesystem = nil
         self.gameUiState = GameUiState()
         self.gameUIState = GameUIState()
+        self.subState = nil
         self.resultState = nil
     }
 }

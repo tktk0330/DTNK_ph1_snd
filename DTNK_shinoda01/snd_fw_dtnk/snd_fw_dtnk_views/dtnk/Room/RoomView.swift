@@ -93,12 +93,12 @@ struct RoomView: View {
         // 作成者なのでsideは1
         let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
 
-        FirebaseManager.shared.createRoom(roomName: roomName, creator: myaccount) { roomName in
+        RoomFirebaseManager.shared.createRoom(roomName: roomName, creator: myaccount) { roomName in
             if let roomName = roomName {
                 // ルーム作成成功
                 print("Room created with ID: \(roomName)")
                 // 検索
-                FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
+                RoomFirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
                     if let roomData = roomData {
                         room.roomData = roomData
                         print("Room found: \(roomData)")
@@ -126,7 +126,7 @@ struct RoomView: View {
         }
         let roomName = text
         
-        FirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
+        RoomFirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
             if let roomData = roomData {
                 room.roomData = roomData
                 print("Room found: \(roomData)")

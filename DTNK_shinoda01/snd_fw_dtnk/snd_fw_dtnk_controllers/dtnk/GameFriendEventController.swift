@@ -1,4 +1,6 @@
-
+/**
+ Gameに関する処理
+ */
 
 
 import SwiftUI
@@ -9,7 +11,7 @@ struct GameFriendEventController {
     let fbms = FirebaseManager.shared
     
     func play(playerID: String, selectCrads: [N_Card], passPayerIndex: Int, completion: @escaping (Bool) -> Void) {
-        fbms.playCards(playerID: playerID, baseselectedCards: selectCrads) { result in
+        fbms.playCards(playerIndex: passPayerIndex, playerID: playerID, baseselectedCards: selectCrads) { result in
             if result {
                 print("Play")
                 pass(passPayerIndex: passPayerIndex, playersCount: 4)
@@ -50,15 +52,30 @@ struct GameFriendEventController {
      challengeするかしないかを報告
      */
     func moveChallenge(index: Int, ans: ChallengeAnswer) {
-        fbms.setChallengeAnswer(index: index, answer: ans) { result in
-        }
+        fbms.setChallengeAnswer(index: index, answer: ans) { result in }
+    }
+    /**
+     準備ができているかを報告
+     */
+    func moveNextGame(index: Int, ans: NextGameAnnouns) {
+        fbms.setNextGameAnnouns(index: index, answer: ans) { result in}
     }
     
     /**
-     途中結果画面へ
+     次の画面へ
      */
     func onTapOKButton(gamePhase: GamePhase) {
-        fbms.setGamePhase(gamePhase: gamePhase) { result in }
+        switch gamePhase {
+        case .result:
+            // スコア確定→途中結果
+            appState.gameUIState.gamePhase = gamePhase
+        case .waiting:
+            // 途中結果→新ゲーム
+            appState.gameUIState.gamePhase = gamePhase
+        default:
+            break
+
+        }
     }
 }
 

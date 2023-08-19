@@ -5,10 +5,11 @@ import SwiftUI
 
 class GameUIState: ObservableObject {
     
+    // FB必要あり
     @Published var gameID: String = ""
     @Published var players: [Player_f] = []
     @Published var deck: [CardId] = []
-    @Published var deckUI: [N_Card] = []
+    @Published var cardUI: [N_Card] = cards
     @Published var table: [CardId] = []
     @Published var myside: Int = 99
     @Published var gamePhase: GamePhase = .dealcard {
@@ -16,30 +17,49 @@ class GameUIState: ObservableObject {
             gamePhaseAction(phase: gamePhase)
         }
     }
+    // TargetGame
+    // Game
+    @Published var gamenum: Int = 1
+    // 出さないことを通知
     // 現在プレイしている人
     @Published var currentPlayerIndex: Int = 99
     // 最後にカードを出した人
-    @Published var lastPlayCardsPlayer: Player_f?
+    @Published var lastPlayerIndex: Int = 99
     // どてんこした人
     @Published var dtnkPlayer: Player_f?
     // どてんこした人のIndex
     @Published var dtnkPlayerIndex: Int = 99
     // チャレンジ通知
     @Published var challengeAnswers: [ChallengeAnswer?] = []
+    // 完了通知
+    @Published var nextGameAnnouns: [NextGameAnnouns?] = []
     // 勝者：オールの場合もある
     @Published var winners: [Player_f] = []
     // 負者：オールの場合もある
     @Published var losers: [Player_f] = []
+    // 裏のカードたち
+    @Published var decisionScoreCards: [CardId] = []
+    // 初期レート
+    @Published var initialRate: Int = 1
+    // 上昇レート
+    @Published var ascendingRate: Int = 1
+    // 決定数
+    // ゲームスコア
+    @Published var gameScore: Int = 1
     
+    // FB必要なし
     // カウンター
     @Published var counter: Bool = false
+    @Published var startFlag: Bool = false
 
     
     func gamePhaseAction(phase: GamePhase) {
         switch phase {
             
         case .dealcard:
-            print(phase)
+            GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
+                startFlag = true
+            }
         case .gamenum:
             print(phase)
         case .countdown:
@@ -65,38 +85,18 @@ class GameUIState: ObservableObject {
         case .challenge:
             GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
         case .decisionrate_pre:
-            GameObserber(hostID: appState.room.roomData.hostID).decideWinnersLosers()
+            GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
         case .decisionrate:
             print(phase)
         case .result:
             print(phase)
         case .other:
             print(phase)
+        case .waiting:
+            print(phase)
         }
     }
 
-}
-
-
-class Player_f: Identifiable {
-    let id: String
-    var side: Int
-    var name: String
-    var icon_url: String
-    var hand: [CardId] = []
-    var score = 0
-    var dtnk: Bool
-    var selectedCards: [N_Card] = []
-    
-    init(id: String, side: Int, name: String, icon_url: String) {
-        self.id = id
-        self.side = side
-        self.name = name
-        self.icon_url = icon_url
-        self.score = 0
-        self.dtnk = false
-
-    }
 }
 
 var cards: [N_Card] = [

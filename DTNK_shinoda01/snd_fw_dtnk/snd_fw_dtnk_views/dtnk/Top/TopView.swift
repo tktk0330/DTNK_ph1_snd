@@ -4,7 +4,6 @@
 import SwiftUI
 
 struct TopView: View {
-    
     var body: some View {
         GeometryReader { geo in
             // 広告用
