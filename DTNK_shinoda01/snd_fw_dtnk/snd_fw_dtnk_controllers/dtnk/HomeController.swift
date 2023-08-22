@@ -32,7 +32,8 @@ struct HomeController {
     }
     
     func onTapOption(){
-        appState.home.mode = .checkoption
+        Router().pushBasePage(pageId: .option)
+        
     }
     func onTapBack(){
         Router().pushBasePage(pageId: .home)
