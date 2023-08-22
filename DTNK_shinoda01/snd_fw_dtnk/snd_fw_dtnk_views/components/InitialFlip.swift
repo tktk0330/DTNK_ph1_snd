@@ -12,6 +12,57 @@ import SwiftUI
  Player name
  
  */
+struct InitialFlip01: View {
+
+    let player: [Player_f]
+    let initialIndex: Int
+
+    @State private var timer: Timer?
+    @State var index: Int = 0
+    @State var count = 0
+    let viewModel: InitialFlipViewModel
+    
+    var remainingPlayers: [Player_f] {
+        var remaining = player
+        remaining.remove(at: initialIndex)
+        remaining.shuffle()
+        remaining.insert(player[initialIndex], at: remaining.count)
+        return remaining
+    }
+
+    var name: [String] {
+        remainingPlayers.map { $0.name }
+    }
+    
+    init(player: [Player_f], initialIndex: Int) {
+        self.player = player
+        self.viewModel = InitialFlipViewModel()
+        self.initialIndex = initialIndex
+        self.index = initialIndex
+        self.viewModel.text = String(name[index])
+        
+    }
+
+    var body: some View {
+        ZStack {
+            InitialFlipView(viewModel: viewModel)
+                .onAppear {
+                    timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                        if count < 11 {
+                            count += 1
+                            index = (index + 1) % name.count
+                            viewModel.text = String(name[index])
+
+                        } else {
+                            timer?.invalidate()
+                            timer = nil
+                        }
+                    }
+                }
+        }
+    }
+}
+
 struct InitialFlip: View {
 
     let player: [Player]
@@ -33,8 +84,7 @@ struct InitialFlip: View {
     var name: [String] {
         remainingPlayers.map { $0.name }
     }
-
-
+    
     init(player: [Player], initialIndex: Int) {
         self.player = player
         self.viewModel = InitialFlipViewModel()
@@ -43,7 +93,6 @@ struct InitialFlip: View {
         self.viewModel.text = String(name[index])
         
     }
-
 
     var body: some View {
         ZStack {

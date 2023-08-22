@@ -2,7 +2,6 @@
  参加可否を問うPOP
  */
 
-
 import SwiftUI
 
 struct JoinPopView: View {
@@ -15,63 +14,27 @@ struct JoinPopView: View {
             ZStack{
                 // 表
                 ZStack{
-                    VStack(spacing: 50) {
-                                                
-                        Text("Room Name: \(room.roomData.roomName)")
-                            .font(.system(size: 20))
+                    VStack(spacing: 40) {
+                        Text("見つかりました")
+                            .font(.custom(FontName.font01, size: 25))
                             .foregroundColor(Color.white)
                             .fontWeight(.bold)
                             .bold()
                         
-//                        Text("Creator: \(room.roomData)")
-//                            .font(.system(size: 20))
-//                            .foregroundColor(Color.white)
-//                            .fontWeight(.bold)
-//                            .bold()
-                        
+                        Text("Room Name: \(room.roomData.roomName)")
+                            .font(.custom(FontName.font01, size: 25))
+                            .foregroundColor(Color.white)
+                            .fontWeight(.bold)
+                            .bold()
+                                                
                         // errore
                         Text("\(room.error_message)")
-                            .font(.system(size: 20))
+                            .font(.custom(FontName.font01, size: 25))
                             .foregroundColor(Color.red)
                             .fontWeight(.bold)
                             .bold()
-                        
-                        HStack(spacing: 40) {
-                            Button(action: {
-                                RoomController().onCloseMenu()
-                            }) {
-                                Text("CANSEL")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding()
-                                    .frame(width: 120, height: 50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.white, lineWidth: 3)
-                                    )
-                            }
-                            
-                            Button(action: {
-                                // 参加処理
-                                room.join(user: appState.account.loginUser)
-                            }) {
-                                Text("JOIN")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding()
-                                    .frame(width: 120, height: 50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.white, lineWidth: 3)
-                                    )
-                            }
-                        }
                     }
-                    .frame(width: 350, height: 500)
+                    .frame(width: UIScreen.main.bounds.width * 0.90, height: geo.size.height * 0.25)
                     .background(
                         Color.black.opacity(0.90)
                     )
@@ -81,6 +44,24 @@ struct JoinPopView: View {
                             .stroke(Color.white, lineWidth: 3)
                     )
                     .position(x: geo.size.width / 2, y: geo.size.height / 2)
+
+                        
+                    HStack(spacing: 40) {
+                        Button(action: {
+                            RoomController().onCloseMenu()
+                        }) {
+                            Btnwb(btnText: "Cansel", btnTextSize: 20, btnWidth: 120, btnHeight: 50)
+                        }
+                        
+                        Button(action: {
+                            // 参加処理
+                            room.join(user: appState.account.loginUser)
+                        }) {
+                            Btnwb(btnText: "Join", btnTextSize: 20, btnWidth: 120, btnHeight: 50)
+                            
+                        }
+                    }
+                    .position(x: geo.size.width / 2, y: geo.size.height * 0.70)
                 }
                 .background(
                     Color.black.opacity(0.50)

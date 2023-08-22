@@ -10,7 +10,54 @@ struct GameFriendEventController {
     let fbm = FirebaseManager()
     let fbms = FirebaseManager.shared
     
+    /**
+     自分のターンかチェックする
+     */
+    func checkTurn(myside: Int) -> Bool {
+        guard myside == appState.gameUIState.currentPlayerIndex || appState.gameUIState.currentPlayerIndex == 99 else {
+            print("not your turn!")
+            return false
+        }
+        return true
+    }
+    
+    /**
+     どてんこできるか（自分の出したカードではないか）
+     */
+    func checDtnk(myside: Int) -> Bool {
+        guard myside != appState.gameUIState.lastPlayerIndex || appState.gameUIState.currentPlayerIndex == 99 else {
+            print("can not dtnk!")
+            return false
+        }
+        return true
+    }
+    
+    /**
+     引く
+     */
+    func draw(playerID: String, playerIndex: Int) {
+        guard checkTurn(myside: playerIndex) else {
+            return
+        }
+        appState.gameUIState.turnFlg = 1
+
+        fbms.drawCard(playerID: playerID) { result in
+            if result {
+                print("Draw")
+            } else {
+                print("draw失敗")
+                appState.gameUIState.turnFlg = 0
+            }
+        }
+    }
+
+    /**
+     出す
+     */
     func play(playerID: String, selectCrads: [N_Card], passPayerIndex: Int, completion: @escaping (Bool) -> Void) {
+        guard checkTurn(myside: passPayerIndex) else {
+            return
+        }
         fbms.playCards(playerIndex: passPayerIndex, playerID: playerID, baseselectedCards: selectCrads) { result in
             if result {
                 print("Play")
@@ -20,31 +67,42 @@ struct GameFriendEventController {
         }
     }
 
+    /**
+     パス
+     */
     func pass(passPayerIndex: Int, playersCount: Int) {
+        guard checkTurn(myside: passPayerIndex) else {
+            return
+        }
         
         // seletcardsを初期化
         // currentIndexを次の人に変える
         let nextPlayerIndex = (passPayerIndex + 1) % playersCount
         // fbに登録
         fbms.setCurrentPlayerIndex(currentplayerIndex: nextPlayerIndex) { result in
+            if result {
+                appState.gameUIState.turnFlg = 0
+            }
         }
     }
     
+    /**
+     どてんこ時処理
+     */
     func dtnk(Index: Int, dtnkPlayer: Player_f) {
-        // 音　バイブ
-
-        fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in
-            if result {
-                // fbに登録
-                fbms.setGamePhase(gamePhase: .dtnk) { result in
-                }
-            }
+        guard checDtnk(myside: Index) else {
+            return
         }
+
+        // TODO: 音バイブ
+        fbms.setGamePhase(gamePhase: .dtnk) { result in }
+        fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
+        
+        // TODO: ロジック修正？
         // アニメーションが終わったら参加可否を問う
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             // 可否
-            fbms.setGamePhase(gamePhase: .q_challenge) { result in
-            }
+            fbms.setGamePhase(gamePhase: .q_challenge) { result in }
         }
     }
     

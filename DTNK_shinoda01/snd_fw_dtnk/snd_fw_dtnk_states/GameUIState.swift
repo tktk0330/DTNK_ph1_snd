@@ -48,11 +48,15 @@ class GameUIState: ObservableObject {
     @Published var losers: [Player_f] = []
     // ゲームスコア
     @Published var gameScore: Int = 1
-    
+    // レートアップカード
+    @Published var rateUpCard: String? = nil
+
     // FB必要なし
     // カウンター
     @Published var counter: Bool = false
     @Published var startFlag: Bool = false
+    @Published var AnnounceFlg = false // 実行中 true 非表示中　false
+    @Published var turnFlg: Int = 0 // 0: canDraw 1: canPass
 
     
     func gamePhaseAction(phase: GamePhase) {
@@ -98,7 +102,6 @@ class GameUIState: ObservableObject {
             print(phase)
         }
     }
-
 }
 
 var cards: [N_Card] = [
