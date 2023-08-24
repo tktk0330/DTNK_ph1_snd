@@ -4,6 +4,42 @@
 
 import SwiftUI
 
+
+struct sample01: View {
+
+@State private var isPressed = false
+
+var body: some View {
+    Button(action: {
+        self.isPressed.toggle()
+    }) {
+        Text("Press Me")
+            .font(.largeTitle)
+            .foregroundColor(.white)
+            .padding(40)
+            .background(
+                ZStack {
+                    Circle()
+                        .fill(isPressed ? Color.red : Color.blue)
+                        .scaleEffect(isPressed ? 0.9 : 1.0)
+                    Circle()
+                        .stroke(Color.gray, lineWidth: 4)
+                        .blur(radius: 2)
+                        .offset(x: 2, y: 2)
+                        .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [Color.black, Color.clear]), startPoint: .bottom, endPoint: .top)))
+                    Circle()
+                        .stroke(Color.white, lineWidth: 2)
+                        .blur(radius: 2)
+                        .offset(x: -2, y: -2)
+                        .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [Color.clear, Color.black]), startPoint: .top, endPoint: .bottom)))
+                }
+            )
+    }
+    .animation(.easeInOut)
+}
+}
+
+
 // 浮いてる感じのボタン
 struct ShadowButtonStyle: ButtonStyle {
     
@@ -58,6 +94,34 @@ struct Btnwb: View {
     var btnTextSize: CGFloat
     var btnWidth: CGFloat
     var btnHeight: CGFloat
+    var btnColor: Color = Color.casinoGreen
+    
+    var body: some View {
+        
+        Text(btnText)
+            .font(.custom(FontName.font01, size: btnTextSize))
+            .foregroundColor(Color.white)
+            .fontWeight(.bold)
+            .bold()
+            .padding()
+            .frame(width: btnWidth, height: btnHeight)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(btnColor)
+                    .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 25)
+                    .stroke(Color.white, lineWidth: 5)
+            )
+    }
+}
+
+struct Btnwb01: View {
+    var btnText: String
+    var btnTextSize: CGFloat
+    var btnWidth: CGFloat
+    var btnHeight: CGFloat
     
     var body: some View {
         
@@ -79,6 +143,7 @@ struct Btnwb: View {
             )
     }
 }
+
 
 struct Btnlgb: View {
     var imageName: String

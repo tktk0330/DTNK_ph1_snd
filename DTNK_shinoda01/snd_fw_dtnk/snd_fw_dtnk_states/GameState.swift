@@ -63,7 +63,7 @@ class GameUiState: ObservableObject {
             gamePhaseAction(phase: gamePhase)
         }
     }
-    //　どてんこ判定：誰かがどてんこしたかどうか
+    // どてんこ判定：誰かがどてんこしたかどうか
     @Published var gamedtnk: Bool = false
     // 出さないことを通知
     @Published var initialAction: [Bool] = [true, true, true, true] {
@@ -166,6 +166,9 @@ class GameUiState: ObservableObject {
             print(phase)
         case .revenge:
             changedrevenge()
+        case .waiting:
+            print(phase)
+
         }
     }
     
@@ -384,6 +387,7 @@ class GameUiState: ObservableObject {
      勝敗を決める
      */
     func winloos() {
+        // 勝者・敗者の初期化
         winers.removeAll()
         loosers.removeAll()
         // SYOTENKO
@@ -443,6 +447,7 @@ class GameUiState: ObservableObject {
             let rank = index + 1
             let item = PlayerResultItem(
                 rank: rank,
+                index: player.side - 1,
                 iconUrl: player.icon_url,
                 name: player.name,
                 score: player.score,

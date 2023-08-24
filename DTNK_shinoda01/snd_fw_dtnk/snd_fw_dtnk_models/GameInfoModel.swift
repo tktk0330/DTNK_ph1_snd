@@ -5,57 +5,82 @@
 
 import SwiftUI
 
+/**
+ ゲーム開始時に設定するアイテム
+ */
 struct GameInfoModel {
-    
-    // 参加者
-    let players: [Player]
+    // 現在のゲーム数
+    let gameNum: Int = 1
+    //　目標ゲーム数
+    let gameTarget: Int
+    // ゲーム状態を示す
+    var gamePhase: GamePhase = .dealcard
     // deck
-    var deck: [CardId]
+    var deck: [CardId] = GameRule.initialDeck.shuffled()
+    // table
+    var table: Any = NSNull()
     // jorker
     let joker: Int
-    // table
-    var table: [Card] = []
-    
+    // 参加者
+    let players: [Player]
     // 現在プレイしている人
     var currentPlayerIndex: Int = 99
     // 最後にカードを出した人
-    var lastPlayCardsPlayer: Player?
+    var lastPlayerIndex: Int = 99
     // どてんこした人
-    var dtnkPlayer: [(player: Player?, index: Int)] = [(nil, 99)]
-
-
-    //　目標ゲーム数
-    let targetgamenum: Int
-    // 現在のゲーム数
-    let game: Int = 1
-    // 最初のカードを出したか
-    var isfirstplayer: Bool = false
-    // 出さないことを通知
-    var initialAction: [Bool] = [true, true, true, true]
-    
-    // ゲーム状態を示す
-    var gamePhase: GamePhase = .dealcard
-
+    var dtnkPlayer: Any =  NSNull()
+    var dtnkPlayerIndex: Int = 99
     // 初期レート
-    let rate: Int
+    var initialRate: Int
     // 倍率
-    var magunigication: Int = 1
+    var ascendingRate: Int = 1
     // 決定数
-    var decisionnum: Int = 1
-    
+    var decisionScoreCards: Any = NSNull()
     // チャレンジプレーヤー
-    var challengeplayers: [Player] = []
-    // チャレンジ通知 init :0 yes :1 no :2 dtnkplayer :3
-
-    
+    var challengeAnswers = Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
+    // 次のゲーム行けるか
+    var nextGameAnnouns = Array(repeating: NextGameAnnouns.initial.rawValue, count: 4)
     // 勝者
-    var winers: [Player] = []
+    var winners: Any = NSNull()
     // 敗者
-    var loosers: [Player] = []
+    var losers: Any = NSNull()
     // ゲームスコア（単体）
-    var gameScore: Int = 1
-    
-    
-
+    var gameScore: Int = 0
 }
 
+/**
+ 次のゲームに行く時に設定するアイテム
+ */
+struct GameResetItem {
+    // 現在のゲーム数
+    var gameNum: Int = appState.gameUIState.gameNum + 1
+    // ゲーム状態を示す
+    var gamePhase: GamePhase = .dealcard
+    // deck
+    var deck: [CardId] = GameRule.initialDeck.shuffled()
+    // table
+    var table: Any = NSNull()
+    // playerHand
+    var hand = Array(repeating: NSNull() , count: 4)
+    // 現在プレイしている人
+    var currentPlayerIndex: Int = 99
+    // 最後にカードを出した人
+    var lastPlayerIndex: Int = 99
+    // どてんこした人
+    var dtnkPlayer: Any =  NSNull()
+    var dtnkPlayerIndex: Int = 99
+    // 倍率
+    var ascendingRate: Int = 1
+    // 決定数
+    var decisionScoreCards: Any = NSNull()
+    // チャレンジプレーヤー
+    var challengeAnswers = Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
+    // 次のゲーム行けるか
+    var nextGameAnnouns = Array(repeating: NextGameAnnouns.initial.rawValue, count: 4)
+    // 勝者
+    var winners: Any = NSNull()
+    // 敗者
+    var losers: Any = NSNull()
+    // ゲームスコア（単体）
+    var gameScore: Int = 0
+}

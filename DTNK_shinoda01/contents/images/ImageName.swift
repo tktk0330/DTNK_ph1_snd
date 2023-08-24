@@ -3,6 +3,10 @@ enum ImageName {
     
     enum Common: String {
         case back = "arrow-back"
+        case dtnk01 = "dtnk-1"
+        case dtnk02 = "dtnk-2"
+        case challenge01 = "chalenge-1"
+        case challenge02 = "chalenge-2"
     }
     
     enum Splash: String {

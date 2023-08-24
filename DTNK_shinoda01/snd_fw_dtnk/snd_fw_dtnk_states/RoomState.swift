@@ -7,10 +7,8 @@ import FirebaseDatabase
 
 class RoomState: ObservableObject {
     
-    static let shared = FirebaseManager()
-    let database = Database.database()
     @Published var roommode: RoomMode = .base
-    @Published var roomData = Room(roomID: "", roomName: "", creatorName: "", participants: [])
+    @Published var roomData = Room(roomID: "", roomName: "", hostID: "", participants: [])
     @Published var error_message = ""
     @Published var startFlg = false // realtime
 
@@ -21,19 +19,26 @@ class RoomState: ObservableObject {
     func join(user: User) {
         
         let room = roomData
-        let side = room.participants.count + 1
-        let myaccount = Player(id: user.userID, side: side, name: user.name, icon_url: user.iconURL)
-        
-        FirebaseManager.shared.joinRoom(room: room, participant: myaccount) { [self] success in
-            if success {
-                // 参加に成功した場合の処理
-                print("参加成功")
-                // Matchingへ
-                RoomController().moveMatchingView()
+        var side = 0
+        // side（何番目の参加か）の取得
+        RoomFirebaseManager().getParticipantsCount(roomID: roomData.roomID) { count in
+            if count != nil {
+                side = count! + 1
+                let myaccount = Player(id: user.userID, side: side, name: user.name, icon_url: user.iconURL)
+                RoomFirebaseManager.shared.joinRoom(room: room, participant: myaccount) { [self] success in
+                    if success {
+                        // 参加に成功した場合の処理
+                        print("参加成功")
+                        // Matchingへ
+                        RoomController().moveMatchingView()
+                    } else {
+                        // 参加に失敗した場合の処理
+                        error_message = "参加失敗"
+                        print("参加失敗")
+                    }
+                }
             } else {
-                // 参加に失敗した場合の処理
-                error_message = "参加失敗"
-                print("参加失敗")
+                print("error count")
             }
         }
     }
@@ -73,6 +78,6 @@ class RoomState: ObservableObject {
             }
         }
         
-        FirebaseManager.shared.observeMatchingFlg(roomID: roomID)
+        RoomFirebaseManager.shared.observeMatchingFlg(roomID: roomID)
     }
 }
