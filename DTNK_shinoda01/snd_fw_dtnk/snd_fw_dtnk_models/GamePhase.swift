@@ -8,8 +8,8 @@ import Foundation
 enum GamePhaseOrigine: Int {
     case playing = 0
     case gameresult = 1
-    
 }
+
 enum GamePhase: Int {
     case dealcard = 0
     case gamenum = 1
@@ -27,6 +27,7 @@ enum GamePhase: Int {
     case decisionrate_pre = 11
     case decisionrate = 12
     case result = 13
+    case waiting = 50
     case other = 99
 }
 

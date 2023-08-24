@@ -5,35 +5,100 @@ import SwiftUI
 
 class GameUIState: ObservableObject {
     
+    // ID
     @Published var gameID: String = ""
-    @Published var players: [Player_f] = []
-    @Published var deck: [CardId] = []
-    @Published var deckUI: [N_Card] = []
-    @Published var table: [CardId] = []
-    @Published var myside: Int = 99
-    @Published var gamePhase: GamePhase = .dealcard
-}
-
-
-class Player_f: Identifiable {
-    let id: String
-    var side: Int
-    var name: String
-    var icon_url: String
-    var hand: [CardId] = []
-    var score = 0
-    var dtnk: Bool
-    var selectedCards: [N_Card] = []
-    
-    init(id: String, side: Int, name: String, icon_url: String) {
-        self.id = id
-        self.side = side
-        self.name = name
-        self.icon_url = icon_url
-        self.score = 0
-        self.dtnk = false
-
+    // Game
+    @Published var gameNum: Int = 1
+    // TargetGame
+    @Published var gameTarget: Int = 1
+    // ゲーム状態を示す
+    @Published var gamePhase: GamePhase = .dealcard {
+        didSet {
+            gamePhaseAction(phase: gamePhase)
+        }
     }
+    @Published var deck: [CardId] = []
+    @Published var cardUI: [N_Card] = cards
+    @Published var table: [CardId] = []
+    @Published var jorker: Int = 2
+    @Published var players: [Player_f] = []
+    @Published var myside: Int = 99
+    // 出さないことを通知
+    // 現在プレイしている人
+    @Published var currentPlayerIndex: Int = 99
+    // 最後にカードを出した人
+    @Published var lastPlayerIndex: Int = 99
+    // どてんこした人
+    @Published var dtnkPlayer: Player_f?
+    // どてんこした人のIndex
+    @Published var dtnkPlayerIndex: Int = 99
+    // チャレンジ通知
+    @Published var challengeAnswers: [ChallengeAnswer?] = []
+    // 完了通知
+    @Published var nextGameAnnouns: [NextGameAnnouns?] = []
+    // 裏のカードたち
+    @Published var decisionScoreCards: [CardId] = []
+    // 初期レート
+    @Published var initialRate: Int = 1
+    // 上昇レート
+    @Published var ascendingRate: Int = 1
+    // 勝者：オールの場合もある
+    @Published var winners: [Player_f] = []
+    // 負者：オールの場合もある
+    @Published var losers: [Player_f] = []
+    // ゲームスコア
+    @Published var gameScore: Int = 1
+    
+    // FB必要なし
+    // カウンター
+    @Published var counter: Bool = false
+    @Published var startFlag: Bool = false
+
+    
+    func gamePhaseAction(phase: GamePhase) {
+        switch phase {
+            
+        case .dealcard:
+            GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
+                startFlag = true
+            }
+        case .gamenum:
+            print(phase)
+        case .countdown:
+            print(phase)
+        case .ratefirst:
+            print(phase)
+        case .gamefirst:
+            print(phase)
+        case .decisioninitialplayer:
+            print(phase)
+        case .gamefirst_sub:
+            print(phase)
+        case .main:
+            print(phase)
+        case .dtnk:
+            print(phase)
+        case .burst:
+            print(phase)
+        case .revenge:
+            print(phase)
+        case .q_challenge:
+            print(phase)
+        case .challenge:
+            GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
+        case .decisionrate_pre:
+            GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
+        case .decisionrate:
+            print(phase)
+        case .result:
+            print(phase)
+        case .other:
+            print(phase)
+        case .waiting:
+            print(phase)
+        }
+    }
+
 }
 
 var cards: [N_Card] = [

@@ -8,7 +8,7 @@ import SwiftUI
 struct Room {
     let roomID: String
     let roomName: String
-    let creatorName: String
+    let hostID: String
     var participants: [Player]
 }
 

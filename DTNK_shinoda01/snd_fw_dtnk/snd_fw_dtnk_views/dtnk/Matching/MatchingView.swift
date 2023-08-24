@@ -1,5 +1,6 @@
-
-
+/**
+MatchingViwe
+*/
 
 import SwiftUI
 
@@ -20,33 +21,45 @@ struct MatchingView: View {
                 .frame(width: 60, height: 60)
             
             Text(nickname)
-                .font(.system(size: 40))
+                .font(.custom(FontName.font01, size: 40))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .padding(5)
                 .frame(width: 200)
 
         }
-        .frame(width: 350, height: 80)
-        .cornerRadius(12)
+        .frame(width: UIScreen.main.bounds.width * 0.9, height: 80)
+        .cornerRadius(25)
+        .background(
+            RoundedRectangle(cornerRadius: 25)
+                .fill(Color.casinoGreen)
+                .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
+        )
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 25)
                 .stroke(Color.white, lineWidth: 5)
         )
     }
     
     //マッチング中の表示
     func placeHolder() -> some View  {
-        return HStack {
+        return HStack(spacing: 20) {
             Text("募集中")
-                .font(.system(size: 20))
+                .font(.custom(FontName.font01, size: 20))
+                .foregroundColor(Color.white)
+                .fontWeight(.bold)
             ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: Color.casinoLightGreen))
+                .scaleEffect(1.5)
         }
-        .frame(width: UIScreen.main.bounds.width - 40, height: 80)
-        .background(Color.gray)
+        .frame(width:  UIScreen.main.bounds.width * 0.9, height: 80)
         .cornerRadius(12)
+        .background(
+            RoundedRectangle(cornerRadius: 25)
+                .fill(Color.black.opacity(0.80))
+                .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
+        )
     }
-
 
     var body: some View {
         GeometryReader { geo in
@@ -58,19 +71,26 @@ struct MatchingView: View {
                     .frame(maxWidth: .infinity, maxHeight: 50)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
-                Text("VS BOT")
-                    .font(.system(size: 50))
+                // back
+                // TODO: 戻るときのロジック＆アナウンス
+                Button(action: {
+                    //                    MatchingController().backMatching(room: room.roomData, user: appState.account.loginUser)
+                    Router().setBasePages(stack: [.room])
+                }) {
+                    Image(ImageName.Common.back.rawValue)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40)
+                }
+                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
+                
+                // title
+                Text("Matching")
+                    .font(.custom(FontName.font01, size: 45))
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .padding(5)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
-                
-                Text("MATCHING...")
-                    .font(.system(size: 40))
-                    .foregroundColor(Color.white)
-                    .fontWeight(.bold)
-                    .padding(5)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.25)
                 
                 VStack(spacing: 20) {
                     ForEach(0..<4) { index in
@@ -80,63 +100,18 @@ struct MatchingView: View {
                             placeHolder()
                         }
                     }
-//                    ForEach(0..<4) { index in
-//                        if room.roomData.participants.count > index {
-//                            item(nickname: room.roomData.participants[index].name, iconUrl:  room.roomData.participants[index].icon_url)
-//                        } else {
-//                            placeHolder()
-//                        }
-//                    }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.55)
                 
-                
-                Group {
+                // gameStartBtn
+                // TODO: 人数揃ったら表示するように
+                if appState.account.loginUser.userID == room.roomData.hostID {
                     Button(action: {
-                        MatchingController().backMatching(room: room.roomData, user: appState.account.loginUser)
-                        print(room.roomData)
+                        MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
                     }) {
-                        Text("BACK")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .bold()
-                            .padding()
-                            .frame(width: 120, height: 50)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.white, lineWidth: 3)
-                            )
+                        Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                     }
-                    .position(x: UIScreen.main.bounds.width / 4, y: geo.size.height * 0.90)
-                    
-                    if  matching.vsInfo == 02 {
-                        // 作成者のみStartボタン表示
-                        // TODO: IDでやる（名前だとなりすまし・誤認知する）
-                        if appState.account.loginUser.name == room.roomData.creatorName {
-                            // ４人揃ったら
-                            if room.startFlg {
-                                Button(action: {
-                                    print(room.roomData)
-                                    print(appState.matching.players)
-                                    MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
-                                }) {
-                                    Text("START")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(Color.white)
-                                        .fontWeight(.bold)
-                                        .bold()
-                                        .padding()
-                                        .frame(width: 120, height: 50)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(Color.white, lineWidth: 3)
-                                        )
-                                }
-                                .position(x: UIScreen.main.bounds.width * 3 / 4, y: geo.size.height * 0.90)
-                            }
-                        }
-                    }
+                    .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
                 }
             }
             .onAppear {

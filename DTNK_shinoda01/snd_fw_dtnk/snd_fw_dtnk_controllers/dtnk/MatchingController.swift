@@ -13,19 +13,15 @@ class MatchingController {
         
         // 参加者
         let players = players
-        let deck = GameRule.initialDeck.shuffled
-        
-        
         let jorker = 2
-        let targetgamenum = 3
-        let rate = 10
+        let gameTarget = 5
+        let initialRate = 10
         
         let gameInfo = GameInfoModel(
-            players: players,
-            deck: deck(),
+            gameTarget: gameTarget,
             joker: jorker,
-            targetgamenum: targetgamenum,
-            rate: rate)
+            players: players,
+            initialRate: initialRate)
         
         return gameInfo
     }
@@ -50,12 +46,11 @@ class MatchingController {
         quick.append(Player_f(id: matchingplayer.id, side: matchingplayer.side, name: matchingplayer.name, icon_url: matchingplayer.icon_url))
         // UIStateの作成（フロント）
         appState.gameUIState.players = quick
-        
         // DBに保存
-        FirebaseManager.shared.saveGameInfo(gameInfo, roomID: roomID) { success in
-            if success {
+        FirebaseManager.shared.setGameInfo(item: gameInfo, roomID: roomID) { gameID in
+            if (gameID != nil) {
                 // matchingflgをOKに設定　その後遷移
-                FirebaseManager.shared.updateMatchingFlg(roomID: roomID)
+                RoomFirebaseManager.shared.updateMatchingFlg(roomID: roomID)
             } else {
                 print("Failed to save game info")
             }
@@ -83,9 +78,8 @@ class MatchingController {
     // TODO: できていない
     func backMatching(room: Room, user: User) {
         // ownerだったらルームを削除
-        // TODO: IDでやる
-        if room.creatorName == user.name {
-            FirebaseManager().deleteRoom(roomID: room.roomID) { success in
+        if room.hostID == user.userID {
+            RoomFirebaseManager().deleteRoom(roomID: room.roomID) { success in
                 if success {
                     print("Room deleted successfully")
                     // ルーム削除後の処理
@@ -96,7 +90,7 @@ class MatchingController {
 
         } else {
             // 参加者だった退出
-            FirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
+            RoomFirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
                 if judge {
                     print("sc")
                     Router().pushBasePage(pageId: .room)
