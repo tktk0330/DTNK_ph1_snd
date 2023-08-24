@@ -527,6 +527,7 @@
 				5D51C05E2A793CED00E59A69 /* GameFriendEventController.swift */,
 				CA5C5DFB2A80E04B006D7C01 /* HeartsRecoverController.swift */,
 				CA5C5DFD2A8A2B00006D7C01 /* HeartsDataManager.swift */,
+
 			);
 			path = dtnk;
 			sourceTree = "<group>";
