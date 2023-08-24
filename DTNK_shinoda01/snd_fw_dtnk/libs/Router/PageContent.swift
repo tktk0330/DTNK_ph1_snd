@@ -35,6 +35,8 @@ struct PageContent: View {
                 GameResultView()
             case .gameresult:
                 GameResultView()
+            case .gameSet:
+                GameSettingView()
             }
         }
     }

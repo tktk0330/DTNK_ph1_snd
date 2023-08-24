@@ -13,7 +13,7 @@ struct HomeController {
         if appState.home.heartsData.heartsCount > 0 {
             // ハートが0より大きい場合はゲームを開始する
             // ゲームの開始処理をここに記述する
-            Router().onOpenMenu()
+            Router().pushBasePage(pageId: .gameSet)
         } else {
             // ハートが0の場合はアラートを表示する
             appState.home.heartsData.showAlert = true

@@ -86,12 +86,13 @@ struct Btnlgb: View {
     var btnTextSize: CGFloat
     var btnWidth: CGFloat
     var btnHeight: CGFloat
+   // var imageSize: CGSize
     
     var body: some View {
         
         HStack (spacing: 20) {
             Image(imageName)
-            
+                //.frame(width: imageSize.width, height: imageSize.height)
             Text(btnText)
                 .font(.custom(FontName.font01, size: btnTextSize))
                 .foregroundColor(Color.white)
