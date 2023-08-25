@@ -21,176 +21,160 @@ struct OptionView: View {
     @State private var text: String = ""
     
     var body: some View {
-        VStack {
-            
-            // 広告用
-            Rectangle()
-                .foregroundColor(Color.white.opacity(0.3))
-                .frame(maxWidth: .infinity, maxHeight: 50)
+        
+        GeometryReader { geo in
+            VStack {
                 
-            
-            Rectangle()
-                            .foregroundColor(Color.clear)
-                            .frame(height: 20)
-            
-            HStack {
-                Button(action: {
-                    Router().setBasePages(stack: [.home])
-                }) {
-                    Image(ImageName.Common.back.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40)
-                }
-                
-                Divider().background(Color.clear).frame(height: 20) // nポイントの透明な線を挿入
-                
-                Text("      Option         ")
-                    .font(.custom(FontName.font01,size: 30))
-                    .foregroundColor(Color.white)
-                    .fontWeight(.bold)
-                
-               
-            }
-            
-            Divider().background(Color.clear).frame(height: 20) // nポイントの透明な線を挿入
-            
-            
-            HStack{
-                Text("^_^   ")
-                    .foregroundColor(Color.white)
-                
-                TextField("User Name", text: $text)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(5)
-                    .frame(width: 300)
-                
-            }
-            Rectangle()
-                            .foregroundColor(Color.clear)
-                            .frame(height: 50)
-            
-            ZStack{
+                // 広告用
                 Rectangle()
-                                .foregroundColor(Color.casinolightgreen) // バーの色を設定
-                                .frame(height: 350) // バーの高さを指定
-                                .edgesIgnoringSafeArea(.top) // バーがセーフエリアの上に表示されるようにする
-                
-                VStack{
-                Button(action: {
-                    button1Colored.toggle()
-                }) {
-                    Text("♪ SE")
-                        .frame(width: 300, height: 50)
-                        .padding()
-                        .background(button1Colored ? Color.pushcolor : Color.casinoGreen)
-                        .foregroundColor(button1Colored ? Color.black : Color.white)
-                        .border(Color.clear, width: 2)
-                        .font(.custom(FontName.font01,size: 30))
-                        .cornerRadius(20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.clear, lineWidth: 2)
-                        )
-                }
+                    .foregroundColor(Color.white.opacity(0.3))
+                    .shadow(color: .gray, radius: 10, x: 0, y: 5)
+                    .frame(maxWidth: .infinity, maxHeight: 50)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
                 
-                    Rectangle()
-                                    .foregroundColor(Color.casinolightgreen)
-                                    .frame(height: 10)
-                
-                Button(action: {
-                    button2Colored.toggle()
-                }) {
-                    Text("📢 BGM")
-                        .frame(width: 300, height: 50)
-                        .padding()
-                        .background(button2Colored ? Color.pushcolor : Color.casinoGreen)
-                        .foregroundColor(button2Colored ? Color.black : Color.white)
-                        .border(Color.clear, width: 2)
-                        .font(.custom(FontName.font01,size: 30))
-                        .cornerRadius(20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.clear, lineWidth: 2)
-                        )
+                VStack {
+                    Button(action: {
+                        Router().setBasePages(stack: [.home])
+                    }) {
+                        Image(ImageName.Common.back.rawValue)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40)
+                    }
+                    .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.01)
+                    
+                    
+                    Text("Option")
+                        .font(.custom(FontName.font01, size: 45))
+                        .foregroundColor(Color.white)
+                        .fontWeight(.bold)
+                        .padding(5)
+                        .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.01)
+                    
                     
                 }
                 
-                    Rectangle()
-                                    .foregroundColor(Color.casinolightgreen)
-                                    .frame(height: 10)
+                Rectangle()
+                    .foregroundColor(Color.clear)
+                    .frame(height: 100)
                 
-                Button(action: {
-                    button3Colored.toggle()
-                }) {
-                    Text("📱 振動")
-                        .frame(width: 300, height: 50)
-                        .padding()
-                        .background(button3Colored ? Color.pushcolor : Color.casinoGreen)
-                        .foregroundColor(button3Colored ? Color.black : Color.white)
-                        .border(Color.clear, width: 2)
-                        .font(.custom(FontName.font01,size: 30))
-                        .cornerRadius(20)
-                        .overlay(
+                
+                HStack{
+                    Text("^_^   ")
+                        .foregroundColor(Color.white)
+                    
+                    TextField("User Name", text: $text)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(5)
+                        .frame(width: 300)
+                    
+                }
+                Rectangle()
+                    .foregroundColor(Color.clear)
+                    .frame(height: 30)
+                
+                ZStack{
+                    Rectangle()
+                        .foregroundColor(Color.casinolightgreen) // バーの色を設定
+                        .frame(height: 410) // バーの高さを指定
+                        .edgesIgnoringSafeArea(.top) // バーがセーフエリアの上に表示されるようにする
+                    
+                    VStack{
+                        ZStack{
+                            
+                            //影
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.clear, lineWidth: 2)
-                        )
-                }
+                                .foregroundColor(Color.black.opacity(0.25))
+                                .frame(width: 335, height: 95)
+                                .offset(x: 5, y: 10)
+                            
+                            //ボタン
+                            Button(action: {
+                                button1Colored.toggle()
+                            }) {
+                                Text("♪ SE")
+                                    .frame(width: 300, height: 60)
+                                    .padding()
+                                    .background(button1Colored ? Color.pushcolor : Color.casinoGreen)
+                                    .foregroundColor(button1Colored ? Color.black : Color.white)
+                                    .border(Color.clear, width: 2)
+                                    .font(.custom(FontName.font01,size: 30))
+                                    .cornerRadius(20)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.clear, lineWidth: 2)
+                                    )
+                                
+                            }
+                        }
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .frame(height: 15)
+                            
+                        ZStack{
+                            
+                            //影
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(Color.black.opacity(0.25))
+                                .frame(width: 335, height: 95)
+                                .offset(x: 5, y: 10)
+                            
+                            //ボタン
+                            Button(action: {
+                                button2Colored.toggle()
+                            }) {
+                                Text("📢 BGM")
+                                    .frame(width: 300, height: 60)
+                                    .padding()
+                                    .background(button2Colored ? Color.pushcolor : Color.casinoGreen)
+                                    .foregroundColor(button2Colored ? Color.black : Color.white)
+                                    .border(Color.clear, width: 2)
+                                    .font(.custom(FontName.font01,size: 30))
+                                    .cornerRadius(20)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.clear, lineWidth: 2)
+                                    )
+                                
+                            }
+                        }
+                        
+                            Rectangle()
+                                .foregroundColor(Color.clear)
+                                .frame(height: 15)
+                            
+                        ZStack{
+                            
+                            //影
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(Color.black.opacity(0.25))
+                                .frame(width: 335, height: 95)
+                                .offset(x: 5, y: 10)
+                            
+                            //ボタン
+                            Button(action: {
+                                button3Colored.toggle()
+                            }) {
+                                Text("📱 Vibration")
+                                    .frame(width: 300, height: 60)
+                                    .padding()
+                                    .background(button3Colored ? Color.pushcolor : Color.casinoGreen)
+                                    .foregroundColor(button3Colored ? Color.black : Color.white)
+                                    .border(Color.clear, width: 2)
+                                    .font(.custom(FontName.font01,size: 30))
+                                    .cornerRadius(20)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.clear, lineWidth: 2)
+                                    )
+                                
+                            }
+                        }
+                        }
+                    }
                 }
             }
         }
     }
-}
-
-/*
-import UIKit
-
-class OptionView: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // タップジェスチャーを四角形に追加
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(squareTapped))
-        squareView.addGestureRecognizer(tapGesture)
-    }
-    
-    @IBOutlet weak var squareView: UIView! // 四角形のUIView
-    
-    @objc func squareTapped() {
-        performSegue(withIdentifier: "toInputNameVC", sender: nil)
-    }
-}
-
-class InputNameViewController: UIViewController {
-    @IBOutlet weak var playerNameTextField: UITextField!
-    
-    @IBAction func continueButtonTapped(_ sender: UIButton) {
-        if let playerName = playerNameTextField.text {
-            performSegue(withIdentifier: "toNextVC", sender: playerName)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toNextVC" {
-            if let nextVC = segue.destination as? NextViewController,
-               let playerName = sender as? String {
-                nextVC.playerName = playerName
-            }
-        }
-    }
-}
-
-class NextViewController: UIViewController {
-    var playerName: String?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        if let playerName = playerName {
-            // playerNameを使用して画面に表示する処理を追加
-        }
-    }
-}
-*/
 
