@@ -174,7 +174,7 @@ struct GameFriendView: View {
                 }
                 // チャレンジ可否ポップ
                 if game.gamePhase == .q_challenge {
-                    ChallengePopView(index: 0)
+                    ChallengePopView(Index: myside, vsInfo: game.gamevsInfo!)
                         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
                         .transition(.move(edge: .top))
                         .animation(.default, value: game.gamePhase == .q_challenge)

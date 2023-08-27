@@ -43,9 +43,15 @@ class GameUIState: ObservableObject {
     // 初め出せるか通知
     @Published var firstAnswers: [FirstAnswers] = Array(repeating: FirstAnswers.initial, count: 4)
     // チャレンジ通知
-    @Published var challengeAnswers: [ChallengeAnswer?] = []
+    @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
+        didSet {
+            if gamevsInfo == .vsBot && challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
+                gamePhase = .challenge
+            }
+        }
+    }
     // 完了通知
-    @Published var nextGameAnnouns: [NextGameAnnouns?] = []
+    @Published var nextGameAnnouns: [NextGameAnnouns] = Array(repeating: NextGameAnnouns.initial, count: 4)
     // 裏のカードたち
     @Published var decisionScoreCards: [CardId] = []
     // 初期レート
@@ -120,11 +126,11 @@ class GameUIState: ObservableObject {
             case .revenge:
                 print(phase)
             case .q_challenge:
-                print(phase)
+                GameBotController().moveChallengeBot()
             case .challenge:
-                print(phase)
+                GameBotController().challengeEvent()
             case .decisionrate_pre:
-                print(phase)
+                GameBotController().preparationFinalPhase()
             case .decisionrate:
                 print(phase)
             case .result:

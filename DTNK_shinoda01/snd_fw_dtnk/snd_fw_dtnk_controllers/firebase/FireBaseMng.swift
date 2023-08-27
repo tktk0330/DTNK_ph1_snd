@@ -381,7 +381,7 @@ class FirebaseManager {
     /**
      ChallengeAnserの取得（リアルタイム）
      */
-    func observeChallengeAnswer(completion: @escaping ([ChallengeAnswer?]) -> Void) {
+    func observeChallengeAnswer(completion: @escaping ([ChallengeAnswer]) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let challengeAnswerRef = gameInfoRef.child("challengeAnswer")
         challengeAnswerRef.observe(.value) { (snapshot) in
@@ -389,11 +389,11 @@ class FirebaseManager {
                 print("Could not cast snapshot value to [Int]")
                 return
             }
-            let answers = rawValues.map { ChallengeAnswer(rawValue: $0) }
+            let answers = rawValues.compactMap { ChallengeAnswer(rawValue: $0) }
             completion(answers)
         }
     }
-    
+
     /**
      NextGameAnnounsのセット
      */
@@ -410,7 +410,7 @@ class FirebaseManager {
     /**
      NextGameAnnounsの取得（リアルタイム）
      */
-    func observeNextGameAnnouns(completion: @escaping ([NextGameAnnouns?]) -> Void) {
+    func observeNextGameAnnouns(completion: @escaping ([NextGameAnnouns]) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let nextGameAnnounsRef = gameInfoRef.child("nextGameAnnouns")
         nextGameAnnounsRef.observe(.value) { (snapshot) in
@@ -418,7 +418,7 @@ class FirebaseManager {
                 print("Could not cast snapshot value to [Int]")
                 return
             }
-            let answers = rawValues.map { NextGameAnnouns(rawValue: $0) }
+            let answers = rawValues.compactMap { NextGameAnnouns(rawValue: $0) }
             completion(answers)
         }
     }
