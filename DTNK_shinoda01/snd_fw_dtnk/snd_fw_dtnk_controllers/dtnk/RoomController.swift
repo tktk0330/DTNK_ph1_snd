@@ -1,9 +1,5 @@
-//
-//  RoomController.swift
-//  DTNK_shinoda01
-//
-//  Created by Takuma Shinoda on 2023/06/29.
-//
+
+
 
 import SwiftUI
 
@@ -33,9 +29,9 @@ struct RoomController {
         }
     }
     
-    func moveMatchingView() {
-        // Matchingへ
-        appState.matching = MatchingState(seatCount: 4, message: "プレイヤーを募集しています...", vsInfo: 02)
-        Router().pushBasePage(pageId: .dtnkMatching)
-    }
+//    func moveMatchingView() {
+//        // Matchingへ
+//        appState.matching = MatchingState(seatCount: 4, message: "プレイヤーを募集しています...", vsInfo: 02)
+//        Router().pushBasePage(pageId: .dtnkMatching)
+//    }
 }

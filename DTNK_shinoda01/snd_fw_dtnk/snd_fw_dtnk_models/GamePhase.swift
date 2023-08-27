@@ -4,6 +4,10 @@
 import SwiftUI
 import Foundation
 
+enum vsInfo: Int {
+    case vsBot = 0
+    case vsFriend = 1
+}
 
 enum GamePhaseOrigine: Int {
     case playing = 0

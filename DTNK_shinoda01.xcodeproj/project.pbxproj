@@ -119,6 +119,8 @@
 		5DCD27BC2A86591100778980 /* ChallengeAnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */; };
 		5DCD27C02A8D0DAA00778980 /* GameCommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */; };
 		5DCD27C22A8E4E6800778980 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C12A8E4E6800778980 /* WaitingView.swift */; };
+		5DCD27C72A9593A800778980 /* GameBotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C62A9593A700778980 /* GameBotView.swift */; };
+		5DCD27C92A9B6C1700778980 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C82A9B6C1700778980 /* Constants.swift */; };
 		5DDB61DD2A4C802300EB03F7 /* JoinPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DC2A4C802300EB03F7 /* JoinPopView.swift */; };
 		5DDB61DF2A4CF6E700EB03F7 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */; };
 		5DDB61E12A4D32EF00EB03F7 /* RoomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */; };
@@ -244,6 +246,8 @@
 		5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeAnswerModel.swift; sourceTree = "<group>"; };
 		5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCommonFunctions.swift; sourceTree = "<group>"; };
 		5DCD27C12A8E4E6800778980 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
+		5DCD27C62A9593A700778980 /* GameBotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBotView.swift; sourceTree = "<group>"; };
+		5DCD27C82A9B6C1700778980 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5DDB61DC2A4C802300EB03F7 /* JoinPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinPopView.swift; sourceTree = "<group>"; };
 		5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomState.swift; sourceTree = "<group>"; };
 		5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomController.swift; sourceTree = "<group>"; };
@@ -390,8 +394,9 @@
 			isa = PBXGroup;
 			children = (
 				5D8FA2C52A48243E0079F260 /* AnimationReader.swift */,
-				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
+				5DCD27C82A9B6C1700778980 /* Constants.swift */,
 				5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */,
+				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
 			);
 			path = snd_fw_dtnk_common;
 			sourceTree = "<group>";
@@ -650,6 +655,7 @@
 				5D8FA3132A48281F0079F260 /* PlayerView.swift */,
 				5D8FA3152A48282E0079F260 /* RateView.swift */,
 				5D8FA3172A4828420079F260 /* TableView.swift */,
+				5DCD27C62A9593A700778980 /* GameBotView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -840,6 +846,7 @@
 				5D8FA3202A4828A60079F260 /* GameResultView.swift in Sources */,
 				5D8FA2B42A4823360079F260 /* Color.swift in Sources */,
 				5D8FA2D82A48251B0079F260 /* ViewComponents.swift in Sources */,
+				5DCD27C92A9B6C1700778980 /* Constants.swift in Sources */,
 				5D8FA2DE2A4825570079F260 /* Vibrate.swift in Sources */,
 				5D8FA2B82A4823660079F260 /* GamePhase.swift in Sources */,
 				5D8FA2A62A48219A0079F260 /* HomeState.swift in Sources */,
@@ -857,6 +864,7 @@
 				5D51C05F2A793CED00E59A69 /* GameFriendEventController.swift in Sources */,
 				5D8FA2A02A4821630079F260 /* GameLogicState.swift in Sources */,
 				5D8FA2AC2A4821CB0079F260 /* SplashState.swift in Sources */,
+				5DCD27C72A9593A800778980 /* GameBotView.swift in Sources */,
 				5D8FA2F22A4826830079F260 /* OptionView.swift in Sources */,
 				5D8FA2F02A4826500079F260 /* GameSettingView.swift in Sources */,
 				5DDB61F02A62609600EB03F7 /* GameUIState.swift in Sources */,

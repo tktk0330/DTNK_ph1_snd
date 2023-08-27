@@ -36,6 +36,7 @@ class FirebaseManager {
             "gameNum": item.gameNum,
             "gameTarget": item.gameTarget,
             "gamePhase": item.gamePhase.rawValue,
+            "gamevsInfo": item.gamevsInfo.rawValue,
             "deck": deckdata,
             "table": item.table,
             "jorker": item.joker,
@@ -72,7 +73,9 @@ class FirebaseManager {
                   let gameData = gameInfoDict.values.first,
                   let gameID = gameData["gameID"] as? String,
                   let gameNum = gameData["gameNum"] as? Int,
+                  let _ = gameData["gamevsInfo"] as? Int,
                   let gameTarget = gameData["gameTarget"] as? Int,
+
                   let deckDict = gameData["deck"] as? [[String: Int]]
             else {
                 return
@@ -87,6 +90,7 @@ class FirebaseManager {
                 gameID: gameID,
                 gameNum: gameNum,
                 gameTarget: gameTarget,
+                gamevsInfo: .vsFriend,
                 deck: cardIds)
             completion(gameState)
         }
@@ -293,6 +297,32 @@ class FirebaseManager {
         }
     }
 
+    /**
+     RateUpCardのセット
+     */
+    func setRateUpCard(rateUpCard: String, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("rateUpCard").setValue(rateUpCard) { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     RateUpCardの取得（リアルタイム）
+     */
+    func observeRateUpCard(completion: @escaping (String?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("rateUpCard")
+        ref.observe(.value) { (snapshot) in
+            guard let currentplayerIndex = snapshot.value as? String else {
+                print("Could not cast snapshot value to an integer")
+                return
+            }
+            completion(currentplayerIndex)
+        }
+    }
     
     /**
      currentPlayerIndexのセット
@@ -351,7 +381,7 @@ class FirebaseManager {
     /**
      ChallengeAnserの取得（リアルタイム）
      */
-    func observeChallengeAnswer(completion: @escaping ([ChallengeAnswer?]) -> Void) {
+    func observeChallengeAnswer(completion: @escaping ([ChallengeAnswer]) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let challengeAnswerRef = gameInfoRef.child("challengeAnswer")
         challengeAnswerRef.observe(.value) { (snapshot) in
@@ -359,11 +389,11 @@ class FirebaseManager {
                 print("Could not cast snapshot value to [Int]")
                 return
             }
-            let answers = rawValues.map { ChallengeAnswer(rawValue: $0) }
+            let answers = rawValues.compactMap { ChallengeAnswer(rawValue: $0) }
             completion(answers)
         }
     }
-    
+
     /**
      NextGameAnnounsのセット
      */
@@ -380,7 +410,7 @@ class FirebaseManager {
     /**
      NextGameAnnounsの取得（リアルタイム）
      */
-    func observeNextGameAnnouns(completion: @escaping ([NextGameAnnouns?]) -> Void) {
+    func observeNextGameAnnouns(completion: @escaping ([NextGameAnnouns]) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let nextGameAnnounsRef = gameInfoRef.child("nextGameAnnouns")
         nextGameAnnounsRef.observe(.value) { (snapshot) in
@@ -388,7 +418,7 @@ class FirebaseManager {
                 print("Could not cast snapshot value to [Int]")
                 return
             }
-            let answers = rawValues.map { NextGameAnnouns(rawValue: $0) }
+            let answers = rawValues.compactMap { NextGameAnnouns(rawValue: $0) }
             completion(answers)
         }
     }
@@ -767,5 +797,6 @@ struct GameState {
     let gameID: String
     let gameNum: Int
     let gameTarget: Int
+    let gamevsInfo: vsInfo
     let deck: [CardId]
 }

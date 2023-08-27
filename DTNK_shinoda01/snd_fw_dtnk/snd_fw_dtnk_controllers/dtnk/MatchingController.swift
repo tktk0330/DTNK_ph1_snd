@@ -58,16 +58,37 @@ class MatchingController {
     }
     
     /**
+     vs Bot
+     */
+    func onTapStartBot() {
+        
+        
+        
+    }
+    
+    /**
      vsBot
      */
     func onRequest() {
         // プレイヤーをUIへ表示
         appState.matching.message = "ゲームを開始します"
         appState.matching.players = BotCreate().initialplayers()
+        
+        
+        // TODO: Player_fnにするための設定　直す
+        var quick:[Player_f] = []
+        for matchingplayer in appState.matching.players {
+            quick.append(Player_f(id: matchingplayer.id, side: matchingplayer.side, name: matchingplayer.name, icon_url: matchingplayer.icon_url))
+        }
+        
+        appState.gameUIState.deck = GameRule.initialDeck.shuffled()
+        print(appState.gameUIState.deck.count)
+        appState.gameUIState.gamevsInfo = .vsBot
+        
         // メインゲーム画面へ
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // gameUiStateにプレイヤーをセット
-            appState.gameUiState.players = appState.matching.players
+            appState.gameUIState.players = quick
             Router().pushBasePage(pageId: .dtnkMain)
         }
     }

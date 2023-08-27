@@ -86,19 +86,16 @@ class GameObserber {
         guard checkHost() else {
             return
         }
-
-        fbms.moveTopCardToTable() { cardInt in
+        fbms.moveTopCardToTable() { [self] cardInt in
             if let cardId = CardId(rawValue: cardInt!) {
                 // レートカードの場合
                 if cardId.rate()[0] == 50 {
-                    
                     // アナウンス処理
-                    
-                    // TODO: アナウンス処理終わったらに変更
-                    // 2秒後にfirstCard関数を再実行
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        self.firstCard()
-                    }
+                    let rateUpCard = cardId.imageName()
+                    fbms.setRateUpCard(rateUpCard: rateUpCard) { resut in }
+                } else {
+                    //　決定されたらmainに
+                    game.gamePhase = .main
                 }
             } else {
             }
@@ -117,7 +114,7 @@ class GameObserber {
         let dtnkIndex = game.dtnkPlayerIndex
         // 参加者を取得 [0,2,3]
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
-            return value!.rawValue > 1 ? index : nil
+            return value.rawValue > 1 ? index : nil
         }
         // 次のIndexを決める 3
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)

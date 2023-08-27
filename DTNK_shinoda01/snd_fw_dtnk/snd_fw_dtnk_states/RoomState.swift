@@ -30,7 +30,7 @@ class RoomState: ObservableObject {
                         // 参加に成功した場合の処理
                         print("参加成功")
                         // Matchingへ
-                        RoomController().moveMatchingView()
+                        GameEventController().moveMatchingView(vsInfo: 02)
                     } else {
                         // 参加に失敗した場合の処理
                         error_message = "参加失敗"

@@ -102,7 +102,7 @@ struct RoomView: View {
                         room.roomData = roomData
                         print("Room found: \(roomData)")
                         // マッチングへ
-                        RoomController().moveMatchingView()
+                        GameEventController().moveMatchingView(vsInfo: 02)
                         
                     } else {
                         message = "erroer"
