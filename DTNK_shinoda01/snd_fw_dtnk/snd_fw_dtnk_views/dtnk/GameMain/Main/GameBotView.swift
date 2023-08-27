@@ -72,7 +72,7 @@ struct GameBotView: View {
                     // testようにボタンとして動かしておく
                     Button(action: {
                         // dtnk
-                        GameFriendEventController().dtnk(Index: myside, dtnkPlayer: game.players[myside])
+                        GameBotController().dtnk(Index: myside)
                     }) {
                         // icon
                         // TODO: 磨き上げ
@@ -154,6 +154,26 @@ struct GameBotView: View {
                     .id(game.rateUpCard)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
+            }
+            Group {
+                // DTNK View
+                if game.gamePhase == .dtnk {
+                    DTNKView(text: "DOTENKO")
+                }
+                // チャレンジ可否ポップ
+                if game.gamePhase == .q_challenge {
+                    ChallengePopView(Index: myside, vsInfo: game.gamevsInfo!)
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+                        .transition(.move(edge: .top))
+                        .animation(.default, value: game.gamePhase == .q_challenge)
+                }
+                if game.gamePhase == .challenge {
+                    MovingImage()
+                }
+                if game.gamePhase == .decisionrate {
+                    DecisionScoreView()
+                }
+
             }
 
 

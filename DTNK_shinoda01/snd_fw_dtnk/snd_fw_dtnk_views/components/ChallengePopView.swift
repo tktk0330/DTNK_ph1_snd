@@ -2,13 +2,12 @@
  チャレンジ可否ポップアップ
  */
 
-
 import SwiftUI
-
 
 struct ChallengePopView: View {
     
-    let index: Int
+    let Index: Int
+    let vsInfo: vsInfo
 
     var body: some View {
         GeometryReader { geo in
@@ -26,28 +25,34 @@ struct ChallengePopView: View {
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.35 )
 
             
+            // 参加可否通知を送る
             HStack(spacing: 20) {
                 
                 Button(action: {
-                    // 参加可否通知を送る
-                    GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .nochallenge)
+                    if vsInfo == .vsFriend {
+                        GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .nochallenge)
+                    } else {
+                        GameBotController().moveChallenge(Index: Index, ans: .nochallenge)
+                    }
                 }) {
                     Btnaction(btnText: "辞退", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                 }
                 
                 Button(action: {
-                    // 参加可否通知を送る
-                    GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                    if vsInfo == .vsFriend {
+                        GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                    } else {
+                        GameBotController().moveChallenge(Index: Index, ans: .challenge)
+                    }
                 }) {
                     Btnaction(btnText: "参加", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                 }
             }
             .position(x: geo.size.width / 2, y: geo.size.height * 0.75)
+            
         }
         .frame(width: 350, height: 350)
-        .background(
-            Color.black.opacity(0.85)
-            )
+        .background(Color.black.opacity(0.85))
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 10)

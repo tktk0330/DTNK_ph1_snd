@@ -114,7 +114,7 @@ class GameObserber {
         let dtnkIndex = game.dtnkPlayerIndex
         // 参加者を取得 [0,2,3]
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
-            return value!.rawValue > 1 ? index : nil
+            return value.rawValue > 1 ? index : nil
         }
         // 次のIndexを決める 3
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
