@@ -15,6 +15,7 @@ struct GameInfoModel {
     let gameTarget: Int
     // ゲーム状態を示す
     var gamePhase: GamePhase = .dealcard
+    var gamevsInfo: vsInfo = .vsFriend
     // deck
     var deck: [CardId] = GameRule.initialDeck.shuffled()
     // table

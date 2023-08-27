@@ -187,6 +187,23 @@ extension CardId {
         }
     }
 
+    func suit() -> Suit {
+        switch self {
+        case .spade1, .spade2, .spade3, .spade4, .spade5, .spade6, .spade7, .spade8, .spade9, .spade10, .spade11, .spade12, .spade13:
+            return .spade
+        case .heart1, .heart2, .heart3, .heart4, .heart5, .heart6, .heart7, .heart8, .heart9, .heart10, .heart11, .heart12, .heart13:
+            return .heart
+        case .diamond1, .diamond2, .diamond3, .diamond4, .diamond5, .diamond6, .diamond7, .diamond8, .diamond9, .diamond10, .diamond11, .diamond12, .diamond13:
+            return .diamond
+        case .club1, .club2, .club3, .club4, .club5, .club6, .club7, .club8, .club9, .club10, .club11, .club12, .club13:
+            return .club
+
+        case .blackJocker, .whiteJocker:
+            return .all
+        case .back:
+            return .all
+        }
+    }
 
     
     //　手札で取りうる値

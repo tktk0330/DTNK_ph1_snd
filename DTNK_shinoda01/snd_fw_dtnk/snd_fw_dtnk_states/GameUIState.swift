@@ -1,5 +1,6 @@
-
-
+/**
+ Game State
+ */
 
 import SwiftUI
 
@@ -11,10 +12,12 @@ class GameUIState: ObservableObject {
     @Published var gameNum: Int = 1
     // TargetGame
     @Published var gameTarget: Int = 1
+    // vsInfo
+    @Published var gamevsInfo: vsInfo?
     // ゲーム状態を示す
     @Published var gamePhase: GamePhase = .dealcard {
         didSet {
-            gamePhaseAction(phase: gamePhase)
+            gamePhaseAction(vsInfo: gamevsInfo!, phase: gamePhase)
         }
     }
     @Published var deck: [CardId] = []
@@ -23,15 +26,22 @@ class GameUIState: ObservableObject {
     @Published var jorker: Int = 2
     @Published var players: [Player_f] = []
     @Published var myside: Int = 99
-    // 出さないことを通知
     // 現在プレイしている人
-    @Published var currentPlayerIndex: Int = 99
+    @Published var currentPlayerIndex: Int = 99 {
+        didSet {
+            if gamevsInfo == .vsBot {
+                botTurnAction(Index: currentPlayerIndex)
+            }
+        }
+    }
     // 最後にカードを出した人
     @Published var lastPlayerIndex: Int = 99
     // どてんこした人
     @Published var dtnkPlayer: Player_f?
     // どてんこした人のIndex
     @Published var dtnkPlayerIndex: Int = 99
+    // 初め出せるか通知
+    @Published var firstAnswers: [FirstAnswers] = Array(repeating: FirstAnswers.initial, count: 4)
     // チャレンジ通知
     @Published var challengeAnswers: [ChallengeAnswer?] = []
     // 完了通知
@@ -48,57 +58,125 @@ class GameUIState: ObservableObject {
     @Published var losers: [Player_f] = []
     // ゲームスコア
     @Published var gameScore: Int = 1
-    
+    // レートアップカード
+    @Published var rateUpCard: String? = nil
+
     // FB必要なし
     // カウンター
     @Published var counter: Bool = false
     @Published var startFlag: Bool = false
+    @Published var AnnounceFlg = false // 実行中 true 非表示中　false
+    @Published var turnFlg: Int = 0 // 0: canDraw 1: canPass
 
-    
-    func gamePhaseAction(phase: GamePhase) {
-        switch phase {
-            
-        case .dealcard:
-            GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
-                startFlag = true
+
+    /**
+     Botのターンを回す
+     */
+    func botTurnAction(Index: Int) {
+        switch Index {
+        case 1, 2, 3:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                GameBotController().botAction(Index: Index) { result in }
             }
-        case .gamenum:
-            print(phase)
-        case .countdown:
-            print(phase)
-        case .ratefirst:
-            print(phase)
-        case .gamefirst:
-            print(phase)
-        case .decisioninitialplayer:
-            print(phase)
-        case .gamefirst_sub:
-            print(phase)
-        case .main:
-            print(phase)
-        case .dtnk:
-            print(phase)
-        case .burst:
-            print(phase)
-        case .revenge:
-            print(phase)
-        case .q_challenge:
-            print(phase)
-        case .challenge:
-            GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
-        case .decisionrate_pre:
-            GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
-        case .decisionrate:
-            print(phase)
-        case .result:
-            print(phase)
-        case .other:
-            print(phase)
-        case .waiting:
-            print(phase)
+        case 0:
+            break;
+        default:
+            break;
         }
     }
-
+    
+    /**
+     Phaseの操作　bot Friendで分ける
+     */
+    func gamePhaseAction(vsInfo: vsInfo, phase: GamePhase) {
+        switch vsInfo {
+        case .vsBot:
+            switch phase {
+            case .dealcard:
+                // カード配る
+                GameBotController().dealCards() { [self] result in
+                    if result {
+                        startFlag = true
+                    }
+                }
+            case .gamenum:
+                print(phase)
+            case .countdown:
+                print(phase)
+            case .ratefirst:
+                GameBotController().firstCard()
+            case .gamefirst:
+                GameBotController().BotGameInit()
+            case .decisioninitialplayer:
+                print(phase)
+            case .gamefirst_sub:
+                print(phase)
+            case .main:
+                print(phase)
+            case .dtnk:
+                print(phase)
+            case .burst:
+                print(phase)
+            case .revenge:
+                print(phase)
+            case .q_challenge:
+                print(phase)
+            case .challenge:
+                print(phase)
+            case .decisionrate_pre:
+                print(phase)
+            case .decisionrate:
+                print(phase)
+            case .result:
+                print(phase)
+            case .other:
+                print(phase)
+            case .waiting:
+                print(phase)
+            }
+        case .vsFriend:
+            switch phase {
+            case .dealcard:
+                GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
+                    startFlag = true
+                }
+            case .gamenum:
+                print(phase)
+            case .countdown:
+                print(phase)
+            case .ratefirst:
+                print(phase)
+            case .gamefirst:
+                print(phase)
+            case .decisioninitialplayer:
+                print(phase)
+            case .gamefirst_sub:
+                print(phase)
+            case .main:
+                print(phase)
+            case .dtnk:
+                print(phase)
+            case .burst:
+                print(phase)
+            case .revenge:
+                print(phase)
+            case .q_challenge:
+                print(phase)
+            case .challenge:
+                GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
+            case .decisionrate_pre:
+                GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
+            case .decisionrate:
+                print(phase)
+            case .result:
+                print(phase)
+            case .other:
+                print(phase)
+            case .waiting:
+                print(phase)
+            }
+        }
+    }
 }
 
 var cards: [N_Card] = [

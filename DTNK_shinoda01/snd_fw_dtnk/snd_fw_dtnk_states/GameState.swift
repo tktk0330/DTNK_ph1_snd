@@ -21,15 +21,11 @@ class GameUiState: ObservableObject {
             deck.appendjorker(Index: jorker)
         }
     }
-
+    
     // Game数
     @Published var gamenum: Int = 1
     // FieldCard
-    @Published var table: [Card] = [] {
-        didSet{
-            CheckBotDtnk()
-        }
-    }
+    @Published var table: [Card] = []
     // 裏のカードたち
     @Published var decisionCards: [Card] = []
     // 最後に出したカード
@@ -94,7 +90,7 @@ class GameUiState: ObservableObject {
                     self.gamePhase = quickPhase!
                 }
             }
-
+            
         }
     }
     
@@ -168,7 +164,7 @@ class GameUiState: ObservableObject {
             changedrevenge()
         case .waiting:
             print(phase)
-
+            
         }
     }
     
@@ -186,7 +182,7 @@ class GameUiState: ObservableObject {
     
     func changedgamefirst() {
         // Botの初期アクション
-        botSyotenko()
+        //        botSyotenko()
     }
     
     func changeddecisioninitialplayer() {
@@ -196,7 +192,7 @@ class GameUiState: ObservableObject {
             gamePhase = .main
             // ペラペラが終わったら決まったプレイヤから始める
             let index = (currentPlayerIndex - 1 + 4) % 4
-            botTurn(Index: index)
+            //            botTurn(Index: index)
         }
     }
     
@@ -292,42 +288,42 @@ class GameUiState: ObservableObject {
         print("Bot \(Index) DOTENKO")
     }
     
-
-        
+    
+    
     /**
      指定したIndexがカードを合計が超えるまで引く
      */
     func drawIndex(Index: Int) {
-        var handSum = 0
-        let tableValue = table.last!.cardid.number()
-        // 手札の数字の合計を計算
-        for card in players[Index].hand {
-            handSum += card.cardid.number()
-        }
-        if GameMainController().sameSum(card: players[Index].hand, tablelast: table.last!) {
-            // リベンジ処理
-            AnnounceLabel("REVENGE"){ [self] in
-                RevengeAction(Index: Index)
-            }
-            print("revenge")
-            return
-            
-        } else if  handSum < tableValue {
-            print("more")
-            
-        } else {
-            print("over")
-            moveToNextPlayer(Index: Index)
-            return
-            
-        }
-        // 1秒ごとにカードを引く処理
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-            if let card = deck.draw() {
-                players[Index].hand.append(card)
-            }
-            drawIndex(Index: Index)
-        }
+        //        var handSum = 0
+        //        let tableValue = table.last!.cardid.number()
+        //        // 手札の数字の合計を計算
+        //        for card in players[Index].hand {
+        //            handSum += card.cardid.number()
+        //        }
+        //        if GameMainController().sameSum(card: players[Index].hand, tablelast: table.last!) {
+        //            // リベンジ処理
+        //            AnnounceLabel("REVENGE"){ [self] in
+        //                RevengeAction(Index: Index)
+        //            }
+        //            print("revenge")
+        //            return
+        //
+        //        } else if  handSum < tableValue {
+        //            print("more")
+        //
+        //        } else {
+        //            print("over")
+        //            moveToNextPlayer(Index: Index)
+        //            return
+        //
+        //        }
+        //        // 1秒ごとにカードを引く処理
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+        //            if let card = deck.draw() {
+        //                players[Index].hand.append(card)
+        //            }
+        //            drawIndex(Index: Index)
+        //        }
     }
     
     /**
@@ -402,7 +398,7 @@ class GameUiState: ObservableObject {
             let otherPlayers = players.filter { $0.side != burstPlayer!.side }
             winers.append(contentsOf: otherPlayers)
         }
-          else {
+        else {
             //　勝敗決定
             winers.append(dtnkPlayer!)
             loosers.append(lastPlayCardsPlayer!)
@@ -468,18 +464,6 @@ class GameUiState: ObservableObject {
      初期操作：カードを配る
      */
     func dealCards(completion: @escaping (Bool) -> Void) {
-//        for j in 0..<2 {
-//            for i in 0..<players.count {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i * 2 + j) * 0.3) {
-//                    if let card = self.deck.draw() {
-//                        self.players[i].hand.append(card)
-//                    }
-//                    if i == self.players.count - 1 && j == 1 {
-//                        completion(true)
-//                    }
-//                }
-//            }
-//        }
         
         for i in 0..<players.count*2 {
             DispatchQueue.main.asyncAfter(deadline: .now() + (Double(i) * 0.2)) { [self] in
@@ -495,21 +479,21 @@ class GameUiState: ObservableObject {
      最初のカードを配置する + 特定数字だったらレート上げる
      */
     func firstCard() {
-            var cards: [Card] = []
-            if let card = self.deck.draw() {
-                cards.append(card)
-                self.table.append(contentsOf: cards)
-                if card.cardid.rate()[0] == 50 {
-                    self.magunigication = 2 * self.magunigication
-                    AnnounceLabel("RATE UP"){
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.firstCard()
-                        }
+        var cards: [Card] = []
+        if let card = self.deck.draw() {
+            cards.append(card)
+            self.table.append(contentsOf: cards)
+            if card.cardid.rate()[0] == 50 {
+                self.magunigication = 2 * self.magunigication
+                AnnounceLabel("RATE UP"){
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.firstCard()
                     }
-                } else {
-                    gamePhase = .gamefirst
                 }
+            } else {
+                gamePhase = .gamefirst
             }
+        }
     }
     
     /**
@@ -576,398 +560,4 @@ class GameUiState: ObservableObject {
         deck.shuffle()
         print("デッキが再構築されました")
     }
-
-    
-    /*
-     パスする
-     */
-    func pass() {
-        if players[currentPlayerIndex].hand.count != 7{
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(1.0)){ [self] in
-                players[currentPlayerIndex].selectedCards = []
-                currentPlayerIndex = (currentPlayerIndex + 1) % players.count
-                progress = "\(players[currentPlayerIndex].name)の番です"
-                // Draw flag riset
-                canDraw = true
-                canTurn = true
-            }
-            
-        } else {
-            // Burst
-            
-            burstPlayer = players[currentPlayerIndex]
-            currentPlayerIndex = burstPlayerIndex
-            self.gamePhase = .burst
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) {
-                self.gamePhase = .decisionrate_pre
-            }
-        }
-    }
-    
-
-    /**
-     カードを出す
-     @Index : Int　出すプレイヤー
-     @cards : [Card]　選択されたカード
-     */
-    func playCards(Index: Int, cards: [Card]) {
-        
-//        withAnimation {
-            let cardsToPlay = cards
-            if cardsToPlay.isEmpty {
-                print("カードを選択してください")
-                return
-            }
-            if !table.isEmpty {
-                //出せるか判定
-                if !GameMainController().isValid(cardsToPlay, tablelast: table.last!) {
-                    progress = "選択したカードは出せません"
-                    return
-                }
-            }
-        
-            if gamePhase == .main || gamePhase == .gamefirst {
-                if currentPlayerIndex == Index || currentPlayerIndex == 99 {
-                    players[Index].hand.removeAll(where: { cardsToPlay.contains($0) })
-                    //　カードが出せる場合
-//                    withAnimation(.easeInOut(duration: 0.5)) {
-                        table.append(contentsOf: cardsToPlay)
-//                    }
-                    lastPlayedCards = cardsToPlay
-                    lastPlayCardsPlayer = players[Index]
-                    currentPlayerIndex = Index
-                    pass()
-                    if !isfirstplayer {
-                        isfirstplayer = true
-                        gamePhase = .main
-                    }
-                    botTurn(Index: 0)
-                }
-                
-            }
-//        }
-    }
-    
-    /**
-     どてんこできるか
-     */
-    func dtnkJudge(playerAllCards: [Card], table: [Card]) -> Bool{
-        var dtnkjudge = false
-        if gamePhase == .gamefirst || gamePhase == .gamefirst_sub || gamePhase == .main {
-            if !table.isEmpty {
-                dtnkjudge = GameMainController().sameSum(card: playerAllCards, tablelast: table.last!)
-            }
-        }
-        return dtnkjudge
-    }
-    
-    //**********************************************************************************
-    // About BOT Action
-    //**********************************************************************************
-        
-    /**
-     Botどてんこ
-     */
-    func CheckBotDtnk() {
-        if gamePhase == .main {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.0...3.0)) { [self] in
-                if lastPlayCardsPlayer?.id != players[1].id {
-                    if let lastCard = table.last, let _ = players[1].hand.first {
-                        if BotController().BotDtnkAct(tabelelastcard: lastCard, hand: players[1].hand) {
-                            dtnkevent(Index: 1)
-                        }
-                    }
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.0...3.0)) { [self] in
-                if lastPlayCardsPlayer?.id != players[2].id {
-                    if let lastCard = table.last, let _ = players[2].hand.first {
-                        if BotController().BotDtnkAct(tabelelastcard: lastCard, hand:  players[2].hand) {
-                            dtnkevent(Index: 2)
-                        }
-                    }
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.0...3.0)) { [self] in
-                if lastPlayCardsPlayer?.id != players[3].id {
-                    if let lastCard = table.last, let _ = players[3].hand.first {
-                        if BotController().BotDtnkAct(tabelelastcard: lastCard, hand: players[3].hand) {
-                            dtnkevent(Index: 3)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     Botの初期アクション
-     */
-    func botSyotenko() {
-        // Bot Indexを用意
-        var numbers = [1, 2, 3]
-        numbers.shuffle()
-        for i in 0..<numbers.count {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                // まだ誰も出していない場合
-                if !self.isfirstplayer {
-                    // 初めのカードを出せるか判定
-                    self.botJudge(Index: numbers[i], completion: {isCompleted in
-                        // 出せた場合
-                        if isCompleted {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 ) {
-                                // 出したBot Indexを私残りのBotを回す
-                                self.botTurn(Index: numbers[i])
-                            }
-                        }
-                        //　出せなかった
-                        else{
-                        }
-                    })
-                }
-            }
-        }
-    }
-    
-    /**
-     最初にカードが出せるか判定
-     ＠Index ：　Int  カードが出せるか試みるプレイヤー
-     */
-    func botJudge(Index: Int, completion: @escaping (Bool) -> Void) {
-        let bot = self.players[Index]
-        let playableCardsVer1 =  BotController().playableCard(bot: bot, mytable: table)
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 1.0...3.0)) { [self] in
-            if !isfirstplayer && !gamedtnk && BotController().BotDtnkAct(tabelelastcard: table.last!, hand: players[Index].hand){
-                // Bot SYOTENKO
-                dtnkevent(Index: Index)
-            }
-            //出せるカードがある時
-            else if !playableCardsVer1.isEmpty {
-                DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.0...0.5)) {
-//                    withAnimation{
-                        if !self.isfirstplayer  {
-                            // カードを出す
-                            let playedCard = playableCardsVer1.randomElement()!
-                            if let index = bot.hand.firstIndex(of: playedCard) {
-                                if !self.isfirstplayer && !self.gamedtnk {
-                                    self.isfirstplayer = true
-//                                    withAnimation{
-                                        self.table.append(playedCard)
-//                                    }
-                                    bot.hand.remove(at: index)
-                                    self.lastPlayCardsPlayer = self.players[Index]
-                                    print("Bot\(Index) played first card")
-                                    // 次のプレイヤーに変更
-                                    self.currentPlayerIndex = (Index + 1) % self.players.count
-                                    print("next \(self.currentPlayerIndex)")
-                                    self.progress = "\(self.players[self.currentPlayerIndex].name)の番です"
-                                    self.gamePhase = .main
-                                    completion(true)
-                                } else {
-                                    print("Already played.")
-                                    completion(false)
-                                }
-                            }
-                        } else {
-                            print("Already played")
-                            completion(false)
-                        }
-//                    }
-                }
-            } else {
-                print("Bot\(Index)　don't play first")
-                initialAction[Index] = false
-                completion(false)
-            }
-        }
-    }
-    
-    /**
-     botを回す(first)
-     @Index : int　firstplayer　最初にカードを出したプレイヤー
-     */
-    func botTurn(Index: Int) {
-        var i = Index
-        while i < players.count-1 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i-Index+1)*3) {
-                print("\(self.currentPlayerIndex)が動きます")
-                self.botDoAction()
-            }
-            i += 1
-        }
-    }
-    
-    /**
-     botの操作実行
-     */
-    func botDoAction() {
-        if gamePhase == .main || gamePhase == .gamefirst || gamePhase == .gamefirst_sub {
-            let botIndex = currentPlayerIndex
-            // 処理を待たせるためのディレイ
-            let delay = 0.5
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [self] in
-                // 前のボットの操作が完了した後に、次のボットの操作を実行する
-                if botIndex == 1 {
-                    self.BotAction(Index:botIndex, tablelast: table, completion: { _ in
-                    })
-                } else if botIndex == 2 {
-                    self.BotAction(Index:botIndex, tablelast: table, completion: { _ in
-                    })
-                } else if botIndex == 3 {
-                    self.BotAction(Index:botIndex, tablelast: table, completion: { _ in
-                    })
-                }
-            }
-        }
-    }
-    
-    /**
-     botがいずれかの操作を実行する
-     @Index : Int　Pyaler Index
-     return [Card]
-     */
-
-    func BotAction(Index: Int, tablelast: [Card], completion: @escaping (Bool) -> Void){
-        print("Bot \(currentPlayerIndex)’s Turn ")
-        
-        let bot = players[Index]
-        let fisrstCanPlay = BotController().playableCards(bot: bot, mytable: tablelast)
-        
-        if gamePhase == .gamefirst || gamePhase == .gamefirst_sub || gamePhase == .main {
-            if !fisrstCanPlay.isEmpty {
-                let root =  Double.random(in: 0.0...2.0)
-                // 出す　or　引く→出す or パス
-                if root < 1.0 {
-                    // カードを出す
-                    let playedCard = fisrstCanPlay.randomElement()!
-                    if !self.gamedtnk {
-//                        withAnimation{
-                            for card in playedCard {
-                                if let index = bot.hand.firstIndex(where: { $0 == card }) {
-                                    bot.hand.remove(at: index)
-                                }
-                            }
-                            table.append(contentsOf: playedCard)
-//                        }
-                        
-                        print("Bot\(currentPlayerIndex) played")
-                        self.lastPlayCardsPlayer = self.players[Index]
-                        self.pass()
-                        print("Next Turn")
-                        if !isfirstplayer {
-                            isfirstplayer = true
-                        }
-
-                        completion(true)
-                    } else {
-                        print("Someone has dotenko")
-                    }
-                } else {
-                    // 引いてからカードを出す
-                    if !gamedtnk {
-                        self.drawCard()
-                        print("I can get it out, but I pulled it.")
-                    } else {
-                        print("Someone has dotenko")
-                    }
-                    
-                    let secondCanPlay =  BotController().playableCards(bot: bot, mytable: tablelast)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
-                        if !secondCanPlay.isEmpty {
-                            let playedCard = secondCanPlay.randomElement()!
-                            if !self.gamedtnk {
-//                                withAnimation{
-                                    for card in playedCard {
-                                        if let index = bot.hand.firstIndex(where: { $0 == card }) {
-                                            bot.hand.remove(at: index)
-                                        }
-                                    }
-                                    table.append(contentsOf: playedCard)
-//                                }
-                                
-                                print("Bot\(currentPlayerIndex) played")
-                                self.lastPlayCardsPlayer = self.players[Index]
-                                self.pass()
-                                print("Next Turn")
-                                if !isfirstplayer {
-                                    isfirstplayer = true
-                                }
-
-                                completion(true)
-                            } else {
-                                print("Someone has dotenko")
-                            }
-                        }
-                    }
-                }
-            } else {
-                // 初めに出せるカードがない  引く→パス　引く→出す
-                // draw
-                if !self.gamedtnk {
-                    drawCard()
-                    print("I have no cards to play, so I'll draw.")
-                } else {
-                    print("Someone has dotenko")
-                }
-                
-                let reCanPlay =  BotController().playableCards(bot: bot, mytable: table)
-                if !reCanPlay.isEmpty {
-                    let root =  Double.random(in: 0.0...2.0)
-                    if root < 1.5 {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
-                            let playedCard = reCanPlay.randomElement()!
-                            if !self.gamedtnk {
-//                                withAnimation{
-                                    for card in playedCard {
-                                        if let index = bot.hand.firstIndex(where: { $0 == card }) {
-                                            bot.hand.remove(at: index)
-                                        }
-                                    }
-                                    table.append(contentsOf: playedCard)
-//                                }
-                                
-                                print("Bot\(self.currentPlayerIndex) was able to play")
-                                self.lastPlayCardsPlayer = self.players[Index]
-                                self.pass()
-                                print("Next Turn")
-                                completion(true)
-                            } else {
-                                print("Someone has dotenko")
-                            }
-                        }
-                    } else {
-                        // 出せるようになったけどpass
-                        self.pass()
-                        print("can play but I'll pass")
-                        print("Next Turn")
-                        completion(true)
-                    }
-                } else {
-                   /*
-                    if bot.hand.count == 7 && reCanPlay.isEmpty{
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 ) { [self] in
-                            self.burstPlayer = players[currentPlayerIndex]
-                            currentPlayerIndex = burstPlayerIndex
-                            self.gamePhase = .burst
-                        }
-                       
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5 ) {
-                            self.gamePhase = .decisionrate_pre
-                            completion(true)
-                        }
-                    }else{*/
-                        //　引いても出せない場合　パス
-                        self.pass()
-                        print("can not play so I'll pass")
-                        print("Next Turn")
-                        completion(true)
-                        
-                    
-                }
-            }
-        }
-    }
-    
 }

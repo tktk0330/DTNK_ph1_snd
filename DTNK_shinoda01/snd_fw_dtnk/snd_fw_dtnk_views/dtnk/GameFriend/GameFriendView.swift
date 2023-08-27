@@ -1,5 +1,6 @@
-
-
+/**
+ 友達対戦　メイン画面
+ */
 
 import SwiftUI
 
@@ -20,15 +21,8 @@ struct GameFriendView: View {
     var body: some View {
         GeometryReader { geo in
             Group {
-                // 仮想View 初期カード設置
-                Text("").onReceive(game.$counter) { newValue in
-                    if newValue {
-                        gameObserber.firstCard()
-                    }
-                }
-                
                 // ForcusAnimation
-                if game.currentPlayerIndex != 99 {
+                if game.currentPlayerIndex != 99 && (game.gamePhase == .main) {
                     TargetPlayerView()
                         .position(x: TargetPlayerView().focusPosition(side: game.currentPlayerIndex).x,
                                   y: geo.size.height * TargetPlayerView().focusPosition(side: game.currentPlayerIndex).y)
@@ -36,8 +30,25 @@ struct GameFriendView: View {
                 }
                 
                 // ScoreBar
-                ScoreBar()
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+                Group {
+                    Text(String(game.players[myside].score))
+                        .modifier(PlayerScoreModifier())
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
+                    
+                    Text(String(game.players[(myside + 1) % game.players.count].score))
+                        .modifier(PlayerScoreModifier())
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.60)
+                        .rotationEffect(Angle(degrees: 90))
+                    
+                    Text(String(game.players[(myside + 2) % game.players.count].score))
+                        .modifier(PlayerScoreModifier())
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.42)
+                                        
+                    Text(String(game.players[(myside + 3) % game.players.count].score))
+                        .modifier(PlayerScoreModifier())
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.60)
+                        .rotationEffect(Angle(degrees: -90))
+                }
             }
                         
             // Card Pool
@@ -55,25 +66,23 @@ struct GameFriendView: View {
             Group {
                 HStack(spacing: 15) {
                     
-                    // TODO: ボタンだしわけ
-//                    Button(action: {
-//                    }) {
-//                        Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
-//                    }
-                    
-                    Button(action: {
-                        fbms.drawCard(playerID: game.players[myside].id) { result in
-                                print("Draw")
-                            }
-                    }) {
-                        Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
+                    if game.turnFlg == 0 {
+                        Button(action: {
+                            GameFriendEventController().draw(playerID: game.players[myside].id, playerIndex: myside)
+                        }) {
+                            Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
+                        }
+                    } else {
+                        Button(action: {
+                            GameFriendEventController().pass(passPayerIndex: myside, playersCount: game.players.count)
+                        }) {
+                            Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+                        }
                     }
-                    
+                                        
                     // testようにボタンとして動かしておく
                     Button(action: {
-                        // count変数にする（人数変動対応）
-                        GameFriendEventController().pass(passPayerIndex: game.currentPlayerIndex, playersCount: 4)
-                        // stnk
+                        // dtnk
                         GameFriendEventController().dtnk(Index: myside, dtnkPlayer: game.players[myside])
                     }) {
                         // icon
@@ -101,27 +110,67 @@ struct GameFriendView: View {
             }
                                     
             Group {
-                // 広告用
-                Rectangle()
-                    .foregroundColor(Color.white.opacity(0.3))
-                    .frame(maxWidth: .infinity, maxHeight: 50)
-                    .background(Color.casinoGreen)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
-                
-                // Rate
-                RateView(gamenum: game.gameNum, rate: game.initialRate, magnification: game.ascendingRate)
-                    .background(Color.casinoGreen)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.09)
+                Group {
+                    // 広告用
+                    Rectangle()
+                        .foregroundColor(Color.white.opacity(0.3))
+                        .frame(maxWidth: .infinity, maxHeight: 50)
+                        .background(Color.casinoGreen)
+                        .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+                    
+                    // Rate
+                    RateView(gamenum: game.gameNum, rate: game.initialRate, magnification: game.ascendingRate)
+                        .background(Color.casinoGreen)
+                        .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.09)
+                }
+                Group {
+                    // ゲーム数アナウンス
+                    if game.gamePhase == .dealcard {
+                        GmaeNumAnnounce(gameNum: game.gameNum, gameTarget: game.gameTarget)
+                            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                    }
+                    // 開始ボタン
+                    if game.startFlag && !game.AnnounceFlg {
+                        Button(action: {
+                            game.startFlag = false
+                            fbms.setGamePhase(gamePhase: .countdown) { result in
+                            }
+                        }) {
+                            Text("Start")
+                                .font(.custom(FontName.font01, size: 30))
+                        }
+                        .buttonStyle(ShadowButtonStyle())
+                        .frame(width: 100, height: 100)
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+                    }
+                    // CountDown
+                    if game.gamePhase == .countdown {
+                        Countdown02View()
+                            .scaleEffect(2.0)
+                            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+                    }
+                    
+                    // 仮想View 初期カード設置
+                    Text("").onReceive(game.$counter) { newValue in
+                        if newValue {
+                            gameObserber.firstCard()
+                        }
+                    }
+                    // レートアップアナウンス
+                    if game.rateUpCard != nil {
+                        RateUpAnnounce(cardImage: game.rateUpCard!) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                gameObserber.firstCard()
+                                game.rateUpCard = nil
+                            }
+                        }
+                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                    }
+                }
                 
                 // DTNK View
                 if game.gamePhase == .dtnk {
                     DTNKView(text: "DOTENKO")
-                }
-                // CountDown
-                if game.gamePhase == .countdown {
-                    Countdown02View()
-                        .scaleEffect(2.0)
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
                 }
                 // チャレンジ可否ポップ
                 if game.gamePhase == .q_challenge {
@@ -136,7 +185,6 @@ struct GameFriendView: View {
                     MovingImage()
                 }
                                 
-//                if game.gamePhase == .decisionrate {
                 if appState.subState != nil && game.gamePhase == .decisionrate {
                     DecisionScoreView()
                 }
@@ -148,21 +196,7 @@ struct GameFriendView: View {
                 if game.gamePhase == .waiting {
                     WaitingView()
                 }
-
-                // 開始ボタン
-                if game.startFlag {
-                    Button(action: {
-                        game.startFlag = false
-                        fbms.setGamePhase(gamePhase: .countdown) { result in
-                        }
-                    }) {
-                        Text("Start")
-                            .font(.custom(FontName.font01, size: 30))
-                    }
-                    .buttonStyle(ShadowButtonStyle())
-                    .frame(width: 100, height: 100)
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-                }
+                
             }
         } .onAppear {
             // サイド設定
@@ -172,6 +206,7 @@ struct GameFriendView: View {
                 game.gameID = info!.gameID
                 game.gameNum = info!.gameNum
                 game.gameTarget = info!.gameTarget
+                game.gamevsInfo = info!.gamevsInfo
                 game.deck = info!.deck
                 FirebaseManager.shared.setIDs(roomID: room.roomData.roomID, gameID: info!.gameID)
                 // 情報取得
@@ -300,8 +335,25 @@ struct GameFriendView: View {
             game.winners = winners
             game.losers = losers
         }
+        fbms.observeRateUpCard() { cardsImage in
+            game.rateUpCard = cardsImage
+        }
     }
 }
+
+struct PlayerScoreModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(FontName.font01, size: 20))
+            .foregroundColor(Color.white)
+            .background(
+                Rectangle()
+                    .fill(Color.casinoShadow)
+                    .frame(width: UIScreen.main.bounds.width * 0.37, height: 23)
+            )
+    }
+}
+
 
 // TODO: 正しい場所へ
 struct N_Card: Equatable {
@@ -323,10 +375,13 @@ struct N_CardView: View {
             .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
             .offset(y: selectedCards.contains(card) ? -20 : 0)
             .onTapGesture {
-                if let index = selectedCards.firstIndex(of: card) {
-                    selectedCards.remove(at: index)
-                } else {
-                    selectedCards.append(card)
+                // 自分の手札のみTap可能
+                if case let .hand(playerIndex, _) = card.location, case playerIndex = appState.gameUIState.myside {
+                    if let idx = selectedCards.firstIndex(of: card) {
+                        selectedCards.remove(at: idx)
+                    } else {
+                        selectedCards.append(card)
+                    }
                 }
             }
     }
