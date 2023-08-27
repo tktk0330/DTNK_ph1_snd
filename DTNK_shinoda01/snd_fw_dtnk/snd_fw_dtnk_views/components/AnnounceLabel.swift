@@ -80,7 +80,10 @@ struct GmaeNumAnnounce: View {
     // アニメーションを制御する関数
     func startAnimation() {
         // 既にアニメーションが開始されていたら、再度実行しない
-        guard !animationStarted else { return }
+        guard !animationStarted else {
+            return
+            
+        }
         
         // アニメーション開始フラグをセット
         animationStarted = true

@@ -30,7 +30,6 @@ struct GameFriendView: View {
                 }
                 
                 // ScoreBar
-                // TODO: sideに設定
                 Group {
                     Text(String(game.players[myside].score))
                         .modifier(PlayerScoreModifier())
@@ -207,6 +206,7 @@ struct GameFriendView: View {
                 game.gameID = info!.gameID
                 game.gameNum = info!.gameNum
                 game.gameTarget = info!.gameTarget
+                game.gamevsInfo = info!.gamevsInfo
                 game.deck = info!.deck
                 FirebaseManager.shared.setIDs(roomID: room.roomData.roomID, gameID: info!.gameID)
                 // 情報取得
@@ -349,7 +349,7 @@ struct PlayerScoreModifier: ViewModifier {
             .background(
                 Rectangle()
                     .fill(Color.casinoShadow)
-                    .frame(width: 145, height: 23)
+                    .frame(width: UIScreen.main.bounds.width * 0.37, height: 23)
             )
     }
 }

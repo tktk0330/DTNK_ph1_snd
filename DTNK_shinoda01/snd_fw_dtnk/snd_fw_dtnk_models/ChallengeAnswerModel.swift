@@ -3,6 +3,16 @@
  */
 
 /**
+初め出せるか
+ */
+enum FirstAnswers: Int {
+    case initial = 0
+    case pass = 1
+    case other = 2
+}
+
+
+/**
 チャレンジするかしないか
  */
 enum ChallengeAnswer: Int {
