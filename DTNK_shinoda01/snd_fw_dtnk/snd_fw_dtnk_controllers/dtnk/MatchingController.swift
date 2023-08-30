@@ -142,7 +142,7 @@ class BotCreate {
         //ゲーム人数分botをセットする
         for i in 2...4 {
             let bot = allBots[i]
-            let player = Player(id: "", side: i, name: bot.name, icon_url: bot.icon_url)
+            let player = Player(id: "botId" + String(i), side: i, name: bot.name, icon_url: bot.icon_url)
             players.append(player)
         }
         return players

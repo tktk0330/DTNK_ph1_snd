@@ -121,6 +121,7 @@
 		5DCD27C22A8E4E6800778980 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C12A8E4E6800778980 /* WaitingView.swift */; };
 		5DCD27C72A9593A800778980 /* GameBotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C62A9593A700778980 /* GameBotView.swift */; };
 		5DCD27C92A9B6C1700778980 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C82A9B6C1700778980 /* Constants.swift */; };
+		5DCD27CB2A9C022D00778980 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27CA2A9C022D00778980 /* Log.swift */; };
 		5DDB61DD2A4C802300EB03F7 /* JoinPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DC2A4C802300EB03F7 /* JoinPopView.swift */; };
 		5DDB61DF2A4CF6E700EB03F7 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */; };
 		5DDB61E12A4D32EF00EB03F7 /* RoomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */; };
@@ -246,6 +247,7 @@
 		5DCD27C12A8E4E6800778980 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
 		5DCD27C62A9593A700778980 /* GameBotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBotView.swift; sourceTree = "<group>"; };
 		5DCD27C82A9B6C1700778980 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5DCD27CA2A9C022D00778980 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		5DDB61DC2A4C802300EB03F7 /* JoinPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinPopView.swift; sourceTree = "<group>"; };
 		5DDB61DE2A4CF6E700EB03F7 /* RoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomState.swift; sourceTree = "<group>"; };
 		5DDB61E02A4D32EF00EB03F7 /* RoomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomController.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 			isa = PBXGroup;
 			children = (
 				5D8FA2812A481EC70079F260 /* JSONSerializable.swift */,
+				5DCD27CA2A9C022D00778980 /* Log.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -845,6 +848,7 @@
 				5D8FA29C2A4821160079F260 /* TopController.swift in Sources */,
 				5D8FA2B22A4823040079F260 /* Card.swift in Sources */,
 				5D8FA2AE2A48229E0079F260 /* AccountUser.swift in Sources */,
+				5DCD27CB2A9C022D00778980 /* Log.swift in Sources */,
 				5D8FA3082A4827AA0079F260 /* DTNKView.swift in Sources */,
 				5D8FA2A82A4821A90079F260 /* MatchingState.swift in Sources */,
 				5D8FA2922A4820AC0079F260 /* HomeController.swift in Sources */,

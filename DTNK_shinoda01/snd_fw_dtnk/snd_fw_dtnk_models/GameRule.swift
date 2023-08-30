@@ -86,6 +86,9 @@ struct GameRule {
             .diamond11,
             .diamond12,
             .diamond13,
+            .whiteJocker,
+            .blackJocker,
+
         ]
     }
     

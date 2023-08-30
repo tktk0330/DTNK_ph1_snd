@@ -45,21 +45,21 @@ class GameBotController {
                 let random = Int.random(in: 0..<100)
                 
                 if random < 70  {
-                    print("① 出せるからすぐ出す")
+                    log("\(Index): ① 出せるからすぐ出す")
                     // ① 出せるからすぐ出す
                     game.table.append(contentsOf: playCards.first!)
                     game.players[Index].hand.removeAll(where: { playCards.first!.contains($0)})
                     game.lastPlayerIndex = Index
                     totable(card: playCards.first!)
                     tohands(Index: Index)
-                    time += 1
+                    time += Int(0.3)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                         // 次のターンへ
                         pass(Index: Index)
                         completion(true)
                     }
                 } else if random < 90 {
-                    print("② 出せるけど引いて出す")
+                    log("\(Index): ② 出せるけど引いて出す")
 
                     time += 1
                     // ② 出せるけど引いて出す
@@ -74,7 +74,7 @@ class GameBotController {
                         totable(card: playCards.first!)
                         tohands(Index: Index)
                     }
-                    time += 1
+                    time += Int(0.3)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                         // 次のターンへ
                         pass(Index: Index)
@@ -83,19 +83,18 @@ class GameBotController {
 
                     
                 } else {
-                    print("③ 出せるけど引くそして出さない")
+                    log("\(Index): ③ 出せるけど引くそして出さない")
                     // ③ 出せるけど引くそして出さない
                     time += 1
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                         drawCard(Index: Index)
                     }
-                    time += 1
+                    time += Int(0.3)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                         // 次のターンへ
                         pass(Index: Index)
                         completion(true)
                     }
-                    
                 }
                 
             } else {
@@ -119,7 +118,7 @@ class GameBotController {
                         
                         if random < 80 {
                             // ④ 出せないので引く、出せるので出す
-                            print("④ 出せないので引く、出せるので出す")
+                            log("\(Index): ④ 出せないので引く、出せるので出す")
                             time += 1
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                                 game.table.append(contentsOf: playCards.first!)
@@ -128,7 +127,7 @@ class GameBotController {
                                 totable(card: playCards.first!)
                                 tohands(Index: Index)
                             }
-                            time += 1
+                            time += Int(0.3)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                                 // 次のターンへ
                                 pass(Index: Index)
@@ -138,8 +137,8 @@ class GameBotController {
                             
                         } else {
                             // ⑤ 出せないので引く、出せるけどパス
-                            print("⑤ 出せないので引く、出せるけどパス")
-                            time += 1
+                            log("\(Index): ⑤ 出せないので引く、出せるけどパス")
+                            time += Int(0.3)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                                 // 次のターンへ
                                 pass(Index: Index)
@@ -149,8 +148,8 @@ class GameBotController {
                         
                     } else {
                         // ⑥ 出せないので引く、出せないのでパス
-                        print("⑥ 出せないので引く、出せないのでパス")
-                        time += 1
+                        log("\(Index): ⑥ 出せないので引く、出せないのでパス")
+                        time += Int(0.3)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                             // 次のターンへ
                             pass(Index: Index)
@@ -179,34 +178,57 @@ class GameBotController {
         var numbers = [1, 2, 3]
         numbers.shuffle()
         var shouldBreakLoop = false // 共有フラグ
-
-        var time = 1
+        var time = 1 // 初期カード待ち時間
         for number in numbers {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
-                                
                 let player = game.players[number]
-                // 出せるか判断
-                var initCards = BotInitCard(table: game.table.last!, hand: player.hand)
-                if !initCards.isEmpty {
-                    initCards.shuffle()
-                    if shouldBreakLoop || !(game.gamePhase == .gamefirst) {
-                        return
-                    }
-                    let card = initCards.first!
-                    game.table.append(card)
-                    player.hand.removeAll { $0 == card }
-                    game.lastPlayerIndex = number
-                    totable(card: card)
-                    tohands(Index: number)
-                    
-                    shouldBreakLoop = true
-                    moveToMain(Index: number)
-                } else {
-                    print("\(player.name) 最初に出せるカードがないです")
-                    // TODO: 処理
-                }
+                game.firstAnswers[number] = .pass
+
+//                // 出せるか判断
+//                var initCards = BotInitCard(table: game.table.last!, hand: player.hand)
+//                if !initCards.isEmpty {
+//                    initCards.shuffle()
+//                    if shouldBreakLoop || !(game.gamePhase == .gamefirst) {
+//                        log("\(number): 誰かが出しました")
+//                        return
+//                    }
+//                    let card = initCards.first!
+//                    game.table.append(card)
+//                    player.hand.removeAll { $0 == card }
+//                    game.lastPlayerIndex = number
+//                    totable(card: card)
+//                    tohands(Index: number)
+//                    shouldBreakLoop = true
+//                    moveToMain(Index: number)
+//                } else {
+//                    log("\(number): 最初に出せるカードがないです")
+//                    game.firstAnswers[number] = .pass
+//                }
             }
             time += 1
+        }
+    }
+    /**
+     Botがどてんこできるか
+     */
+    func checkBotHand(Index: Int, player: Player_f) {
+        // dtnkできるか
+        let resultFirst = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
+        if resultFirst == Constants.dtnkCode {
+            // ランダムで数秒待ってどてんこ
+            let random = Int.random(in: 0..<5)
+            DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(random)) { [self] in
+                let resultSecond = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
+                if resultSecond  == Constants.dtnkCode {
+                    // TODO: Bot Dtnk
+                    dtnk(Index: Index)
+                    log("\(player.name) dtnk")
+                } else {
+                    return
+                }
+            }
+        } else {
+            return
         }
     }
     
@@ -231,6 +253,21 @@ class GameBotController {
                 }
             }
             game.challengeAnswers[number] = ans
+        }
+    }
+    
+    /**
+     次のゲームへ
+     */
+    func moveNextGame() {
+        let Item = GameResetItem()
+        game.preparationNewGame(resetItem: Item) { [self] result in
+            if result {
+                todeck(card: game.deck)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+            game.gamePhase = .dealcard
         }
     }
     
@@ -269,11 +306,19 @@ class GameBotController {
         }
     }
 
-    // メインに向けた処理
+    // メインに向けた処理　いらんかも
     func moveToMain(Index: Int) {
         game.gamePhase = .main
         pass(Index: Index)
     }
+    
+    func endFlip() {
+        // X秒後にratefirst
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            game.gamePhase = .main
+        }
+    }
+
     
     /**
      チャレンジ時のカード配布
@@ -361,7 +406,6 @@ class GameBotController {
             }
             return
         }
-        
     }
     
     /**
@@ -385,7 +429,6 @@ class GameBotController {
         
         appState.subState = SubState(resultItem: item)
         game.gameScore = item.gameScore
-        
         game.gamePhase = .decisionrate
     }
     
@@ -400,9 +443,9 @@ class GameBotController {
         if game.currentPlayerIndex == 99 {
             // しょてんこの場合
 
-        } else if game.currentPlayerIndex == 88 {
+        } else if game.burstPlayerIndex != -1 {
             // バーストの場合
-
+            
         } else {
             // 通常時
             let winer = game.players[game.dtnkPlayerIndex]
@@ -487,12 +530,25 @@ class GameBotController {
         return orderedRanks
     }
 
-
+    /**
+     カードを再生成する
+     */
+    func regenerationDeck() {
+        //deckに戻す　一番上だけ残す
+        let lastCard = game.table.last!
+        var remainingCards = Array(game.table.dropLast())
+        remainingCards.shuffle()
+        game.deck.append(contentsOf: remainingCards)
+        game.table = [lastCard]
+        
+        // view
+        todeck(card: game.deck)
+        totable(card: game.table)
+    }
 
     //**********************************************************************************
     // Player Action
     //**********************************************************************************
-    
     /**
      challengeするかしないかを報告
      */
@@ -502,15 +558,43 @@ class GameBotController {
 
     /**
      どてんこできるか
+     手札合計が一致していればどてんこ可能
+     自分が出したカードに対してだったらリベンジ可能
+     ？？？だったらしょてんこ可能
      */
-    func dtnkJudge(playerAllCards: [CardId], table: [CardId]) -> Bool {
+    func dtnkJudge(myside: Int, playerAllCards: [CardId], table: [CardId]) -> Int {
         var dtnkjudge = false
-//        if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main {
-//            if !table.isEmpty {
-//                dtnkjudge = GameMainController().sameSum(card: playerAllCards, tablelast: table.last!)
-//            }
-//        }
-        return dtnkjudge
+        var result = Constants.ngCode
+        
+        // tableが空だったらだめ
+        if table.isEmpty {
+            return result
+        }
+        // 手札がとりえる値
+        let possibleSum = calculatePossibleSums(cards: playerAllCards)
+        for sum in possibleSum {
+            if sum == table.last!.number() {
+                dtnkjudge = true
+            }
+        }
+        // どてんこできない
+        if !dtnkjudge {
+            return result
+        }
+        
+        // 自分にはどてんこできない　：リベンジ可能として出す？
+        if game.lastPlayerIndex == myside {
+            return result
+        }
+        // しょてんこ可能として返す
+        if game.currentPlayerIndex == Constants.stnkCode {
+            return Constants.stnkCode
+        }
+
+        // 通常どてんこ可能として返す
+        result = Constants.dtnkCode
+
+        return result
     }
     
     /**
@@ -518,12 +602,17 @@ class GameBotController {
      */
     func playCards(Index: Int, cards: [CardId]) {
         let cardsToPlay = cards
+        
+        if game.table.isEmpty {
+            log("テーブルが空です")
+            return
+        }
         if cardsToPlay.isEmpty {
-            print("カードを選択してください")
+            log("\(Index): カードを選択してください")
             return
         }
         if game.currentPlayerIndex != Index && game.currentPlayerIndex != 99 {
-            print("自分のターンではないです")
+            log("\(Index): あなたのターンではないです")
             return
         }
         if checkMultipleCards(table: game.table.last!, playCard: cards) {
@@ -533,9 +622,8 @@ class GameBotController {
             totable(card: cards)
             tohands(Index: Index)
             game.players[Index].selectedCards = []
-
         } else {
-            print("それらのカードは出せないです")
+            log("\(Index): それらのカードは出せないです")
             return
         }
         // 次への処理
@@ -543,31 +631,54 @@ class GameBotController {
     }
     
     /**
-     カードを引く
+     カードを引く 判定入れるために分割
      */
+    func playerDrawCard(Index: Int) {
+        if !(game.gamePhase == .main && game.currentPlayerIndex == Index) {
+            log("\(Index): あなたのターンではないです")
+            return
+        }
+        drawCard(Index: Index)
+    }
+    
     func drawCard(Index: Int) {
+        if Index == game.myside {
+            game.turnFlg = 1
+        }
         let drawnCard = game.deck.removeLast()
         game.players[Index].hand.append(drawnCard)
         tohands(Index: Index)
-        
         // deck再生成
+        if game.deck.count < 1 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                regenerationDeck()
+            }
+        }
     }
     
     /*
      パスする
      */
     func pass(Index: Int) {
-        game.currentPlayerIndex = (Index + 1) % game.players.count
+        game.gamePhase = .main
         
-        // Burstするとき
-        //            burstPlayer = players[currentPlayerIndex]
-        //            currentPlayerIndex = burstPlayerIndex
-        //            self.gamePhase = .burst
-        //
-        //            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) {
-        //                self.gamePhase = .decisionrate_pre
-        //            }
-
+        if game.players[Index].hand.count < Constants.burstCount {
+            game.currentPlayerIndex = (Index + 1) % game.players.count
+            
+            if Index == game.myside {
+                game.turnFlg = 0
+            }
+            
+        } else {
+            // Burstするとき
+            game.gamePhase = .burst
+            game.burstPlayer = game.players[Index]
+            game.burstPlayerIndex = Index
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) { [self] in
+                game.gamePhase = .decisionrate_pre
+            }
+        }
     }
     
     /**
@@ -653,7 +764,7 @@ class GameBotController {
         let firstValue = cards[0].number()
         
         for card in cards {
-            if card.number() != firstValue {
+            if card.number() != firstValue && card.suit() == .all {
                 return false
             }
         }
@@ -663,6 +774,16 @@ class GameBotController {
     //**********************************************************************************
     // Card Animation
     //**********************************************************************************
+    
+    func todeck(card: [CardId]) {
+        for carddata in card {
+            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == carddata.id }) {
+                var newCard = game.cardUI.remove(at: index)
+                newCard.location = .deck
+                game.cardUI.append(newCard)
+            }
+        }
+    }
     
     func totable(card: CardId) {
         if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == card.id }) {

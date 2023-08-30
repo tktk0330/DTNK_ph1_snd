@@ -53,11 +53,32 @@ struct GameBotView: View {
             
             // Btn
             Group {
+                
+                Group {
+                    if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.dtnkCode {
+                        Button(action: {
+                            // dtnk
+                            GameBotController().dtnk(Index: myside)
+                        }) {
+                            Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                        }
+                    }
+                    if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
+                        Button(action: {
+                            // dtnk
+                            GameBotController().dtnk(Index: myside)
+                        }) {
+                            Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                        }
+                    }
+                }
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
+
                 HStack(spacing: 15) {
                     
                     if game.turnFlg == 0 {
                         Button(action: {
-                            GameBotController().drawCard(Index: myside)
+                            GameBotController().playerDrawCard(Index: myside)
                         }) {
                             Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
                         }
@@ -68,11 +89,12 @@ struct GameBotView: View {
                             Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                         }
                     }
-                                        
+                    
                     // testようにボタンとして動かしておく
                     Button(action: {
-                        // dtnk
-                        GameBotController().dtnk(Index: myside)
+//                        GameBotController().dtnk(Index: myside)
+                        game.firstAnswers[myside] = .pass
+
                     }) {
                         // icon
                         // TODO: 磨き上げ
@@ -117,13 +139,13 @@ struct GameBotView: View {
                     GmaeNumAnnounce(gameNum: game.gameNum, gameTarget: game.gameTarget)
                         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
-
+                
                 // 開始ボタン
                 if game.startFlag && !game.AnnounceFlg {
                     Button(action: {
                         game.startFlag = false
                         game.gamePhase = .countdown
-
+                        
                     }) {
                         Text("Start")
                             .font(.custom(FontName.font01, size: 30))
@@ -154,15 +176,29 @@ struct GameBotView: View {
                     .id(game.rateUpCard)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
+                // Decision Initial Player View
+                if game.gamePhase == .decisioninitialplayer {
+                    InitialFlip(player: game.players, initialIndex: game.currentPlayerIndex)
+                        .position(x: UIScreen.main.bounds.width / 2,  y:  geo.size.height / 2)
+                        .transition(.move(edge: .top))
+                        .animation(.default, value: game.gamePhase == .decisioninitialplayer)
+                        .allowsHitTesting(false)  // タッチイベントを無効にする
+
+                }
+                
             }
             Group {
                 // DTNK View
                 if game.gamePhase == .dtnk {
                     DTNKView(text: "DOTENKO")
                 }
+                // BurstView
+                if game.gamePhase == .burst {
+                    BurstView(text: "BURST")
+                }
                 // チャレンジ可否ポップ
                 if game.gamePhase == .q_challenge {
-                    ChallengePopView(Index: myside, vsInfo: game.gamevsInfo!)
+                    ChallengePopView()
                         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
                         .transition(.move(edge: .top))
                         .animation(.default, value: game.gamePhase == .q_challenge)
@@ -173,7 +209,11 @@ struct GameBotView: View {
                 if game.gamePhase == .decisionrate {
                     DecisionScoreView()
                 }
-
+                if game.gamePhase == .result {
+                    ResultView()
+                }
+                
+                
             }
 
 
