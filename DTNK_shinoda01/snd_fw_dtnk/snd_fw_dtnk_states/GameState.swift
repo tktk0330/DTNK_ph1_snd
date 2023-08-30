@@ -137,7 +137,7 @@ class GameUiState: ObservableObject {
             print(phase)
             // メイン
         case .main:
-            print(phase)
+            log("")
             // DOTENKO
         case .dtnk:
             changeddtnk()
@@ -260,14 +260,14 @@ class GameUiState: ObservableObject {
      誰も出せなかった時にランダムで最初のプレイヤーを決める
      */
     func judgeFirstPlayer() {
-        if initialAction.allSatisfy({ $0 == false }) {
-            let randomInitialPlayerIndex = Int.random(in: 0...3)
-            currentPlayerIndex = randomInitialPlayerIndex
-            gamePhase = .decisioninitialplayer
-            progress = "\(players[currentPlayerIndex].name)の番です"
-            // Reset
-            initialAction = Array(repeating: true, count: initialAction.count)
-        }
+//        if initialAction.allSatisfy({ $0 == false }) {
+//            let randomInitialPlayerIndex = Int.random(in: 0...3)
+//            currentPlayerIndex = randomInitialPlayerIndex
+//            gamePhase = .decisioninitialplayer
+//            progress = "\(players[currentPlayerIndex].name)の番です"
+//            // Reset
+//            initialAction = Array(repeating: true, count: initialAction.count)
+//        }
     }
     
     /**
@@ -288,44 +288,7 @@ class GameUiState: ObservableObject {
         print("Bot \(Index) DOTENKO")
     }
     
-    
-    
-    /**
-     指定したIndexがカードを合計が超えるまで引く
-     */
-    func drawIndex(Index: Int) {
-        //        var handSum = 0
-        //        let tableValue = table.last!.cardid.number()
-        //        // 手札の数字の合計を計算
-        //        for card in players[Index].hand {
-        //            handSum += card.cardid.number()
-        //        }
-        //        if GameMainController().sameSum(card: players[Index].hand, tablelast: table.last!) {
-        //            // リベンジ処理
-        //            AnnounceLabel("REVENGE"){ [self] in
-        //                RevengeAction(Index: Index)
-        //            }
-        //            print("revenge")
-        //            return
-        //
-        //        } else if  handSum < tableValue {
-        //            print("more")
-        //
-        //        } else {
-        //            print("over")
-        //            moveToNextPlayer(Index: Index)
-        //            return
-        //
-        //        }
-        //        // 1秒ごとにカードを引く処理
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-        //            if let card = deck.draw() {
-        //                players[Index].hand.append(card)
-        //            }
-        //            drawIndex(Index: Index)
-        //        }
-    }
-    
+        
     /**
      リベンジ challenge
      */
@@ -376,7 +339,7 @@ class GameUiState: ObservableObject {
             return
         }
         // 次のプレイヤーの手番を開始
-        drawIndex(Index: nextPlayerIndex)
+//        drawIndex(Index: nextPlayerIndex)
     }
     
     /**

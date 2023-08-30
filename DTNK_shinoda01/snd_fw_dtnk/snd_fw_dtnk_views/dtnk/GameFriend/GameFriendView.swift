@@ -174,7 +174,7 @@ struct GameFriendView: View {
                 }
                 // チャレンジ可否ポップ
                 if game.gamePhase == .q_challenge {
-                    ChallengePopView(Index: myside, vsInfo: game.gamevsInfo!)
+                    ChallengePopView()
                         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
                         .transition(.move(edge: .top))
                         .animation(.default, value: game.gamePhase == .q_challenge)
@@ -354,7 +354,6 @@ struct PlayerScoreModifier: ViewModifier {
     }
 }
 
-
 // TODO: 正しい場所へ
 struct N_Card: Equatable {
     let id: CardId
@@ -375,12 +374,14 @@ struct N_CardView: View {
             .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
             .offset(y: selectedCards.contains(card) ? -20 : 0)
             .onTapGesture {
-                // 自分の手札のみTap可能
-                if case let .hand(playerIndex, _) = card.location, case playerIndex = appState.gameUIState.myside {
-                    if let idx = selectedCards.firstIndex(of: card) {
-                        selectedCards.remove(at: idx)
-                    } else {
-                        selectedCards.append(card)
+                if appState.gameUIState.gamePhase != .decisioninitialplayer {
+                    // 自分の手札のみTap可能
+                    if case let .hand(playerIndex, _) = card.location, case playerIndex = appState.gameUIState.myside {
+                        if let idx = selectedCards.firstIndex(of: card) {
+                            selectedCards.remove(at: idx)
+                        } else {
+                            selectedCards.append(card)
+                        }
                     }
                 }
             }

@@ -22,7 +22,13 @@ class GameUIState: ObservableObject {
     }
     @Published var deck: [CardId] = []
     @Published var cardUI: [N_Card] = cards
-    @Published var table: [CardId] = []
+    @Published var table: [CardId] = [] {
+        didSet {
+            if gamevsInfo == .vsBot {
+                checkBotDtnk()
+            }
+        }
+    }
     @Published var jorker: Int = 2
     @Published var players: [Player_f] = []
     @Published var myside: Int = 99
@@ -40,8 +46,18 @@ class GameUIState: ObservableObject {
     @Published var dtnkPlayer: Player_f?
     // どてんこした人のIndex
     @Published var dtnkPlayerIndex: Int = 99
+    // バーストした人
+    @Published var burstPlayer: Player_f?
+    // バーストした人のIndex
+    @Published var burstPlayerIndex: Int = 88
     // 初め出せるか通知
-    @Published var firstAnswers: [FirstAnswers] = Array(repeating: FirstAnswers.initial, count: 4)
+    @Published var firstAnswers: [FirstAnswers] = Array(repeating: FirstAnswers.initial, count: 4) {
+        didSet {
+            if gamevsInfo == .vsBot && firstAnswers.allSatisfy({ $0 == FirstAnswers.pass }) {
+                judgeFirstPlayer()
+            }
+        }
+    }
     // チャレンジ通知
     @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
         didSet {
@@ -95,6 +111,7 @@ class GameUIState: ObservableObject {
      Phaseの操作　bot Friendで分ける
      */
     func gamePhaseAction(vsInfo: vsInfo, phase: GamePhase) {
+        
         switch vsInfo {
         case .vsBot:
             switch phase {
@@ -114,11 +131,11 @@ class GameUIState: ObservableObject {
             case .gamefirst:
                 GameBotController().BotGameInit()
             case .decisioninitialplayer:
-                print(phase)
+                GameBotController().endFlip()
             case .gamefirst_sub:
                 print(phase)
             case .main:
-                print(phase)
+                print("")
             case .dtnk:
                 print(phase)
             case .burst:
@@ -140,6 +157,7 @@ class GameUIState: ObservableObject {
             case .waiting:
                 print(phase)
             }
+            
         case .vsFriend:
             switch phase {
             case .dealcard:
@@ -159,7 +177,7 @@ class GameUIState: ObservableObject {
             case .gamefirst_sub:
                 print(phase)
             case .main:
-                print(phase)
+                print("")
             case .dtnk:
                 print(phase)
             case .burst:
@@ -182,6 +200,52 @@ class GameUIState: ObservableObject {
                 print(phase)
             }
         }
+    }
+    
+    /**
+     Botがどてんこできるか調査する
+     */
+    func checkBotDtnk() {
+        for i in 1...3 {
+            GameBotController().checkBotHand(Index: i, player: players[i])
+        }
+    }
+    
+    /**
+     誰も出せなかった時にランダムで最初のプレイヤーを決める
+     */
+    func judgeFirstPlayer() {
+        let randomInitialPlayerIndex = Int.random(in: 0...3)
+        currentPlayerIndex = randomInitialPlayerIndex
+        gamePhase = .decisioninitialplayer
+    }
+
+    /**
+     次のゲームの準備
+     */
+    func preparationNewGame(resetItem: GameResetItem, completion: @escaping (Bool) -> Void) {
+        self.gameNum = resetItem.gameNum
+        self.deck = resetItem.deck
+        self.table = resetItem.table as? [CardId] ?? []
+        for player in self.players {
+            player.hand.removeAll()
+        }
+        self.currentPlayerIndex = resetItem.currentPlayerIndex
+        self.lastPlayerIndex = resetItem.lastPlayerIndex
+        self.dtnkPlayerIndex = resetItem.dtnkPlayerIndex
+        self.dtnkPlayer = nil
+        self.burstPlayerIndex = resetItem.burstPlayerIndex
+        self.burstPlayer = nil
+        self.ascendingRate = resetItem.ascendingRate
+        self.decisionScoreCards = []
+        self.challengeAnswers = resetItem.challengeAnswers.compactMap { ChallengeAnswer(rawValue: $0) }
+        self.nextGameAnnouns = resetItem.nextGameAnnouns.compactMap { NextGameAnnouns(rawValue: $0) }
+//        self.firstAnswers = resetItem.firstAnswers.compactMap { FirstAnswers(rawValue: $0) }
+        self.winners = []
+        self.losers = []
+        self.gameScore = resetItem.gameScore
+        
+        completion(true)
     }
 }
 

@@ -70,6 +70,9 @@ struct GameResetItem {
     // どてんこした人
     var dtnkPlayer: Any =  NSNull()
     var dtnkPlayerIndex: Int = 99
+    // バーストした人
+    var burstPlayer: Any =  NSNull()
+    var burstPlayerIndex: Int = 88
     // 倍率
     var ascendingRate: Int = 1
     // 決定数

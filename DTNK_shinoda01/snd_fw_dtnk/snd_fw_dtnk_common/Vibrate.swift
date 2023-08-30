@@ -1,10 +1,11 @@
+/**
+ バイブレーション
+ */
 
 import SwiftUI
 import AudioToolbox
 
-
 struct Vibration {
-    
     
     let generator = UINotificationFeedbackGenerator()
     @State var isVibrationOn = false
@@ -15,5 +16,4 @@ struct Vibration {
             sleep(UInt32(0.01))
         }
     }
-    
 }
