@@ -29,6 +29,8 @@ struct TopView: View {
             Button(action: {
                 // Home画面へ
                 TopController().onTapPlay()
+                print(UIScreen.main.bounds.width)
+                print(UIScreen.main.bounds.height)
             }) {
                 Btnwb(btnText: "Tap", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
             }

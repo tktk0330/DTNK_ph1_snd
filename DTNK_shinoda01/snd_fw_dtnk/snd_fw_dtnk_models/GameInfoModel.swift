@@ -81,6 +81,8 @@ struct GameResetItem {
     var challengeAnswers = Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
     // 次のゲーム行けるか
     var nextGameAnnouns = Array(repeating: NextGameAnnouns.initial.rawValue, count: 4)
+    // 初め出せるか通知
+    var firstAnswers = Array(repeating: FirstAnswers.initial.rawValue, count: 4)
     // 勝者
     var winners: Any = NSNull()
     // 敗者

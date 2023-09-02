@@ -21,15 +21,15 @@ struct DecisionScoreView: View {
                         Text("Winer")
                             .modifier(DecisionScoreViewModifier(fontSize: 30))
                         // TODO: 名前反映
-//                        Text(sub.resultItem.winners[0].name)
-//                            .modifier(DecisionScoreViewModifier(fontSize: 20))
+                        Text(sub.resultItem.winners.count > 1 ? "ALL" : sub.resultItem.winners[0].name)
+                            .modifier(DecisionScoreViewModifier(fontSize: 20))
                     }
                     VStack() {
                         Text("Loser")
                             .modifier(DecisionScoreViewModifier(fontSize: 30))
                         // TODO: 名前反映
-//                        Text(sub.resultItem.losers[0].name)
-//                            .modifier(DecisionScoreViewModifier(fontSize: 20))
+                        Text(sub.resultItem.losers.count > 1 ? "ALL" : sub.resultItem.losers[0].name)
+                            .modifier(DecisionScoreViewModifier(fontSize: 20))
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)

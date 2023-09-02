@@ -7,7 +7,7 @@ import Foundation
 import AudioToolbox
 
 class GameUiState: ObservableObject {
-    
+
     var sides: [GameUiSide] = []
     // Player
     @Published var players: [Player] = []
@@ -21,7 +21,7 @@ class GameUiState: ObservableObject {
             deck.appendjorker(Index: jorker)
         }
     }
-    
+
     // Game数
     @Published var gamenum: Int = 1
     // FieldCard
@@ -84,35 +84,34 @@ class GameUiState: ObservableObject {
     // チャレンジ通知 init :0 yes :1 no :2 dtnkplayer :3
     @Published var challengeFlag: [Int] = [0, 0, 0, 0] {
         didSet {
-            let quickPhase = GameMainController().moveChallengeEvent(challengeFlag: challengeFlag)
-            if quickPhase != nil {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.gamePhase = quickPhase!
-                }
-            }
-            
+//            let quickPhase = GameMainController().moveChallengeEvent(challengeFlag: challengeFlag)
+//            if quickPhase != nil {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                    self.gamePhase = quickPhase!
+//                }
+//            }
         }
     }
-    
+
     // FRONT
     // カードは１ターン１
     @Published var canDraw = true
     // pass or play
     @Published var canTurn = true
-    
+
     init() {
         deck.shuffle()
     }
-    
+
     //**********************************************************************************
     // About GamePhase
     //**********************************************************************************
-    
+
     /**
      gamePhase変更時に値に依存して実行される関数
      */
     func gamePhaseAction(phase: GamePhase) {
-        
+
         switch phase {
             // カードを配っている
         case .dealcard:
@@ -164,27 +163,27 @@ class GameUiState: ObservableObject {
             changedrevenge()
         case .waiting:
             print(phase)
-            
+
         }
     }
-    
+
     func changedcountdown() {
         // X秒後にratefirst
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.gamePhase = .ratefirst
         }
     }
-    
+
     func changedratefirst() {
         // 最初のカードを配置する + 特定数字だったらレート上げる
         firstCard()
     }
-    
+
     func changedgamefirst() {
         // Botの初期アクション
         //        botSyotenko()
     }
-    
+
     func changeddecisioninitialplayer() {
         // X秒後にratefirst
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
@@ -195,14 +194,14 @@ class GameUiState: ObservableObject {
             //            botTurn(Index: index)
         }
     }
-    
+
     func changeddtnk() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             // 可否
             self.gamePhase = .q_challenge
         }
     }
-    
+
     func changeq_challenge() {
         var numbers = [1, 2, 3]
         numbers.shuffle()
@@ -215,7 +214,7 @@ class GameUiState: ObservableObject {
                         Index: numbers[i],
                         table: table,
                         dtnkPlayerIndex: dtnkPlayerIndex)
-                    
+
                     // REVENGE
                     if challengeFlag[numbers[i]] == 99 {
                         dtnkevent(Index: numbers[i])
@@ -226,17 +225,17 @@ class GameUiState: ObservableObject {
             }
         }
     }
-    
+
     func changedchallege() {
-        AnnounceLabel("CHALLENGE"){
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
-                // どてんこした次の人からカードを引く
-                let index = dtnkPlayerIndex
-                moveToNextPlayer(Index: index)
-            }
-        }
+//        AnnounceLabel("CHALLENGE"){
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+//                // どてんこした次の人からカードを引く
+//                let index = dtnkPlayerIndex
+//                moveToNextPlayer(Index: index)
+//            }
+//        }
     }
-    
+
     func changeddecisionrate_pre() {
         winloos()
         // X秒後にratefirst
@@ -244,18 +243,18 @@ class GameUiState: ObservableObject {
             self.gamePhase = .decisionrate
         }
     }
-    
+
     func changedrevenge() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             // 可否
             self.gamePhase = .q_challenge
         }
     }
-    
+
     //**********************************************************************************
     // About Action
     //**********************************************************************************
-    
+
     /**
      誰も出せなかった時にランダムで最初のプレイヤーを決める
      */
@@ -269,7 +268,7 @@ class GameUiState: ObservableObject {
 //            initialAction = Array(repeating: true, count: initialAction.count)
 //        }
     }
-    
+
     /**
      どてんこ
      どてんこプレイヤーの設定
@@ -279,7 +278,7 @@ class GameUiState: ObservableObject {
         let generator = UINotificationFeedbackGenerator()
         @State var isVibrationOn = false
         generator.notificationOccurred(.success)
-        
+
         gamedtnk = true
         dtnkPlayer = players[Index]
         dtnkPlayerIndex = Index
@@ -287,8 +286,8 @@ class GameUiState: ObservableObject {
         challengeFlag[Index] = 3
         print("Bot \(Index) DOTENKO")
     }
-    
-        
+
+
     /**
      リベンジ challenge
      */
@@ -306,7 +305,7 @@ class GameUiState: ObservableObject {
             moveToNextPlayer(Index: Index)
         }
     }
-    
+
     /**
      リベンジ challenge
      */
@@ -324,8 +323,8 @@ class GameUiState: ObservableObject {
             winloos()
         }
     }
-    
-    
+
+
     /**
      チャレンジ
      次のチャレンジャーのターンへ
@@ -341,7 +340,7 @@ class GameUiState: ObservableObject {
         // 次のプレイヤーの手番を開始
 //        drawIndex(Index: nextPlayerIndex)
     }
-    
+
     /**
      勝敗を決める
      */
@@ -367,7 +366,7 @@ class GameUiState: ObservableObject {
             loosers.append(lastPlayCardsPlayer!)
         }
     }
-    
+
     /**
      ゲーム結果設定
      */
@@ -387,7 +386,7 @@ class GameUiState: ObservableObject {
         let this_score = this_rate * this_magunigication * this_decisionnum
         let this_winners = winers
         let this_looser = loosers
-        
+
         let gameitem = GameResultItem(
             gamenum: this_num,
             rate: this_rate,
@@ -396,12 +395,12 @@ class GameUiState: ObservableObject {
             gamescore: this_score,
             winners: this_winners,
             loosers: this_looser)
-        
+
         // Player結果情報
         let sorted: [Player] = players.sorted(by: {
             return  $0.score > $1.score
         })
-        
+
         let playerItems = sorted.enumerated().map { (index, player) -> PlayerResultItem in
             let rank = index + 1
             let item = PlayerResultItem(
@@ -418,16 +417,16 @@ class GameUiState: ObservableObject {
         let scoreUiState = ResultState(gameitems: gameitem, playeritems: playerItems)
         appState.resultState = scoreUiState
     }
-    
+
     //**********************************************************************************
     // About Player card Action
     //**********************************************************************************
-    
+
     /**
      初期操作：カードを配る
      */
     func dealCards(completion: @escaping (Bool) -> Void) {
-        
+
         for i in 0..<players.count*2 {
             DispatchQueue.main.asyncAfter(deadline: .now() + (Double(i) * 0.2)) { [self] in
                 if let card = self.deck.draw() {
@@ -437,7 +436,7 @@ class GameUiState: ObservableObject {
         }
         completion(true)
     }
-    
+
     /**
      最初のカードを配置する + 特定数字だったらレート上げる
      */
@@ -448,17 +447,17 @@ class GameUiState: ObservableObject {
             self.table.append(contentsOf: cards)
             if card.cardid.rate()[0] == 50 {
                 self.magunigication = 2 * self.magunigication
-                AnnounceLabel("RATE UP"){
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        self.firstCard()
-                    }
-                }
+//                AnnounceLabel("RATE UP"){
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                        self.firstCard()
+//                    }
+//                }
             } else {
                 gamePhase = .gamefirst
             }
         }
     }
-    
+
     /**
      最終カードを決める時に引くやつ
      */
@@ -489,7 +488,7 @@ class GameUiState: ObservableObject {
             }
         }
     }
-    
+
     /**
      カードを引く
      */
@@ -508,7 +507,7 @@ class GameUiState: ObservableObject {
             }
         }
     }
-    
+
     /**
      カードを再生成する
      */

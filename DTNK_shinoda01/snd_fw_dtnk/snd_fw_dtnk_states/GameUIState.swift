@@ -33,7 +33,7 @@ class GameUIState: ObservableObject {
     @Published var players: [Player_f] = []
     @Published var myside: Int = 99
     // 現在プレイしている人
-    @Published var currentPlayerIndex: Int = 99 {
+    @Published var currentPlayerIndex: Int = Constants.stnkCode {
         didSet {
             if gamevsInfo == .vsBot {
                 botTurnAction(Index: currentPlayerIndex)
@@ -41,15 +41,15 @@ class GameUIState: ObservableObject {
         }
     }
     // 最後にカードを出した人
-    @Published var lastPlayerIndex: Int = 99
+    @Published var lastPlayerIndex: Int = Constants.stnkCode
     // どてんこした人
     @Published var dtnkPlayer: Player_f?
     // どてんこした人のIndex
-    @Published var dtnkPlayerIndex: Int = 99
+    @Published var dtnkPlayerIndex: Int = Constants.stnkCode
     // バーストした人
     @Published var burstPlayer: Player_f?
     // バーストした人のIndex
-    @Published var burstPlayerIndex: Int = 88
+    @Published var burstPlayerIndex: Int = Constants.burstCode
     // 初め出せるか通知
     @Published var firstAnswers: [FirstAnswers] = Array(repeating: FirstAnswers.initial, count: 4) {
         didSet {
@@ -82,6 +82,8 @@ class GameUIState: ObservableObject {
     @Published var gameScore: Int = 1
     // レートアップカード
     @Published var rateUpCard: String? = nil
+    // initialFlipの仮変数
+    @Published var initialPlayerIndex: Int? = nil
 
     // FB必要なし
     // カウンター
@@ -135,7 +137,7 @@ class GameUIState: ObservableObject {
             case .gamefirst_sub:
                 print(phase)
             case .main:
-                print("")
+                print(phase)
             case .dtnk:
                 print(phase)
             case .burst:
@@ -212,12 +214,17 @@ class GameUIState: ObservableObject {
     }
     
     /**
-     誰も出せなかった時にランダムで最初のプレイヤーを決める
+     誰も出せなかった時、Hostから順にゲームを始める
+     TODO：　誰も出せなかった時にランダムで最初のプレイヤーを決める
      */
     func judgeFirstPlayer() {
-        let randomInitialPlayerIndex = Int.random(in: 0...3)
-        currentPlayerIndex = randomInitialPlayerIndex
-        gamePhase = .decisioninitialplayer
+//        let randomInitialPlayerIndex = Int.random(in: 0...3)
+        //        currentPlayerIndex = randomInitialPlayerIndex
+        //        gamePhase = .decisioninitialplayer
+        log("誰も出せないのでホストから始める")
+        currentPlayerIndex = 0
+        gamePhase = .gamefirst_sub
+        
     }
 
     /**
@@ -240,10 +247,13 @@ class GameUIState: ObservableObject {
         self.decisionScoreCards = []
         self.challengeAnswers = resetItem.challengeAnswers.compactMap { ChallengeAnswer(rawValue: $0) }
         self.nextGameAnnouns = resetItem.nextGameAnnouns.compactMap { NextGameAnnouns(rawValue: $0) }
-//        self.firstAnswers = resetItem.firstAnswers.compactMap { FirstAnswers(rawValue: $0) }
+        self.firstAnswers = resetItem.firstAnswers.compactMap { FirstAnswers(rawValue: $0) }
         self.winners = []
         self.losers = []
         self.gameScore = resetItem.gameScore
+        
+        self.turnFlg = 0
+
         
         completion(true)
     }
