@@ -11,6 +11,7 @@ struct DTNKView: View {
             AnimationReader(100) { value in
                 ZStack {
                     Text(text)
+                        .font(.custom(FontName.font01, size: 50))
                         .font(.system(size: 50, weight: .bold, design: .default))
                         .shine(.gold, withWaveIndex: value)
                         .fontWeight(.heavy)

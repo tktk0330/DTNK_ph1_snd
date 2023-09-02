@@ -169,11 +169,8 @@ struct InitialFlip: View {
                         }
                     }
                 }
-                .allowsHitTesting(false)
-                .gesture(TapGesture().onEnded({ _ in
-                    // 何もしない
-                }))
-
         }
     }
 }
+
+

@@ -5,9 +5,8 @@
 import SwiftUI
 
 struct ChallengePopView: View {
+    
     @StateObject var game: GameUIState = appState.gameUIState
-//    let Index: Int
-//    let vsInfo: vsInfo
 
     var body: some View {
         GeometryReader { geo in
@@ -22,49 +21,61 @@ struct ChallengePopView: View {
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .padding(5)
-                .position(x: geo.size.width / 2, y: geo.size.height * 0.35 )
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.35)
 
             
-            // 参加可否通知を送る
-            HStack(spacing: 20) {
-                
-                // TODO: どてんこした人は待機させるロード
-                
-                Button(action: {
-                    if game.gamevsInfo == .vsFriend {
-                        GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .nochallenge)
-                    } else {
-                        GameBotController().moveChallenge(Index: game.myside, ans: .nochallenge)
-                    }
-                }) {
-                    Btnaction(btnText: "辞退", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
-                }
-                // 返せる時
-                if GameBotController().dtnkJudge(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) == Constants.dtnkCode {
-                    Button(action: {
-                        if game.gamevsInfo == .vsFriend {
-                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
-                        } else {
-                            GameBotController().dtnk(Index: game.myside)
+            
+            if game.dtnkPlayerIndex == game.myside {
+                // TODO: Friendの場合
+                //　vsBot 他の人が決まるまで待機
+                WaitingChallengeView()
+                    .position(x: geo.size.width / 2, y: geo.size.height * 1.0)
+                    .onAppear{
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+                            game.challengeAnswers[game.myside] = .challenge
                         }
-                    }) {
-                        Btnaction(btnText: "どてんこ返し", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                     }
+                
+            } else {
+                // 参加可否通知を送る
+                HStack(spacing: 20) {
                     
-                } else {
-                    // 参加する
                     Button(action: {
                         if game.gamevsInfo == .vsFriend {
-                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .nochallenge)
                         } else {
-                            GameBotController().moveChallenge(Index: game.myside, ans: .challenge)
+                            GameBotController().moveChallenge(Index: game.myside, ans: .nochallenge)
                         }
                     }) {
-                        Btnaction(btnText: "参加", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                        Btnaction(btnText: "辞退", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+                    }
+                    // 返せる時
+                    if GameBotController().dtnkJudge(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) == Constants.dtnkCode {
+                        Button(action: {
+                            if game.gamevsInfo == .vsFriend {
+                                GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                            } else {
+                                GameBotController().dtnk(Index: game.myside)
+                            }
+                        }) {
+                            Btnaction(btnText: "どてんこ返し", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                        }
+                        
+                    } else {
+                        // 参加する
+                        Button(action: {
+                            if game.gamevsInfo == .vsFriend {
+                                GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                            } else {
+                                GameBotController().moveChallenge(Index: game.myside, ans: .challenge)
+                            }
+                        }) {
+                            Btnaction(btnText: "参加", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                        }
                     }
                 }
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.75)
             }
-            .position(x: geo.size.width / 2, y: geo.size.height * 0.75)
             
         }
         .frame(width: 350, height: 350)

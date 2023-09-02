@@ -116,6 +116,7 @@
 		5D8FA32B2A482B960079F260 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5D8FA32A2A482B960079F260 /* FirebaseAuth */; };
 		5D8FA32D2A482B960079F260 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5D8FA32C2A482B960079F260 /* FirebaseDatabase */; };
 		5D8FA32F2A482B960079F260 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5D8FA32E2A482B960079F260 /* FirebaseFirestore */; };
+		5D9871FE2AA15BFE0031A57C /* RectangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9871FD2AA15BFE0031A57C /* RectangleView.swift */; };
 		5DCD27BC2A86591100778980 /* ChallengeAnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */; };
 		5DCD27C02A8D0DAA00778980 /* GameCommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */; };
 		5DCD27C22A8E4E6800778980 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C12A8E4E6800778980 /* WaitingView.swift */; };
@@ -242,6 +243,7 @@
 		5D8FA3212A4828D00079F260 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		5D8FA3232A4829100079F260 /* GameRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRule.swift; sourceTree = "<group>"; };
 		5D8FA3252A482B3E0079F260 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5D9871FD2AA15BFE0031A57C /* RectangleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleView.swift; sourceTree = "<group>"; };
 		5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeAnswerModel.swift; sourceTree = "<group>"; };
 		5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCommonFunctions.swift; sourceTree = "<group>"; };
 		5DCD27C12A8E4E6800778980 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 				5D8FA2D12A4824DD0079F260 /* IconView.swift */,
 				5D8FA2D32A4824EE0079F260 /* InitialFlip.swift */,
 				5D8FA2D52A4825020079F260 /* NothingPlayView.swift */,
+				5D9871FD2AA15BFE0031A57C /* RectangleView.swift */,
 				5D8FA2D92A48252E0079F260 /* RelaunchView.swift */,
 				5D8FA2DB2A48253C0079F260 /* TargetPlayerView.swift */,
 				5D8FA2D72A48251B0079F260 /* ViewComponents.swift */,
@@ -776,6 +779,7 @@
 				5D8FA2902A48209E0079F260 /* GameResultController.swift in Sources */,
 				CA5C5DF22A794497006D7C01 /* BurstView.swift in Sources */,
 				5D8FA30C2A4827C80079F260 /* FieldView.swift in Sources */,
+				5D9871FE2AA15BFE0031A57C /* RectangleView.swift in Sources */,
 				5D8FA2622A481C740079F260 /* StringExtension.swift in Sources */,
 				5D8FA3062A4827960079F260 /* DeckView.swift in Sources */,
 				5D8FA31C2A48287B0079F260 /* ResultView.swift in Sources */,

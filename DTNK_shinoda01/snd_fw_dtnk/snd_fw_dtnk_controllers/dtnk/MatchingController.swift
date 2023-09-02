@@ -113,11 +113,8 @@ class MatchingController {
             // 参加者だった退出
             RoomFirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
                 if judge {
-                    print("sc")
                     Router().pushBasePage(pageId: .room)
                 } else {
-                    print("er")
-
                 }
             }
         }

@@ -21,18 +21,12 @@ struct Flip<Front: View, Back: View>: View {
 
     var body: some View {
         ZStack {
-            AnimationReader(CGFloat(degree)) { value in
-                if (value < 90) || (270 < value) {
-                    front
-                } else {
-                    back
-                }
+            if (degree < 90) || (270 < degree) {
+                front
+            } else {
+                back
             }
         }
-        .rotation3DEffect(
-            Angle(degrees: degree),
-            axis: (x: 0, y: 10, z: 0)
-        )
     }
 }
 

@@ -349,41 +349,7 @@ struct PlayerScoreModifier: ViewModifier {
             .background(
                 Rectangle()
                     .fill(Color.casinoShadow)
-                    .frame(width: UIScreen.main.bounds.width * 0.37, height: 23)
+                    .frame(width: UIScreen.main.bounds.width * 0.41, height: Constants.scrHeight * 0.0248)
             )
-    }
-}
-
-// TODO: 正しい場所へ
-struct N_Card: Equatable {
-    let id: CardId
-    var location: CardLocation
-}
-
-struct N_CardView: View {
-    var card: N_Card
-    let location: CardLocation
-    @Binding var selectedCards: [N_Card]
-    
-    var body: some View {
-        Image(card.id.imageName())
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 60)
-            .rotationEffect(Angle(degrees: card.id.angle(for: location, total: card.id.total(for: card.location))))
-            .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
-            .offset(y: selectedCards.contains(card) ? -20 : 0)
-            .onTapGesture {
-                if appState.gameUIState.gamePhase != .decisioninitialplayer {
-                    // 自分の手札のみTap可能
-                    if case let .hand(playerIndex, _) = card.location, case playerIndex = appState.gameUIState.myside {
-                        if let idx = selectedCards.firstIndex(of: card) {
-                            selectedCards.remove(at: idx)
-                        } else {
-                            selectedCards.append(card)
-                        }
-                    }
-                }
-            }
     }
 }

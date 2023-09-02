@@ -1,6 +1,6 @@
-
-
-
+/**
+ ターンフォーカスView
+ */
 
 import SwiftUI
 
@@ -36,11 +36,11 @@ struct TargetPlayerView: View {
         case game!.myside:
             return CGPoint(x: UIScreen.main.bounds.width / 2, y: 0.90)
         case  (game!.myside + 1) % game!.players.count:
-            return CGPoint(x: UIScreen.main.bounds.width * 0.10, y: 0.50)
+            return CGPoint(x: UIScreen.main.bounds.width * 0.10, y: 0.32)
         case  (game!.myside + 2) % game!.players.count:
             return CGPoint(x: UIScreen.main.bounds.width / 2, y: 0.12)
         case  (game!.myside + 3) % game!.players.count:
-            return CGPoint(x: UIScreen.main.bounds.width * 0.90, y: 0.50)
+            return CGPoint(x: UIScreen.main.bounds.width * 0.90, y: 0.32)
         default:
             return CGPoint.zero
         }
