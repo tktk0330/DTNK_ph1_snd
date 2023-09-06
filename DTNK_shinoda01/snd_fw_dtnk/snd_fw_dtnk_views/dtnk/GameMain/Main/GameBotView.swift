@@ -19,19 +19,17 @@ struct GameBotView: View {
             }
             
             // Card Pool
-            HStack() {
-                ZStack {
-                    ForEach(Array(game.cardUI.enumerated()), id: \.1.id) { index, card in
-                        N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
-                            .animation(.easeInOut(duration: 0.3))
-                    }
-
-                    Image(ImageName.Card.back.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: Constants.otherCardWidth)
-                        .offset(CGSize(width: UIScreen.main.bounds.width * -0.09, height: -Constants.scrHeight * 0.046))
+            ZStack {
+                ForEach(Array(game.cardUI.enumerated()), id: \.1.id) { index, card in
+                    N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
+                        .animation(.easeInOut(duration: 0.3))
                 }
+                
+                Image(ImageName.Card.back.rawValue)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.otherCardWidth)
+                    .offset(CGSize(width: UIScreen.main.bounds.width * -0.09, height: -Constants.scrHeight * 0.046))
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
             
@@ -81,7 +79,6 @@ struct GameBotView: View {
                     .cornerRadius(10)
                     .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
                     .position(x: UIScreen.main.bounds.width * 0.70, y:  geo.size.height * 0.30)
-                
             }
             
             // playerCardsCount
@@ -93,22 +90,23 @@ struct GameBotView: View {
             
             // Btn
             Group {
-                
                 Group {
-                    if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.dtnkCode {
-                        Button(action: {
-                            // dtnk
-                            GameBotController().dtnk(Index: myside)
-                        }) {
-                            Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                    if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main {
+                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.dtnkCode {
+                            Button(action: {
+                                // dtnk
+                                GameBotController().dtnk(Index: myside)
+                            }) {
+                                Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                            }
                         }
-                    }
-                    if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
-                        Button(action: {
-                            // dtnk
-                            GameBotController().dtnk(Index: myside)
-                        }) {
-                            Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
+                            Button(action: {
+                                // dtnk
+                                GameBotController().dtnk(Index: myside)
+                            }) {
+                                Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                            }
                         }
                     }
                 }
@@ -118,7 +116,7 @@ struct GameBotView: View {
                     
                     if game.gamePhase == .dealcard || game.gamePhase == .countdown || game.gamePhase == .gamefirst  {
                         Button(action: {
-                            GameBotController().pass(Index: myside)
+                            GameBotController().initPass(Index: myside)
                         }) {
                             Btnaction(btnText: "出せない", btnTextSize: 20, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                         }
@@ -139,7 +137,7 @@ struct GameBotView: View {
                     
                     // testようにボタンとして動かしておく
                     Button(action: {
-                        GameBotController().dtnk(Index: myside)
+                        GameBotController().playerDtnk(Index: myside)
                     }) {
                         // icon
                         // TODO: 磨き上げ
@@ -162,8 +160,6 @@ struct GameBotView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.92)
             }
 
-            
-            
             Group {
                 // 広告用
                 Rectangle()
@@ -184,7 +180,6 @@ struct GameBotView: View {
                     GmaeNumAnnounce(gameNum: game.gameNum, gameTarget: game.gameTarget)
                         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
-                
                 // 開始ボタン
                 if game.startFlag && !game.AnnounceFlg {
                     Button(action: {
@@ -221,6 +216,17 @@ struct GameBotView: View {
                     .id(game.rateUpCard)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
+                // revenge
+                if !game.revengerIndex.isEmpty {
+                    RevengeAnnounce() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            GameBotController().revenge()
+                        }
+                    }
+                    .id(game.revengerIndex)
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                }
+
                 // Decision Initial Player View
 //                if game.gamePhase == .decisioninitialplayer {
 //                    InitialFlip(player: game.players, initialIndex: game.currentPlayerIndex)
@@ -261,11 +267,7 @@ struct GameBotView: View {
                 if game.gamePhase == .waiting {
                     WaitingView()
                 }
-                
-                
             }
-
-
         }
         .onAppear {
             game.myside = self.myside

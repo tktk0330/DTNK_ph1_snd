@@ -94,8 +94,9 @@ class GameObserber {
                     let rateUpCard = cardId.imageName()
                     fbms.setRateUpCard(rateUpCard: rateUpCard) { resut in }
                 } else {
-                    //　決定されたらmainに
-                    game.gamePhase = .main
+                    //　決定されたらgamefirstに
+                    game.gamePhase = .gamefirst
+                    fbms.setGamePhase(gamePhase: .gamefirst) { result in }
                 }
             } else {
             }
@@ -197,6 +198,25 @@ class GameObserber {
     }
     
     /**
+     誰も出せなかった場合
+     */
+    func firstAnswers() {
+        guard checkHost() else {
+            return
+        }
+        // TODO: ランダムにしたい
+        // Hostから始める
+        let index = GameCommonFunctions().findSideById(players: game.players, id: hostID)
+        
+        fbms.setCurrentPlayerIndex(currentplayerIndex: index! - 1) { [self] result in
+            if result {
+                // mainに移る
+                fbms.setGamePhase(gamePhase: .main) { result in }
+            }
+        }
+    }
+    
+    /**
      challengeAnswersが揃ったらchallengeに移す
      */
     func challengeAnswers() {
@@ -213,7 +233,6 @@ class GameObserber {
         guard checkHost() else {
             return
         }
-        setGame()
         let Item = GameResetItem()
         fbms.resetGame(item: Item) { result in }
     }
@@ -276,11 +295,24 @@ class GameObserber {
         game.winners.removeAll()
         game.losers.removeAll()
         // 勝者・敗者を決める
-        if game.currentPlayerIndex == 99 {
+        if game.currentPlayerIndex == Constants.stnkCode || game.lastPlayerIndex == Constants.stnkCode {
             // しょてんこの場合
-
-        } else if game.currentPlayerIndex == 88 {
+            // しょてんこの場合
+            let winner = game.players[game.dtnkPlayerIndex]
+            game.winners.append(winner)
+            let losers = game.players.enumerated().compactMap { index, player in
+                index != game.dtnkPlayerIndex ? player : nil
+            }
+            game.losers.append(contentsOf: losers)
+            
+        } else if game.burstPlayerIndex != Constants.burstCode  {
             // バーストの場合
+            let winers = game.players.enumerated().compactMap { index, player in
+                index != game.burstPlayerIndex ? player : nil
+            }
+            game.winners.append(contentsOf: winers)
+            let loser = game.players[game.burstPlayerIndex]
+            game.losers.append(loser)
 
         } else {
             // 通常時
@@ -367,14 +399,5 @@ class GameObserber {
             }
         }
         return orderedRanks
-    }
-
-    /**
-     次ゲーム処理
-     */
-    func setGame() {
-        // フロント初期化アイテム
-        game.counter = false
-        game.startFlag = false
     }
 }

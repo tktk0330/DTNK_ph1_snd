@@ -20,53 +20,92 @@ struct GameFriendView: View {
 
     var body: some View {
         GeometryReader { geo in
-            Group {
                 // ForcusAnimation
-                if game.currentPlayerIndex != 99 && (game.gamePhase == .main) {
+                if game.currentPlayerIndex != 99 && (game.gamePhase == .main || game.gamePhase == .gamefirst_sub) {
                     TargetPlayerView()
                         .position(x: TargetPlayerView().focusPosition(side: game.currentPlayerIndex).x,
                                   y: geo.size.height * TargetPlayerView().focusPosition(side: game.currentPlayerIndex).y)
                         .animation(.easeInOut(duration: 0.5), value: game.currentPlayerIndex)
                 }
-                
-                // ScoreBar
-                Group {
-                    Text(String(game.players[myside].score))
-                        .modifier(PlayerScoreModifier())
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
-                    
-                    Text(String(game.players[(myside + 1) % game.players.count].score))
-                        .modifier(PlayerScoreModifier())
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.60)
-                        .rotationEffect(Angle(degrees: 90))
-                    
-                    Text(String(game.players[(myside + 2) % game.players.count].score))
-                        .modifier(PlayerScoreModifier())
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.42)
-                                        
-                    Text(String(game.players[(myside + 3) % game.players.count].score))
-                        .modifier(PlayerScoreModifier())
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.60)
-                        .rotationEffect(Angle(degrees: -90))
-                }
-            }
-                        
+            
             // Card Pool
-            HStack() {
-                ZStack {
-                    ForEach(Array(game.cardUI.enumerated()), id: \.1.id) { index, card in
-                        N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
-                            .animation(.easeInOut(duration: 0.3))
-                    }
+            ZStack {
+                ForEach(Array(game.cardUI.enumerated()), id: \.1.id) { index, card in
+                    N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
+                        .animation(.easeInOut(duration: 0.3))
                 }
+                
+                Image(ImageName.Card.back.rawValue)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.otherCardWidth)
+                    .offset(CGSize(width: UIScreen.main.bounds.width * -0.09, height: -Constants.scrHeight * 0.046))
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
 
+
+            // ScoreBar
+            Group {
+                Text(String(game.players[myside].score))
+                    .modifier(PlayerScoreModifier())
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.54)
+                
+                Text(String(game.players[(myside + 1) % game.players.count].score))
+                    .modifier(PlayerScoreModifier())
+                    .position(x: UIScreen.main.bounds.width * 0.40, y:  geo.size.height * 0.61)
+                    .rotationEffect(Angle(degrees: 90))
+                
+                Text(String(game.players[(myside + 2) % game.players.count].score))
+                    .modifier(PlayerScoreModifier())
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.36)
+                
+                Text(String(game.players[(myside + 3) % game.players.count].score))
+                    .modifier(PlayerScoreModifier())
+                    .position(x: UIScreen.main.bounds.width * 0.60, y:  geo.size.height * 0.61)
+                    .rotationEffect(Angle(degrees: -90))
+            }
+            
+            // playerCardsCount
+            ForEach(0..<4) { index in
+                CardsCountView(cardsCount: game.players[index].hand.count)
+                    .position(x: CardsCountView(cardsCount: index).position(side: index).x,
+                              y: geo.size.height * CardsCountView(cardsCount: index).position(side: index).y)
+            }
+                        
             // Btn
             Group {
+                Group {
+                    if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main {
+                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.dtnkCode {
+                            Button(action: {
+                                // dtnk
+                                GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
+                            }) {
+                                Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                            }
+                        }
+                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
+                            Button(action: {
+                                // dtnk
+                                GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
+                            }) {
+                                Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                            }
+                        }
+                    }
+                }
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
+                
                 HStack(spacing: 15) {
                     
-                    if game.turnFlg == 0 {
+                    if game.gamePhase == .dealcard || game.gamePhase == .countdown || game.gamePhase == .gamefirst  {
+                        Button(action: {
+                            GameFriendEventController().initPass(Index: myside)
+                        }) {
+                            Btnaction(btnText: "出せない", btnTextSize: 20, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+                        }
+                        
+                    } else if game.turnFlg == 0 {
                         Button(action: {
                             GameFriendEventController().draw(playerID: game.players[myside].id, playerIndex: myside)
                         }) {
@@ -83,7 +122,7 @@ struct GameFriendView: View {
                     // testようにボタンとして動かしておく
                     Button(action: {
                         // dtnk
-                        GameFriendEventController().dtnk(Index: myside, dtnkPlayer: game.players[myside])
+                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
                     }) {
                         // icon
                         // TODO: 磨き上げ
@@ -149,7 +188,6 @@ struct GameFriendView: View {
                             .scaleEffect(2.0)
                             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
                     }
-                    
                     // 仮想View 初期カード設置
                     Text("").onReceive(game.$counter) { newValue in
                         if newValue {
@@ -161,6 +199,7 @@ struct GameFriendView: View {
                         RateUpAnnounce(cardImage: game.rateUpCard!) {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 gameObserber.firstCard()
+                                game.ascendingRate += game.ascendingRate
                                 game.rateUpCard = nil
                             }
                         }
@@ -171,6 +210,14 @@ struct GameFriendView: View {
                 // DTNK View
                 if game.gamePhase == .dtnk {
                     DTNKView(text: "DOTENKO")
+                }
+                // バースト注意文言
+                if  game.players[myside].hand.count == Constants.burstCount && game.gamePhase == .main {
+                    BurstCoutionView(text: "Burst Caution!").position(x: geo.size.width * 0.68, y: geo.size.height * 1.08)
+                }
+                // BurstView
+                if game.gamePhase == .burst {
+                    BurstView(text: "BURST")
                 }
                 // チャレンジ可否ポップ
                 if game.gamePhase == .q_challenge {
@@ -196,7 +243,6 @@ struct GameFriendView: View {
                 if game.gamePhase == .waiting {
                     WaitingView()
                 }
-                
             }
         } .onAppear {
             // サイド設定
@@ -305,12 +351,23 @@ struct GameFriendView: View {
             game.dtnkPlayerIndex = Index!
             game.dtnkPlayer = player
         }
+        // DTNKInfo
+        fbms.observeBurstPlayerIndex() { Index in
+            game.burstPlayerIndex = Index!
+        }
+
+        // 初期回答
+        fbms.observeFirstAnswers() { firstAnswers in
+            game.firstAnswers = firstAnswers
+            if firstAnswers.allSatisfy({ $0 != .initial }) {
+                gameObserber.firstAnswers()
+            }
+        }
         // challengeAnswers
         fbms.observeChallengeAnswer() { challengeAnswers in
             game.challengeAnswers = challengeAnswers
             if challengeAnswers.allSatisfy({ $0 != .initial }) {
                 gameObserber.challengeAnswers()
-                
             }
         }
         fbms.observeNextGameAnnouns() { announce in

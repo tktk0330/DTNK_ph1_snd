@@ -22,25 +22,46 @@ struct ChallengePopView: View {
                 .fontWeight(.bold)
                 .padding(5)
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.35)
-
-            
             
             if game.dtnkPlayerIndex == game.myside {
-                // TODO: Friendの場合
-                //　vsBot 他の人が決まるまで待機
-                WaitingChallengeView()
-                    .position(x: geo.size.width / 2, y: geo.size.height * 1.0)
+                
+                WaitingView()
                     .onAppear{
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
-                            game.challengeAnswers[game.myside] = .challenge
+                        game.gamePhase = .waiting
+                        //　vsFriend 他の人が決まるまで待機
+                        if game.gamevsInfo == .vsFriend {
+                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                        } else {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+                                game.challengeAnswers[game.myside] = .challenge
+                            }
                         }
                     }
+//                //　vsFriend 他の人が決まるまで待機
+//                if game.gamevsInfo == .vsFriend {
+//                    WaitingChallengeView()
+//                        .position(x: geo.size.width / 2, y: geo.size.height * 1.0)
+//                        .onAppear{
+//                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+//                        }
+//                } else {
+//                    //　vsBot 他の人が決まるまで待機
+//                    WaitingChallengeView()
+//                        .position(x: geo.size.width / 2, y: geo.size.height * 1.0)
+//                        .onAppear{
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+//                                game.challengeAnswers[game.myside] = .challenge
+//                            }
+//                        }
+//                }
                 
             } else {
                 // 参加可否通知を送る
                 HStack(spacing: 20) {
                     
+                    
                     Button(action: {
+                        game.gamePhase = .waiting
                         if game.gamevsInfo == .vsFriend {
                             GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .nochallenge)
                         } else {
@@ -64,6 +85,7 @@ struct ChallengePopView: View {
                     } else {
                         // 参加する
                         Button(action: {
+                            game.gamePhase = .waiting
                             if game.gamevsInfo == .vsFriend {
                                 GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
                             } else {

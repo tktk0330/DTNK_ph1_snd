@@ -186,13 +186,13 @@ class GameUiState: ObservableObject {
 
     func changeddecisioninitialplayer() {
         // X秒後にratefirst
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
-            // まだ誰も出せずSYOTENKO可能状態である時
-            gamePhase = .main
-            // ペラペラが終わったら決まったプレイヤから始める
-            let index = (currentPlayerIndex - 1 + 4) % 4
-            //            botTurn(Index: index)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+//            // まだ誰も出せずSYOTENKO可能状態である時
+//            gamePhase = .main
+//            // ペラペラが終わったら決まったプレイヤから始める
+//            let index = (currentPlayerIndex - 1 + 4) % 4
+//            //            botTurn(Index: index)
+//        }
     }
 
     func changeddtnk() {
