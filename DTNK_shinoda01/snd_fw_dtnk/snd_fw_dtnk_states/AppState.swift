@@ -23,10 +23,9 @@ final class AppState {
     var matching: MatchingState!
     
     var gamesystem: GameSystemState!
-    // old
-    var gameUiState: GameUiState!
-    // new
+    // Game
     var gameUIState: GameUIState!
+    
     var subState: SubState!
 
     var resultState: ResultState!
@@ -40,7 +39,6 @@ final class AppState {
         room: RoomState,
         matching: MatchingState?,
         gamesystem: GameSystemState?,
-        gameUiState: GameUiState?,
         gameUIState: GameUIState?,
         subState: SubState?,
         resultState: ResultState?
@@ -53,7 +51,6 @@ final class AppState {
         self.room = room
         self.matching = matching
         self.gamesystem = gamesystem
-        self.gameUiState = gameUiState
         self.gameUIState = gameUIState
         self.subState = subState
         self.resultState = resultState
@@ -67,7 +64,6 @@ final class AppState {
         self.room = RoomState()
         self.matching = nil
         self.gamesystem = nil
-        self.gameUiState = GameUiState()
         self.gameUIState = GameUIState()
         self.subState = nil
         self.resultState = nil

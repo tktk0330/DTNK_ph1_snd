@@ -28,7 +28,6 @@ struct PageContent: View {
             case .dtnkMatching:
                 MatchingView()
             case .dtnkMain:
-//                GameMain()
                 GameBotView()
             case .dtnkMain_friends:
                 GameFriendView()
