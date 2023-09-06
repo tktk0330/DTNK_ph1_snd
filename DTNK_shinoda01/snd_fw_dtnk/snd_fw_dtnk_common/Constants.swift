@@ -1,6 +1,7 @@
 /**
  定数ファイル
  */
+
 import SwiftUI
 
 struct Constants {

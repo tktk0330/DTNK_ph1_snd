@@ -562,7 +562,6 @@
 				5D8FA2E22A4825970079F260 /* Room */,
 				5D8FA2FB2A4826F40079F260 /* Matching */,
 				5D8FA2E32A48259E0079F260 /* GameMain */,
-				5DDB61E62A5583FD00EB03F7 /* GameFriend */,
 				5D8FA2E42A4825AC0079F260 /* GameResult */,
 			);
 			path = dtnk;
@@ -639,6 +638,7 @@
 			children = (
 				5DCD27C62A9593A700778980 /* GameBotView.swift */,
 				5D8FA30D2A4827D70079F260 /* GameMainView.swift */,
+				5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */,
 				5D8FA3012A4827750079F260 /* BotView.swift */,
 				CA5C5DF72A794E21006D7C01 /* BurstCoutionViewswift.swift */,
 				CA5C5DF12A794497006D7C01 /* BurstView.swift */,
@@ -671,14 +671,6 @@
 				5D8FA31D2A48288A0079F260 /* ScoreItem.swift */,
 			);
 			path = Result;
-			sourceTree = "<group>";
-		};
-		5DDB61E62A5583FD00EB03F7 /* GameFriend */ = {
-			isa = PBXGroup;
-			children = (
-				5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */,
-			);
-			path = GameFriend;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -2,7 +2,6 @@
  Gameに関する処理
  */
 
-
 import SwiftUI
 
 struct GameFriendEventController {

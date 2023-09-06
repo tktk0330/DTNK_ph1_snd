@@ -1,5 +1,6 @@
-
-
+/**
+ 共通関数
+ */
 
 import Foundation
 
@@ -19,6 +20,4 @@ struct GameCommonFunctions {
         }
         return nil
     }
-
-
 }

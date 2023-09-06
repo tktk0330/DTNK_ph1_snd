@@ -4,13 +4,7 @@
 
 import SwiftUI
 
-struct Header: View {
-
-//    @ObservedObject var game = GameUiState()
-    @StateObject var game: GameUiState = appState.gameUiState
-
-
-    
+struct Header: View {    
     var body: some View {
         HStack {
             Button {
