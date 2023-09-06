@@ -15,26 +15,26 @@ struct PlayerView: View {
 
     var body: some View {
         
-        let handsCount = game.players[playerIndex].hand.count
-        let cardposition_y = [[0],
-                              [0],
-                              [0,0],
-                              [5,0,5],
-                              [10,0,0,10],
-                              [15,3,0,3,15],
-                              [15,5,0,0,5,15],
-                              [23,10,3,0,3,10,23]]
+//        let handsCount = game.players[playerIndex].hand.count
+//        let cardposition_y = [[0],
+//                              [0],
+//                              [0,0],
+//                              [5,0,5],
+//                              [10,0,0,10],
+//                              [15,3,0,3,15],
+//                              [15,5,0,0,5,15],
+//                              [23,10,3,0,3,10,23]]
 
         VStack{
             // 手札
-            HStack(spacing: -35) {
-                ForEach(Array(game.players[playerIndex].hand.enumerated()), id: \.1.id) { index, card in
-                    CardView(card: card, namespace: namespace, selectedCards: $game.players[playerIndex].selectedCards)
-                        .rotationEffect(.degrees(Double(index * a[handsCount] - b[handsCount])))
-                        .offset(y:CGFloat(cardposition_y[handsCount][index]))
-                }
-            }
-            .animation(.easeInOut(duration: 0.3))
+//            HStack(spacing: -35) {
+//                ForEach(Array(game.players[playerIndex].hand.enumerated()), id: \.1.id) { index, card in
+//                    CardView(card: card, namespace: namespace, selectedCards: $game.players[playerIndex].selectedCards)
+//                        .rotationEffect(.degrees(Double(index * a[handsCount] - b[handsCount])))
+//                        .offset(y:CGFloat(cardposition_y[handsCount][index]))
+//                }
+//            }
+//            .animation(.easeInOut(duration: 0.3))
 
         }
     }

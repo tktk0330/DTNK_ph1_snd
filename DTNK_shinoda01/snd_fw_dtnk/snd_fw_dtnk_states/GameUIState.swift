@@ -84,13 +84,14 @@ class GameUIState: ObservableObject {
     @Published var rateUpCard: String? = nil
     // initialFlipの仮変数
     @Published var initialPlayerIndex: Int? = nil
-
+    // どてんこ返し [返した人　返された人]
+    @Published var revengerIndex: [Int] = []
     // FB必要なし
-    // カウンター
-    @Published var counter: Bool = false
-    @Published var startFlag: Bool = false
-    @Published var AnnounceFlg = false // 実行中 true 非表示中　false
-    @Published var turnFlg: Int = 0 // 0: canDraw 1: canPass
+    @Published var counter: Bool = false   // カウンター
+    @Published var startFlag: Bool = false // startBtn
+    @Published var AnnounceFlg = false     // 実行中 true 非表示中　false
+    @Published var turnFlg: Int = 0        // 0: canDraw 1: canPass
+    @Published var dtnkFlg: Int = 0        // 0: no 1: dtnked
 
 
     /**
@@ -218,13 +219,14 @@ class GameUIState: ObservableObject {
      TODO：　誰も出せなかった時にランダムで最初のプレイヤーを決める
      */
     func judgeFirstPlayer() {
-//        let randomInitialPlayerIndex = Int.random(in: 0...3)
+        //        let randomInitialPlayerIndex = Int.random(in: 0...3)
         //        currentPlayerIndex = randomInitialPlayerIndex
         //        gamePhase = .decisioninitialplayer
         log("誰も出せないのでホストから始める")
-        currentPlayerIndex = 0
-        gamePhase = .gamefirst_sub
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            currentPlayerIndex = 0
+            gamePhase = .gamefirst_sub
+        }
     }
 
     /**
@@ -253,6 +255,7 @@ class GameUIState: ObservableObject {
         self.gameScore = resetItem.gameScore
         
         self.turnFlg = 0
+        self.dtnkFlg = 0
 
         
         completion(true)
