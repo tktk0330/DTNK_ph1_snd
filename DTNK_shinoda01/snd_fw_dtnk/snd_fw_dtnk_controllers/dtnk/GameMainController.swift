@@ -43,7 +43,6 @@ class GameBotController {
             }
         }
         
-//        var time: Double = 0.8
         // 自分のターンになって考える時間
         let time01: Double = 0.8
         // カードを引く前に考える時間
@@ -672,13 +671,14 @@ class GameBotController {
      カードを再生成する
      */
     func regenerationDeck() {
+        // アナウンス
+        game.regenerationDeckFlg = 1
         //deckに戻す　一番上だけ残す
         let lastCard = game.table.last!
         var remainingCards = Array(game.table.dropLast())
         remainingCards.shuffle()
         game.deck.append(contentsOf: remainingCards)
         game.table = [lastCard]
-        
         // view
         todeck(card: game.deck)
         totable(card: game.table)
@@ -894,6 +894,7 @@ class GameBotController {
         // 合計が一緒
         var sum: Bool = false
         let sumResult = calculatePossibleSums(cards: playCard)
+        log("sumResult")
         for sumdata in sumResult {
             if sumdata == table.number() {
                 sum = true

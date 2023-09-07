@@ -637,7 +637,6 @@
 			isa = PBXGroup;
 			children = (
 				5DCD27C62A9593A700778980 /* GameBotView.swift */,
-				5D8FA30D2A4827D70079F260 /* GameMainView.swift */,
 				5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */,
 				5D8FA3012A4827750079F260 /* BotView.swift */,
 				CA5C5DF72A794E21006D7C01 /* BurstCoutionViewswift.swift */,
@@ -651,6 +650,7 @@
 				5D8FA3112A48280F0079F260 /* HeaderView.swift */,
 				5D8FA3132A48281F0079F260 /* PlayerView.swift */,
 				5D8FA3152A48282E0079F260 /* RateView.swift */,
+				5D8FA30D2A4827D70079F260 /* GameMainView.swift */,
 				5D8FA3172A4828420079F260 /* TableView.swift */,
 			);
 			path = Main;

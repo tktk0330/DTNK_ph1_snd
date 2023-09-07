@@ -226,6 +226,17 @@ struct GameBotView: View {
                     .id(game.revengerIndex)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
+                // デッキ再生成
+                if game.regenerationDeckFlg == 1 {
+                    RegenerationDeck() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            game.regenerationDeckFlg = 0
+                        }
+                    }
+                    .id(game.regenerationDeckFlg)
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                }
+
 
                 // Decision Initial Player View
 //                if game.gamePhase == .decisioninitialplayer {

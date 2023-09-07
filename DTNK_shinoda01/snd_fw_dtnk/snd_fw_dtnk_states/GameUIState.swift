@@ -92,6 +92,8 @@ class GameUIState: ObservableObject {
     @Published var AnnounceFlg = false     // 実行中 true 非表示中　false
     @Published var turnFlg: Int = 0        // 0: canDraw 1: canPass
     @Published var dtnkFlg: Int = 0        // 0: no 1: dtnked
+    @Published var regenerationDeckFlg: Int = 0        // 0: no 1: dtnked
+
 
 
     /**
