@@ -15,6 +15,11 @@ struct HomeController {
         Router().onCloseMenu()
     }
     
+    func onTapBackMode(){
+        appState.home.mode = .noEditting
+    }
+
+    
     func onTapIcon(){
         appState.home.mode = .edittingIcon
     }
@@ -40,4 +45,35 @@ struct HomeController {
     func onTapBack(){
         Router().pushBasePage(pageId: .home)
     }
+    
+    // 名前変更
+    func updateName(newName: String) {
+        // FB
+        HomeFireBaseMng().upDateUserName(newUsername: newName) { result in
+            if result {
+                // Realm
+                RealmMng().updateUsernameInRealm(userId: appState.account.loginUser.userID, newUsername: newName) { result in
+                    if result {
+                        appState.account.loginUser.name = newName
+                    }
+                }
+            }
+        }
+    }
+    
+    // Icon変更
+    func updateIcon(iconURL: String) {
+        // FB
+        HomeFireBaseMng().upDateIcon(iconURL: iconURL) { result in
+            if result {
+                // Realm
+                RealmMng().updateIconInRealm(userId: appState.account.loginUser.userID, iconURL: iconURL) { result in
+                    if result {
+                        appState.account.loginUser.iconURL = iconURL
+                    }
+                }
+            }
+        }
+    }
+
 }
