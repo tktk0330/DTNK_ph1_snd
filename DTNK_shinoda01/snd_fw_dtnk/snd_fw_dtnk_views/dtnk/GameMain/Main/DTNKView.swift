@@ -1,5 +1,6 @@
 // TODO: テキストの背景をオシャレにしたいipadで作って取り込む？　　アニメーションも要検討
 
+
 import SwiftUI
 
 struct DTNKView: View {
@@ -11,7 +12,8 @@ struct DTNKView: View {
             AnimationReader(100) { value in
                 ZStack {
                     Text(text)
-                        .font(.system(size: 50, weight: .bold, design: .default))
+                        .font(.custom(FontName.font01, size: Constants.scrWidth * 0.1))
+                        .font(.system(size: Constants.scrWidth * 0.1, weight: .bold, design: .default))
                         .shine(.gold, withWaveIndex: value)
                         .fontWeight(.heavy)
                         .foregroundColor(.white)
@@ -44,7 +46,8 @@ struct RevengeView: View {
             AnimationReader(100) { value in
                 ZStack {
                     Text(text)
-                        .font(.system(size: 50, weight: .bold, design: .default))
+                        .font(.custom(FontName.font01, size: Constants.scrWidth * 0.1))
+                        .font(.system(size: Constants.scrWidth * 0.1, weight: .bold, design: .default))
                         .shine(.bronze, withWaveIndex: value)
                         .fontWeight(.heavy)
                         .foregroundColor(.white)

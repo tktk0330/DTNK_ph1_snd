@@ -12,7 +12,6 @@ struct GameResultController {
     func onTapPlay() {
         
         appState.gamesystem = nil
-        appState.gameUiState = GameUiState()
         appState.resultState = nil
         
         Router().pushBasePage(pageId: .home)

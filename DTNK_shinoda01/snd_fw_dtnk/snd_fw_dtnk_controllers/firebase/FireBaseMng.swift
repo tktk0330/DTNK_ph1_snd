@@ -1,6 +1,7 @@
 /**
  FireBaseManager
  */
+
 import SwiftUI
 import Firebase
 import FirebaseDatabase
@@ -45,6 +46,7 @@ class FirebaseManager {
             "lastPlayerIndex": item.lastPlayerIndex,
             "dtnkPlayer": item.dtnkPlayer,
             "dtnkPlayerIndex": item.dtnkPlayerIndex,
+            "firstAnswers": item.firstAnswers,
             "challengeAnswer": item.challengeAnswers,
             "nextGameAnnouns": item.nextGameAnnouns,
             "initialRate": item.initialRate,
@@ -366,6 +368,64 @@ class FirebaseManager {
     }
     
     /**
+     burstPlayerIndexのセット
+     */
+    func setBurstPlayerIndex(burstPlayerIndex: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("burstPlayerIndex").setValue(burstPlayerIndex) { error, _ in
+            if let error = error {
+                print("Failed to update room status: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     burstPlayerIndexの取得（リアルタイム）
+     */
+    func observeBurstPlayerIndex(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("burstPlayerIndex")
+        ref.observe(.value) { (snapshot) in
+            guard let burstPlayerIndex = snapshot.value as? Int else {
+                print("Could not cast snapshot value to an integer")
+                return
+            }
+            completion(burstPlayerIndex)
+        }
+    }
+
+    
+    /**
+     FirstAnswersのセット
+     */
+    func setFirstAnswers(index: Int, answer: FirstAnswers, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("firstAnswers/\(index)").setValue(answer.rawValue) { error, _ in
+            if let error = error {
+                print("Failed: \(error.localizedDescription)")
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     FirstAnswersの取得（リアルタイム）
+     */
+    func observeFirstAnswers(completion: @escaping ([FirstAnswers]) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let firstAnswersRef = gameInfoRef.child("firstAnswers")
+        firstAnswersRef.observe(.value) { (snapshot) in
+            guard let rawValues = snapshot.value as? [Int] else {
+                print("Could not cast snapshot value to [Int]")
+                return
+            }
+            let answers = rawValues.compactMap { FirstAnswers(rawValue: $0) }
+            completion(answers)
+        }
+    }
+
+    
+    /**
      ChallengeAnserのセット
      */
     func setChallengeAnswer(index: Int, answer: ChallengeAnswer, completion: @escaping (Bool) -> Void) {
@@ -634,6 +694,7 @@ class FirebaseManager {
             "lastPlayerIndex": item.lastPlayerIndex,
             "dtnkPlayer": item.dtnkPlayer,
             "dtnkPlayerIndex": item.dtnkPlayerIndex,
+            "firstAnswers": item.firstAnswers,
             "challengeAnswer": item.challengeAnswers,
             "nextGameAnnouns": item.nextGameAnnouns,
             "ascendingRate": item.ascendingRate,

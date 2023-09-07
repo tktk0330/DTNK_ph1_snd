@@ -9,6 +9,7 @@ struct BurstCoutionView: View {
             AnimationReader(100) { value in
                 ZStack {
                     Text(text)
+                        .font(.custom(FontName.font01, size: 30))
                         .font(.system(size: 30, weight: .bold, design: .default))
                         .fontWeight(.heavy)
                         .foregroundColor(.red) // 赤い色を追加

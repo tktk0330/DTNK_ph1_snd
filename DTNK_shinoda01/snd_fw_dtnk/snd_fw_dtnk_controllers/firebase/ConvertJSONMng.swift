@@ -2,10 +2,10 @@
  JSON形式に変換する
  
  */
+
 import SwiftUI
 
 struct ConvertJSONMng {
-    
 
     // ルーム作成の際
     func playerJSON(player: Player) -> [String: Any] {
@@ -68,7 +68,4 @@ struct ConvertJSONMng {
         }
         return playersJSON
     }
-
-
-
 }

@@ -113,11 +113,8 @@ class MatchingController {
             // 参加者だった退出
             RoomFirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
                 if judge {
-                    print("sc")
                     Router().pushBasePage(pageId: .room)
                 } else {
-                    print("er")
-
                 }
             }
         }
@@ -142,7 +139,7 @@ class BotCreate {
         //ゲーム人数分botをセットする
         for i in 2...4 {
             let bot = allBots[i]
-            let player = Player(id: "", side: i, name: bot.name, icon_url: bot.icon_url)
+            let player = Player(id: "botId" + String(i), side: i, name: bot.name, icon_url: bot.icon_url)
             players.append(player)
         }
         return players

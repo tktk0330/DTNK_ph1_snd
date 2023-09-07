@@ -18,13 +18,19 @@ class GameBotController {
      ① 出せるからすぐ出す
      ② 出せるけど引いて出す
      ③ 出せるけど引くそして出さない
-     
      ④ 出せないので引く、出せるので出す
      ⑤ 出せないので引く、出せるけどパス
      ⑥ 出せないので引く、出せないのでパス
      */
     // TODO: 綺麗にする
     func botAction(Index: Int, completion: @escaping (Bool) -> Void) {
+        
+        guard judgeInGame() else {
+            completion(false)
+            return
+        }
+        
+        
         // 手札全パターン
         let allPatern = generateAllCombinations(cards: game.players[Index].hand)
         var playCards: [[CardId]] = []
@@ -37,71 +43,120 @@ class GameBotController {
             }
         }
         
-        var time = 1
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+        // 自分のターンになって考える時間
+        let time01: Double = 0.8
+        // カードを引く前に考える時間
+        let time02: Double = 0.8
+        // カードを出すまでに考える時間
+        let time03: Double = 0.8
+        //　パスするまでに考える時間
+        let time04: Double = 0.8
+
+        // 自分のターンになって次の処理をするまでの時間
+        DispatchQueue.main.asyncAfter(deadline: .now() + time01) { [self] in
             // 出せる時
             if !playCards.isEmpty {
                 playCards.shuffle()
                 let random = Int.random(in: 0..<100)
                 
                 if random < 70  {
-                    print("① 出せるからすぐ出す")
-                    // ① 出せるからすぐ出す
+                    guard judgeInGame() else {
+                        completion(false)
+                        return
+                    }
+                    log("\(Index): ① 出せるからすぐ出す")
+                    log("\( playCards.first!)")
                     game.table.append(contentsOf: playCards.first!)
                     game.players[Index].hand.removeAll(where: { playCards.first!.contains($0)})
                     game.lastPlayerIndex = Index
-                    totable(card: playCards.first!)
-                    tohands(Index: Index)
-                    time += 1
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                    DispatchQueue.main.async { [self] in
+                        totable(card: playCards.first!)
+                        tohands(Index: Index)
+                    }
+                    //　パスするまでの時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
                         // 次のターンへ
                         pass(Index: Index)
                         completion(true)
                     }
                 } else if random < 90 {
-                    print("② 出せるけど引いて出す")
-
-                    time += 1
+                    guard judgeInGame() else {
+                        completion(false)
+                        return
+                    }
+                    log("\(Index): ② 出せるけど引いて出す")
                     // ② 出せるけど引いて出す
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                    // カードを引く前に考える時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
                         drawCard(Index: Index)
                     }
-                    time += 1
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                    // カードを出すまでに考える時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time03 + 0.3) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
+                        log("\( playCards.first!)")
                         game.table.append(contentsOf: playCards.first!)
                         game.players[Index].hand.removeAll(where: { playCards.first!.contains($0) })
                         game.lastPlayerIndex = Index
-                        totable(card: playCards.first!)
-                        tohands(Index: Index)
+                        DispatchQueue.main.async { [self] in
+                            totable(card: playCards.first!)
+                            tohands(Index: Index)
+                        }
                     }
-                    time += 1
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                    //　パスするまでの時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time04 + 0.5) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
                         // 次のターンへ
                         pass(Index: Index)
                         completion(true)
                     }
-
-                    
                 } else {
-                    print("③ 出せるけど引くそして出さない")
-                    // ③ 出せるけど引くそして出さない
-                    time += 1
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                    guard judgeInGame() else {
+                        completion(false)
+                        return
+                    }
+                    log("\(Index): ③ 出せるけど引くそして出さない")
+                    // カードを引く前に考える時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
                         drawCard(Index: Index)
                     }
-                    time += 1
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                    //　パスするまでの時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time04 + 0.3) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
                         // 次のターンへ
                         pass(Index: Index)
                         completion(true)
                     }
-                    
                 }
                 
             } else {
                 // 出せない時
-                time += 1
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                // カードを引く前に考える時間
+                DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
+                    guard judgeInGame() else {
+                        completion(false)
+                        return
+                    }
                     drawCard(Index: Index)
                     
                     let allPatern = generateAllCombinations(cards: game.players[Index].hand)
@@ -116,31 +171,46 @@ class GameBotController {
                     if !playCards.isEmpty {
                         playCards.shuffle()
                         let random = Int.random(in: 0..<100)
-                        
                         if random < 80 {
-                            // ④ 出せないので引く、出せるので出す
-                            print("④ 出せないので引く、出せるので出す")
-                            time += 1
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
+                            log("\(Index): ④ 出せないので引く、出せるので出す")
+                            // カードを出すまでに考える時間
+                            DispatchQueue.main.asyncAfter(deadline: .now() + time03) { [self] in
+                                guard judgeInGame() else {
+                                    completion(false)
+                                    return
+                                }
+                                log("\( playCards.first!)")
                                 game.table.append(contentsOf: playCards.first!)
                                 game.players[Index].hand.removeAll(where: { playCards.first!.contains($0) })
                                 game.lastPlayerIndex = Index
-                                totable(card: playCards.first!)
-                                tohands(Index: Index)
+                                DispatchQueue.main.async { [self] in
+                                    totable(card: playCards.first!)
+                                    tohands(Index: Index)
+                                }
                             }
-                            time += 1
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                            //　パスするまでの時間
+                            DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                                guard judgeInGame() else {
+                                    completion(false)
+                                    return
+                                }
                                 // 次のターンへ
                                 pass(Index: Index)
                                 completion(true)
                             }
-
                             
                         } else {
-                            // ⑤ 出せないので引く、出せるけどパス
-                            print("⑤ 出せないので引く、出せるけどパス")
-                            time += 1
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                            log("\(Index): ⑤ 出せないので引く、出せるけどパス")
+                            //　パスするまでの時間
+                            DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                                guard judgeInGame() else {
+                                    completion(false)
+                                    return
+                                }
                                 // 次のターンへ
                                 pass(Index: Index)
                                 completion(true)
@@ -148,15 +218,17 @@ class GameBotController {
                         }
                         
                     } else {
-                        // ⑥ 出せないので引く、出せないのでパス
-                        print("⑥ 出せないので引く、出せないのでパス")
-                        time += 1
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
+                        log("\(Index): ⑥ 出せないので引く、出せないのでパス")
+                        //　パスするまでの時間
+                        DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
                             // 次のターンへ
                             pass(Index: Index)
                             completion(true)
                         }
-                        
                     }
                 }
             }
@@ -179,17 +251,16 @@ class GameBotController {
         var numbers = [1, 2, 3]
         numbers.shuffle()
         var shouldBreakLoop = false // 共有フラグ
-
-        var time = 1
+        var time = 1 // 初期カード待ち時間
         for number in numbers {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
-                                
                 let player = game.players[number]
                 // 出せるか判断
                 var initCards = BotInitCard(table: game.table.last!, hand: player.hand)
                 if !initCards.isEmpty {
                     initCards.shuffle()
                     if shouldBreakLoop || !(game.gamePhase == .gamefirst) {
+                        log("\(number): 誰かが出しました")
                         return
                     }
                     let card = initCards.first!
@@ -198,15 +269,37 @@ class GameBotController {
                     game.lastPlayerIndex = number
                     totable(card: card)
                     tohands(Index: number)
-                    
                     shouldBreakLoop = true
                     moveToMain(Index: number)
                 } else {
-                    print("\(player.name) 最初に出せるカードがないです")
-                    // TODO: 処理
+                    log("\(number): 最初に出せるカードがないです")
+                    game.firstAnswers[number] = .pass
                 }
             }
             time += 1
+        }
+    }
+    /**
+     Botがどてんこできるか
+     */
+    func checkBotHand(Index: Int, player: Player_f) {
+        // dtnkできるか
+        let resultFirst = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
+        if resultFirst == Constants.dtnkCode {
+            // ランダムで数秒待ってどてんこ
+            let random = Int.random(in: 0..<5)
+            DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(random)) { [self] in
+                let resultSecond = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
+                if resultSecond  == Constants.dtnkCode {
+                    // TODO: Bot Dtnk
+                    dtnk(Index: Index)
+                    log("\(player.name) dtnk")
+                } else {
+                    return
+                }
+            }
+        } else {
+            return
         }
     }
     
@@ -226,11 +319,43 @@ class GameBotController {
             let bot = game.players[number]
             let botHand = calculatePossibleSums(cards: bot.hand)
             for hand in botHand {
-                if hand < table.number() {
+                if hand <= table.number() {
                     ans = .challenge
                 }
             }
             game.challengeAnswers[number] = ans
+        }
+    }
+    
+    /**
+     ゲーム中でなかったら処理しない
+     */
+    func judgeInGame() -> Bool {
+        
+        if game.gamePhase != .gamefirst_sub && game.gamePhase != .main {
+            return false
+        }
+        return true
+    }
+    
+    /**
+     次のゲームへ
+     */
+    func moveNextGame() {
+        
+        if game.gameNum == game.gameTarget {
+            Router().setBasePages(stack: [.gameresult])
+        } else {
+            game.gamePhase = .waiting
+            let Item = GameResetItem()
+            game.preparationNewGame(resetItem: Item) { [self] result in
+                if result {
+                    todeck(card: game.deck)
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                game.gamePhase = .dealcard
+            }
         }
     }
     
@@ -256,23 +381,29 @@ class GameBotController {
      最初のカードを配置する + 特定数字だったらレート上げる
      */
     func firstCard() {
-        print(appState.gameUIState.deck.count)
         let drawnCard = game.deck.removeLast()
         game.table.append(drawnCard)
         totable(card: drawnCard)
         game.rateUpCard = nil
         if drawnCard.rate()[0] == 50 {
             game.rateUpCard = drawnCard.imageName()
-            //TODO: レートあげる
+            game.ascendingRate = game.ascendingRate * 2
         } else {
             game.gamePhase = .gamefirst
         }
     }
 
-    // メインに向けた処理
+    // メインに向けた処理　いらんかも
     func moveToMain(Index: Int) {
         game.gamePhase = .main
         pass(Index: Index)
+    }
+    
+    func endFlip() {
+        // X秒後にratefirst
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            game.gamePhase = .main
+        }
     }
     
     /**
@@ -285,6 +416,11 @@ class GameBotController {
         // 参加者を取得 [0,2,3]
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
             return value.rawValue > 1 ? index : nil
+        }
+        
+        if challengeplayers.isEmpty {
+            game.gamePhase = .decisionrate_pre
+            return
         }
         // 次のIndexを決める 3
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
@@ -314,6 +450,14 @@ class GameBotController {
         return sum
     }
     
+    // 最小の数字を返す
+    func findSmallestNumber(numbers: [Int]) -> Int {
+        guard let smallestNumber = numbers.min() else {
+            return 0 // 配列が空の場合などに適切なデフォルト値を返す
+        }
+        return smallestNumber
+    }
+    
     // 指定したIndexがどてんこカードより大きくなるまで引く
     func challengeIndex(challengerIndex: Int, dtnkCardNumber: Int, dtnkIndex: Int, challengers: [Int]) {
         // 自分がdtnkIndexだったら終了
@@ -324,34 +468,32 @@ class GameBotController {
         }
         // 手札とどてんこカードを比較
         let challenger = appState.gameUIState.players[challengerIndex]
-        let handSum = countHand(hand: challenger.hand)
+
+        // 手札がとりえる値
+        let handSum = calculatePossibleSums(cards: challenger.hand)
+        // 最小値
+        let minimun = findSmallestNumber(numbers: handSum)
         
-        // TODO: jokerを考慮させる
-        // チャンスがあれば引く
-        if (dtnkCardNumber - handSum) > 0 {
-            // チャンスあり 一枚引く
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-                drawCard(Index: challengerIndex)
-                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
-                self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+        // 返せるか検査
+        for value in handSum {
+            // 一つでも引っかかればどてんこ返し成功
+            if value == dtnkCardNumber {
+                // リベンジ処理
+                log("どてんこ返し：\(challengerIndex) → \(dtnkIndex)")
+                game.revengerIndex.append(challengerIndex)
+                game.revengerIndex.append(dtnkIndex)
+                // 手札処理
+                DispatchQueue.main.async { [self] in
+                    todeck(card: game.players[dtnkIndex].hand)
+                    appState.gameUIState.players[dtnkIndex].hand.removeAll()
+                    tohands(Index: dtnkIndex)
+                }
+                return
             }
-            // loop
-        } else if (dtnkCardNumber - handSum) == 0 {
-            // リベンジ成功 animation
-            print("revenge")
-            // 処理
-            appState.gameUIState.players[dtnkIndex].hand.removeAll()
-            // Viewも
-
-            // 次の人へ
-            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-//            print("\(nextChallenger!) : \(dtnkCardNumber) : \(challengerIndex) : \(challengers)")
-            // dtnkIndexをrevengerに変更
-            let revengerIndex = challengerIndex
-            self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: revengerIndex, challengers: challengers)
-            return
-
-        } else {
+        }
+        
+        // 終了(最小値がダメだった場合)
+        if (minimun > dtnkCardNumber) {
             // overしたら次の人へ
             let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -362,6 +504,28 @@ class GameBotController {
             return
         }
         
+        // 最小の方が小さい場合
+        if (minimun < dtnkCardNumber) {
+            // チャンスあり 一枚引く
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+                drawCard(Index: challengerIndex)
+                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+                self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+                return
+            }
+        }
+    }
+    
+    // どてんこ返し
+    func revenge() {
+        // 倍にして勝敗逆に
+        game.ascendingRate += game.ascendingRate
+        game.dtnkPlayerIndex = game.revengerIndex[0]
+        game.dtnkPlayer = game.players[game.revengerIndex[0]]
+        game.lastPlayerIndex = game.revengerIndex[1]
+        // 空にする
+        game.revengerIndex.removeAll()
+        challengeEvent()
     }
     
     /**
@@ -384,8 +548,11 @@ class GameBotController {
             gameScore: game.gameScore)
         
         appState.subState = SubState(resultItem: item)
+        // 順位格納
+        for i in 0...3 {
+            game.players[i].rank = item.playersRank[i]
+        }
         game.gameScore = item.gameScore
-        
         game.gamePhase = .decisionrate
     }
     
@@ -397,12 +564,24 @@ class GameBotController {
         game.winners.removeAll()
         game.losers.removeAll()
         // 勝者・敗者を決める
-        if game.currentPlayerIndex == 99 {
+        if game.lastPlayerIndex == Constants.stnkCode {
             // しょてんこの場合
+            let winner = game.players[game.dtnkPlayerIndex]
+            game.winners.append(winner)
+            let losers = game.players.enumerated().compactMap { index, player in
+                index != game.dtnkPlayerIndex ? player : nil
+            }
+            game.losers.append(contentsOf: losers)
 
-        } else if game.currentPlayerIndex == 88 {
+        } else if game.burstPlayerIndex != Constants.burstCode {
             // バーストの場合
-
+            let winers = game.players.enumerated().compactMap { index, player in
+                index != game.burstPlayerIndex ? player : nil
+            }
+            game.winners.append(contentsOf: winers)
+            let loser = game.players[game.burstPlayerIndex]
+            game.losers.append(loser)
+            
         } else {
             // 通常時
             let winer = game.players[game.dtnkPlayerIndex]
@@ -458,6 +637,7 @@ class GameBotController {
         for loser in game.losers {
             loser.score -= game.gameScore * game.winners.count
         }
+        log("\(game.winners[0].score)")
         // rank計算
         return calculateRanks(players: game.players)
     }
@@ -487,12 +667,26 @@ class GameBotController {
         return orderedRanks
     }
 
-
+    /**
+     カードを再生成する
+     */
+    func regenerationDeck() {
+        // アナウンス
+        game.regenerationDeckFlg = 1
+        //deckに戻す　一番上だけ残す
+        let lastCard = game.table.last!
+        var remainingCards = Array(game.table.dropLast())
+        remainingCards.shuffle()
+        game.deck.append(contentsOf: remainingCards)
+        game.table = [lastCard]
+        // view
+        todeck(card: game.deck)
+        totable(card: game.table)
+    }
 
     //**********************************************************************************
     // Player Action
     //**********************************************************************************
-    
     /**
      challengeするかしないかを報告
      */
@@ -502,15 +696,43 @@ class GameBotController {
 
     /**
      どてんこできるか
+     手札合計が一致していればどてんこ可能
+     自分が出したカードに対してだったらリベンジ可能
+     ？？？だったらしょてんこ可能
      */
-    func dtnkJudge(playerAllCards: [CardId], table: [CardId]) -> Bool {
+    func dtnkJudge(myside: Int, playerAllCards: [CardId], table: [CardId]) -> Int {
         var dtnkjudge = false
-//        if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main {
-//            if !table.isEmpty {
-//                dtnkjudge = GameMainController().sameSum(card: playerAllCards, tablelast: table.last!)
-//            }
-//        }
-        return dtnkjudge
+        var result = Constants.ngCode
+        
+        // tableが空だったらだめ
+        if table.isEmpty {
+            return result
+        }
+        // 手札がとりえる値
+        let possibleSum = calculatePossibleSums(cards: playerAllCards)
+        for sum in possibleSum {
+            if sum == table.last!.number() {
+                dtnkjudge = true
+            }
+        }
+        // どてんこできない
+        if !dtnkjudge {
+            return result
+        }
+        
+        // 自分にはどてんこできない　：リベンジ可能として出す？
+        if game.lastPlayerIndex == myside {
+            return result
+        }
+        // しょてんこ可能として返す
+        if game.currentPlayerIndex == Constants.stnkCode {
+            return Constants.stnkCode
+        }
+
+        // 通常どてんこ可能として返す
+        result = Constants.dtnkCode
+
+        return result
     }
     
     /**
@@ -518,12 +740,17 @@ class GameBotController {
      */
     func playCards(Index: Int, cards: [CardId]) {
         let cardsToPlay = cards
+        
+        if game.table.isEmpty {
+            log("テーブルが空です")
+            return
+        }
         if cardsToPlay.isEmpty {
-            print("カードを選択してください")
+            log("\(Index): カードを選択してください")
             return
         }
         if game.currentPlayerIndex != Index && game.currentPlayerIndex != 99 {
-            print("自分のターンではないです")
+            log("\(Index): あなたのターンではないです")
             return
         }
         if checkMultipleCards(table: game.table.last!, playCard: cards) {
@@ -533,9 +760,8 @@ class GameBotController {
             totable(card: cards)
             tohands(Index: Index)
             game.players[Index].selectedCards = []
-
         } else {
-            print("それらのカードは出せないです")
+            log("\(Index): それらのカードは出せないです")
             return
         }
         // 次への処理
@@ -543,48 +769,99 @@ class GameBotController {
     }
     
     /**
-     カードを引く
+     カードを引く 判定入れるために分割
      */
+    func playerDrawCard(Index: Int) {
+        if !((game.gamePhase == .gamefirst_sub || game.gamePhase == .main) && game.currentPlayerIndex == Index) {
+            log("\(Index): あなたのターンではないです")
+            return
+        }
+        drawCard(Index: Index)
+    }
+    
     func drawCard(Index: Int) {
+        if Index == game.myside {
+            game.turnFlg = 1
+        }
         let drawnCard = game.deck.removeLast()
         game.players[Index].hand.append(drawnCard)
         tohands(Index: Index)
-        
         // deck再生成
+        if game.deck.count < 1 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                regenerationDeck()
+            }
+        }
     }
+    
     
     /*
      パスする
      */
+    func initPass(Index: Int) {
+        // 初期フェーズの時(一致番最初)
+        if game.firstAnswers[Index] == .initial && game.gamePhase == .gamefirst {
+            game.gamePhase = .waiting
+            game.firstAnswers[Index] = .pass
+            return;
+        } else {
+            log("")
+        }
+    }
+    
     func pass(Index: Int) {
-        game.currentPlayerIndex = (Index + 1) % game.players.count
-        
+        // 通常時
+        if game.players[Index].hand.count < Constants.burstCount {
+            game.currentPlayerIndex = (Index + 1) % game.players.count
+            if Index == game.myside {
+                game.turnFlg = 0
+            }
+        }
         // Burstするとき
-        //            burstPlayer = players[currentPlayerIndex]
-        //            currentPlayerIndex = burstPlayerIndex
-        //            self.gamePhase = .burst
-        //
-        //            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) {
-        //                self.gamePhase = .decisionrate_pre
-        //            }
-
+        if (game.gamePhase == .decisionrate_pre || game.gamePhase == .main) && game.players[Index].hand.count == Constants.burstCount {
+            game.gamePhase = .burst
+            game.burstPlayer = game.players[Index]
+            game.burstPlayerIndex = Index
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) { [self] in
+                game.gamePhase = .decisionrate_pre
+            }
+        }
     }
     
     /**
      どてんこ
      */
+    func playerDtnk(Index: Int) {
+        if !( game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main) {
+            log("\(Index): まだどてんこできないです")
+            return
+        }
+        dtnk(Index: Index)
+    }
+    
     func dtnk(Index: Int) {
-        // バイブ　音声
-        game.gamePhase = .dtnk
-        // 処理
-        game.dtnkPlayerIndex = Index
-        game.dtnkPlayer = game.players[Index]
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
-            game.gamePhase = .q_challenge
+        // dtnkは１ゲーム１人１回
+        if game.dtnkFlg != 1 {
+            // バイブ　音声
+            DispatchQueue.main.async { [self] in
+                game.gamePhase = .dtnk
+                game.dtnkFlg = 1
+                // 処理
+                game.dtnkPlayerIndex = Index
+                game.dtnkPlayer = game.players[Index]
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    DispatchQueue.main.async { [self] in // メインスレッドでUIの更新を行う
+                        game.gamePhase = .q_challenge
+                    }
+                }
+            }
+        } else {
+            log("\(Index): どてんこ済みです")
         }
     }
-        
+
     //**********************************************************************************
     // Card Check
     //**********************************************************************************
@@ -617,6 +894,7 @@ class GameBotController {
         // 合計が一緒
         var sum: Bool = false
         let sumResult = calculatePossibleSums(cards: playCard)
+        log("sumResult")
         for sumdata in sumResult {
             if sumdata == table.number() {
                 sum = true
@@ -644,7 +922,9 @@ class GameBotController {
             }
             sums = newSums
         }
-        return Array(sums).sorted().filter { $0 < 13 }
+        // 13以下を返す
+        return Array(sums).sorted()
+//        return Array(sums).sorted().filter { $0 < 13 }
     }
 
     // カードが全て同じカードかどうか
@@ -653,7 +933,7 @@ class GameBotController {
         let firstValue = cards[0].number()
         
         for card in cards {
-            if card.number() != firstValue {
+            if card.number() != firstValue && card.suit() != .all {
                 return false
             }
         }
@@ -664,6 +944,16 @@ class GameBotController {
     // Card Animation
     //**********************************************************************************
     
+    func todeck(card: [CardId]) {
+        for carddata in card {
+            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == carddata.id }) {
+                var newCard = game.cardUI.remove(at: index)
+                newCard.location = .deck
+                game.cardUI.append(newCard)
+            }
+        }
+    }
+
     func totable(card: CardId) {
         if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == card.id }) {
             var newCard = game.cardUI.remove(at: index)
@@ -671,6 +961,7 @@ class GameBotController {
             game.cardUI.append(newCard)
         }
     }
+    
 
     func totable(card: [CardId]) {
         for carddata in card {
@@ -686,47 +977,12 @@ class GameBotController {
         let hand = game.players[Index].hand
         var i = 0
         for newhandcard in hand {
-            // まず新しい手札を配列から見つけ出し
             if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
                 var newCard = game.cardUI.remove(at: index)
-                // 新しい位置を設定
                 newCard.location = .hand(playerIndex: Index, cardIndex: i)
                 i += 1;
-                // 新しい手札を一番最後に追加
                 game.cardUI.append(newCard)
             }
         }
     }
 }
-
-// TODO: 問題なくなったら消す
-struct GameMainController {
-    
-//**********************************************************************************
-// GamePhase Event
-//**********************************************************************************
-
-    /**
-     チャレンジモードへ
-     */
-    func moveChallengeEvent(challengeFlag: [Int]) -> GamePhase? {
-        var gamePhase: GamePhase = .challenge
-        // チャレンジするかしないか、全員が判断したら
-        let compCallenge = challengeFlag.allSatisfy { $0 > 0 }
-        if compCallenge {
-            // TODO: 現状全パターンチャレンジへ行く　Flg値・ロジック変更必要？
-            //　一人もチャレンジしない場合、結果画面へ
-            let check = challengeFlag.allSatisfy { $0 == 2 }
-            if check {
-                gamePhase = .decisionrate_pre
-            }
-            // チャレンジャーがいる場合移動
-            else {
-                gamePhase = .challenge
-            }
-            return gamePhase
-        }
-        return nil
-    }
-}
-

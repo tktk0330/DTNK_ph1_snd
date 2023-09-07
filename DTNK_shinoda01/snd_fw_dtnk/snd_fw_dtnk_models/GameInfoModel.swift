@@ -37,6 +37,8 @@ struct GameInfoModel {
     var ascendingRate: Int = 1
     // 決定数
     var decisionScoreCards: Any = NSNull()
+    // 初め出せるか通知
+    var firstAnswers = Array(repeating: FirstAnswers.initial.rawValue, count: 4)
     // チャレンジプレーヤー
     var challengeAnswers = Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
     // 次のゲーム行けるか
@@ -70,10 +72,15 @@ struct GameResetItem {
     // どてんこした人
     var dtnkPlayer: Any =  NSNull()
     var dtnkPlayerIndex: Int = 99
+    // バーストした人
+    var burstPlayer: Any =  NSNull()
+    var burstPlayerIndex: Int = 88
     // 倍率
     var ascendingRate: Int = 1
     // 決定数
     var decisionScoreCards: Any = NSNull()
+    // 初め出せるか通知
+    var firstAnswers = Array(repeating: FirstAnswers.initial.rawValue, count: 4)
     // チャレンジプレーヤー
     var challengeAnswers = Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
     // 次のゲーム行けるか
