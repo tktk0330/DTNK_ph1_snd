@@ -124,15 +124,19 @@ class MatchingController {
 
 /**
  vs Bot
- bot生成
+ 参加者t生成
  */
+
 class BotCreate {
     
     func initialplayers() -> [Player] {
         
         var players: [Player] = []
+        
         //myaccount
-        let myaccount = Player(id: "xxx", side: 1, name: "user", icon_url: "icon-bot1")
+        let user = appState.account.loginUser
+        let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
+
         players.append(myaccount)
 
         let allBots = BotUserList().botUsers().shuffled()

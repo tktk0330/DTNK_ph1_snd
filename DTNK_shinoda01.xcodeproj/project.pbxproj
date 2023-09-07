@@ -599,10 +599,10 @@
 				5D8FA2E92A4826230079F260 /* EditNicknameView.swift */,
 				5D8FA2ED2A4826440079F260 /* GameRuleView.swift */,
 				5D8FA2EF2A4826500079F260 /* GameSettingView.swift */,
+				5D9872062AA99F430031A57C /* IconSelectView.swift */,
 				5D8FA2F12A4826830079F260 /* OptionView.swift */,
 				5D8FA2F32A4826950079F260 /* SelectIconView.swift */,
 				5D8FA2F52A4826A40079F260 /* ShopView.swift */,
-				5D9872062AA99F430031A57C /* IconSelectView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
