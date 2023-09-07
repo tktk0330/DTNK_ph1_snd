@@ -11,7 +11,8 @@ extension Color {
     static let dtnkBlue = Color(red: 2/255, green: 63/255, blue: 129/255)
     static let dtnkGreen01 = Color(red: 76/255, green: 271/255, blue: 100/255)
     static let casinoShadow = Color(red: 7/255, green: 61/255, blue: 14/255)
-
+    static let pushcolor = Color(red: 194/255, green: 194/255, blue: 194/255)
+    static let casinolightgreen = Color(red: 195/255, green: 242/255, blue: 203/255)
 }
 
 extension Color {
