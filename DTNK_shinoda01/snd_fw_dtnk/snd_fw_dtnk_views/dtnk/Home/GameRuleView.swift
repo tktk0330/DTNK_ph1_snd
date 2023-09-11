@@ -1,3 +1,7 @@
+/**
+ ゲームルール
+ */
+
 import SwiftUI
 
 struct Info: Identifiable {
@@ -5,16 +9,14 @@ struct Info: Identifiable {
     let title: String
     let details: String
     let imageNames: [String] // 画像ファイル名の配列
-    }
-
+}
 
 struct Rule: Identifiable {
     let id = UUID()
     let title: String
     let details: String
     let imageNames: [String] // 画像ファイル名の配列
-    }
-
+}
 
 let infos = [
     Info(title: "概要", details:"""
@@ -112,24 +114,27 @@ struct BorderedListView<Content: View>: View {
 struct InfoListView: View {
     let info: Info
     @State private var isExpanded = false
-
+    
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text(info.title)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .fontWeight(.bold)
-                    .padding(.leading, 10)
-                Spacer()
-                Button(action: {
-                    withAnimation {
-                        isExpanded.toggle()
-                    }
-                }) {
+            
+            // tite
+            Button(action: {
+                withAnimation {
+                    isExpanded.toggle()
+                }
+            }) {
+                HStack {
+                    Text("　　" + info.title)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .fontWeight(.bold)
+                        .frame(height: 50)
+                    Spacer()
+                    
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .foregroundColor(.white)
-                        .padding(.leading, 10)
+                        .frame(width: 50)
                 }
             }
             if isExpanded {
@@ -172,34 +177,13 @@ struct InfoListView: View {
                             }
                         }
                     }
-                    .padding()
+                        .padding() // 詳細横
                 ))
+                .background(Color.plusAutoBlack.opacity(0.3))
             }
         }
-        .padding()
-        
     }
 }
-    
-struct InfoScreen: View {
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 10) {
-                ForEach(infos.indices, id: \.self) { index in
-                    InfoListView(info: infos[index])
-                    if index < infos.count - 1 {
-                        Divider()
-                            .background(Color.white)
-                            .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, maxHeight: 3) // 横いっぱいに広げる
-                    }
-                }
-            }
-        }
-        .navigationBarTitle("インフォメーション")
-    }
-}
-
     
 struct RuleListView: View {
     let rule: Rule
@@ -207,21 +191,25 @@ struct RuleListView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text(rule.title)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .fontWeight(.bold)
-                    .padding(.leading, 10)
-                Spacer()
-                Button(action: {
-                    withAnimation {
-                        isExpanded.toggle()
-                    }
-                }) {
+            
+            // tite
+            Button(action: {
+                withAnimation {
+                    isExpanded.toggle()
+                }
+            }) {
+                HStack {
+                    Text("　　" + rule.title)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .fontWeight(.bold)
+                        .frame(height: 50)
+                    
+                    Spacer()
+                    
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .foregroundColor(.white)
-                        .padding(.leading, 10)
+                        .frame(width: 50)
                 }
             }
             if isExpanded {
@@ -244,6 +232,7 @@ struct RuleListView: View {
                                     .padding(.top, 7)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+
                             } else {
                                 VStack {
                                     Text(line)
@@ -261,140 +250,121 @@ struct RuleListView: View {
                                             .frame(maxHeight: 200)
                                     }
                                 }
+                                
                             }
                         }
                     }
-                    .padding()
+                        .padding()
                 ))
+                .background(Color.plusAutoBlack.opacity(0.3))
             }
         }
-        .padding()
     }
 }
-    
+
+// スクロール部分
 struct RuleScreen: View {
     var body: some View {
         ScrollView {
-            VStack(spacing: 10) {
+            VStack(spacing: 0) {
+                
+                // section 1
+                Text("  基本ルール")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color.white)
+                    .fontWeight(.bold)
+                    .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.06, alignment: .leading)
+                    .background(
+                        Color.dtnkGreen01
+                    )
+
+                ForEach(infos.indices, id: \.self) { index in
+                    InfoListView(info: infos[index])
+                    if index < infos.count - 1 {
+                        CustomDivider()
+                    }
+                }
+
+                // section 2
+                Text("  詳細ルール")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color.white)
+                    .fontWeight(.bold)
+                    .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.06, alignment: .leading)
+                    .background(
+                        Color.dtnkGreen01
+                    )
+
                 ForEach(rules.indices, id: \.self) { index in
                     RuleListView(rule: rules[index])
                     if index < rules.count - 1 {
-                        Divider()
-                            .background(Color.white)
-                            .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, maxHeight: 3) // 横いっぱいに広げる
+                        CustomDivider()
                     }
                 }
+                CustomDivider()
             }
         }
         .navigationBarTitle("インフォメーション")
     }
 }
+
+/**
+ ゲームルール
+ */
+struct GameRuleView: View {
     
-    struct GameRuleView: View {
-        var body: some View {
-            
-            Color.plusDarkGreen
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            VStack(spacing: 0){
+    @State private var isRule1Expanded = false
+    @State private var isRule2Expanded = false
+
+    var body: some View {
+        GeometryReader { geo in
+            ZStack {
                 // 広告用
                 Rectangle()
                     .foregroundColor(Color.white.opacity(0.3))
+                    .shadow(color: .gray, radius: 10, x: 0, y: 5)
                     .frame(maxWidth: .infinity, maxHeight: 50)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
                 
-                Spacer()
+                // back
+                Button(action: {
+                    Router().setBasePages(stack: [.home])
+                }) {
+                    Image(ImageName.Common.back.rawValue)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40)
+                }
+                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
                 
-                VStack(alignment: .leading) {
-                    ZStack(alignment: .leading) {
-                        Rectangle()
-                            .foregroundColor(Color.plusDarkGreen)
-                            .frame(maxWidth: .infinity, maxHeight: 50)
-                        
-                        HStack {
-                            Button(action: {
-                                // ボタンのアクション
-                                HomeController().onTapBack()
-                            }) {
-                                Text("×")
-                                    .font(.system(size: 30))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.thin)
-                                    .bold()
-                                    .padding()
-                                    .frame(width: 50, height: 50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.white, lineWidth: 2)
-                                    )
-                            }
-                            
-                            Spacer()
-                            
-                            Text("ヘルプ       ")
-                                .font(.system(size: 30))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    Rectangle()
-                        .foregroundColor(Color.gray.opacity(0.5))
-                        .frame(maxWidth: .infinity, maxHeight: 3)
-                    
+                // title
+                Text("Rule")
+                    .font(.custom(FontName.font01, size: 45))
+                    .foregroundColor(Color.white)
+                    .fontWeight(.bold)
+                    .padding(5)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
+
+                // 内容
+                VStack(alignment: .leading, spacing: 0) {
                     ScrollView {
-                        Text("  基本ルール")
-                            .font(.system(size: 30))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Rectangle()
-                            .foregroundColor(Color.gray.opacity(0.5))
-                            .frame(maxWidth: .infinity, maxHeight: 3)
-                        
-                        BorderedListView(content: AnyView(
-                            InfoScreen()
-                        ))
-                        
-                        Divider()
-                            .background(Color.white)
-                            .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, maxHeight: 3) // 横いっぱいに広げる
-                        
-                        Text("")
-                        Text("")
-                        
-                        Text("  詳細ルール")
-                            .font(.system(size: 30))
-                            .foregroundColor(Color.white)
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Rectangle()
-                            .foregroundColor(Color.gray.opacity(0.5))
-                            .frame(maxWidth: .infinity, maxHeight: 3)
-                        
                         BorderedListView(content: AnyView(
                             RuleScreen()
                         ))
-                        
-                        Divider()
-                            .background(Color.white)
-                            .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity, maxHeight: 3) // 横いっぱいに広げる
-                        
-                        
-                        
                     }
-                    
                 }
-                
+                .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.65)
+                .position(x:  Constants.scrWidth / 2, y: geo.size.height * 0.60)
             }
         }
-        
     }
+}
 
+// 罫線
+struct CustomDivider: View {
+    var body: some View {
+        Divider()
+            .frame(height: 3)
+            .background(Color.plusAutoBlack.opacity(0.3))
+    }
+}

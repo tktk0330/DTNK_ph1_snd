@@ -10,6 +10,9 @@ struct OptionView: View {
     @State private var button3Colored = false
     @State private var text: String = ""
     
+    @StateObject var home: HomeState = appState.home
+
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -40,14 +43,31 @@ struct OptionView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
                 
                 
-                HStack {
-                    Text("^_^   ")
-                        .foregroundColor(Color.white)
+                HStack(spacing: 15) {
                     
-                    TextField("User Name", text: $text)
+                    Button(action: {
+                        home.mode = .edittingIcon
+                    }) {
+                        Image(appState.account.loginUser.iconURL)
+                            .resizable()
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 50, height: 50)
+                            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+                    }
+
+                    TextField(appState.account.loginUser.name, text: $text)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(5)
-                        .frame(width: 300)
+                        .frame(width: 250)
+                        .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+
+                    
+                    Button(action: {
+                        HomeController().updateName(newName: text)
+                    }) {
+                        Btnaction(btnText: "更新", btnTextSize: 15, btnWidth:  70, btnHeight: 35, btnColor: Color.dtnkLightBlue)
+                    }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28)
                 
@@ -128,6 +148,14 @@ struct OptionView: View {
                 }
             }
             .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.65)
+            
+            
+            if home.mode == .edittingIcon {
+                IconSelectView()
+            }
+            
+            
+
         }
     }
 }
