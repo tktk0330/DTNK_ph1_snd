@@ -12,7 +12,7 @@ struct RuleSettingView: View {
         let gamejorker = [0, 2, 4]
         @State private var selec_3=2
     
-   // @ObservedObject var gameSettings: GameSettingsModel
+    //@ObservedObject var gameSettings: GameSettingsModel
 
     
     // TODO: その他要素

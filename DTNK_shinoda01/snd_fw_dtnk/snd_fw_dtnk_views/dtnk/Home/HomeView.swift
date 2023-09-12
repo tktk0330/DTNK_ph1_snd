@@ -33,7 +33,7 @@ struct HomeView: View {
                 // Life
                 HStack {
                                     VStack {
-                                        if appState.home.heartsData.heartsCount != 5 {
+                                        if appState.home.heartsData.heartsCount <= 4 {
                                             // タイマーの残り時間を表示
                                             Text(String(format: "%.0f", max(appState.home.heartsData.remainingTime, 0)))
                                                 .foregroundColor(.black)
@@ -53,10 +53,10 @@ struct HomeView: View {
                                             }
 
                                             Button(action: {
-                                                if appState.home.heartsData.heartsCount < 5 { // 上限を5に制限
+//                                                if appState.home.heartsData.heartsCount < 5 { // 上限を5に制限
                                                                     print("ハートの購入処理")
                                                                     appState.home.heartsData.heartsCount += 1
-                                                }
+                                              //  }
                                             }) {
                                                 Image(ImageName.Home.healbox.rawValue)
                                                     .resizable()

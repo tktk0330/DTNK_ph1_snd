@@ -39,6 +39,8 @@ struct PageContent: View {
                 OptionView()
             case .gameSet:
                 GameSettingView()
+            case .ruleSetting:
+                RuleSettingView()
             }
         }
     }

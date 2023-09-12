@@ -60,6 +60,9 @@ struct HomeController {
 
 //        appState.home.mode = .checkrule
     }
+    func onTapRuleSetting(){
+           Router().pushBasePage(pageId: .ruleSetting)
+       }
     
     func onTapShop(){
         appState.home.mode = .checkshop
