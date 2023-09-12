@@ -55,7 +55,7 @@ struct HomeView: View {
                                             Button(action: {
 //                                                if appState.home.heartsData.heartsCount < 5 { // 上限を5に制限
                                                                     print("ハートの購入処理")
-                                                                    appState.home.heartsData.heartsCount += 1
+                                                                    appState.home.heartsData.heartsCount -= 1
                                               //  }
                                             }) {
                                                 Image(ImageName.Home.healbox.rawValue)
