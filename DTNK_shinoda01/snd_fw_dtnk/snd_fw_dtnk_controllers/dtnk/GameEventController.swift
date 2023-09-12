@@ -5,6 +5,14 @@
 import Foundation
 import SwiftUI
 
+class BattleSelectController {
+    
+    func onTapPlay(gamenum: Int, rate: Int, jorker: Int)  {
+        let eventController = GameEventController()
+        eventController.play(gamenum: gamenum, rate: rate, jorker: jorker)
+    }
+}
+
 struct GameEventController {
     
     /**
@@ -15,11 +23,6 @@ struct GameEventController {
         appState.gameUIState.gameTarget = gamenum
         appState.gameUIState.initialRate = rate
         appState.gameUIState.jorker = jorker
-        
-//        appState.gameUiState.targetgamenum = gamenum
-//        appState.gameUiState.rate = jorker
-//        appState.gameUiState.jorker = jorker
-        
         // Matchingへ
         moveMatchingView(vsInfo: 01)
     }

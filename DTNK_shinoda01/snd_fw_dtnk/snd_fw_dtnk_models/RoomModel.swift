@@ -19,4 +19,5 @@ struct Room {
 enum RoomMode: Int {
     case base = 0
     case pop = 1
+    case waiting = 2
 }

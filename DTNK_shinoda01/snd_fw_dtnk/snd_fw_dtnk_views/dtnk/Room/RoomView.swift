@@ -73,6 +73,10 @@ struct RoomView: View {
                     JoinPopView()
                         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.50)
                 }
+                
+                if room.roommode == .waiting {
+                    WaitingLoadingView()
+                }
             }
         }
     }
@@ -82,35 +86,39 @@ struct RoomView: View {
      挙動としては作成して検索かけて遷移
      */
     func onTapCreate() {
+                
         if text.isEmpty {
-            message = "Room name cannot be empty"
+            message = "ルーム名を入れてください"
             return
         }
+        room.roommode = .waiting
+
         let roomName = text
         let user = appState.account.loginUser
-        // Player準備
-        // 作成者なのでsideは1
+        // Player準備：作成者なのでsideは1
         let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
 
+        // ルーム作成
         RoomFirebaseManager.shared.createRoom(roomName: roomName, creator: myaccount) { roomName in
             if let roomName = roomName {
-                // ルーム作成成功
-                print("Room created with ID: \(roomName)")
+                log("Room created with ID: \(roomName)")
                 // 検索
                 RoomFirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
                     if let roomData = roomData {
                         room.roomData = roomData
-                        print("Room found: \(roomData)")
+                        log("Room found: \(roomData)")
                         // マッチングへ
                         GameEventController().moveMatchingView(vsInfo: 02)
                         
+                        // 画面初期化
+                        room.roommode = .base
                     } else {
                         message = "erroer"
                     }
                 }
             } else {
                 // ルーム作成失敗
-                print("Failed to create room")
+                log("Failed to create room", level: .error)
             }
         }
     }
@@ -120,19 +128,23 @@ struct RoomView: View {
      */
     func onTapSearch() {
         if text.isEmpty {
-            message = "Room name cannot be empty"
+            message = "ルーム名を入れてください"
             return
         }
+        
+        room.roommode = .waiting
+
         let roomName = text
         
         RoomFirebaseManager.shared.searchRoom(withRoomName: roomName) { (roomData) in
             if let roomData = roomData {
                 room.roomData = roomData
-                print("Room found: \(roomData)")
+                log("Room found: \(roomData)")
                 // 参加可否POPへ
                 RoomController().onOpenMenu()
             } else {
-                message = "Room not found"
+                message = "ルームが見つかりません"
+                room.roommode = .base
             }
         }
     }

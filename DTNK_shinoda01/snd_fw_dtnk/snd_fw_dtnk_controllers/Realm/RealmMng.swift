@@ -3,6 +3,7 @@
  */
 
 import RealmSwift
+import Foundation
 
 
 class RealmMng {
@@ -37,5 +38,37 @@ class RealmMng {
             completion(false)
         }
     }
+}
+
+class LifeManager {
+    private var user: RealmUser!
+    
+
+    init(user: RealmUser) {
+        self.user = user
+    }
+
+    // ゲーム開始時のライフ消費
+    func consumeLifeForGame() -> Bool {
+
+        if user.currentLives > 0 {
+            try! Realm().write {
+                user.currentLives -= 1
+                user.lastUpdated = Date() // 更新時刻も保存
+            }
+            appState.account.loginUser.life = user.currentLives
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // 次のライフが回復するまでの残り時間（秒）を返す関数
+    func timeUntilNextLifeRecovery() -> TimeInterval {
+        let elapsedTime = Date().timeIntervalSince(user.lastUpdated)
+        let remainingTimeForNextLife = 300 - (elapsedTime.truncatingRemainder(dividingBy: 300))
+        return remainingTimeForNextLife
+    }
 
 }
+

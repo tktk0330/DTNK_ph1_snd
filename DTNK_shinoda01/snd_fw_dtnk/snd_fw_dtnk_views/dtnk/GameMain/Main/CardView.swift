@@ -151,12 +151,14 @@ struct N_CardView: View {
         .offset(y: selectedCards.contains(card) ? -20 : 0)
         .onTapGesture {
             if appState.gameUIState.gamePhase != .decisioninitialplayer {
-                // 自分の手札のみTap可能
-                if case let .hand(playerIndex, _) = card.location, case playerIndex = appState.gameUIState.myside {
-                    if let idx = selectedCards.firstIndex(of: card) {
-                        selectedCards.remove(at: idx)
-                    } else {
-                        selectedCards.append(card)
+                withAnimation(.easeInOut(duration: 0.0)) {
+                    // 自分の手札のみTap可能
+                    if case let .hand(playerIndex, _) = card.location, case playerIndex = appState.gameUIState.myside {
+                        if let idx = selectedCards.firstIndex(of: card) {
+                            selectedCards.remove(at: idx)
+                        } else {
+                            selectedCards.append(card)
+                        }
                     }
                 }
             }

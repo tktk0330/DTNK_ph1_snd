@@ -9,11 +9,13 @@
  */
 
 import SwiftUI
+import RealmSwift
 
 struct HomeView: View {
     
     @StateObject var home: HomeState = appState.home
-    
+    @StateObject var account: AccountState = appState.account
+
     var body: some View {
         GeometryReader { geo in
             ZStack{
@@ -31,17 +33,29 @@ struct HomeView: View {
                 // Life
                 HStack(spacing: 10) {
                     HStack {
-                        ForEach(0..<5) {_ in
+                        ForEach(0..<5, id: \.self) { index in
                             Image(systemName: "heart.fill")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 30, height: 30)
-                                .foregroundColor(.red)
+                                .foregroundColor(index < account.loginUser.life ? .red : .gray)
                         }
                     }
                     
                     Button(action: {
                         print("ハートの購入")
+
+                        if let realm = try? Realm(), let user = realm.objects(RealmUser.self).first {
+                            let manager = LifeManager(user: user)
+                            if manager.consumeLifeForGame() {
+                                print("\(appState.account.loginUser.life)")
+                                // ゲームを開始
+                                
+                            } else {
+                                // ライフが足りない場合のアラート
+                                print("x")
+                            }
+                        }
                     }) {
                         Image(ImageName.Home.healbox.rawValue)
                             .resizable()
@@ -71,17 +85,17 @@ struct HomeView: View {
                 // Info List
                 HStack(spacing: 20) {
                     Button(action: {
-                        HomeController().onTapRule()
+                        HomeController().onTapPageBtn(page: .rule)
                     }) {
                         Btnwb(btnText: "Rule", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
                     Button(action: {
-                        HomeController().onTapOption()
+                        HomeController().onTapPageBtn(page: .option)
                     }) {
                         Btnwb(btnText: "Option", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
                     Button(action: {
-                        HomeController().onTapShop()
+                        HomeController().onTapPageBtn(page: .shop)
                     }) {
                         Btnwb(btnText: "Shop", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
@@ -89,27 +103,6 @@ struct HomeView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.90)
              
                 Group{
-                    if home.mode == .edittingNickname {
-                        EditNicknameView()
-                    }
-                    
-                    if home.mode == .edittingIcon {
-                        SelectIconView()
-                    }
-                    
-                    if home.mode == .checkrule {
-                        GameRuleView()
-                            .transition(.move(edge: .bottom))
-                            .animation(.default, value: home.mode == .checkrule)
-                    }
-                    
-                    if home.mode == .checkshop{
-                        ShopView()
-                    }
-                    
-                    if home.mode == .checkoption {
-                        OptionView()
-                    }
                     
                     if home.mode == .gamesetting {
                         GameSettingView()

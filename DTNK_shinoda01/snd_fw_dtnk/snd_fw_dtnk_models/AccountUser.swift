@@ -10,14 +10,14 @@ struct User {
     let userID: String
     var name: String
     var iconURL: String
-    var editedName: String // 編集用のプロパティ
-    var editedIconURL: String // 編集用のプロパティ
+    var life: Int
     
-    init(userID: String, name: String, iconURL: String) {
+
+    
+    init(userID: String, name: String, iconURL: String, life: Int) {
         self.userID = userID
         self.name = name
         self.iconURL = iconURL
-        self.editedName = name // 初期値は現在の名前
-        self.editedIconURL = iconURL // 初期値は現在のアイコンのURL
+        self.life = life
     }
 }

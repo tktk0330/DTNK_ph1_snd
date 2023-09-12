@@ -29,9 +29,7 @@ struct RoomController {
         }
     }
     
-//    func moveMatchingView() {
-//        // Matchingへ
-//        appState.matching = MatchingState(seatCount: 4, message: "プレイヤーを募集しています...", vsInfo: 02)
-//        Router().pushBasePage(pageId: .dtnkMatching)
-//    }
+    
+    
+    
 }

@@ -18,7 +18,6 @@ struct HomeController {
     func onTapBackMode(){
         appState.home.mode = .noEditting
     }
-
     
     func onTapIcon(){
         appState.home.mode = .edittingIcon
@@ -28,20 +27,10 @@ struct HomeController {
         appState.home.mode = .edittingNickname
     }
     
-    func onTapRule(){
-        Router().pushBasePage(pageId: .rule)
-
-//        appState.home.mode = .checkrule
+    func onTapPageBtn(page: PageId) {
+        Router().pushBasePage(pageId: page)
     }
     
-    func onTapShop(){
-        appState.home.mode = .checkshop
-    }
-    
-    func onTapOption(){
-        Router().pushBasePage(pageId: .option)
-        
-    }
     func onTapBack(){
         Router().pushBasePage(pageId: .home)
     }

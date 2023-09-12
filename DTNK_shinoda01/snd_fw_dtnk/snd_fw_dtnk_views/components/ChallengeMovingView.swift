@@ -1,9 +1,5 @@
-//
-//  ChallengeMovingView.swift
-//  DTNK_shinoda01
-//
-//  Created by Takuma Shinoda on 2023/08/06.
-//
+
+
 
 import SwiftUI
 

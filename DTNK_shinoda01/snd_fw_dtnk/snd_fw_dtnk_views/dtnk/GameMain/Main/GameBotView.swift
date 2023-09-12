@@ -72,7 +72,7 @@ struct GameBotView: View {
                     .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
                     .position(x: UIScreen.main.bounds.width * 0.50, y:  geo.size.height * 0.25)
                 
-                Image(game.players[2].icon_url)
+                Image(game.players[3].icon_url)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 40)
@@ -91,11 +91,11 @@ struct GameBotView: View {
             // Btn
             Group {
                 Group {
-                    if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main {
+                    if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main || game.gamePhase == .dtnk {
                         if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.dtnkCode {
                             Button(action: {
                                 // dtnk
-                                GameBotController().dtnk(Index: myside)
+                                GameBotController().playerDtnk(Index: myside)
                             }) {
                                 Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
                             }
@@ -103,11 +103,20 @@ struct GameBotView: View {
                         if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
                             Button(action: {
                                 // dtnk
-                                GameBotController().dtnk(Index: myside)
+                                GameBotController().playerDtnk(Index: myside)
                             }) {
                                 Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
                             }
                         }
+                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.revengeCode {
+                            Button(action: {
+                                // dtnk
+                                GameBotController().playerDtnk(Index: myside)
+                            }) {
+                                Btnaction(btnText: "どてんこ返し（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
+                            }
+                        }
+
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
@@ -280,6 +289,17 @@ struct GameBotView: View {
                 }
             }
         }
+        .background(
+            RadialGradient(
+                gradient: Gradient(
+                    colors: [.init(hex: 0x008800), .black]
+                ),
+                center: .center,
+                startRadius: 2,
+                endRadius: UIScreen.main.bounds.height
+            )
+                .ignoresSafeArea(.all)
+        )
         .onAppear {
             game.myside = self.myside
             game.gamePhase = .dealcard

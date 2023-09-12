@@ -43,7 +43,7 @@ struct GmaeNumAnnounce: View {
         // アニメーション開始フラグをセット
         animationStarted = true
         appState.gameUIState.AnnounceFlg = true
-        print("開始") // 開始の出力
+        log("開始") // 開始の出力
         
         // 左から中央に動く
         withAnimation(Animation.linear(duration: self.duration)) {
@@ -60,7 +60,7 @@ struct GmaeNumAnnounce: View {
                 
                 // アニメーション終了フラグをセット
                 animationEnded = true
-                print("終了") // 終了の出力
+                log("終了") // 終了の出力
                 appState.gameUIState.AnnounceFlg = false
             }
         }
@@ -110,7 +110,7 @@ struct RateUpAnnounce: View {
         
         // アニメーション開始フラグをセット
         animationStarted = true
-        print("開始") // 開始の出力
+        log("開始") // 開始の出力
         
         // 左から中央に動く
         withAnimation(Animation.linear(duration: self.duration)) {
@@ -127,7 +127,7 @@ struct RateUpAnnounce: View {
                 
                 // アニメーション終了フラグをセット
                 animationEnded = true
-                print("終了") // 終了の出力
+                log("終了") // 終了の出力
 
                 // アニメーション終了時のコールバックを実行
                 onEnd?()
@@ -174,7 +174,7 @@ struct RevengeAnnounce: View {
         
         // アニメーション開始フラグをセット
         animationStarted = true
-        print("開始") // 開始の出力
+        log("開始") // 開始の出力
         
         // 左から中央に動く
         withAnimation(Animation.linear(duration: self.duration)) {
@@ -191,7 +191,7 @@ struct RevengeAnnounce: View {
                 
                 // アニメーション終了フラグをセット
                 animationEnded = true
-                print("終了") // 終了の出力
+                log("終了") // 終了の出力
 
                 // アニメーション終了時のコールバックを実行
                 onEnd?()
@@ -238,7 +238,7 @@ struct RegenerationDeck: View {
         
         // アニメーション開始フラグをセット
         animationStarted = true
-        print("開始") // 開始の出力
+        log("開始") // 開始の出力
         
         // 左から中央に動く
         withAnimation(Animation.linear(duration: self.duration)) {
@@ -255,7 +255,7 @@ struct RegenerationDeck: View {
                 
                 // アニメーション終了フラグをセット
                 animationEnded = true
-                print("終了") // 終了の出力
+                log("終了") // 終了の出力
 
                 // アニメーション終了時のコールバックを実行
                 onEnd?()

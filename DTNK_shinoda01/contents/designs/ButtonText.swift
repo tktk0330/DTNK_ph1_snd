@@ -4,42 +4,6 @@
 
 import SwiftUI
 
-
-struct sample01: View {
-
-@State private var isPressed = false
-
-var body: some View {
-    Button(action: {
-        self.isPressed.toggle()
-    }) {
-        Text("Press Me")
-            .font(.largeTitle)
-            .foregroundColor(.white)
-            .padding(40)
-            .background(
-                ZStack {
-                    Circle()
-                        .fill(isPressed ? Color.red : Color.blue)
-                        .scaleEffect(isPressed ? 0.9 : 1.0)
-                    Circle()
-                        .stroke(Color.gray, lineWidth: 4)
-                        .blur(radius: 2)
-                        .offset(x: 2, y: 2)
-                        .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [Color.black, Color.clear]), startPoint: .bottom, endPoint: .top)))
-                    Circle()
-                        .stroke(Color.white, lineWidth: 2)
-                        .blur(radius: 2)
-                        .offset(x: -2, y: -2)
-                        .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [Color.clear, Color.black]), startPoint: .top, endPoint: .bottom)))
-                }
-            )
-    }
-    .animation(.easeInOut)
-}
-}
-
-
 // 浮いてる感じのボタン
 struct ShadowButtonStyle: ButtonStyle {
     

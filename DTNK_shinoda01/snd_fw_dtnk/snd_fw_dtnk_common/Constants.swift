@@ -7,7 +7,13 @@ import SwiftUI
 struct Constants {
     
     // MARK: - logLevel
-    static let currentLogLevel: LogLevel = .info // 現在のログレベルを指定
+    static let currentLogLevel: LogLevel = .debug // 現在のログレベルを指定
+    
+    // MARK: - SE
+    static let SEFlg: Int = 1
+    
+    // MARK: - Vibrate
+    static let VibrateFlg: Int = 1
     
     // MARK: - cardFaceUp
     static let cardFaceUp: Bool = true

@@ -8,7 +8,7 @@ import SwiftUI
 class GameBotController {
     
     var game: GameUIState = appState.gameUIState
-    
+
     //**********************************************************************************
     // Bot Action
     //**********************************************************************************
@@ -29,7 +29,6 @@ class GameBotController {
             completion(false)
             return
         }
-        
         
         // 手札全パターン
         let allPatern = generateAllCombinations(cards: game.players[Index].hand)
@@ -64,7 +63,7 @@ class GameBotController {
                         completion(false)
                         return
                     }
-                    log("\(Index): ① 出せるからすぐ出す")
+                    log("\(Index): ① 出せるからすぐ出す", level: .debug)
                     log("\( playCards.first!)")
                     game.table.append(contentsOf: playCards.first!)
                     game.players[Index].hand.removeAll(where: { playCards.first!.contains($0)})
@@ -88,7 +87,7 @@ class GameBotController {
                         completion(false)
                         return
                     }
-                    log("\(Index): ② 出せるけど引いて出す")
+                    log("\(Index): ② 出せるけど引いて出す", level: .debug)
                     // ② 出せるけど引いて出す
                     // カードを引く前に考える時間
                     DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
@@ -128,7 +127,7 @@ class GameBotController {
                         completion(false)
                         return
                     }
-                    log("\(Index): ③ 出せるけど引くそして出さない")
+                    log("\(Index): ③ 出せるけど引くそして出さない", level: .debug)
                     // カードを引く前に考える時間
                     DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
                         guard judgeInGame() else {
@@ -176,7 +175,7 @@ class GameBotController {
                                 completion(false)
                                 return
                             }
-                            log("\(Index): ④ 出せないので引く、出せるので出す")
+                            log("\(Index): ④ 出せないので引く、出せるので出す", level: .debug)
                             // カードを出すまでに考える時間
                             DispatchQueue.main.asyncAfter(deadline: .now() + time03) { [self] in
                                 guard judgeInGame() else {
@@ -204,7 +203,7 @@ class GameBotController {
                             }
                             
                         } else {
-                            log("\(Index): ⑤ 出せないので引く、出せるけどパス")
+                            log("\(Index): ⑤ 出せないので引く、出せるけどパス", level: .debug)
                             //　パスするまでの時間
                             DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
                                 guard judgeInGame() else {
@@ -218,7 +217,7 @@ class GameBotController {
                         }
                         
                     } else {
-                        log("\(Index): ⑥ 出せないので引く、出せないのでパス")
+                        log("\(Index): ⑥ 出せないので引く、出せないのでパス", level: .debug)
                         //　パスするまでの時間
                         DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
                             guard judgeInGame() else {
@@ -259,17 +258,17 @@ class GameBotController {
                 var initCards = BotInitCard(table: game.table.last!, hand: player.hand)
                 if !initCards.isEmpty {
                     initCards.shuffle()
-                    if shouldBreakLoop || !(game.gamePhase == .gamefirst) {
+                    if shouldBreakLoop || !(game.gamePhase == .gamefirst || game.gamePhase == .waiting) {
                         log("\(number): 誰かが出しました")
                         return
                     }
+                    shouldBreakLoop = true
                     let card = initCards.first!
                     game.table.append(card)
                     player.hand.removeAll { $0 == card }
                     game.lastPlayerIndex = number
                     totable(card: card)
                     tohands(Index: number)
-                    shouldBreakLoop = true
                     moveToMain(Index: number)
                 } else {
                     log("\(number): 最初に出せるカードがないです")
@@ -285,13 +284,12 @@ class GameBotController {
     func checkBotHand(Index: Int, player: Player_f) {
         // dtnkできるか
         let resultFirst = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
-        if resultFirst == Constants.dtnkCode {
+        if resultFirst == Constants.dtnkCode && game.lastPlayerIndex != Index {
             // ランダムで数秒待ってどてんこ
             let random = Int.random(in: 0..<5)
             DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(random)) { [self] in
                 let resultSecond = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
-                if resultSecond  == Constants.dtnkCode {
-                    // TODO: Bot Dtnk
+                if resultSecond  == Constants.dtnkCode && game.lastPlayerIndex != Index {
                     dtnk(Index: Index)
                     log("\(player.name) dtnk")
                 } else {
@@ -462,7 +460,7 @@ class GameBotController {
     func challengeIndex(challengerIndex: Int, dtnkCardNumber: Int, dtnkIndex: Int, challengers: [Int]) {
         // 自分がdtnkIndexだったら終了
         if challengerIndex == dtnkIndex {
-            print("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
+            log("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
             game.gamePhase = .decisionrate_pre
             return
         }
@@ -671,17 +669,19 @@ class GameBotController {
      カードを再生成する
      */
     func regenerationDeck() {
-        // アナウンス
-        game.regenerationDeckFlg = 1
-        //deckに戻す　一番上だけ残す
-        let lastCard = game.table.last!
-        var remainingCards = Array(game.table.dropLast())
-        remainingCards.shuffle()
-        game.deck.append(contentsOf: remainingCards)
-        game.table = [lastCard]
-        // view
-        todeck(card: game.deck)
-        totable(card: game.table)
+        DispatchQueue.main.async { [self] in
+            // アナウンス
+            game.regenerationDeckFlg = 1
+            //deckに戻す　一番上だけ残す
+            let lastCard = game.table.last!
+            var remainingCards = Array(game.table.dropLast())
+            remainingCards.shuffle()
+            game.deck.append(contentsOf: remainingCards)
+            game.table = [lastCard]
+            // view
+            todeck(card: game.deck)
+            totable(card: game.table)
+        }
     }
 
     //**********************************************************************************
@@ -719,8 +719,7 @@ class GameBotController {
         if !dtnkjudge {
             return result
         }
-        
-        // 自分にはどてんこできない　：リベンジ可能として出す？
+        // 自分にはどてんこできない
         if game.lastPlayerIndex == myside {
             return result
         }
@@ -728,7 +727,6 @@ class GameBotController {
         if game.currentPlayerIndex == Constants.stnkCode {
             return Constants.stnkCode
         }
-
         // 通常どてんこ可能として返す
         result = Constants.dtnkCode
 
@@ -739,6 +737,7 @@ class GameBotController {
      カードを出す
      */
     func playCards(Index: Int, cards: [CardId]) {
+        log("card: \(cards)", level: .debug)
         let cardsToPlay = cards
         
         if game.table.isEmpty {
@@ -754,6 +753,9 @@ class GameBotController {
             return
         }
         if checkMultipleCards(table: game.table.last!, playCard: cards) {
+            if game.gamePhase != .main {
+                game.gamePhase = .main
+            }
             game.table.append(contentsOf: cards)
             game.players[Index].hand.removeAll(where: { cardsToPlay.contains($0) })
             game.lastPlayerIndex = Index
@@ -843,7 +845,9 @@ class GameBotController {
     func dtnk(Index: Int) {
         // dtnkは１ゲーム１人１回
         if game.dtnkFlg != 1 {
-            // バイブ　音声
+            // Vib & SE
+            SoundMng.shared.dtnkSound()
+
             DispatchQueue.main.async { [self] in
                 game.gamePhase = .dtnk
                 game.dtnkFlg = 1
@@ -859,6 +863,21 @@ class GameBotController {
             }
         } else {
             log("\(Index): どてんこ済みです")
+        }
+    }
+    
+    func revenge(Index: Int) {
+        // Vib & SE
+        
+        game.gamePhase = .revenge
+        // 入れ替え
+        let quickIndex = game.dtnkPlayerIndex
+        let quickPlayer = game.dtnkPlayer
+        game.lastPlayerIndex = quickIndex
+        game.dtnkPlayerIndex = Index
+        game.dtnkPlayer = game.players[Index]
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
+            game.gamePhase = .q_challenge
         }
     }
 
@@ -894,7 +913,7 @@ class GameBotController {
         // 合計が一緒
         var sum: Bool = false
         let sumResult = calculatePossibleSums(cards: playCard)
-        log("sumResult")
+//        log("\(sumResult)")
         for sumdata in sumResult {
             if sumdata == table.number() {
                 sum = true
@@ -945,27 +964,20 @@ class GameBotController {
     //**********************************************************************************
     
     func todeck(card: [CardId]) {
-        for carddata in card {
-            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == carddata.id }) {
-                var newCard = game.cardUI.remove(at: index)
-                newCard.location = .deck
-                game.cardUI.append(newCard)
+        DispatchQueue.main.async { [self] in
+            for carddata in card {
+                if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == carddata.id }) {
+                    var newCard = game.cardUI.remove(at: index)
+                    newCard.location = .deck
+                    game.cardUI.append(newCard)
+                }
             }
         }
     }
 
     func totable(card: CardId) {
-        if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == card.id }) {
-            var newCard = game.cardUI.remove(at: index)
-            newCard.location = .table
-            game.cardUI.append(newCard)
-        }
-    }
-    
-
-    func totable(card: [CardId]) {
-        for carddata in card {
-            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == carddata.id }) {
+        DispatchQueue.main.async { [self] in
+            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == card.id }) {
                 var newCard = game.cardUI.remove(at: index)
                 newCard.location = .table
                 game.cardUI.append(newCard)
@@ -973,15 +985,30 @@ class GameBotController {
         }
     }
     
+
+    func totable(card: [CardId]) {
+        DispatchQueue.main.async { [self] in
+            for carddata in card {
+                if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == carddata.id }) {
+                    var newCard = game.cardUI.remove(at: index)
+                    newCard.location = .table
+                    game.cardUI.append(newCard)
+                }
+            }
+        }
+    }
+    
     func tohands(Index: Int) {
+        DispatchQueue.main.async { [self] in
         let hand = game.players[Index].hand
         var i = 0
-        for newhandcard in hand {
-            if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
-                var newCard = game.cardUI.remove(at: index)
-                newCard.location = .hand(playerIndex: Index, cardIndex: i)
-                i += 1;
-                game.cardUI.append(newCard)
+            for newhandcard in hand {
+                if let index = game.cardUI.firstIndex(where: { $0.id.rawValue == newhandcard.id }) {
+                    var newCard = game.cardUI.remove(at: index)
+                    newCard.location = .hand(playerIndex: Index, cardIndex: i)
+                    i += 1;
+                    game.cardUI.append(newCard)
+                }
             }
         }
     }

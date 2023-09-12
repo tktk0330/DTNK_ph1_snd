@@ -56,7 +56,7 @@ struct SplashController {
             if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: currentUser.uid) {
                 log("既存ユーザー：User ID: \(user.id), Name: \(user.name), Icon URL: \(user.iconURL)")
                 DispatchQueue.main.async {
-                    let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL)
+                    let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL, life: user.currentLives)
                     appState.account.loginUser = newUser // loginUserに情報を格納
                 }
             } else {
@@ -116,7 +116,7 @@ struct SplashController {
         let realm = try! Realm()
         if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: userId) {
             DispatchQueue.main.async {
-                let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL)
+                let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL, life: user.currentLives)
                 appState.account.loginUser = newUser // loginUserに情報を格納
             }
         } else {

@@ -128,9 +128,9 @@ class GameUIState: ObservableObject {
                     }
                 }
             case .gamenum:
-                print(phase)
+                log("\(phase)")
             case .countdown:
-                print(phase)
+                log("\(phase)")
             case .ratefirst:
                 GameBotController().firstCard()
             case .gamefirst:
@@ -138,15 +138,15 @@ class GameUIState: ObservableObject {
             case .decisioninitialplayer:
                 GameBotController().endFlip()
             case .gamefirst_sub:
-                print(phase)
+                log("\(phase)")
             case .main:
-                print(phase)
+                log("\(phase)")
             case .dtnk:
-                print(phase)
+                log("\(phase)")
             case .burst:
-                print(phase)
+                log("\(phase)")
             case .revenge:
-                print(phase)
+                log("\(phase)")
             case .q_challenge:
                 GameBotController().moveChallengeBot()
             case .challenge:
@@ -154,13 +154,13 @@ class GameUIState: ObservableObject {
             case .decisionrate_pre:
                 GameBotController().preparationFinalPhase()
             case .decisionrate:
-                print(phase)
+                log("\(phase)")
             case .result:
-                print(phase)
+                log("\(phase)")
             case .other:
-                print(phase)
+                log("\(phase)")
             case .waiting:
-                print(phase)
+                log("\(phase)")
             }
             
         case .vsFriend:
@@ -170,39 +170,39 @@ class GameUIState: ObservableObject {
                     startFlag = true
                 }
             case .gamenum:
-                print(phase)
+                log("\(phase)")
             case .countdown:
-                print(phase)
+                log("\(phase)")
             case .ratefirst:
-                print(phase)
+                log("\(phase)")
             case .gamefirst:
-                print(phase)
+                log("\(phase)")
             case .decisioninitialplayer:
-                print(phase)
+                log("\(phase)")
             case .gamefirst_sub:
-                print(phase)
+                log("\(phase)")
             case .main:
-                print("")
+                log("\(phase)")
             case .dtnk:
-                print(phase)
+                log("\(phase)")
             case .burst:
-                print(phase)
+                log("\(phase)")
             case .revenge:
-                print(phase)
+                log("\(phase)")
             case .q_challenge:
-                print(phase)
+                log("\(phase)")
             case .challenge:
                 GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
             case .decisionrate_pre:
                 GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
             case .decisionrate:
-                print(phase)
+                log("\(phase)")
             case .result:
-                print(phase)
+                log("\(phase)")
             case .other:
-                print(phase)
+                log("\(phase)")
             case .waiting:
-                print(phase)
+                log("\(phase)")
             }
         }
     }
@@ -258,8 +258,7 @@ class GameUIState: ObservableObject {
         
         self.turnFlg = 0
         self.dtnkFlg = 0
-
-        
+        self.players[0].selectedCards = []
         completion(true)
     }
 }
