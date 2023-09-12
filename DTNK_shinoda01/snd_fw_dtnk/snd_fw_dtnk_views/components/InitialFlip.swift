@@ -12,59 +12,6 @@ import SwiftUI
  Player name
  
  */
-struct InitialFlip: View {
-
-    let player: [Player]
-    let initialIndex: Int
-
-    @State private var timer: Timer?
-    @State var index: Int = 0
-    @State var count = 0
-    let viewModel: InitialFlipViewModel
-    
-    var remainingPlayers: [Player] {
-        var remaining = player
-        remaining.remove(at: initialIndex)
-        remaining.shuffle()
-        remaining.insert(player[initialIndex], at: remaining.count)
-        return remaining
-    }
-
-    var name: [String] {
-        remainingPlayers.map { $0.name }
-    }
-
-
-    init(player: [Player], initialIndex: Int) {
-        self.player = player
-        self.viewModel = InitialFlipViewModel()
-        self.initialIndex = initialIndex
-        self.index = initialIndex
-        self.viewModel.text = String(name[index])
-        
-    }
-
-
-    var body: some View {
-        ZStack {
-            InitialFlipView(viewModel: viewModel)
-                .onAppear {
-                    timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-                        if count < 11 {
-                            count += 1
-                            index = (index + 1) % name.count
-                            viewModel.text = String(name[index])
-
-                        } else {
-                            timer?.invalidate()
-                            timer = nil
-                        }
-                    }
-                }
-        }
-    }
-}
-
 
 enum InitialFlipType {
     case top
@@ -122,10 +69,10 @@ struct InitialFlipView: View {
             ZStack {
                 InitialFlipPartsView(text: viewModel.newValue ?? "", type: .top)
                 InitialFlipPartsView(text: viewModel.oldValue ?? "", type: .top)
-                    .rotation3DEffect(.init(degrees: viewModel.animateTop ? -90 : 0),
+                    .rotation3DEffect(.init(degrees: viewModel.animateTop ? -89.9 : 0.1),
                                       axis: (1, 0, 0),
                                       anchor: .bottom,
-                                      perspective: 0.5)
+                                      perspective: 1.0)
             }
             // 横棒
             Color.plusDarkGreen
@@ -133,10 +80,10 @@ struct InitialFlipView: View {
             ZStack {
                 InitialFlipPartsView(text: viewModel.oldValue ?? "", type: .bottom)
                 InitialFlipPartsView(text: viewModel.newValue ?? "", type: .bottom)
-                    .rotation3DEffect(.init(degrees: viewModel.animateBottom ? 0 : 90),
+                    .rotation3DEffect(.init(degrees: viewModel.animateBottom ? 0.1 : 89.9),
                                       axis: (1, 0, 0),
                                       anchor: .top,
-                                      perspective: 0.5)
+                                      perspective: 1.0)
             }
         }
     }
@@ -172,3 +119,58 @@ class InitialFlipViewModel: ObservableObject, Identifiable {
         }
     }
 }
+
+
+struct InitialFlip: View {
+
+    let player: [Player_f]
+    let initialIndex: Int
+
+    @State private var timer: Timer?
+    @State var index: Int = 0
+    @State var count = 0
+    let viewModel: InitialFlipViewModel
+    
+    var remainingPlayers: [Player_f] {
+        var remaining = player
+        remaining.remove(at: initialIndex)
+        remaining.shuffle()
+        remaining.insert(player[initialIndex], at: remaining.count)
+        return remaining
+    }
+
+    var name: [String] {
+        remainingPlayers.map { $0.name }
+    }
+    
+    init(player: [Player_f], initialIndex: Int) {
+        self.player = player
+        self.viewModel = InitialFlipViewModel()
+        self.initialIndex = initialIndex
+        self.index = initialIndex
+        self.viewModel.text = String(name[index])
+        
+    }
+
+    var body: some View {
+        ZStack {
+            InitialFlipView(viewModel: viewModel)
+                .contentShape(Rectangle())
+                .onAppear {
+                    timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+                        if count < 11 {
+                            count += 1
+                            index = (index + 1) % name.count
+                            viewModel.text = String(name[index])
+
+                        } else {
+                            timer?.invalidate()
+                            timer = nil
+                        }
+                    }
+                }
+        }
+    }
+}
+
+

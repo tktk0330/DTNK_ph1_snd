@@ -26,6 +26,7 @@ struct GameRule {
             gameID: "",
             gameNum: 1,
             gameTarget: 1,
+            gamevsInfo: .vsFriend,
             deck:  self.initialDeck)
     }
     
@@ -85,6 +86,9 @@ struct GameRule {
             .diamond11,
             .diamond12,
             .diamond13,
+            .whiteJocker,
+            .blackJocker,
+
         ]
     }
     

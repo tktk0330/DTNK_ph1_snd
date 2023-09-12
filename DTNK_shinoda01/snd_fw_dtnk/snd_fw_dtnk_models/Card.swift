@@ -25,6 +25,11 @@ enum Suit: String, CaseIterable {
     case all = "A"
 }
 
+struct N_Card: Equatable {
+    let id: CardId
+    var location: CardLocation
+}
+
 /**
  カード詳細
  @var CardId Int
@@ -107,14 +112,15 @@ extension CardId {
         
     // 座標　total: 手札合計, index: 何枚目のカードか
     func location(for location: CardLocation, total: Int) -> CGSize {
-        let resize = CGFloat(200)
+        let resize = Constants.scrWidth * 0.47
         let game = appState.gameUIState
+        let space = 0.09
         
         switch location {
         case .deck:
-            return CGSize(width: UIScreen.main.bounds.width / 128 - 38, height: 0)
+            return CGSize(width: UIScreen.main.bounds.width * -space, height: -Constants.scrHeight * 0.046)
         case .table:
-            return CGSize(width: UIScreen.main.bounds.width / 128 + 32, height: 0)
+            return CGSize(width: UIScreen.main.bounds.width * space, height: -Constants.scrHeight * 0.046)
         case .hand(let playerIndex, let cardIndex):
             let cardSpacingDegrees: Double = playerIndex == game!.myside ? 30 : 10
             var prex = CGFloat(0)
@@ -138,15 +144,15 @@ extension CardId {
             }
             // 自分のサイドの次のプレイヤーの座標(左)
             else if playerIndex == (game!.myside + 1) % game!.players.count {
-                return CGSize(width: -y - resize, height: x)
+                return CGSize(width: -y - resize, height: x - Constants.scrHeight * 0.16)
             }
             // 自分のサイドの次の次のプレイヤーの座標(正面)
             else if playerIndex == (game!.myside + 2) % game!.players.count {
-                return CGSize(width: -x, height: y - CGFloat(300))
+                return CGSize(width: -x, height: y - Constants.scrHeight * 0.35)
             }
             // 自分のサイドの次の次の次のプレイヤーの座標(右)
             else if playerIndex == (game!.myside + 3) % game!.players.count {
-                return CGSize(width: y + resize, height: -x)
+                return CGSize(width: y + resize, height: -x - Constants.scrHeight * 0.16)
             }
             else {
                 return .zero
@@ -187,6 +193,23 @@ extension CardId {
         }
     }
 
+    func suit() -> Suit {
+        switch self {
+        case .spade1, .spade2, .spade3, .spade4, .spade5, .spade6, .spade7, .spade8, .spade9, .spade10, .spade11, .spade12, .spade13:
+            return .spade
+        case .heart1, .heart2, .heart3, .heart4, .heart5, .heart6, .heart7, .heart8, .heart9, .heart10, .heart11, .heart12, .heart13:
+            return .heart
+        case .diamond1, .diamond2, .diamond3, .diamond4, .diamond5, .diamond6, .diamond7, .diamond8, .diamond9, .diamond10, .diamond11, .diamond12, .diamond13:
+            return .diamond
+        case .club1, .club2, .club3, .club4, .club5, .club6, .club7, .club8, .club9, .club10, .club11, .club12, .club13:
+            return .club
+
+        case .blackJocker, .whiteJocker:
+            return .all
+        case .back:
+            return .all
+        }
+    }
 
     
     //　手札で取りうる値
@@ -292,7 +315,7 @@ extension CardId {
         case .spade13, .heart13, .diamond13, .club13:
             return 13
         case .blackJocker, .whiteJocker:
-            return 0
+            return 1
         case .back:
             return 900
         }

@@ -1,5 +1,6 @@
-
-
+/**
+ Game State
+ */
 
 import SwiftUI
 
@@ -11,31 +12,62 @@ class GameUIState: ObservableObject {
     @Published var gameNum: Int = 1
     // TargetGame
     @Published var gameTarget: Int = 1
+    // vsInfo
+    @Published var gamevsInfo: vsInfo?
     // ゲーム状態を示す
     @Published var gamePhase: GamePhase = .dealcard {
         didSet {
-            gamePhaseAction(phase: gamePhase)
+            gamePhaseAction(vsInfo: gamevsInfo!, phase: gamePhase)
         }
     }
     @Published var deck: [CardId] = []
     @Published var cardUI: [N_Card] = cards
-    @Published var table: [CardId] = []
+    @Published var table: [CardId] = [] {
+        didSet {
+            if gamevsInfo == .vsBot {
+                checkBotDtnk()
+            }
+        }
+    }
     @Published var jorker: Int = 2
     @Published var players: [Player_f] = []
     @Published var myside: Int = 99
-    // 出さないことを通知
     // 現在プレイしている人
-    @Published var currentPlayerIndex: Int = 99
+    @Published var currentPlayerIndex: Int = Constants.stnkCode {
+        didSet {
+            if gamevsInfo == .vsBot {
+                botTurnAction(Index: currentPlayerIndex)
+            }
+        }
+    }
     // 最後にカードを出した人
-    @Published var lastPlayerIndex: Int = 99
+    @Published var lastPlayerIndex: Int = Constants.stnkCode
     // どてんこした人
     @Published var dtnkPlayer: Player_f?
     // どてんこした人のIndex
-    @Published var dtnkPlayerIndex: Int = 99
+    @Published var dtnkPlayerIndex: Int = Constants.stnkCode
+    // バーストした人
+    @Published var burstPlayer: Player_f?
+    // バーストした人のIndex
+    @Published var burstPlayerIndex: Int = Constants.burstCode
+    // 初め出せるか通知
+    @Published var firstAnswers: [FirstAnswers] = Array(repeating: FirstAnswers.initial, count: 4) {
+        didSet {
+            if gamevsInfo == .vsBot && firstAnswers.allSatisfy({ $0 == FirstAnswers.pass }) {
+                judgeFirstPlayer()
+            }
+        }
+    }
     // チャレンジ通知
-    @Published var challengeAnswers: [ChallengeAnswer?] = []
+    @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
+        didSet {
+            if gamevsInfo == .vsBot && challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
+                gamePhase = .challenge
+            }
+        }
+    }
     // 完了通知
-    @Published var nextGameAnnouns: [NextGameAnnouns?] = []
+    @Published var nextGameAnnouns: [NextGameAnnouns] = Array(repeating: NextGameAnnouns.initial, count: 4)
     // 裏のカードたち
     @Published var decisionScoreCards: [CardId] = []
     // 初期レート
@@ -48,57 +80,188 @@ class GameUIState: ObservableObject {
     @Published var losers: [Player_f] = []
     // ゲームスコア
     @Published var gameScore: Int = 1
-    
+    // レートアップカード
+    @Published var rateUpCard: String? = nil
+    // initialFlipの仮変数
+    @Published var initialPlayerIndex: Int? = nil
+    // どてんこ返し [返した人　返された人]
+    @Published var revengerIndex: [Int] = []
     // FB必要なし
-    // カウンター
-    @Published var counter: Bool = false
-    @Published var startFlag: Bool = false
+    @Published var counter: Bool = false   // カウンター
+    @Published var startFlag: Bool = false // startBtn
+    @Published var AnnounceFlg = false     // 実行中 true 非表示中　false
+    @Published var turnFlg: Int = 0        // 0: canDraw 1: canPass
+    @Published var dtnkFlg: Int = 0        // 0: no 1: dtnked
+    @Published var regenerationDeckFlg: Int = 0        // 0: no 1: dtnked
 
-    
-    func gamePhaseAction(phase: GamePhase) {
-        switch phase {
-            
-        case .dealcard:
-            GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
-                startFlag = true
+
+
+    /**
+     Botのターンを回す
+     */
+    func botTurnAction(Index: Int) {
+        switch Index {
+        case 1, 2, 3:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                GameBotController().botAction(Index: Index) { result in }
             }
-        case .gamenum:
-            print(phase)
-        case .countdown:
-            print(phase)
-        case .ratefirst:
-            print(phase)
-        case .gamefirst:
-            print(phase)
-        case .decisioninitialplayer:
-            print(phase)
-        case .gamefirst_sub:
-            print(phase)
-        case .main:
-            print(phase)
-        case .dtnk:
-            print(phase)
-        case .burst:
-            print(phase)
-        case .revenge:
-            print(phase)
-        case .q_challenge:
-            print(phase)
-        case .challenge:
-            GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
-        case .decisionrate_pre:
-            GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
-        case .decisionrate:
-            print(phase)
-        case .result:
-            print(phase)
-        case .other:
-            print(phase)
-        case .waiting:
-            print(phase)
+        case 0:
+            break;
+        default:
+            break;
+        }
+    }
+    
+    /**
+     Phaseの操作　bot Friendで分ける
+     */
+    func gamePhaseAction(vsInfo: vsInfo, phase: GamePhase) {
+        
+        switch vsInfo {
+        case .vsBot:
+            switch phase {
+            case .dealcard:
+                // カード配る
+                GameBotController().dealCards() { [self] result in
+                    if result {
+                        startFlag = true
+                    }
+                }
+            case .gamenum:
+                print(phase)
+            case .countdown:
+                print(phase)
+            case .ratefirst:
+                GameBotController().firstCard()
+            case .gamefirst:
+                GameBotController().BotGameInit()
+            case .decisioninitialplayer:
+                GameBotController().endFlip()
+            case .gamefirst_sub:
+                print(phase)
+            case .main:
+                print(phase)
+            case .dtnk:
+                print(phase)
+            case .burst:
+                print(phase)
+            case .revenge:
+                print(phase)
+            case .q_challenge:
+                GameBotController().moveChallengeBot()
+            case .challenge:
+                GameBotController().challengeEvent()
+            case .decisionrate_pre:
+                GameBotController().preparationFinalPhase()
+            case .decisionrate:
+                print(phase)
+            case .result:
+                print(phase)
+            case .other:
+                print(phase)
+            case .waiting:
+                print(phase)
+            }
+            
+        case .vsFriend:
+            switch phase {
+            case .dealcard:
+                GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
+                    startFlag = true
+                }
+            case .gamenum:
+                print(phase)
+            case .countdown:
+                print(phase)
+            case .ratefirst:
+                print(phase)
+            case .gamefirst:
+                print(phase)
+            case .decisioninitialplayer:
+                print(phase)
+            case .gamefirst_sub:
+                print(phase)
+            case .main:
+                print("")
+            case .dtnk:
+                print(phase)
+            case .burst:
+                print(phase)
+            case .revenge:
+                print(phase)
+            case .q_challenge:
+                print(phase)
+            case .challenge:
+                GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
+            case .decisionrate_pre:
+                GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
+            case .decisionrate:
+                print(phase)
+            case .result:
+                print(phase)
+            case .other:
+                print(phase)
+            case .waiting:
+                print(phase)
+            }
+        }
+    }
+    
+    /**
+     Botがどてんこできるか調査する
+     */
+    func checkBotDtnk() {
+        for i in 1...3 {
+            GameBotController().checkBotHand(Index: i, player: players[i])
+        }
+    }
+    
+    /**
+     誰も出せなかった時、Hostから順にゲームを始める
+     TODO：　誰も出せなかった時にランダムで最初のプレイヤーを決める
+     */
+    func judgeFirstPlayer() {
+        //        let randomInitialPlayerIndex = Int.random(in: 0...3)
+        //        currentPlayerIndex = randomInitialPlayerIndex
+        //        gamePhase = .decisioninitialplayer
+        log("誰も出せないのでホストから始める")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [self] in
+            currentPlayerIndex = 0
+            gamePhase = .gamefirst_sub
         }
     }
 
+    /**
+     次のゲームの準備
+     */
+    func preparationNewGame(resetItem: GameResetItem, completion: @escaping (Bool) -> Void) {
+        self.gameNum = resetItem.gameNum
+        self.deck = resetItem.deck
+        self.table = resetItem.table as? [CardId] ?? []
+        for player in self.players {
+            player.hand.removeAll()
+        }
+        self.currentPlayerIndex = resetItem.currentPlayerIndex
+        self.lastPlayerIndex = resetItem.lastPlayerIndex
+        self.dtnkPlayerIndex = resetItem.dtnkPlayerIndex
+        self.dtnkPlayer = nil
+        self.burstPlayerIndex = resetItem.burstPlayerIndex
+        self.burstPlayer = nil
+        self.ascendingRate = resetItem.ascendingRate
+        self.decisionScoreCards = []
+        self.challengeAnswers = resetItem.challengeAnswers.compactMap { ChallengeAnswer(rawValue: $0) }
+        self.nextGameAnnouns = resetItem.nextGameAnnouns.compactMap { NextGameAnnouns(rawValue: $0) }
+        self.firstAnswers = resetItem.firstAnswers.compactMap { FirstAnswers(rawValue: $0) }
+        self.winners = []
+        self.losers = []
+        self.gameScore = resetItem.gameScore
+        
+        self.turnFlg = 0
+        self.dtnkFlg = 0
+
+        
+        completion(true)
+    }
 }
 
 var cards: [N_Card] = [

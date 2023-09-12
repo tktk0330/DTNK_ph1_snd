@@ -28,13 +28,15 @@ struct PageContent: View {
             case .dtnkMatching:
                 MatchingView()
             case .dtnkMain:
-                GameMain()
+                GameBotView()
             case .dtnkMain_friends:
                 GameFriendView()
             case .dtnkResult:
                 GameResultView()
             case .gameresult:
                 GameResultView()
+            case .option:
+                OptionView()
             case .gameSet:
                 GameSettingView()
             }

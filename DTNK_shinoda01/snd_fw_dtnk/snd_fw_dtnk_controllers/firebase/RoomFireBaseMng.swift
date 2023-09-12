@@ -1,9 +1,6 @@
-//
-//  RoomFireBaseMng.swift
-//  DTNK_shinoda01
-//
-//  Created by Takuma Shinoda on 2023/08/05.
-//
+/**
+ FireBaseManager (ROOM)
+ */
 
 import SwiftUI
 import Firebase
@@ -266,7 +263,4 @@ class RoomFirebaseManager {
             completion(participantsData.count)
         }
     }
-
-
-
 }

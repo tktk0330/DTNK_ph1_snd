@@ -58,16 +58,37 @@ class MatchingController {
     }
     
     /**
+     vs Bot
+     */
+    func onTapStartBot() {
+        
+        
+        
+    }
+    
+    /**
      vsBot
      */
     func onRequest() {
         // プレイヤーをUIへ表示
         appState.matching.message = "ゲームを開始します"
         appState.matching.players = BotCreate().initialplayers()
+        
+        
+        // TODO: Player_fnにするための設定　直す
+        var quick:[Player_f] = []
+        for matchingplayer in appState.matching.players {
+            quick.append(Player_f(id: matchingplayer.id, side: matchingplayer.side, name: matchingplayer.name, icon_url: matchingplayer.icon_url))
+        }
+        
+        appState.gameUIState.deck = GameRule.initialDeck.shuffled()
+        print(appState.gameUIState.deck.count)
+        appState.gameUIState.gamevsInfo = .vsBot
+        
         // メインゲーム画面へ
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // gameUiStateにプレイヤーをセット
-            appState.gameUiState.players = appState.matching.players
+            appState.gameUIState.players = quick
             Router().pushBasePage(pageId: .dtnkMain)
         }
     }
@@ -92,11 +113,8 @@ class MatchingController {
             // 参加者だった退出
             RoomFirebaseManager().leaveRoom(roomID: room.roomID, participantID: user.userID)  { judge in
                 if judge {
-                    print("sc")
                     Router().pushBasePage(pageId: .room)
                 } else {
-                    print("er")
-
                 }
             }
         }
@@ -106,22 +124,26 @@ class MatchingController {
 
 /**
  vs Bot
- bot生成
+ 参加者t生成
  */
+
 class BotCreate {
     
     func initialplayers() -> [Player] {
         
         var players: [Player] = []
+        
         //myaccount
-        let myaccount = Player(id: "xxx", side: 1, name: "user", icon_url: "icon-bot1")
+        let user = appState.account.loginUser
+        let myaccount = Player(id: user!.userID, side: 1, name: user!.name, icon_url: user!.iconURL)
+
         players.append(myaccount)
 
         let allBots = BotUserList().botUsers().shuffled()
         //ゲーム人数分botをセットする
         for i in 2...4 {
             let bot = allBots[i]
-            let player = Player(id: "", side: i, name: bot.name, icon_url: bot.icon_url)
+            let player = Player(id: "botId" + String(i), side: i, name: bot.name, icon_url: bot.icon_url)
             players.append(player)
         }
         return players

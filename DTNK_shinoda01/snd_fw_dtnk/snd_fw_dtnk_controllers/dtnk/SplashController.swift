@@ -54,7 +54,7 @@ struct SplashController {
         if let currentUser = Auth.auth().currentUser {
             let realm = try! Realm()
             if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: currentUser.uid) {
-                print("User ID: \(user.id), Name: \(user.name), Icon URL: \(user.iconURL)")
+                log("既存ユーザー：User ID: \(user.id), Name: \(user.name), Icon URL: \(user.iconURL)")
                 DispatchQueue.main.async {
                     let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL)
                     appState.account.loginUser = newUser // loginUserに情報を格納
@@ -85,7 +85,7 @@ struct SplashController {
             }
 
         } else {
-            print("新規登録")
+            log("新規登録")
             Auth.auth().signInAnonymously { (result, error) in
                 if let error = error {
                     print("Failed to sign in: \(error)")
