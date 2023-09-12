@@ -3,11 +3,37 @@
 
 import SwiftUI
 
+
 struct HomeController {
+    var heartsController = HeartsRecoverController.shared
     
     func onTapPlay() {
         Router().onOpenMenu()
     }
+    
+    func hasHeartSoloPlay() {
+        if appState.home.heartsData.heartsCount > 0 {
+            // ハートが0より大きい場合はゲームを開始する
+            // ゲームの開始処理をここに記述する
+            Router().pushBasePage(pageId: .gameSet)
+        } else {
+            // ハートが0の場合はアラートを表示する
+            appState.home.heartsData.showAlert = true
+        }
+    }
+    
+    func hasHeartMultiPlay() {
+        if appState.home.heartsData.heartsCount > 0 {
+            // ハートが0より大きい場合はゲームを開始する
+            // ゲームの開始処理をここに記述する
+            Router().pushBasePage(pageId: .room)
+        } else {
+            // ハートが0の場合はアラートを表示する
+            appState.home.heartsData.showAlert = true
+        }
+    }
+
+
     
     func onTapStart(gamenum: Int, rate: Int, jorker: Int) {
         let eventController = GameEventController()
@@ -15,11 +41,10 @@ struct HomeController {
         Router().onCloseMenu()
     }
     
+    
     func onTapBackMode(){
         appState.home.mode = .noEditting
     }
-
-    
     func onTapIcon(){
         appState.home.mode = .edittingIcon
     }
@@ -33,6 +58,9 @@ struct HomeController {
 
 //        appState.home.mode = .checkrule
     }
+    func onTapRuleSetting(){
+           Router().pushBasePage(pageId: .ruleSetting)
+       }
     
     func onTapShop(){
         appState.home.mode = .checkshop

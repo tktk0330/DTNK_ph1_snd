@@ -6,10 +6,12 @@ import SwiftUI
 
 struct GameResultView: View {
     
+
     @StateObject var game: GameUIState = appState.gameUIState
     let sortedPlayers = appState.gameUIState.players.sorted(by: { $0.rank < $1.rank })
     var body: some View {
         
+
         GeometryReader { geo in
             ZStack(alignment: .center) {
                 // 広告用
@@ -92,5 +94,6 @@ struct GameResultView: View {
             }
         }
     }
+    
 }
 

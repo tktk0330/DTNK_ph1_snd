@@ -13,6 +13,8 @@ import SwiftUI
 struct HomeView: View {
     
     @StateObject var home: HomeState = appState.home
+    @StateObject var heartsController: HeartsRecoverController = HeartsRecoverController.shared
+    @State private var showAlert = false
     
     var body: some View {
         GeometryReader { geo in
@@ -29,44 +31,73 @@ struct HomeView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
                        
                 // Life
-                HStack(spacing: 10) {
-                    HStack {
-                        ForEach(0..<5) {_ in
-                            Image(systemName: "heart.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.red)
-                        }
-                    }
-                    
-                    Button(action: {
-                        print("ハートの購入")
-                    }) {
-                        Image(ImageName.Home.healbox.rawValue)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 30, height: 30)
-                    }
-                }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.30)
-                
+                HStack {
+                                    VStack {
+                                        if appState.home.heartsData.heartsCount <= 4 {
+                                            // タイマーの残り時間を表示
+                                            Text(String(format: "%.0f", max(appState.home.heartsData.remainingTime, 0)))
+                                                .foregroundColor(.black)
+                                                .font(.system(size: 30, weight: .bold))
+                                        } else {
+                                            Text(" ")
+                                                .font(.system(size: 30, weight: .bold))
+                                        }
+
+                                        HStack(spacing: 10) {
+                                            ForEach(0..<5) { index in
+                                                Image(systemName: "heart.fill")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 30, height: 30)
+                                                    .foregroundColor(index < appState.home.heartsData.heartsCount ? .red : .gray)
+                                            }
+
+                                            Button(action: {
+//                                                if appState.home.heartsData.heartsCount < 5 { // 上限を5に制限
+                                                                    print("ハートの購入処理")
+                                                                    appState.home.heartsData.heartsCount -= 1
+                                              //  }
+                                            }) {
+                                                Image(ImageName.Home.healbox.rawValue)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 30, height: 30)
+                                            }
+                                        }
+                                    }
+                                }
+                                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.27)
+                                .onAppear {
+                                    if appState.home.heartsData.heartsCount != 5 {
+                                        heartsController.stopTimer()
+                                        print("タイマーストップview")
+                                        // ハートの回復タイマーを開始
+                                        heartsController.startTimer()
+                                        print("タイマー始動view")
+                                    }
+                                }
+                          
                 // Game List
                 VStack (spacing: 40){
                     Button(action: {
-                        HomeController().onTapPlay()
+                        HomeController().hasHeartSoloPlay()
                     }) {
                         Btnlgb(imageName: ImageName.Home.vsbots.rawValue, btnText: "ひとりでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120)
                     }
                     
                     Button(action: {
-                        Router().pushBasePage(pageId: .room)
+                        HomeController().hasHeartMultiPlay()
                     }) {
                         Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120)
                     }
 
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
+                .alert(isPresented: $home.heartsData.showAlert) {
+                            Alert(title: Text("ハートが足りません"),
+                                  message: Text("ハートを回復してください。"),
+                                  dismissButton: .default(Text("OK")))
+                        }
 
                 // Info List
                 HStack(spacing: 20) {
@@ -119,4 +150,7 @@ struct HomeView: View {
             }
         }
     }
+    
+
+
 }
