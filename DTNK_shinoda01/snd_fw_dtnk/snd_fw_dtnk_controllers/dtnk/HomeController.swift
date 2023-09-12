@@ -45,8 +45,6 @@ struct HomeController {
     func onTapBackMode(){
         appState.home.mode = .noEditting
     }
-
-    
     func onTapIcon(){
         appState.home.mode = .edittingIcon
     }
