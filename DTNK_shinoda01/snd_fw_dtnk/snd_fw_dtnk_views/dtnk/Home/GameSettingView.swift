@@ -1,158 +1,148 @@
-//
-//  GameSettingView.swift
-//  Dtnk-ver002
-//
-//  Created by Takuma Shinoda on 2023/06/16.
-//
+/**
+ ゲーム設定画面
+ */
 
 import SwiftUI
 
 struct GameSettingView: View {
     
-    let gamenum = [1, 2, 3, 5, 10]
-    @State private var selec_1 = 4
-    
-    let gamerate = [1, 2, 5, 10, 50, 100]
-    @State private var selec_2 = 3
-    
-    let gamejorker = [0, 2, 4]
-    @State private var selec_3 = 2
-    
-    
-    // TODO: その他要素
+    @StateObject var home: HomeState = appState.home
+    @StateObject var account: AccountState = appState.account
     
     var body: some View {
         GeometryReader { geo in
-            // 裏
             ZStack{
-                // 表
-                ZStack{
-                    VStack(spacing: 70){
-                        VStack{
-                            HStack() {
-                                Text("GAME")
-                                    .font(.system(size: 30))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding(3)
-                                    .frame(width: 100)
-
-                                
-                                Picker(selection: $selec_1, label: Text("")) {
-                                    ForEach(gamenum.indices, id: \.self) { index in
-                                        Text(String(gamenum[index]))
-                                    }
-                                }
-                                .pickerStyle(SegmentedPickerStyle())
-                                .frame(width: 200)
-
-                            }
-                            
-                            HStack() {
-                                Text("RATE")
-                                    .font(.system(size: 30))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding(3)
-                                    .frame(width: 100)
-
-                                
-                                Picker(selection: $selec_2, label: Text("")) {
-                                    ForEach(gamerate.indices, id: \.self) { index in
-                                        Text(String(gamerate[index]))
-                                    }
-                                }
-                                .pickerStyle(SegmentedPickerStyle())
-                                .frame(width: 200)
-
-                            }
-                            
-                            HStack() {
-                                Text("JOKER")
-                                    .font(.system(size: 27))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding(3)
-                                    .frame(width: 100)
-                                
-                                Picker(selection: $selec_3, label: Text("")) {
-                                    ForEach(gamejorker.indices, id: \.self) { index in
-                                        Text(String(gamejorker[index]))
-                                    }
-                                }
-                                .pickerStyle(SegmentedPickerStyle())
-                                .frame(width: 200)
-
-                            }
-                            
-                            HStack() {
-                                Text("MAXIMUM")
-                                    .font(.system(size: 30))
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
-                                    .bold()
-                                    .padding(3)
-                            }
-                            
-                            Text("TEST")
-                                .font(.system(size: 30))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding(3)
-                            
-                            Text("TEST")
-                                .font(.system(size: 30))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding(3)
-                        }
-
+                // 広告用
+                Rectangle()
+                    .foregroundColor(Color.white.opacity(0.3))
+                    .shadow(color: .gray, radius: 10, x: 0, y: 5)
+                    .frame(maxWidth: .infinity, maxHeight: 50)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+                
+                // back
+                Button(action: {
+                    Router().setBasePages(stack: [.home])
+                }) {
+                    Image(ImageName.Common.back.rawValue)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40)
+                }
+                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
+                
+                // title
+                Text("GameSetting")
+                    .font(.custom(FontName.font01, size: 35))
+                    .foregroundColor(Color.white)
+                    .fontWeight(.bold)
+                    .padding(5)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
+                
+                Rectangle()
+                    .foregroundColor(Color.yellowGreen)
+                    .frame(width: geo.size.width, height: geo.size.height / 1.75)
+                    .offset(y: -geo.size.height / 350)
+                
+                VStack(spacing: 35) {
+                    
+                    HStack(spacing: 40) {
                         Button(action: {
-                            HomeController().onTapStart(gamenum: gamenum[selec_1], rate: gamerate[selec_2], jorker: gamejorker[selec_3])
+                            home.mode = .gameNum
                         }) {
-                            Text("START")
-                                .font(.system(size: 30))
-                                .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                                .bold()
-                                .padding(3)
-                                .frame(width: 150, height: 50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.white, lineWidth: 3)
-                                )
+                            settingUnitView(imageName: "number", text: "ゲーム数")
                         }
-
+                        .modifier(settingUnitModifier())
+                        
+                        Button(action: {
+                            home.mode = .joker
+                        }) {
+                            settingUnitView(imageName: "jorker", text: "Jorker")
+                        }
+                        .modifier(settingUnitModifier())
                     }
                     
+                    HStack(spacing: 40) {
+                        Button(action: {
+                            home.mode = .rate
+                        }) {
+                            settingUnitView(imageName: "rate", text: "Rate")
+                        }
+                        .modifier(settingUnitModifier())
+                        
+                        Button(action: {
+                            home.mode = .max
+                        }) {
+                            settingUnitView(imageName: "max", text: "上限")
+                        }
+                        .modifier(settingUnitModifier())
+                    }
+                    
+                    HStack(spacing: 40) {
+                        Button(action: {
+                            home.mode = .uprate
+                        }) {
+                            settingUnitView(imageName: "uprate", text: "重ね")
+                        }
+                        .modifier(settingUnitModifier())
+                        
+                        Button(action: {
+                            home.mode = .deck
+                        }) {
+                            settingUnitView(imageName: "deck", text: "デッキサイクル")
+                        }
+                        .modifier(settingUnitModifier())
+                    }
                 }
-                .frame(width: 350, height: 500)
-                .background(
-                    Color.black.opacity(0.90)
-                )
-                .cornerRadius(20)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.white, lineWidth: 3)
-                )
+                .padding()
+                .navigationBarTitle("Button Grid")
+                
+                Button(action: {
+                    // TODO: ライフ処理
+                    HomeController().onTapStart(gamenum: account.loginUser.gameNum, rate: account.loginUser.gameRate, jorker: account.loginUser.gameJorker)
+                }) {
+                    Btnwb(btnText: "Start", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
+                }
+                .position(x: Constants.scrWidth / 2, y:  Constants.scrHeight * 0.80)
             }
-            .position(x: geo.size.width / 2, y: geo.size.height / 2)
-
+            
+            // setting unit
+            if home.mode != .noEditting && home.mode != .edittingNickname && home.mode != .edittingIcon {
+                GameSettingUnitView(mode: home.mode)
+            }
         }
-        .background(
-            Color.black.opacity(0.50)
-                .onTapGesture {
-                    Router().onCloseMenu()
-                }
-        )
+    }
+}
 
-        .edgesIgnoringSafeArea(.all)
-        .frame(maxWidth: .infinity,
-               maxHeight: .infinity)
+// 項目View
+struct settingUnitView: View {
+    let imageName: String
+    let text: String
+    
+    var body: some View {
+        VStack(spacing: 2) {
+            Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: Constants.scrWidth / 12, height: Constants.scrWidth / 12)
+
+            Text(text)
+                .font(.system(size: 15))
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+        }
+        .padding(10)
+    }
+}
+
+// 項目Modifire
+struct settingUnitModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .shadow(color: Color.black.opacity(0.5), radius: 5, x: 10, y: 10)
+            .frame(width: Constants.scrWidth / 3, height: Constants.scrHeight / 9)
+            .background(Color.plusDarkGreen)
+            .cornerRadius(10)
+            .shadow(color: Color.black.opacity(0.5), radius: 10, x: 10, y: 10)
     }
 }

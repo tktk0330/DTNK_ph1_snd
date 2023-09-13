@@ -112,6 +112,7 @@
 		5D98720F2AAB49110031A57C /* dtnk01.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D98720E2AAB49110031A57C /* dtnk01.wav */; };
 		5D9872122AAB4A210031A57C /* SoundMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872112AAB4A210031A57C /* SoundMng.swift */; };
 		5D9872142AAB5D8A0031A57C /* SoundName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872132AAB5D8A0031A57C /* SoundName.swift */; };
+		5D9872162AB0AAF70031A57C /* GameSettingUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872152AB0AAF70031A57C /* GameSettingUnitView.swift */; };
 		5DCD27BC2A86591100778980 /* ChallengeAnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */; };
 		5DCD27C02A8D0DAA00778980 /* GameCommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */; };
 		5DCD27C22A8E4E6800778980 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C12A8E4E6800778980 /* WaitingView.swift */; };
@@ -233,6 +234,7 @@
 		5D98720E2AAB49110031A57C /* dtnk01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = dtnk01.wav; sourceTree = "<group>"; };
 		5D9872112AAB4A210031A57C /* SoundMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMng.swift; sourceTree = "<group>"; };
 		5D9872132AAB5D8A0031A57C /* SoundName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundName.swift; sourceTree = "<group>"; };
+		5D9872152AB0AAF70031A57C /* GameSettingUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingUnitView.swift; sourceTree = "<group>"; };
 		5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeAnswerModel.swift; sourceTree = "<group>"; };
 		5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCommonFunctions.swift; sourceTree = "<group>"; };
 		5DCD27C12A8E4E6800778980 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
@@ -578,6 +580,7 @@
 				5D8FA2F72A4826AF0079F260 /* AccountView.swift */,
 				5D8FA2ED2A4826440079F260 /* GameRuleView.swift */,
 				5D8FA2EF2A4826500079F260 /* GameSettingView.swift */,
+				5D9872152AB0AAF70031A57C /* GameSettingUnitView.swift */,
 				5D9872062AA99F430031A57C /* IconSelectView.swift */,
 				5D8FA2F12A4826830079F260 /* OptionView.swift */,
 				5D8FA2F52A4826A40079F260 /* ShopView.swift */,
@@ -855,6 +858,7 @@
 				5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */,
 				5D8FA2BC2A4823890079F260 /* GameUiSide.swift in Sources */,
 				5D8FA2E82A4825FD0079F260 /* TopView.swift in Sources */,
+				5D9872162AB0AAF70031A57C /* GameSettingUnitView.swift in Sources */,
 				5D8FA2D02A4824CE0079F260 /* Flip.swift in Sources */,
 				5D8FA29A2A4820FD0079F260 /* SplashController.swift in Sources */,
 				5D8FA2672A481D010079F260 /* BlinkEffect.swift in Sources */,

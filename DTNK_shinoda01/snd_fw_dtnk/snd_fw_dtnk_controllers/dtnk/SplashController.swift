@@ -54,9 +54,18 @@ struct SplashController {
         if let currentUser = Auth.auth().currentUser {
             let realm = try! Realm()
             if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: currentUser.uid) {
-                log("既存ユーザー：User ID: \(user.id), Name: \(user.name), Icon URL: \(user.iconURL)")
+                log("既存ユーザー：User ID: \(user.id), Name: \(user.name), Icon URL: \(user.iconURL), life: \(user.currentLives), gameNum: \(user.gameNum), gameJorker: \(user.gameJorker), gameRate: \(user.gameRate), gameMaximum: \(user.gameMaximum), gameUpRate: \(user.gameUpRate), gameDeckMaximum: \(user.gameDeckMaximum)")
                 DispatchQueue.main.async {
-                    let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL, life: user.currentLives)
+                    let newUser = User(userID: user.id,
+                                       name: user.name,
+                                       iconURL: user.iconURL,
+                                       life: user.currentLives,
+                                       gameNum: user.gameNum,
+                                       gameJorker: user.gameJorker,
+                                       gameRate: user.gameRate,
+                                       gameMaximum: user.gameMaximum,
+                                       gameUpRate: user.gameUpRate,
+                                       gameDeckMaximum: user.gameDeckMaximum)
                     appState.account.loginUser = newUser // loginUserに情報を格納
                 }
             } else {
@@ -116,7 +125,17 @@ struct SplashController {
         let realm = try! Realm()
         if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: userId) {
             DispatchQueue.main.async {
-                let newUser = User(userID: user.id, name: user.name, iconURL: user.iconURL, life: user.currentLives)
+                let newUser = User(
+                    userID: user.id,
+                    name: user.name,
+                    iconURL: user.iconURL,
+                    life: user.currentLives,
+                    gameNum: user.gameNum,
+                    gameJorker: user.gameJorker,
+                    gameRate: user.gameRate,
+                    gameMaximum: user.gameMaximum,
+                    gameUpRate: user.gameUpRate,
+                    gameDeckMaximum: user.gameDeckMaximum)
                 appState.account.loginUser = newUser // loginUserに情報を格納
             }
         } else {

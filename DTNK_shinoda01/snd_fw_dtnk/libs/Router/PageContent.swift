@@ -39,6 +39,8 @@ struct PageContent: View {
                 OptionView()
             case .shop:
                 ShopView()
+            case .gameSetting:
+                GameSettingView()
             }
         }
     }

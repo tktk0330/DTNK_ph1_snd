@@ -101,14 +101,6 @@ struct HomeView: View {
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.90)
-             
-                Group{
-                    
-                    if home.mode == .gamesetting {
-                        GameSettingView()
-                            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-                    }
-                }
             }
         }
     }

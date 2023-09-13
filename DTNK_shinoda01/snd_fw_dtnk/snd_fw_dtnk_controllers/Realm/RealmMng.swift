@@ -8,7 +8,6 @@ import Foundation
 
 class RealmMng {
     
-    
     /**
      ユーザーネーム変更
      */
@@ -35,6 +34,26 @@ class RealmMng {
                 completion(true)
             }
         } else {
+            completion(false)
+        }
+    }
+    
+    /**
+     ゲーム設定変更
+     */
+    func updateGameSettingRealm(userId: String, item: String, value: Int, completion: @escaping (Bool) -> Void) {
+        do {
+            let realm = try Realm()
+            if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: userId) {
+                try realm.write {
+                    user.setValue(value, forKey: item)
+                }
+                completion(true)
+            } else {
+                completion(false)
+            }
+        } catch {
+            print("Error updating Realm: \(error)")
             completion(false)
         }
     }

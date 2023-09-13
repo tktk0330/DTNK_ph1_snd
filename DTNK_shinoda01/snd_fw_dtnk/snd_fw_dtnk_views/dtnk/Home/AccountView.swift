@@ -26,20 +26,6 @@ struct AccountView: View {
                 .fontWeight(.bold)
                 .bold()
                 .padding()
-            
-            // ここでは編集させない
-//            Button(action: {
-//                guard let loginUser = appState.account.loginUser else { return }
-//                // 編集された名前とアイコンのURLを保存
-//                saveUserData(userID: loginUser.userID, name: loginUser.editedName, iconURL: loginUser.editedIconURL)
-//            }) {
-//                Text("保存")
-//                    .foregroundColor(.white)
-//                    .padding()
-//                    .background(Color.blue)
-//                    .cornerRadius(10)
-//            }
-            
         }
     }
     /**

@@ -6,7 +6,7 @@ import SwiftUI
 struct HomeController {
     
     func onTapPlay() {
-        Router().onOpenMenu()
+        Router().pushBasePage(pageId: .gameSetting)
     }
     
     func onTapStart(gamenum: Int, rate: Int, jorker: Int) {
@@ -64,5 +64,13 @@ struct HomeController {
             }
         }
     }
-
+    
+    // ゲーム設定変更
+    func updateGameSetting<T: Numeric>(keyPath: WritableKeyPath<User, T>, item: String, value: T) {
+        appState.account.loginUser[keyPath: keyPath] = value
+        // IntにキャストしてRealmのアップデートを行う。この例ではTがIntとしてキャストできることを前提としています。
+        if let intValue = value as? Int {
+            RealmMng().updateGameSettingRealm(userId: appState.account.loginUser.userID, item: item, value: intValue) { result in }
+        }
+    }
 }

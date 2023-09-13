@@ -21,5 +21,6 @@ enum PageId: Int, JSONSerializable {
     case gameresult
     case option
     case shop
+    case gameSetting
     
 }

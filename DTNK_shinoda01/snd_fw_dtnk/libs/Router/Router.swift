@@ -38,15 +38,15 @@ struct Router {
      一部表示
      */
     func onOpenMenu(animated: Bool = false) {
-        DispatchQueue.main.async {
-            if animated {
-                withAnimation {
-                    appState.home.mode = .gamesetting
-                }
-            } else {
-                appState.home.mode = .gamesetting
-            }
-        }
+//        DispatchQueue.main.async {
+//            if animated {
+//                withAnimation {
+//                    appState.home.mode = .gamesetting
+//                }
+//            } else {
+//                appState.home.mode = .gamesetting
+//            }
+//        }
     }
     
     func onCloseMenu(animated: Bool = false) {

@@ -13,6 +13,7 @@ extension Color {
     static let casinoShadow = Color(red: 7/255, green: 61/255, blue: 14/255)
     static let pushcolor = Color(red: 194/255, green: 194/255, blue: 194/255)
     static let casinolightgreen = Color(red: 195/255, green: 242/255, blue: 203/255)
+    static let yellowGreen = Color(red: 210 / 255.0, green: 255 / 255.0, blue: 210 / 255.0)
 }
 
 extension Color {
