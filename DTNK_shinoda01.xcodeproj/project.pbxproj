@@ -388,11 +388,11 @@
 		5D8FA2582A481BC50079F260 /* snd_fw_dtnk_common */ = {
 			isa = PBXGroup;
 			children = (
+				5D9872172AB3C6BC0031A57C /* AppDelegate.swift */,
 				5D8FA2C52A48243E0079F260 /* AnimationReader.swift */,
 				5DCD27C82A9B6C1700778980 /* Constants.swift */,
 				5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */,
 				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
-				5D9872172AB3C6BC0031A57C /* AppDelegate.swift */,
 			);
 			path = snd_fw_dtnk_common;
 			sourceTree = "<group>";

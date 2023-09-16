@@ -14,13 +14,7 @@ struct Constants {
     
     // MARK: - lifeMax
     static let lifeMax: Int = 5
-    
-    // MARK: - SE
-    static let SEFlg: Int = 1
-    
-    // MARK: - Vibrate
-    static let VibrateFlg: Int = 1
-    
+        
     // MARK: - cardFaceUp
     static let cardFaceUp: Bool = true
     

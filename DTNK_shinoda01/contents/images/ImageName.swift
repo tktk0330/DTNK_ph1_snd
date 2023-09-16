@@ -20,8 +20,8 @@ enum ImageName {
     }
     
     enum Home: String {
-        case vsbots = "icon-solo"
-        case vsfriends = "icon-team"
+        case vsbots = "game-bot"
+        case vsfriends = "game-friend"
         case healbox = "box-yellow"
     }
     

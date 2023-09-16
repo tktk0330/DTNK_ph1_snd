@@ -2,15 +2,12 @@
  Realm
  */
 
+import SwiftUI
 import RealmSwift
-import Foundation
-
 
 class RealmMng {
     
-    /**
-     ユーザーネーム変更
-     */
+    // ユーザーネーム変更
     func updateUsernameInRealm(userId: String, newUsername: String, completion: @escaping (Bool) -> Void) {
         let realm = try! Realm()
         if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: userId) {
@@ -23,9 +20,7 @@ class RealmMng {
         }
     }
     
-    /**
-     Icon変更
-     */
+    // Icon変更
     func updateIconInRealm(userId: String, iconURL: String, completion: @escaping (Bool) -> Void) {
         let realm = try! Realm()
         if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: userId) {
@@ -38,9 +33,7 @@ class RealmMng {
         }
     }
     
-    /**
-     ゲーム設定変更
-     */
+    // ゲーム設定変更
     func updateGameSettingRealm(userId: String, item: String, value: Int, completion: @escaping (Bool) -> Void) {
         do {
             let realm = try Realm()
@@ -53,8 +46,20 @@ class RealmMng {
                 completion(false)
             }
         } catch {
-            log("Error updating Realm: \(error)", level: .error )
+            log("Error updating Realm: \(error)", level: .error)
             completion(false)
+        }
+    }
+    
+    // Options設定
+    func updateOptionRealm(item: String, value: Bool) {
+        let realm = try! Realm()
+        if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: appState.account.loginUser.userID) {
+            try! realm.write {
+                user.setValue(value, forKey: item)
+            }
+        } else {
+            log("Error updating Option", level: .error)
         }
     }
 }

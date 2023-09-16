@@ -12,6 +12,7 @@ struct RoomView: View {
     @State private var user: String = appState.account.loginUser.name
     @State private var text: String = ""
     @State private var message: String = ""
+    @State private var keyboardHeight: CGFloat = 0
 
     var body: some View {
         GeometryReader { geo in
@@ -21,7 +22,8 @@ struct RoomView: View {
                     .foregroundColor(Color.white.opacity(0.3))
                     .shadow(color: .gray, radius: 10, x: 0, y: 5)
                     .frame(maxWidth: .infinity, maxHeight: 50)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025 + keyboardHeight * 0.8)
+                
                 
                 // back
                 Button(action: {
@@ -32,7 +34,8 @@ struct RoomView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40)
                 }
-                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
+                .frame(maxHeight: 40)
+                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10 + keyboardHeight)
 
                 // title
                 Text("Room")
@@ -40,19 +43,19 @@ struct RoomView: View {
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .padding(5)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15 + keyboardHeight)
                 
                 TextField("search room", text: $text)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(5)
                     .frame(width: 300)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.30)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.30 + keyboardHeight)
                 
                 Text(message)
                     .foregroundColor(Color.red)
                     .padding(5)
                     .frame(width: 300)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.40)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.40 + keyboardHeight)
 
                 VStack(spacing: 50) {
                     Button(action: {
@@ -67,7 +70,7 @@ struct RoomView: View {
                         Btnwb(btnText: "Search", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                     }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60 + keyboardHeight)
                 
                 if room.roommode == .pop {
                     JoinPopView()
@@ -79,6 +82,18 @@ struct RoomView: View {
                 }
             }
         }
+        .onAppear {
+            // キーボード対応
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notif in
+                let value = notif.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                let height = value.height
+                keyboardHeight = height / 10
+            }
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                keyboardHeight = 0
+            }
+        }
+
     }
     
     /**

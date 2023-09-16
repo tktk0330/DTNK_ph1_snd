@@ -19,8 +19,12 @@ struct User {
     var gameMaximum: Int
     var gameUpRate: Int
     var gameDeckMaximum: Int
+    // option
+    var se: Bool
+    var sound: Bool
+    var vibration: Bool
     
-    init(userID: String, name: String, iconURL: String, life: Int, lifeTime: Int, lastUpdated: Date, gameNum: Int,  gameJorker: Int,  gameRate: Int,  gameMaximum: Int,  gameUpRate: Int,  gameDeckMaximum: Int) {
+    init(userID: String, name: String, iconURL: String, life: Int, lifeTime: Int, lastUpdated: Date, gameNum: Int,  gameJorker: Int,  gameRate: Int,  gameMaximum: Int,  gameUpRate: Int,  gameDeckMaximum: Int, se: Bool, sound: Bool, vibration: Bool) {
         self.userID = userID
         self.name = name
         self.iconURL = iconURL
@@ -33,5 +37,8 @@ struct User {
         self.gameMaximum = gameMaximum
         self.gameUpRate = gameUpRate
         self.gameDeckMaximum = gameDeckMaximum
+        self.se = se
+        self.sound = sound
+        self.vibration = vibration
     }
 }

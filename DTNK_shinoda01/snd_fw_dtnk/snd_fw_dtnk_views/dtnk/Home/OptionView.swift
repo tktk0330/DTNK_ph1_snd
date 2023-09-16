@@ -5,13 +5,11 @@
 import SwiftUI
 
 struct OptionView: View {
-    @State private var button1Colored = false
-    @State private var button2Colored = false
-    @State private var button3Colored = false
-    @State private var text: String = ""
     
     @StateObject var home: HomeState = appState.home
-
+    @StateObject var account: AccountState = appState.account
+    @State private var text: String = ""
+    @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         GeometryReader { geo in
@@ -21,7 +19,7 @@ struct OptionView: View {
                     .foregroundColor(Color.white.opacity(0.3))
                     .shadow(color: .gray, radius: 10, x: 0, y: 5)
                     .frame(maxWidth: .infinity, maxHeight: 50)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025 + keyboardHeight * 0.8)
                 
                 // back
                 Button(action: {
@@ -32,7 +30,7 @@ struct OptionView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40)
                 }
-                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
+                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10 + keyboardHeight)
                 
                 // title
                 Text("Option")
@@ -40,7 +38,7 @@ struct OptionView: View {
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .padding(5)
-                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
+                    .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15 + keyboardHeight)
                 
                 
                 VStack(spacing: 15) {
@@ -71,7 +69,7 @@ struct OptionView: View {
                         }
                     }
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28 + keyboardHeight * 2)
                 
             }
             
@@ -84,37 +82,50 @@ struct OptionView: View {
                 VStack(spacing: 30) {
 
                     Button(action: {
-                        button1Colored.toggle()
+                        account.loginUser.se.toggle()
+                        HomeController().updateOption(keyPath: \.se, item: "se", value: account.loginUser.se)
                     }) {
-                        Text("♪ SE")
-                            .modifier(optionUnitModifier(color: button1Colored))
+                        Text("SE")
+                            .modifier(optionUnitModifier(color: account.loginUser.se))
                     }
                     
                     Button(action: {
-                        button2Colored.toggle()
+                        account.loginUser.sound.toggle()
+                        HomeController().updateOption(keyPath: \.sound, item: "sound", value: account.loginUser.sound)
                     }) {
-                        Text("📢 BGM")
-                            .modifier(optionUnitModifier(color: button2Colored))
+                        Text("Sound")
+                            .modifier(optionUnitModifier(color: account.loginUser.sound))
                     }
                     
                     Button(action: {
-                        button3Colored.toggle()
+                        account.loginUser.vibration.toggle()
+                        HomeController().updateOption(keyPath: \.vibration, item: "vibration", value: account.loginUser.vibration)
                     }) {
-                        Text("📱 Vibration")
-                            .modifier(optionUnitModifier(color: button3Colored))
+                        Text("Vibration")
+                            .modifier(optionUnitModifier(color: account.loginUser.vibration))
                     }
                 }
             }
-            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.65)
+            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.65 + keyboardHeight * 5)
             
             // アイコン変更
             if home.mode == .edittingIcon {
                 IconSelectView()
             }
         }
+        .onAppear {
+            // キーボード対応
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notif in
+                let value = notif.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                let height = value.height
+                keyboardHeight = height / 10
+            }
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                keyboardHeight = 0
+            }
+        }
     }
 }
-
 
 // 項目Modifire
 struct optionUnitModifier: ViewModifier {
@@ -125,13 +136,13 @@ struct optionUnitModifier: ViewModifier {
         content
             .frame(width: 300, height: 60)
             .padding()
-            .foregroundColor(color ? Color.black : Color.white)
+            .foregroundColor(color ? Color.white : Color.black)
             .border(Color.clear, width: 2)
             .font(.custom(FontName.font01,size: 30))
             .cornerRadius(20)
             .background(
                 RoundedRectangle(cornerRadius: 25)
-                    .fill(color ? Color.pushcolor : Color.casinoGreen)
+                    .fill(color ? Color.casinoGreen : Color.pushcolor)
                     .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
             )
             .overlay(

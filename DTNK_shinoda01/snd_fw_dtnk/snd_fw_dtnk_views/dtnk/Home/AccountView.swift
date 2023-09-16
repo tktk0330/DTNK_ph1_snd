@@ -2,7 +2,6 @@
  ユーザー情報表示
  */
 
-
 import SwiftUI
 import Firebase
 import FirebaseDatabase
@@ -42,9 +41,9 @@ struct AccountView: View {
         
         ref.setValue(userData) { (error, _) in
             if let error = error {
-                print("ユーザーデータの保存に失敗しました: \(error.localizedDescription)")
+                log("ユーザーデータの保存に失敗しました: \(error.localizedDescription)")
             } else {
-                print("ユーザーデータをFirebase Realtime Databaseに保存しました")
+                log("ユーザーデータをFirebase Realtime Databaseに保存しました")
                 // 編集された名前とアイコンのURLを反映
                 appState.account.loginUser?.name = name
                 appState.account.loginUser?.iconURL = iconURL

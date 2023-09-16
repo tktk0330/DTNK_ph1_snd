@@ -110,16 +110,22 @@ struct Btnwb01: View {
 
 
 struct Btnlgb: View {
+    
     var imageName: String
     var btnText: String
     var btnTextSize: CGFloat
     var btnWidth: CGFloat
     var btnHeight: CGFloat
+    var judge: Bool // vsbot vsfriendで画像大きさ変える
     
     var body: some View {
         
         HStack (spacing: 20) {
             Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: judge ? 70 : 100, height: judge ? 70 : 100)
+
             
             Text(btnText)
                 .font(.custom(FontName.font01, size: btnTextSize))

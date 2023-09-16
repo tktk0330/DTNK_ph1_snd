@@ -99,6 +99,12 @@ struct HomeController {
         }
     }
     
+    // Option設定変更
+    func updateOption(keyPath: WritableKeyPath<User, Bool>, item: String, value: Bool) {
+        appState.account.loginUser[keyPath: keyPath] = value
+        RealmMng().updateOptionRealm(item: item, value: value)
+    }
+    
     /**
      ライフ処理
      */

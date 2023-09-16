@@ -2,7 +2,6 @@
  ライフ画面
  */
 
-
 import SwiftUI
 
 struct LifeView: View {
@@ -21,12 +20,18 @@ struct LifeView: View {
         
         VStack() {
             
-            Text("\(timeString(from: appState.account.loginUser.lifeTime))")
-                .font(.custom(FontName.font01, size: 15))
-                .foregroundColor(Color.white)
-                .onReceive(timer) { _ in
-                    HomeController().lifeCoundDown()
-                }
+            if account.loginUser.life < Constants.lifeMax {
+                Text("\(timeString(from: appState.account.loginUser.lifeTime))")
+                    .font(.custom(FontName.font01, size: 15))
+                    .foregroundColor(Color.white)
+                    .onReceive(timer) { _ in
+                        HomeController().lifeCoundDown()
+                    }
+            } else {
+                Text("：")
+                    .font(.system(size: 15))
+                    .foregroundColor(Color.clear)
+            }
             
             HStack(spacing: 10) {
                 HStack() {

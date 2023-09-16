@@ -22,7 +22,11 @@ class RealmUser: Object {
     @objc dynamic var gameMaximum: Int = 0
     @objc dynamic var gameUpRate: Int = 0
     @objc dynamic var gameDeckMaximum: Int = 0
-    
+    // Option
+    @objc dynamic var se: Bool = true
+    @objc dynamic var sound: Bool = true
+    @objc dynamic var vibration: Bool = true
+
     override class func primaryKey() -> String? {
         return "id"
     }
