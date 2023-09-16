@@ -53,15 +53,15 @@ class RealmMng {
                 completion(false)
             }
         } catch {
-            print("Error updating Realm: \(error)")
+            log("Error updating Realm: \(error)", level: .error )
             completion(false)
         }
     }
 }
 
 class LifeManager {
-    private var user: RealmUser!
     
+    private var user: RealmUser!
 
     init(user: RealmUser) {
         self.user = user
@@ -75,10 +75,18 @@ class LifeManager {
                 user.currentLives -= 1
                 user.lastUpdated = Date() // 更新時刻も保存
             }
-            appState.account.loginUser.life = user.currentLives
             return true
         } else {
             return false
+        }
+    }
+    
+    // ライフ回復
+    func recoverLifeRealm() {
+        
+        try! Realm().write {
+            user.currentLives += 1
+            user.lastUpdated = Date() // 更新時刻も保存
         }
     }
     
@@ -88,6 +96,31 @@ class LifeManager {
         let remainingTimeForNextLife = 300 - (elapsedTime.truncatingRemainder(dividingBy: 300))
         return remainingTimeForNextLife
     }
+}
 
+class LifeMng {
+    // ライフ情報登録
+    func setLifeInfo() {
+        let realm = try! Realm()
+        if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: appState.account.loginUser.userID) {
+            try! realm.write {
+                user.currentLives = appState.account.loginUser.life // 溜まってるライフ
+                user.lifeTime = appState.account.loginUser.lifeTime // 回復中の残り秒数
+                user.lastUpdated = Date() // 時間
+                log("Home退出　ライフ：\(appState.account.loginUser.life)　回復中の残り時間：\(appState.account.loginUser.lifeTime)")
+            }
+        }
+    }
+    
+    // ライフ情報取得
+    func getLifeInfo() {
+        let realm = try! Realm()
+        if let user = realm.object(ofType: RealmUser.self, forPrimaryKey: appState.account.loginUser.userID) {
+            appState.account.loginUser.life = user.currentLives
+            appState.account.loginUser.lifeTime = user.lifeTime
+            appState.account.loginUser.lastUpdated = user.lastUpdated
+            log("Home入室　ライフ：\(appState.account.loginUser.life)　回復中の残り時間：\(appState.account.loginUser.lifeTime)")
+        }
+    }
 }
 

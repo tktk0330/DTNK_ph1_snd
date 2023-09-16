@@ -43,7 +43,7 @@ struct OptionView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
                 
                 
-                HStack(spacing: 15) {
+                VStack(spacing: 15) {
                     
                     Button(action: {
                         home.mode = .edittingIcon
@@ -55,18 +55,20 @@ struct OptionView: View {
                             .frame(width: 50, height: 50)
                             .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
                     }
-
-                    TextField(appState.account.loginUser.name, text: $text)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(5)
-                        .frame(width: 250)
-                        .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
-
                     
-                    Button(action: {
-                        HomeController().updateName(newName: text)
-                    }) {
-                        Btnaction(btnText: "更新", btnTextSize: 15, btnWidth:  70, btnHeight: 35, btnColor: Color.dtnkLightBlue)
+                    HStack() {
+                        TextField(appState.account.loginUser.name, text: $text)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(5)
+                            .frame(width: 250)
+                            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+                        
+                        
+                        Button(action: {
+                            HomeController().updateName(newName: text)
+                        }) {
+                            Btnaction(btnText: "更新", btnTextSize: 15, btnWidth:  70, btnHeight: 35, btnColor: Color.dtnkLightBlue)
+                        }
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28)
@@ -80,84 +82,61 @@ struct OptionView: View {
                     .edgesIgnoringSafeArea(.top) // バーがセーフエリアの上に表示されるようにする
                 
                 VStack(spacing: 30) {
-                    //ボタン
+
                     Button(action: {
                         button1Colored.toggle()
                     }) {
                         Text("♪ SE")
-                            .frame(width: 300, height: 60)
-                            .padding()
-                            .foregroundColor(button1Colored ? Color.black : Color.white)
-                            .border(Color.clear, width: 2)
-                            .font(.custom(FontName.font01,size: 30))
-                            .cornerRadius(20)
-                            .background(
-                                RoundedRectangle(cornerRadius: 25)
-                                    .fill(button1Colored ? Color.pushcolor : Color.casinoGreen)
-                                    .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.clear, lineWidth: 2)
-                            )
+                            .modifier(optionUnitModifier(color: button1Colored))
                     }
                     
-                    //ボタン
                     Button(action: {
                         button2Colored.toggle()
                     }) {
                         Text("📢 BGM")
-                            .frame(width: 300, height: 60)
-                            .padding()
-                            .foregroundColor(button2Colored ? Color.black : Color.white)
-                            .border(Color.clear, width: 2)
-                            .font(.custom(FontName.font01,size: 30))
-                            .cornerRadius(20)
-                            .background(
-                                RoundedRectangle(cornerRadius: 25)
-                                    .fill(button2Colored ? Color.pushcolor : Color.casinoGreen)
-                                    .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.clear, lineWidth: 2)
-                            )
+                            .modifier(optionUnitModifier(color: button2Colored))
                     }
                     
-                    //ボタン
                     Button(action: {
                         button3Colored.toggle()
                     }) {
                         Text("📱 Vibration")
-                            .frame(width: 300, height: 60)
-                            .padding()
-                            .foregroundColor(button3Colored ? Color.black : Color.white)
-                            .border(Color.clear, width: 2)
-                            .font(.custom(FontName.font01,size: 30))
-                            .cornerRadius(20)
-                            .background(
-                                RoundedRectangle(cornerRadius: 25)
-                                    .fill(button3Colored ? Color.pushcolor : Color.casinoGreen)
-                                    .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.clear, lineWidth: 2)
-                            )
+                            .modifier(optionUnitModifier(color: button3Colored))
                     }
                 }
             }
             .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.65)
             
-            
+            // アイコン変更
             if home.mode == .edittingIcon {
                 IconSelectView()
             }
-            
-            
-
         }
     }
 }
 
 
+// 項目Modifire
+struct optionUnitModifier: ViewModifier {
+        
+    let color: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 300, height: 60)
+            .padding()
+            .foregroundColor(color ? Color.black : Color.white)
+            .border(Color.clear, width: 2)
+            .font(.custom(FontName.font01,size: 30))
+            .cornerRadius(20)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(color ? Color.pushcolor : Color.casinoGreen)
+                    .shadow(color: Color.casinoShadow, radius: 1, x: 5, y: 10)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.clear, lineWidth: 2)
+            )
+    }
+}

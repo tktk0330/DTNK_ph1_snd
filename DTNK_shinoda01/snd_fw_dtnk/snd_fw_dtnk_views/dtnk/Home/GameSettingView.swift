@@ -49,14 +49,14 @@ struct GameSettingView: View {
                         Button(action: {
                             home.mode = .gameNum
                         }) {
-                            settingUnitView(imageName: "number", text: "ゲーム数")
+                            settingUnitView(imageName: ImageName.Setting.gameNum.rawValue, text: "ゲーム数")
                         }
                         .modifier(settingUnitModifier())
                         
                         Button(action: {
                             home.mode = .joker
                         }) {
-                            settingUnitView(imageName: "jorker", text: "Jorker")
+                            settingUnitView(imageName: ImageName.Setting.gameJorker.rawValue, text: "Jorker")
                         }
                         .modifier(settingUnitModifier())
                     }
@@ -65,14 +65,14 @@ struct GameSettingView: View {
                         Button(action: {
                             home.mode = .rate
                         }) {
-                            settingUnitView(imageName: "rate", text: "Rate")
+                            settingUnitView(imageName: ImageName.Setting.gameRate.rawValue, text: "Rate")
                         }
                         .modifier(settingUnitModifier())
                         
                         Button(action: {
                             home.mode = .max
                         }) {
-                            settingUnitView(imageName: "max", text: "上限")
+                            settingUnitView(imageName: ImageName.Setting.gameMaximum.rawValue, text: "上限")
                         }
                         .modifier(settingUnitModifier())
                     }
@@ -81,14 +81,14 @@ struct GameSettingView: View {
                         Button(action: {
                             home.mode = .uprate
                         }) {
-                            settingUnitView(imageName: "uprate", text: "重ね")
+                            settingUnitView(imageName: ImageName.Setting.gameUpRate.rawValue, text: "重ね")
                         }
                         .modifier(settingUnitModifier())
                         
                         Button(action: {
                             home.mode = .deck
                         }) {
-                            settingUnitView(imageName: "deck", text: "デッキサイクル")
+                            settingUnitView(imageName: ImageName.Setting.gameDeck.rawValue, text: "デッキサイクル")
                         }
                         .modifier(settingUnitModifier())
                     }

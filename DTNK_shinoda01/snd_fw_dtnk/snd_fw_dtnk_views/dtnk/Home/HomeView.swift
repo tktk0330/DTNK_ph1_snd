@@ -1,20 +1,19 @@
 /**
  Home
  
- アカウント編集
+ アカウント
+ ライフ
  ゲーム選択
- ルール選択
- その他Info share
-
+ ルール
+ オプション
+ ショップ
  */
 
 import SwiftUI
-import RealmSwift
 
 struct HomeView: View {
     
     @StateObject var home: HomeState = appState.home
-    @StateObject var account: AccountState = appState.account
 
     var body: some View {
         GeometryReader { geo in
@@ -31,39 +30,8 @@ struct HomeView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
                        
                 // Life
-                HStack(spacing: 10) {
-                    HStack {
-                        ForEach(0..<5, id: \.self) { index in
-                            Image(systemName: "heart.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(index < account.loginUser.life ? .red : .gray)
-                        }
-                    }
-                    
-                    Button(action: {
-                        print("ハートの購入")
-
-                        if let realm = try? Realm(), let user = realm.objects(RealmUser.self).first {
-                            let manager = LifeManager(user: user)
-                            if manager.consumeLifeForGame() {
-                                print("\(appState.account.loginUser.life)")
-                                // ゲームを開始
-                                
-                            } else {
-                                // ライフが足りない場合のアラート
-                                print("x")
-                            }
-                        }
-                    }) {
-                        Image(ImageName.Home.healbox.rawValue)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 30, height: 30)
-                    }
-                }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.30)
+                LifeView()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.27)
                 
                 // Game List
                 VStack (spacing: 40){
@@ -78,7 +46,6 @@ struct HomeView: View {
                     }) {
                         Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120)
                     }
-
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
 
@@ -102,6 +69,12 @@ struct HomeView: View {
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.90)
             }
+        }
+        .onAppear {
+            HomeController().enterHome()
+        }
+        .onDisappear {
+            HomeController().exitHome()
         }
     }
 }

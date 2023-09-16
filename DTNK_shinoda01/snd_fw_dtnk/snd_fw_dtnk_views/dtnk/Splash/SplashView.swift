@@ -1,6 +1,5 @@
 /**
  SplashView
- 裏で認証
  */
 
 import SwiftUI
@@ -32,7 +31,6 @@ struct SplashView: View {
                 
             }
             .onAppear {
-                SplashController().setupUserData()
                 SplashController().onSplashAppear()
             }
         }

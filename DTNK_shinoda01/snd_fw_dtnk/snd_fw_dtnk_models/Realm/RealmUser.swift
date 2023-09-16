@@ -12,6 +12,8 @@ class RealmUser: Object {
     @objc dynamic var iconURL: String = ""
     // LifeInfo
     @objc dynamic var currentLives: Int = 5
+    @objc dynamic var lifeInRecovery: Int = 0 // 回復中のハートは初期値0（フルで残っている）
+    @objc dynamic var lifeTime: Int = Constants.lifeTime
     @objc dynamic var lastUpdated: Date = Date()
     // GameSetteingInfo
     @objc dynamic var gameNum: Int = 5

@@ -24,6 +24,22 @@ enum ImageName {
         case vsfriends = "icon-team"
         case healbox = "box-yellow"
     }
+    
+    enum Setting: String {
+        case gameNum = "setting-gamenum"
+        case gameJorker = "setting-jorker"
+        case gameRate = "setting-rate"
+        case gameMaximum = "setting-max"
+        case gameUpRate = "setting-uprate"
+        case gameDeck = "setting-deck"
+    }
+    
+    enum Option: String {
+        case sound = "option-sound"
+        case se = "option-se"
+        case vibration = "option-vibration"
+
+    }
 
     enum Card: String {
         
