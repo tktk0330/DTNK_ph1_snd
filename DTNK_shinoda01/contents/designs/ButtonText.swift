@@ -121,18 +121,17 @@ struct Btnlgb: View {
     var body: some View {
         
         HStack (spacing: 20) {
+            
             Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: judge ? 70 : 100, height: judge ? 70 : 100)
 
-            
             Text(btnText)
                 .font(.custom(FontName.font01, size: btnTextSize))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .bold()
-            
         }
         .padding()
         .frame(width: btnWidth, height: btnHeight)

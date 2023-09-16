@@ -40,7 +40,6 @@ struct OptionView: View {
                     .padding(5)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15 + keyboardHeight)
                 
-                
                 VStack(spacing: 15) {
                     
                     Button(action: {
@@ -70,14 +69,13 @@ struct OptionView: View {
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28 + keyboardHeight * 2)
-                
             }
             
             ZStack{
                 Rectangle()
-                    .foregroundColor(Color.casinolightgreen) // バーの色を設定
-                    .frame(height: 410) // バーの高さを指定
-                    .edgesIgnoringSafeArea(.top) // バーがセーフエリアの上に表示されるようにする
+                    .foregroundColor(Color.casinolightgreen)
+                    .frame(height: 410)
+                    .edgesIgnoringSafeArea(.top)
                 
                 VStack(spacing: 30) {
 
@@ -85,7 +83,7 @@ struct OptionView: View {
                         account.loginUser.se.toggle()
                         HomeController().updateOption(keyPath: \.se, item: "se", value: account.loginUser.se)
                     }) {
-                        Text("SE")
+                        optionUnitView(ImageName: ImageName.Option.se.rawValue, optionName: "Se")
                             .modifier(optionUnitModifier(color: account.loginUser.se))
                     }
                     
@@ -93,7 +91,7 @@ struct OptionView: View {
                         account.loginUser.sound.toggle()
                         HomeController().updateOption(keyPath: \.sound, item: "sound", value: account.loginUser.sound)
                     }) {
-                        Text("Sound")
+                        optionUnitView(ImageName: ImageName.Option.sound.rawValue, optionName: "Sound")
                             .modifier(optionUnitModifier(color: account.loginUser.sound))
                     }
                     
@@ -101,7 +99,7 @@ struct OptionView: View {
                         account.loginUser.vibration.toggle()
                         HomeController().updateOption(keyPath: \.vibration, item: "vibration", value: account.loginUser.vibration)
                     }) {
-                        Text("Vibration")
+                        optionUnitView(ImageName: ImageName.Option.vibration.rawValue, optionName: "Vibration")
                             .modifier(optionUnitModifier(color: account.loginUser.vibration))
                     }
                 }
@@ -123,6 +121,26 @@ struct OptionView: View {
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
                 keyboardHeight = 0
             }
+        }
+    }
+}
+
+// 項目View
+struct optionUnitView: View {
+    
+    let ImageName: String
+    let optionName: String
+    
+    var body: some View {
+        HStack() {
+            Image(ImageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 50, height: 50)
+                .padding(.leading, 20)
+            Spacer()
+            Text(optionName)
+            Spacer()
         }
     }
 }
