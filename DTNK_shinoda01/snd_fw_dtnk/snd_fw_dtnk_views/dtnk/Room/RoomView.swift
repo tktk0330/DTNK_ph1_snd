@@ -27,7 +27,7 @@ struct RoomView: View {
                 
                 // back
                 Button(action: {
-                    Router().setBasePages(stack: [.home])
+                    Router().setBasePages(stack: [.gameSetting])
                 }) {
                     Image(ImageName.Common.back.rawValue)
                         .resizable()
@@ -63,12 +63,16 @@ struct RoomView: View {
                     }) {
                         Btnwb(btnText: "Create", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                     }
+                    .buttonStyle(PressBtn())
+
                     
                     Button(action: {
                         onTapSearch()
                     }) {
                         Btnwb(btnText: "Search", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                     }
+                    .buttonStyle(PressBtn())
+
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60 + keyboardHeight)
                 

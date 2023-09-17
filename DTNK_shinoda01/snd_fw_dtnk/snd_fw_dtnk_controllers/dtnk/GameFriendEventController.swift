@@ -186,7 +186,6 @@ struct GameFriendEventController {
             setGame()
         default:
             break
-
         }
     }
     
@@ -195,13 +194,11 @@ struct GameFriendEventController {
      */
     func setGame() {
         // フロント初期化アイテム
-        game.counter = false   // カウンター
-        game.startFlag = false // startBtn
-        game.AnnounceFlg = false     // 実行中 true 非表示中　false
-        game.turnFlg = 0        // 0: canDraw 1: canPass
-        game.dtnkFlg = 0        // 0: no 1: dtnked
-
+        game.counter = false     // カウンター
+        game.startFlag = false   // startBtn
+        game.AnnounceFlg = false // 実行中 true 非表示中　false
+        game.turnFlg = 0         // 0: canDraw 1: canPass
+        game.dtnkFlg = 0         // 0: no 1: dtnked
     }
-
 }
 

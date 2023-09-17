@@ -163,7 +163,7 @@ class GameObserber {
             // チャンスあり 一枚引く
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
                 fbms.drawCard(playerID: challenger.id) { result in
-                    print("challenger \(challenger.side-1) draw")
+                    log("challenger \(challenger.side-1) draw")
                     // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
                     self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
                 }
@@ -171,7 +171,7 @@ class GameObserber {
             // loop
         } else if (dtnkCardNumber - handSum) == 0 {
             // リベンジ成功 animation
-            print("revenge")
+            log("revenge")
             // 処理
             appState.gameUIState.players[dtnkIndex].hand.removeAll()
             // Viewも
@@ -188,7 +188,7 @@ class GameObserber {
             // overしたら次の人へ
             let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                print("next challenger")
+                log("next challenger")
                 // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
                 self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
             }
@@ -233,6 +233,14 @@ class GameObserber {
         guard checkHost() else {
             return
         }
+        // 事前処理
+        for player in game.players {
+            game.deck.append(contentsOf: player.hand)
+            player.hand.removeAll()
+        }
+        game.deck.append(contentsOf: game.table)
+        game.table.removeAll()
+        
         let Item = GameResetItem()
         fbms.resetGame(item: Item) { result in }
     }

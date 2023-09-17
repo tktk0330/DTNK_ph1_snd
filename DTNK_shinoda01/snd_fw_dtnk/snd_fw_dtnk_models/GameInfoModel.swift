@@ -17,7 +17,7 @@ struct GameInfoModel {
     var gamePhase: GamePhase = .dealcard
     var gamevsInfo: vsInfo = .vsFriend
     // deck
-    var deck: [CardId] = GameRule.initialDeck.shuffled()
+    let deck: [CardId]
     // table
     var table: Any = NSNull()
     // jorker
@@ -60,7 +60,7 @@ struct GameResetItem {
     // ゲーム状態を示す
     var gamePhase: GamePhase = .dealcard
     // deck
-    var deck: [CardId] = GameRule.initialDeck.shuffled()
+    var deck: [CardId] = appState.gameUIState.deck.shuffled()
     // table
     var table: Any = NSNull()
     // playerHand

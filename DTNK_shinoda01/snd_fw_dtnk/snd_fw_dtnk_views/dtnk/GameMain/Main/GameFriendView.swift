@@ -83,6 +83,8 @@ struct GameFriendView: View {
                             }) {
                                 Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
                             }
+                            .buttonStyle(PressBtn())
+
                         }
                         if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
                             Button(action: {
@@ -91,6 +93,8 @@ struct GameFriendView: View {
                             }) {
                                 Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
                             }
+                            .buttonStyle(PressBtn())
+
                         }
                     }
                 }
@@ -104,6 +108,7 @@ struct GameFriendView: View {
                         }) {
                             Btnaction(btnText: "出せない", btnTextSize: 20, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                         }
+                        .buttonStyle(PressBtn())
                         
                     } else if game.turnFlg == 0 {
                         Button(action: {
@@ -111,12 +116,15 @@ struct GameFriendView: View {
                         }) {
                             Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
                         }
+                        .buttonStyle(PressBtn())
+
                     } else {
                         Button(action: {
                             GameFriendEventController().pass(passPayerIndex: myside, playersCount: game.players.count)
                         }) {
                             Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                         }
+                        .buttonStyle(PressBtn())
                     }
                                         
                     // testようにボタンとして動かしておく
@@ -144,6 +152,7 @@ struct GameFriendView: View {
                     }) {
                         Btnaction(btnText: "出す", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                     }
+                    .buttonStyle(PressBtn())
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.9)
             }
@@ -252,6 +261,7 @@ struct GameFriendView: View {
                 game.gameID = info!.gameID
                 game.gameNum = info!.gameNum
                 game.gameTarget = info!.gameTarget
+                game.initialRate = info!.initialRate
                 game.gamevsInfo = info!.gamevsInfo
                 game.deck = info!.deck
                 FirebaseManager.shared.setIDs(roomID: room.roomData.roomID, gameID: info!.gameID)

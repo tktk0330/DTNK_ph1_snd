@@ -17,9 +17,19 @@ class MatchingController {
         let gameTarget = appState.account.loginUser.gameNum
         let jorker = appState.account.loginUser.gameJorker
         let initialRate = appState.account.loginUser.gameRate
+        // Deckの用意
+        var deck = GameRule.initialDeck
+        // Jorker追加
+        if jorker == 2 {
+            deck.append(contentsOf: GameRule.appendJorker2)
+        } else if jorker == 4 {
+            deck.append(contentsOf: GameRule.appendJorker4)
+        }
+        deck = deck.shuffled()
         
         let gameInfo = GameInfoModel(
             gameTarget: gameTarget,
+            deck: deck,
             joker: jorker,
             players: players,
             initialRate: initialRate)
@@ -36,11 +46,7 @@ class MatchingController {
         let gameInfo = generateGameInfo(players: players)
         
         // Stateの作成（バック）
-        // player
-        let players = appState.matching.players
-        // deck
-        _ = appState.gameUIState.deck
-
+        let players = appState.matching.players         // player
         var quick:[Player_f] = []
         let matchingplayer = players.last!
         
@@ -48,6 +54,7 @@ class MatchingController {
         // UIStateの作成（フロント）
         appState.gameUIState.players = quick
         // DBに保存
+        print(gameInfo.initialRate)
         FirebaseManager.shared.setGameInfo(item: gameInfo, roomID: roomID) { gameID in
             if (gameID != nil) {
                 // matchingflgをOKに設定　その後遷移
@@ -75,15 +82,21 @@ class MatchingController {
         appState.matching.message = "ゲームを開始します"
         appState.matching.players = BotCreate().initialplayers()
         
-        
         // TODO: Player_fnにするための設定　直す
         var quick:[Player_f] = []
         for matchingplayer in appState.matching.players {
             quick.append(Player_f(id: matchingplayer.id, side: matchingplayer.side, name: matchingplayer.name, icon_url: matchingplayer.icon_url))
         }
-        
-        appState.gameUIState.deck = GameRule.initialDeck.shuffled()
-        print(appState.gameUIState.deck.count)
+        // Deckの用意
+        var deck = GameRule.initialDeck
+        // Jorker追加
+        let gameJorker = appState.account.loginUser.gameJorker
+        if gameJorker == 2 {
+            deck.append(contentsOf: GameRule.appendJorker2)
+        } else if gameJorker == 4 {
+            deck.append(contentsOf: GameRule.appendJorker4)
+        }
+        appState.gameUIState.deck = deck.shuffled()
         appState.gameUIState.gamevsInfo = .vsBot
         
         // メインゲーム画面へ

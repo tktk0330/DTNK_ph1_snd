@@ -77,13 +77,13 @@ struct Deck: Equatable {
     }
     
     // jorker選択分だけ入れる
-    mutating func appendjorker(Index: Int) {
-        for _ in 0..<Index/2 {
-            cards.append(Card(suit: .all, number: 0, cardid: .blackJocker))
-            cards.append(Card(suit: .all, number: 0, cardid: .whiteJocker))
-        }
-        shuffle()
-    }
+//    mutating func appendjorker(Index: Int) {
+//        for _ in 0..<Index/2 {
+//            cards.append(Card(suit: .all, number: 0, cardid: .blackJocker))
+//            cards.append(Card(suit: .all, number: 0, cardid: .whiteJocker))
+//        }
+//        shuffle()
+//    }
     
     //　カードを引く
     mutating func draw() -> Card? {

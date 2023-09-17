@@ -95,8 +95,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                         newUser.id = currentUser.uid
                         newUser.name = value["name"] as? String ?? "ゲスト"
                         newUser.iconURL = value["iconURL"] as? String ?? "icon-bot5"
-                        newUser.currentLives = (value["life"] as? Int)!
-                        newUser.lifeTime = (value["lifetime"] as? Int)!
+                        newUser.currentLives = value["life"] as? Int ?? 5
+                        newUser.lifeTime = value["lifetime"] as? Int ?? 0
                         if let lastupdateTimestamp = value["lastupdate"] as? Int {
                             let lastupdate = Date(timeIntervalSince1970: TimeInterval(lastupdateTimestamp)) // UNIX timestampからDateに変換
                             newUser.lastUpdated = lastupdate

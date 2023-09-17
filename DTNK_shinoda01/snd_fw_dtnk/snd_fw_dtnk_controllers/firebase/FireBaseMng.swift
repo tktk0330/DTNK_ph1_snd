@@ -77,6 +77,7 @@ class FirebaseManager {
                   let gameNum = gameData["gameNum"] as? Int,
                   let _ = gameData["gamevsInfo"] as? Int,
                   let gameTarget = gameData["gameTarget"] as? Int,
+                  let gameInitialRate = gameData["initialRate"] as? Int,
 
                   let deckDict = gameData["deck"] as? [[String: Int]]
             else {
@@ -92,6 +93,7 @@ class FirebaseManager {
                 gameID: gameID,
                 gameNum: gameNum,
                 gameTarget: gameTarget,
+                initialRate: gameInitialRate,
                 gamevsInfo: .vsFriend,
                 deck: cardIds)
             completion(gameState)
@@ -858,6 +860,7 @@ struct GameState {
     let gameID: String
     let gameNum: Int
     let gameTarget: Int
+    let initialRate: Int
     let gamevsInfo: vsInfo
     let deck: [CardId]
 }

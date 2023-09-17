@@ -7,7 +7,7 @@ import SwiftUI
 struct Constants {
     
     // MARK: - logLevel
-    static let currentLogLevel: LogLevel = .info // 現在のログレベルを指定
+    static let currentLogLevel: LogLevel = .error // 現在のログレベルを指定
     
     // MARK: - lifeTime
     static let lifeTime: Int = 60

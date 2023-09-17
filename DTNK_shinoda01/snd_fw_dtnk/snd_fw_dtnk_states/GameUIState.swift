@@ -236,11 +236,14 @@ class GameUIState: ObservableObject {
      */
     func preparationNewGame(resetItem: GameResetItem, completion: @escaping (Bool) -> Void) {
         self.gameNum = resetItem.gameNum
-        self.deck = resetItem.deck
-        self.table = resetItem.table as? [CardId] ?? []
         for player in self.players {
+            self.deck.append(contentsOf: player.hand)
             player.hand.removeAll()
         }
+        self.deck.append(contentsOf: self.table)
+        self.table.removeAll()
+        self.table = resetItem.table as? [CardId] ?? []
+        self.deck = deck.shuffled()
         self.currentPlayerIndex = resetItem.currentPlayerIndex
         self.lastPlayerIndex = resetItem.lastPlayerIndex
         self.dtnkPlayerIndex = resetItem.dtnkPlayerIndex
@@ -323,9 +326,10 @@ var cards: [N_Card] = [
     N_Card(id: .heart12, location: .deck),
     N_Card(id: .heart13, location: .deck),
 
-    // TODO: Jorker 4?
-    N_Card(id: .blackJocker, location: .deck),
-    N_Card(id: .whiteJocker, location: .deck),
+    N_Card(id: .blackJorker1, location: .deck),
+    N_Card(id: .whiteJorker1, location: .deck),
+    N_Card(id: .blackJorker2, location: .deck),
+    N_Card(id: .whiteJorker2, location: .deck),
 
 ]
 

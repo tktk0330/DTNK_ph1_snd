@@ -13,25 +13,18 @@ struct GameRule {
      sides :　参加者【ゲーム情報】
      players :　参加者【固有情報】
      */
-//    static var initialState: GameLogicState {
-//        return GameLogicState(
-//            deck: Self.initialDeck,
-//            sides: Self.initialSides
-//            )
-//    }
-
     static var initialState: GameState {
         
         return GameState(
             gameID: "",
             gameNum: 1,
             gameTarget: 1,
+            initialRate: 1,
             gamevsInfo: .vsFriend,
             deck:  self.initialDeck)
     }
     
     // Deck
-    // TODO: 必要に応じてJorker追加
     static var initialDeck: [CardId] {
         return [
             .spade1,
@@ -86,11 +79,25 @@ struct GameRule {
             .diamond11,
             .diamond12,
             .diamond13,
-            .whiteJocker,
-            .blackJocker,
-
         ]
     }
+    
+    static var appendJorker2: [CardId] {
+        return [
+            .whiteJorker1,
+            .blackJorker1,
+        ]
+    }
+    
+    static var appendJorker4: [CardId] {
+        return [
+            .whiteJorker1,
+            .blackJorker1,
+            .whiteJorker2,
+            .blackJorker2,
+        ]
+    }
+
     
     static var initialSides: [GameSide] {
         return [

@@ -92,8 +92,11 @@ enum CardId: Int, CaseIterable, JSONSerializable, Identifiable {
     case club11 = 411
     case club12 = 412
     case club13 = 413
-    case blackJocker = 998
-    case whiteJocker = 999
+    case blackJorker1 = 996
+    case whiteJorker1 = 997
+    case blackJorker2 = 998
+    case whiteJorker2 = 999
+
     case back = 900
 }
 
@@ -203,8 +206,7 @@ extension CardId {
             return .diamond
         case .club1, .club2, .club3, .club4, .club5, .club6, .club7, .club8, .club9, .club10, .club11, .club12, .club13:
             return .club
-
-        case .blackJocker, .whiteJocker:
+        case .blackJorker1, .whiteJorker1, .blackJorker2, .whiteJorker2:
             return .all
         case .back:
             return .all
@@ -241,9 +243,7 @@ extension CardId {
             return [12]
         case .spade13, .heart13, .diamond13, .club13:
             return [13]
-        case .blackJocker:
-            return [-1,0,1]
-        case .whiteJocker:
+        case .blackJorker1, .whiteJorker1, .blackJorker2, .whiteJorker2:
             return [-1,0,1]
         case .back:
             return [900]
@@ -253,7 +253,7 @@ extension CardId {
     //　最初にめくった時のレート値[開始時, 終了時]([0,1])　倍：５０　逆転：２０　ダイ３：３０
     func rate() -> [Int] {
         switch self {
-        case .spade1, .heart1, .diamond1, .club1, .spade2, .heart2, .diamond2, .club2, .whiteJocker, .blackJocker:
+        case .spade1, .heart1, .diamond1, .club1, .spade2, .heart2, .diamond2, .club2, .whiteJorker1, .blackJorker1, .whiteJorker2, .blackJorker2:
             return [50,50]
         case .spade3, .club3:
             return [3,20]
@@ -314,7 +314,7 @@ extension CardId {
             return 12
         case .spade13, .heart13, .diamond13, .club13:
             return 13
-        case .blackJocker, .whiteJocker:
+        case .blackJorker1, .whiteJorker1, .blackJorker2, .whiteJorker2:
             return 1
         case .back:
             return 900
@@ -427,10 +427,14 @@ extension CardId {
             return ImageName.Card.diamond12.rawValue
         case .diamond13:
             return ImageName.Card.diamond13.rawValue
-        case .whiteJocker:
-            return  ImageName.Card.whiteJocker.rawValue
-        case .blackJocker:
-            return  ImageName.Card.blackJocker.rawValue
+        case .whiteJorker1:
+            return  ImageName.Card.whiteJorker.rawValue
+        case .blackJorker1:
+            return  ImageName.Card.blackJorker.rawValue
+        case .whiteJorker2:
+            return  ImageName.Card.whiteJorker.rawValue
+        case .blackJorker2:
+            return  ImageName.Card.blackJorker.rawValue
         case .back:
             return  ImageName.Card.back.rawValue
 

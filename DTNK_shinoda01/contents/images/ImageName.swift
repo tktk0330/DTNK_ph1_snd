@@ -44,8 +44,8 @@ enum ImageName {
     enum Card: String {
         
         case back = "back-1"
-        case whiteJocker = "jorker-1"
-        case blackJocker = "jorker-2"
+        case whiteJorker = "jorker-1"
+        case blackJorker = "jorker-2"
         case spade1 = "s01"
         case spade2 = "s02"
         case spade3 = "s03"
