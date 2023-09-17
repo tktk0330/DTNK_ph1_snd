@@ -45,50 +45,50 @@ struct GameSettingView: View {
                 
                 VStack(spacing: 35) {
                     
-                    HStack(spacing: 40) {
+                    HStack(spacing: 30) {
                         Button(action: {
                             home.mode = .gameNum
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameNum.rawValue, text: "ゲーム数")
+                            settingUnitView(imageName: ImageName.Setting.gameNum.rawValue, text: "ゲーム数", nowItem: String(account.loginUser.gameNum))
                         }
                         .modifier(settingUnitModifier())
                         
                         Button(action: {
                             home.mode = .joker
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameJorker.rawValue, text: "Jorker")
+                            settingUnitView(imageName: ImageName.Setting.gameJorker.rawValue, text: "Jorker", nowItem: String(account.loginUser.gameJorker))
                         }
                         .modifier(settingUnitModifier())
                     }
                     
-                    HStack(spacing: 40) {
+                    HStack(spacing: 30) {
                         Button(action: {
                             home.mode = .rate
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameRate.rawValue, text: "Rate")
+                            settingUnitView(imageName: ImageName.Setting.gameRate.rawValue, text: "Rate", nowItem: String(account.loginUser.gameRate))
                         }
                         .modifier(settingUnitModifier())
                         
                         Button(action: {
                             home.mode = .max
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameMaximum.rawValue, text: "上限")
+                            settingUnitView(imageName: ImageName.Setting.gameMaximum.rawValue, text: "上限", nowItem: String(account.loginUser.gameMaximum))
                         }
                         .modifier(settingUnitModifier())
                     }
                     
-                    HStack(spacing: 40) {
+                    HStack(spacing: 30) {
                         Button(action: {
                             home.mode = .uprate
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameUpRate.rawValue, text: "重ね")
+                            settingUnitView(imageName: ImageName.Setting.gameUpRate.rawValue, text: "重ね", nowItem: String(account.loginUser.gameUpRate))
                         }
                         .modifier(settingUnitModifier())
                         
                         Button(action: {
                             home.mode = .deck
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameDeck.rawValue, text: "デッキサイクル")
+                            settingUnitView(imageName: ImageName.Setting.gameDeck.rawValue, text: "サイクル", nowItem: String(account.loginUser.gameDeckMaximum))
                         }
                         .modifier(settingUnitModifier())
                     }
@@ -96,13 +96,24 @@ struct GameSettingView: View {
                 .padding()
                 .navigationBarTitle("Button Grid")
                 
-                Button(action: {
-                    // TODO: ライフ処理
-                    HomeController().onTapStart(gamenum: account.loginUser.gameNum, rate: account.loginUser.gameRate, jorker: account.loginUser.gameJorker)
-                }) {
-                    Btnwb(btnText: "Start", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
+                if home.vsInfo == .vsBot {
+                    Button(action: {
+                        // TODO: ライフ処理
+                        HomeController().onTapStart(gamenum: account.loginUser.gameNum, rate: account.loginUser.gameRate, jorker: account.loginUser.gameJorker)
+                    }) {
+                        Btnwb(btnText: "Start", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
+                    }
+                    .position(x: Constants.scrWidth / 2, y:  Constants.scrHeight * 0.80)
+
+                } else {
+                    Button(action: {
+                        // TODO: ライフ処理
+                        Router().pushBasePage(pageId: .room)
+                    }) {
+                        Btnwb(btnText: "Next", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
+                    }
+                    .position(x: Constants.scrWidth / 2, y:  Constants.scrHeight * 0.80)
                 }
-                .position(x: Constants.scrWidth / 2, y:  Constants.scrHeight * 0.80)
             }
             
             // setting unit
@@ -117,18 +128,30 @@ struct GameSettingView: View {
 struct settingUnitView: View {
     let imageName: String
     let text: String
+    let nowItem: String
     
     var body: some View {
-        VStack(spacing: 2) {
+        HStack(spacing: 0) {
             Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: Constants.scrWidth / 12, height: Constants.scrWidth / 12)
-
-            Text(text)
-                .font(.system(size: 15))
-                .fontWeight(.bold)
-                .foregroundColor(.white)
+                .padding(5)
+            
+            Spacer()
+            
+            VStack(spacing: 5) {
+                Text(text)
+                    .font(.custom(FontName.font01, size: 15))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Text(nowItem)
+                    .font(.custom(FontName.font01, size: 15))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
+            Spacer()
         }
         .padding(10)
     }
@@ -138,9 +161,9 @@ struct settingUnitView: View {
 struct settingUnitModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .padding(10)
+            .padding(5)
             .shadow(color: Color.black.opacity(0.5), radius: 5, x: 10, y: 10)
-            .frame(width: Constants.scrWidth / 3, height: Constants.scrHeight / 9)
+            .frame(width: Constants.scrWidth * 0.40, height: Constants.scrHeight / 9)
             .background(Color.plusDarkGreen)
             .cornerRadius(10)
             .shadow(color: Color.black.opacity(0.5), radius: 10, x: 10, y: 10)

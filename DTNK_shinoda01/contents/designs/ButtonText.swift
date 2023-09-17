@@ -13,7 +13,7 @@ struct ShadowButtonStyle: ButtonStyle {
                 .foregroundColor(Color.white)
                 .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 25)
                         .fill(
                             LinearGradient(gradient:
                                 Gradient(colors: [
@@ -29,6 +29,14 @@ struct ShadowButtonStyle: ButtonStyle {
         }
     }
     
+}
+
+// 浮いてる感じのボタン
+struct PressBtn: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.90 : 1.0)
+    }
 }
 
 struct Btnaction: View {

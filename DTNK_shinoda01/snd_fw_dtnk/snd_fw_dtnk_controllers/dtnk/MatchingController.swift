@@ -13,9 +13,10 @@ class MatchingController {
         
         // 参加者
         let players = players
-        let jorker = 2
-        let gameTarget = 5
-        let initialRate = 10
+        // gameSetting
+        let gameTarget = appState.account.loginUser.gameNum
+        let jorker = appState.account.loginUser.gameJorker
+        let initialRate = appState.account.loginUser.gameRate
         
         let gameInfo = GameInfoModel(
             gameTarget: gameTarget,
@@ -52,7 +53,7 @@ class MatchingController {
                 // matchingflgをOKに設定　その後遷移
                 RoomFirebaseManager.shared.updateMatchingFlg(roomID: roomID)
             } else {
-                print("Failed to save game info")
+                log("Failed to save game info", level: .error)
             }
         }
     }

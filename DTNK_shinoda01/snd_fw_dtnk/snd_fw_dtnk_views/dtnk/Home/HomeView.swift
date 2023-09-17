@@ -36,16 +36,20 @@ struct HomeView: View {
                 // Game List
                 VStack (spacing: 40){
                     Button(action: {
+                        home.vsInfo = .vsBot
                         HomeController().onTapPlay()
                     }) {
                         Btnlgb(imageName: ImageName.Home.vsbots.rawValue, btnText: "ひとりでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120, judge: true)
                     }
+                    .buttonStyle(PressBtn())
                     
                     Button(action: {
-                        Router().pushBasePage(pageId: .room)
+                        home.vsInfo = .vsFriend
+                        HomeController().onTapPlay()
                     }) {
                         Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120, judge: false)
                     }
+                    .buttonStyle(PressBtn())
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
 
@@ -56,16 +60,22 @@ struct HomeView: View {
                     }) {
                         Btnwb(btnText: "Rule", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
+                    .buttonStyle(PressBtn())
+
                     Button(action: {
                         HomeController().onTapPageBtn(page: .option)
                     }) {
                         Btnwb(btnText: "Option", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
+                    .buttonStyle(PressBtn())
+
                     Button(action: {
                         HomeController().onTapPageBtn(page: .shop)
                     }) {
                         Btnwb(btnText: "Shop", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
                     }
+                    .buttonStyle(PressBtn())
+
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.90)
             }

@@ -35,17 +35,20 @@ struct GameSettingUnitView: View {
                         
                         if mode == .gameNum {
                             
-                            CustomPickerView(
-                                title: "ゲーム数",
-                                choices: gameNum,
-                                selectedChoice: $pickGameNum,
-                                updateAction: { newValue in
-                                    HomeController().updateGameSetting(keyPath: \.gameNum, item: "gameNum", value: newValue)
-                                }
-                            )
-                            Text("説明 \(appState.account.loginUser.gameNum)")
-                                .font(.custom(FontName.font01, size: 15))
-                                .foregroundColor(Color.white)
+                            VStack(spacing: 30) {
+                                CustomPickerView(
+                                    title: "ゲーム数",
+                                    choices: gameNum,
+                                    selectedChoice: $pickGameNum,
+                                    updateAction: { newValue in
+                                        HomeController().updateGameSetting(keyPath: \.gameNum, item: "gameNum", value: newValue)
+                                    }
+                                )
+                                
+                                Text("ゲームを何ターンするか決めます。")
+                                    .font(.custom(FontName.font01, size: 15))
+                                    .foregroundColor(Color.white)
+                            }
                             
                         } else if mode == .joker {
                             
@@ -162,12 +165,16 @@ struct CustomPickerView: View {
     var body: some View {
         VStack {
             Text(title)
-                .font(.custom(FontName.font01, size: 15))
+                .font(.custom(FontName.font01, size: 30))
                 .foregroundColor(Color.white)
+                .fontWeight(.bold)
+                .padding(20)
 
             Picker(selection: $selectedChoice, label: Text("")) {
                 ForEach(choices, id: \.self) { choice in
                     Text(String(choice))
+                        .font(.custom(FontName.font01, size: 5))
+
                 }
             }
             .pickerStyle(SegmentedPickerStyle())

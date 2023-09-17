@@ -153,7 +153,7 @@ class RoomFirebaseManager {
         // ルームのmatchingFlgを「1」に更新
         roomRef.child("matchingFlg").setValue(1) { error, _ in
             if let error = error {
-                print("Failed to update room status: \(error.localizedDescription)")
+                log("Failed to update room status: \(error.localizedDescription)", level: .error)
             } else {
             }
         }

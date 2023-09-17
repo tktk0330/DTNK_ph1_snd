@@ -52,6 +52,7 @@ struct OptionView: View {
                             .frame(width: 50, height: 50)
                             .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
                     }
+                    .buttonStyle(PressBtn())
                     
                     HStack() {
                         TextField(appState.account.loginUser.name, text: $text)
@@ -66,6 +67,7 @@ struct OptionView: View {
                         }) {
                             Btnaction(btnText: "更新", btnTextSize: 15, btnWidth:  70, btnHeight: 35, btnColor: Color.dtnkLightBlue)
                         }
+                        .buttonStyle(PressBtn())
                     }
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28 + keyboardHeight * 2)
@@ -86,6 +88,7 @@ struct OptionView: View {
                         optionUnitView(ImageName: ImageName.Option.se.rawValue, optionName: "Se")
                             .modifier(optionUnitModifier(color: account.loginUser.se))
                     }
+                    .buttonStyle(PressBtn())
                     
                     Button(action: {
                         account.loginUser.sound.toggle()
@@ -94,6 +97,7 @@ struct OptionView: View {
                         optionUnitView(ImageName: ImageName.Option.sound.rawValue, optionName: "Sound")
                             .modifier(optionUnitModifier(color: account.loginUser.sound))
                     }
+                    .buttonStyle(PressBtn())
                     
                     Button(action: {
                         account.loginUser.vibration.toggle()
@@ -102,6 +106,8 @@ struct OptionView: View {
                         optionUnitView(ImageName: ImageName.Option.vibration.rawValue, optionName: "Vibration")
                             .modifier(optionUnitModifier(color: account.loginUser.vibration))
                     }
+                    .buttonStyle(PressBtn())
+
                 }
             }
             .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.65 + keyboardHeight * 5)
