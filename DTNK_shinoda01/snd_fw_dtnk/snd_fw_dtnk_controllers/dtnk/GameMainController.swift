@@ -282,6 +282,12 @@ class GameBotController {
      Botがどてんこできるか
      */
     func checkBotHand(Index: Int, player: Player_f) {
+        
+        if game.lastPlayerIndex == Index  {
+            log("\(Index): 自分にはどてんこできません")
+            return
+        }
+        
         // dtnkできるか
         let resultFirst = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
         if resultFirst == Constants.dtnkCode && game.lastPlayerIndex != Index {
@@ -872,7 +878,7 @@ class GameBotController {
         game.gamePhase = .revenge
         // 入れ替え
         let quickIndex = game.dtnkPlayerIndex
-        let quickPlayer = game.dtnkPlayer
+        _ = game.dtnkPlayer
         game.lastPlayerIndex = quickIndex
         game.dtnkPlayerIndex = Index
         game.dtnkPlayer = game.players[Index]
@@ -905,7 +911,8 @@ class GameBotController {
     // カードが出せるか：単体
     func checkSingleCard(table: CardId, playCard: CardId) -> Bool {
         
-        return playCard.number() == table.number() || playCard.suit() == table.suit() || playCard.suit() == .all
+        // 同じ数字　同じスート　どちらかがJorker
+        return playCard.number() == table.number() || playCard.suit() == table.suit() || playCard.suit() == .all || table.suit() == .all
     }
     
     // カードが出せるか：複数
@@ -925,7 +932,14 @@ class GameBotController {
         if sameResult {
             same = checkSingleCard(table: table, playCard: playCard.first!)
         }
-        return sum || same
+        
+        // if single
+        var single = false
+        if playCard.count == 1 {
+            single = checkSingleCard(table: table, playCard: playCard.first!)
+        }
+        
+        return sum || same || single
     }
     
     // 手札の合計計算 [[2] [3] [-1 0 1]]  ->  [4 5 6]
