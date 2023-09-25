@@ -5,6 +5,7 @@
 import SwiftUI
 
 struct GameFriendView: View {
+    
     @StateObject var game: GameUIState = appState.gameUIState
     @StateObject var room: RoomState = appState.room
     let gameObserber = GameObserber(hostID: appState.room.roomData.hostID)
@@ -20,240 +21,64 @@ struct GameFriendView: View {
 
     var body: some View {
         GeometryReader { geo in
-                // ForcusAnimation
-                if game.currentPlayerIndex != 99 && (game.gamePhase == .main || game.gamePhase == .gamefirst_sub) {
-                    TargetPlayerView()
-                        .position(x: TargetPlayerView().focusPosition(side: game.currentPlayerIndex).x,
-                                  y: geo.size.height * TargetPlayerView().focusPosition(side: game.currentPlayerIndex).y)
-                        .animation(.easeInOut(duration: 0.5), value: game.currentPlayerIndex)
-                }
             
-            // Card Pool
-            ZStack {
-                ForEach(Array(game.cardUI.enumerated()), id: \.1.id) { index, card in
-                    N_CardView(card: card, location: card.location, selectedCards: $game.players[myside].selectedCards)
-                        .animation(.easeInOut(duration: 0.3))
-                }
-                
-                Image(ImageName.Card.back.rawValue)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: Constants.otherCardWidth)
-                    .offset(CGSize(width: UIScreen.main.bounds.width * -0.09, height: -Constants.scrHeight * 0.046))
-            }
-            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-
-
-            // ScoreBar
-            Group {
-                Text(String(game.players[myside].score))
-                    .modifier(PlayerScoreModifier())
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.54)
-                
-                Text(String(game.players[(myside + 1) % game.players.count].score))
-                    .modifier(PlayerScoreModifier())
-                    .position(x: UIScreen.main.bounds.width * 0.40, y:  geo.size.height * 0.61)
-                    .rotationEffect(Angle(degrees: 90))
-                
-                Text(String(game.players[(myside + 2) % game.players.count].score))
-                    .modifier(PlayerScoreModifier())
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.36)
-                
-                Text(String(game.players[(myside + 3) % game.players.count].score))
-                    .modifier(PlayerScoreModifier())
-                    .position(x: UIScreen.main.bounds.width * 0.60, y:  geo.size.height * 0.61)
-                    .rotationEffect(Angle(degrees: -90))
-            }
+            TargetPlayerPositionView(game: game, geo: geo)
+            CardPoolView(game: game, myside: myside, geo: geo, selectedCards: $game.players[myside].selectedCards)
+            ScoreBarView(game: game, myside: myside, geo: geo)
+            OtherPlayerIconsView(game: game, myside: myside, geo: geo)
+            PlayerCardsCountView(game: game, myside: myside, geo: geo)
+            GameButtonView(game: game, myside: myside, geo: geo)
+            Header(game: game, geo: geo)
+            GameEventView(game: game, myside: myside, geo: geo, fbms: fbms)
             
-            // playerCardsCount
-            ForEach(0..<4) { index in
-                CardsCountView(cardsCount: game.players[index].hand.count)
-                    .position(x: CardsCountView(cardsCount: index).position(side: index).x,
-                              y: geo.size.height * CardsCountView(cardsCount: index).position(side: index).y)
-            }
-                        
-            // Btn
             Group {
-                Group {
-                    if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub || game.gamePhase == .main {
-                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.dtnkCode {
-                            Button(action: {
-                                // dtnk
-                                GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
-                            }) {
-                                Btnaction(btnText: "どてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
-                            }
-                            .buttonStyle(PressBtn())
-
-                        }
-                        if GameBotController().dtnkJudge(myside: myside, playerAllCards: game.players[myside].hand, table: game.table) == Constants.stnkCode {
-                            Button(action: {
-                                // dtnk
-                                GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
-                            }) {
-                                Btnaction(btnText: "しょてんこ（仮）", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.5, btnHeight: 60, btnColor: Color.casinoLightGreen)
-                            }
-                            .buttonStyle(PressBtn())
-
-                        }
-                    }
-                }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
-                
-                HStack(spacing: 15) {
-                    
-                    if game.gamePhase == .dealcard || game.gamePhase == .countdown || game.gamePhase == .gamefirst  {
-                        Button(action: {
-                            GameFriendEventController().initPass(Index: myside)
-                        }) {
-                            Btnaction(btnText: "出せない", btnTextSize: 20, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
-                        }
-                        .buttonStyle(PressBtn())
-                        
-                    } else if game.turnFlg == 0 {
-                        Button(action: {
-                            GameFriendEventController().draw(playerID: game.players[myside].id, playerIndex: myside)
-                        }) {
-                            Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
-                        }
-                        .buttonStyle(PressBtn())
-
-                    } else {
-                        Button(action: {
-                            GameFriendEventController().pass(passPayerIndex: myside, playersCount: game.players.count)
-                        }) {
-                            Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
-                        }
-                        .buttonStyle(PressBtn())
-                    }
-                                        
-                    // testようにボタンとして動かしておく
-                    Button(action: {
-                        // dtnk
-                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
-                    }) {
-                        // icon
-                        // TODO: 磨き上げ
-                        Image(game.players[myside].icon_url)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 60)
-                            .cornerRadius(10)
-                            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
-                    }
-                    
-                    Button(action: {
-                        GameFriendEventController().play(playerID: game.players[myside].id, selectCrads: game.players[myside].selectedCards, passPayerIndex: myside) { result in
-                            if result {
-                                game.players[myside].selectedCards = []
-                            } else {
-                            }
-                        }
-                    }) {
-                        Btnaction(btnText: "出す", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
-                    }
-                    .buttonStyle(PressBtn())
-                }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.9)
-            }
-                                    
-            Group {
-                Group {
-                    // 広告用
-                    Rectangle()
-                        .foregroundColor(Color.white.opacity(0.3))
-                        .frame(maxWidth: .infinity, maxHeight: 50)
-                        .background(Color.casinoGreen)
-                        .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
-                    
-                    // Rate
-                    RateView(gamenum: game.gameNum, rate: game.initialRate, magnification: game.ascendingRate)
-                        .background(Color.casinoGreen)
-                        .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.09)
-                }
-                Group {
-                    // ゲーム数アナウンス
-                    if game.gamePhase == .dealcard {
-                        GmaeNumAnnounce(gameNum: game.gameNum, gameTarget: game.gameTarget)
-                            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
-                    }
-                    // 開始ボタン
-                    if game.startFlag && !game.AnnounceFlg {
-                        Button(action: {
-                            game.startFlag = false
-                            fbms.setGamePhase(gamePhase: .countdown) { result in
-                            }
-                        }) {
-                            Text("Start")
-                                .font(.custom(FontName.font01, size: 30))
-                        }
-                        .buttonStyle(ShadowButtonStyle())
-                        .frame(width: 100, height: 100)
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-                    }
-                    // CountDown
-                    if game.gamePhase == .countdown {
-                        Countdown02View()
-                            .scaleEffect(2.0)
-                            .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-                    }
-                    // 仮想View 初期カード設置
-                    Text("").onReceive(game.$counter) { newValue in
-                        if newValue {
+                // レートアップアナウンス
+                if game.rateUpCard != nil {
+                    RateUpAnnounce(cardImage: game.rateUpCard!) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             gameObserber.firstCard()
+                            game.ascendingRate += game.ascendingRate
+                            game.rateUpCard = nil
                         }
                     }
-                    // レートアップアナウンス
-                    if game.rateUpCard != nil {
-                        RateUpAnnounce(cardImage: game.rateUpCard!) {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                gameObserber.firstCard()
-                                game.ascendingRate += game.ascendingRate
-                                game.rateUpCard = nil
-                            }
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                }
+                // revenge
+                if !game.revengerIndex.isEmpty {
+                    RevengeAnnounce() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            GameBotController().revenge()
                         }
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                     }
+                    .id(game.revengerIndex)
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                }
+                // デッキ再生成
+                if game.regenerationDeckFlg == 1 {
+                    RegenerationDeck() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            game.regenerationDeckFlg = 0
+                        }
+                    }
+                    .id(game.regenerationDeckFlg)
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
                 
-                // DTNK View
-                if game.gamePhase == .dtnk {
-                    DTNKView(text: "DOTENKO")
+                if game.gamePhase == .revenge {
+                    RevengeView(text: "どてんこ返し") {
+                        game.ascendingRate += game.ascendingRate
+                        log("新しい勝敗　勝者：\(game.dtnkPlayerIndex)   敗者：\(game.lastPlayerIndex)")
+                        
+                    }
                 }
-                // バースト注意文言
-                if  game.players[myside].hand.count == Constants.burstCount && game.gamePhase == .main {
-                    BurstCoutionView(text: "Burst Caution!").position(x: geo.size.width * 0.68, y: geo.size.height * 1.08)
-                }
-                // BurstView
-                if game.gamePhase == .burst {
-                    BurstView(text: "BURST")
-                }
-                // チャレンジ可否ポップ
-                if game.gamePhase == .q_challenge {
-                    ChallengePopView()
-                        .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
-                        .transition(.move(edge: .top))
-                        .animation(.default, value: game.gamePhase == .q_challenge)
-                }
-                // チャレンジロゴ
-                // TODO: 配置諸々考える
-                if game.gamePhase == .challenge {
-                    MovingImage()
-                }
-                                
+                // スコア
                 if appState.subState != nil && game.gamePhase == .decisionrate {
                     DecisionScoreView()
                 }
-                
-                if game.gamePhase == .result {
-                    ResultView()
-                }
-                
-                if game.gamePhase == .waiting {
-                    WaitingView()
-                }
             }
-        } .onAppear {
+        }
+        .gameBackground()
+        .onAppear {
             // サイド設定
             game.myside = self.myside
             // ゲーム情報取得
@@ -288,9 +113,9 @@ struct GameFriendView: View {
                 game.deck = cards!
             } else {
                 // ゲーム中であれば再生成します
-//                if game.table.count > 1 {
-//                    gameObserber.regenerateDeck(table: game.table)
-//                }
+                if game.table.count > 1 {
+                    gameObserber.regenerateDeck(table: game.table)
+                }
             }
         }
         // table
@@ -308,7 +133,7 @@ struct GameFriendView: View {
                 }
                 game.table = cards!
             } else{
-                print("テーブル取得エラー")
+                log("table is 0")
             }
         }
         // gamePhase
@@ -346,10 +171,10 @@ struct GameFriendView: View {
                             }
                         }
                         game.players[s].hand = cards!
-                        
                     } else{
                         game.players[s].hand = []
                     }
+                    print("Index: \(s)  hand: \(game.players[s].hand)")
                 }
         }
         // lastPlayerIndex
@@ -405,18 +230,8 @@ struct GameFriendView: View {
         fbms.observeRateUpCard() { cardsImage in
             game.rateUpCard = cardsImage
         }
-    }
-}
-
-struct PlayerScoreModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.custom(FontName.font01, size: 20))
-            .foregroundColor(Color.white)
-            .background(
-                Rectangle()
-                    .fill(Color.casinoShadow)
-                    .frame(width: UIScreen.main.bounds.width * 0.41, height: Constants.scrHeight * 0.0248)
-            )
+        fbms.observeAscendingRate() { rate in
+            game.ascendingRate = rate!
+        }
     }
 }

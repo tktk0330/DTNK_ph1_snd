@@ -1,31 +1,24 @@
-/*
- exit btn controllerの処理必要　現在簡易的
- */
+
+
 
 import SwiftUI
 
-struct Header: View {    
+struct Header: View {
+    var game: GameUIState
+    var geo: GeometryProxy
+    
     var body: some View {
-        HStack {
-            Button {
-//                Router().pushBasePage(pageId: .home)
-            } label: {
-                Text("Exit")
-                    .font(.system(size: 16))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: 100, maxHeight: .infinity)
-                    .background(.red)
-                    .cornerRadius(10)
-            }
-            .padding()
-            Spacer()
+        
+        AdTestView(geo: geo)
+        GameRateView(game: game, geo: geo)
+        // option
+        Button(action: {
+        }) {
+            Image(ImageName.Common.setting.rawValue)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30)
         }
-    }
-}
-
-extension Header {
-    class State: ObservableObject {
-        @Published var isShowingAlert: Bool = false
-        var onTapExit: (() -> Void)?
+        .position(x: Constants.scrWidth * 0.1, y: geo.size.height * 0.16)
     }
 }

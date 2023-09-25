@@ -93,6 +93,7 @@ class RoomFirebaseManager {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         // 遷移
                         Router().pushBasePage(pageId: .dtnkMain_friends)
+                        appState.room.roommode = .base
                     }
                 }
             }

@@ -98,7 +98,7 @@ struct DecisionScoreViewModifier: ViewModifier {
     var fontSize: CGFloat
     func body(content: Content) -> some View {
         content
-            .font(.custom(FontName.font01, size: fontSize))
+            .font(.custom(FontName.MP_Bo, size: fontSize))
             .foregroundColor(Color.white)
             .padding(5)
     }

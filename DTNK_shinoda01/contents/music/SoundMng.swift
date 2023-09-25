@@ -8,8 +8,11 @@ class SoundMng {
     static let shared = SoundMng()
     private var audioPlayer: AVAudioPlayer?
 
+    let test = 1
     func dtnkSound() {
         
+        guard test == 2 else { return }
+
         guard appState.account.loginUser.sound else { return }
 
         guard let url = Bundle.main.url(forResource: SoundName.SE.dtnk.rawValue, withExtension: "wav") else {

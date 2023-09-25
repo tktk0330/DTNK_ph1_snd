@@ -355,6 +355,20 @@ class FirebaseManager {
         }
     }
     
+    
+    /**
+     lastPlayerIndexのセット
+     */
+    func setLasrPlayerIndex(lastPlayerIndex: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("lastPlayerIndex").setValue(lastPlayerIndex) { error, _ in
+            if let error = error {
+                log("Failed to update room status: \(error.localizedDescription)", level: .error)
+            } else {
+                completion(true)
+            }
+        }
+    }
     /**
      lastPlayerIndexの取得（リアルタイム）
      */
@@ -362,7 +376,7 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("lastPlayerIndex")
         ref.observe(.value) { (snapshot) in
             guard let lastPlayerIndex = snapshot.value as? Int else {
-                print("errore")
+                log("error", level: .error)
                 return
             }
             completion(lastPlayerIndex)
@@ -395,6 +409,34 @@ class FirebaseManager {
             completion(burstPlayerIndex)
         }
     }
+    
+    /**
+     ascendingRateのセット
+     */
+    func setAscendingRate(ascendingRate: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("ascendingRate").setValue(ascendingRate) { error, _ in
+            if let error = error {
+                log("Failed to update room status: \(error.localizedDescription)", level: .error)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     burstPlayerIndexの取得（リアルタイム）
+     */
+    func observeAscendingRate(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("ascendingRate")
+        ref.observe(.value) { (snapshot) in
+            guard let ascendingRate = snapshot.value as? Int else {
+                log("Could not cast snapshot value to an integer", level: .error)
+                return
+            }
+            completion(ascendingRate)
+        }
+    }
+
 
     
     /**
@@ -795,6 +837,14 @@ class FirebaseManager {
             
         }
     }
+    
+    func convertToDictArray(cards: [CardId]) -> [[String: Int]] {
+        return cards.map { card in
+            ["cardID": card.id]
+            
+        }
+    }
+
 
     /**
      PlayCards
@@ -848,6 +898,56 @@ class FirebaseManager {
             }
         }
     }
+    /**
+     RevengeEvent
+     */
+    func resetHands(playerIndex: Int, playerID: String, baseselectedCards: [CardId], completion: @escaping (Bool) -> Void) {
+        let selectedCards = convertToDictArray(cards: baseselectedCards)
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.observeSingleEvent(of: .value) { snapshot in
+            guard var gameInfo = snapshot.value as? [String: Any],
+                  var players = gameInfo["players"] as? [[String: Any]]
+            else {
+                completion(false)
+                return
+            }
+            // プレイヤーの手札からカードを出す
+            for (index, player) in players.enumerated() {
+                if let id = player["id"] as? String, id == playerID {
+                    var hand = player["hand"] as? [[String: Int]] ?? []
+                    
+                    for selectedCard in selectedCards {
+                        if let cardIndex = hand.firstIndex(where: { $0 == selectedCard }) {
+                            hand.remove(at: cardIndex)
+                        } else {
+                            log("Selected card not found in hand!")
+                            completion(false)
+                            return
+                        }
+                    }
+                    players[index]["hand"] = hand
+                    break
+                }
+            }
+            // テーブルにカードを追加
+            var table = gameInfo["deck"] as? [[String: Int]] ?? []
+            table.append(contentsOf: selectedCards)
+            gameInfo["deck"] = table
+            // プレイヤーのデータを更新
+            gameInfo["players"] = players
+            
+            // データの更新
+            gameInfoRef.setValue(gameInfo) { error, _ in
+                if let error = error {
+                    log(error.localizedDescription)
+                    completion(false)
+                } else {
+                    completion(true)
+                }
+            }
+        }
+    }
+
 }
 
 // TODO: 整理

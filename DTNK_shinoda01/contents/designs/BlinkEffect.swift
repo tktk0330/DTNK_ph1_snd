@@ -1,3 +1,7 @@
+/**
+ 点滅
+ */
+
 import SwiftUI
 
 struct BlinkEffect: ViewModifier {
@@ -21,7 +25,7 @@ struct BlinkEffect: ViewModifier {
 }
 
 extension View {
-    func blinkEffect(animating: Bool, opacity: ClosedRange<Double> = 0.1...1, interval: Double = 0.3) -> some View {
+    func blinkEffect(animating: Bool, opacity: ClosedRange<Double> = 0.1...1, interval: Double = 0.7) -> some View {
         if animating {
             return AnyView(modifier(BlinkEffect(opacity: opacity, interval: interval)))
         } else {

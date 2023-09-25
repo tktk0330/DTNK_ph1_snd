@@ -5,6 +5,11 @@
 
 import SwiftUI
 
+// Bot Friend共通
+struct GameMainController {
+    
+}
+
 class GameBotController {
     
     var game: GameUIState = appState.gameUIState
@@ -472,7 +477,6 @@ class GameBotController {
         }
         // 手札とどてんこカードを比較
         let challenger = appState.gameUIState.players[challengerIndex]
-
         // 手札がとりえる値
         let handSum = calculatePossibleSums(cards: challenger.hand)
         // 最小値
@@ -501,7 +505,7 @@ class GameBotController {
             // overしたら次の人へ
             let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                print("next challenger")
+                log("next challenger")
                 // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
                 self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
             }
@@ -726,7 +730,7 @@ class GameBotController {
             return result
         }
         // 自分にはどてんこできない
-        if game.lastPlayerIndex == myside {
+        if game.gamePhase != .q_challenge && game.lastPlayerIndex == myside {
             return result
         }
         // しょてんこ可能として返す

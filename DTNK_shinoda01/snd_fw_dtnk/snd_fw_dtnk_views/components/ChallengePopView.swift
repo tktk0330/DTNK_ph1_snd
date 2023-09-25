@@ -23,11 +23,10 @@ struct ChallengePopView: View {
                 .padding(5)
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.35)
             
-            if game.dtnkPlayerIndex == game.myside {
+            if game.dtnkPlayerIndex == game.myside || game.dtnkFlg == 1 {
                 
-                WaitingView()
+                WaitingChallengePopView()
                     .onAppear{
-                        game.gamePhase = .waiting
                         //　vsFriend 他の人が決まるまで待機
                         if game.gamevsInfo == .vsFriend {
                             GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
@@ -37,28 +36,9 @@ struct ChallengePopView: View {
                             }
                         }
                     }
-//                //　vsFriend 他の人が決まるまで待機
-//                if game.gamevsInfo == .vsFriend {
-//                    WaitingChallengeView()
-//                        .position(x: geo.size.width / 2, y: geo.size.height * 1.0)
-//                        .onAppear{
-//                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
-//                        }
-//                } else {
-//                    //　vsBot 他の人が決まるまで待機
-//                    WaitingChallengeView()
-//                        .position(x: geo.size.width / 2, y: geo.size.height * 1.0)
-//                        .onAppear{
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
-//                                game.challengeAnswers[game.myside] = .challenge
-//                            }
-//                        }
-//                }
-                
             } else {
                 // 参加可否通知を送る
                 HStack(spacing: 20) {
-                    
                     
                     Button(action: {
                         game.gamePhase = .waiting
@@ -74,12 +54,12 @@ struct ChallengePopView: View {
                     if GameBotController().dtnkJudge(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) == Constants.dtnkCode {
                         Button(action: {
                             if game.gamevsInfo == .vsFriend {
-                                GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                                GameFriendEventController().revengeQuick(Index: game.myside, dtnkPlayer: game.players[game.myside])
                             } else {
                                 GameBotController().dtnk(Index: game.myside)
                             }
                         }) {
-                            Btnaction(btnText: "どてんこ返し", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                            Btnaction(btnText: "どてんこ返し", btnTextSize: 10, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                         }
                         
                     } else {

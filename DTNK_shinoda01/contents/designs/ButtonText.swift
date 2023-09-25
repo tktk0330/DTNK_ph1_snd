@@ -49,7 +49,7 @@ struct Btnaction: View {
     var body: some View {
         
         Text(btnText)
-            .font(.custom(FontName.font01, size: btnTextSize))
+            .font(.custom(FontName.MP_EB, size: btnTextSize))
             .fontWeight(.heavy)
             .padding()
             .frame(width: btnWidth, height: btnHeight)

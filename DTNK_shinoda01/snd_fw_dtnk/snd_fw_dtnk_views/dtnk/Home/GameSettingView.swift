@@ -72,25 +72,25 @@ struct GameSettingView: View {
                         Button(action: {
                             home.mode = .max
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameMaximum.rawValue, text: "上限", nowItem: String(account.loginUser.gameMaximum))
+                            untilSettingUnitView(imageName: ImageName.Setting.gameMaximum.rawValue, text: "上限", nowItem: String(account.loginUser.gameMaximum))
                         }
-                        .modifier(settingUnitModifier())
+                        .modifier(untilSettingUnitModifier())
                     }
                     
                     HStack(spacing: 30) {
                         Button(action: {
                             home.mode = .uprate
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameUpRate.rawValue, text: "重ね", nowItem: String(account.loginUser.gameUpRate))
+                            untilSettingUnitView(imageName: ImageName.Setting.gameUpRate.rawValue, text: "重ね", nowItem: String(account.loginUser.gameUpRate))
                         }
-                        .modifier(settingUnitModifier())
+                        .modifier(untilSettingUnitModifier())
                         
                         Button(action: {
                             home.mode = .deck
                         }) {
-                            settingUnitView(imageName: ImageName.Setting.gameDeck.rawValue, text: "サイクル", nowItem: String(account.loginUser.gameDeckMaximum))
+                            untilSettingUnitView(imageName: ImageName.Setting.gameDeck.rawValue, text: "サイクル", nowItem: String(account.loginUser.gameDeckMaximum))
                         }
-                        .modifier(settingUnitModifier())
+                        .modifier(untilSettingUnitModifier())
                     }
                 }
                 .padding()
@@ -169,3 +169,59 @@ struct settingUnitModifier: ViewModifier {
             .shadow(color: Color.black.opacity(0.5), radius: 10, x: 10, y: 10)
     }
 }
+
+// 未実装のもの
+struct untilSettingUnitView: View {
+    let imageName: String
+    let text: String
+    let nowItem: String
+    
+    var body: some View {
+        ZStack {
+            HStack(spacing: 0) {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Constants.scrWidth / 12, height: Constants.scrWidth / 12)
+                    .padding(5)
+                
+                Spacer()
+                
+                VStack(spacing: 5) {
+                    Text(text)
+                        .font(.custom(FontName.font01, size: 15))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    Text(nowItem)
+                        .font(.custom(FontName.font01, size: 15))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                }
+                Spacer()
+            }
+            
+            Text("ComingSoon")
+                .font(.custom(FontName.font01, size: 15))
+                .fontWeight(.bold)
+                .foregroundColor(Color.white)
+                .rotationEffect(.degrees(20)) // テキストを斜めにする
+            
+        }
+        .padding(10)
+    }
+}
+
+struct untilSettingUnitModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(5)
+            .shadow(color: Color.black.opacity(0.5), radius: 5, x: 10, y: 10)
+            .frame(width: Constants.scrWidth * 0.40, height: Constants.scrHeight / 9)
+            .background(Color.gray)
+            .cornerRadius(10)
+            .shadow(color: Color.black.opacity(0.5), radius: 10, x: 10, y: 10)
+            .disabled(true)
+    }
+}
+

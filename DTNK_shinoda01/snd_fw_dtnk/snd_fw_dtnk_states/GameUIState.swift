@@ -174,7 +174,7 @@ class GameUIState: ObservableObject {
             case .countdown:
                 log("\(phase)")
             case .ratefirst:
-                log("\(phase)")
+                GameObserber(hostID: appState.room.roomData.hostID).firstCard()
             case .gamefirst:
                 log("\(phase)")
             case .decisioninitialplayer:

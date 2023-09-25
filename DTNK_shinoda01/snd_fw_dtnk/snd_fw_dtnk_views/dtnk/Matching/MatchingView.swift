@@ -103,15 +103,21 @@ struct MatchingView: View {
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.55)
                 
+                if room.roommode == .waiting {
+                    WaitingLoadingView()
+                }
+
                 // gameStartBtn
-                // TODO: 人数揃ったら表示するように
-                if appState.account.loginUser.userID == room.roomData.hostID {
-                    Button(action: {
-                        MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
-                    }) {
-                        Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                if matching.players.count == 4 {
+                    if appState.account.loginUser.userID == room.roomData.hostID {
+                        Button(action: {
+                            room.roommode = .waiting
+                            MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
+                        }) {
+                            Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                        }
+                        .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
                     }
-                    .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
                 }
             }
             .onAppear {

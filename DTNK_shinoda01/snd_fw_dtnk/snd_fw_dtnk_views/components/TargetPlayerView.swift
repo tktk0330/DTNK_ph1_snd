@@ -4,6 +4,20 @@
 
 import SwiftUI
 
+struct TargetPlayerPositionView: View {
+    @ObservedObject var game: GameUIState // あなたのゲームの型に変更してください
+    var geo: GeometryProxy
+    
+    var body: some View {
+        if game.currentPlayerIndex != 99 && (game.gamePhase == .main || game.gamePhase == .gamefirst_sub) {
+            TargetPlayerView()
+                .position(x: TargetPlayerView().focusPosition(side: game.currentPlayerIndex).x,
+                          y: geo.size.height * TargetPlayerView().focusPosition(side: game.currentPlayerIndex).y)
+                .animation(.easeInOut(duration: 0.5), value: game.currentPlayerIndex)
+        }
+    }
+}
+
 struct TargetPlayerView: View {
     
     @State private var isAnimating = false

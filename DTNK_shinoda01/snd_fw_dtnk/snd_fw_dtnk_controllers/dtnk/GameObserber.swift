@@ -117,6 +117,7 @@ class GameObserber {
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
             return value.rawValue > 1 ? index : nil
         }
+        log("Challenge参加者：　\(challengeplayers)")
         // 次のIndexを決める 3
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
         let dtnkCardNumber = game.table.last?.number()
@@ -147,19 +148,60 @@ class GameObserber {
     
     // 指定したIndexがどてんこカードより大きくなるまで引く
     func challengeIndex(challengerIndex: Int, dtnkCardNumber: Int, dtnkIndex: Int, challengers: [Int]) {
+        log("\(challengerIndex) のチャレンジです")
         // 自分がdtnkIndexだったら終了
         if challengerIndex == dtnkIndex {
-            print("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
+            log("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
             fbms.setGamePhase(gamePhase: .decisionrate_pre) { result in }
             return
         }
         // 手札とどてんこカードを比較
         let challenger = appState.gameUIState.players[challengerIndex]
         let handSum = countHand(hand: challenger.hand)
+        // 手札がとりえる値
+        let handSumPos = GameBotController().calculatePossibleSums(cards: challenger.hand)
+        // 最小値
+        let minimun = GameBotController().findSmallestNumber(numbers: handSumPos)
+
+        log("手札：\(challenger)　手札合計： \(handSumPos)")
         
-        // TODO: jokerを考慮させる
-        // チャンスがあれば引く
-        if (dtnkCardNumber - handSum) > 0 {
+        // 返せるか検査
+        for sumdata in handSumPos {
+            if sumdata == dtnkCardNumber {
+                // リベンジ処理
+                log("どてんこ返し：\(challengerIndex) → \(dtnkIndex)")
+                // 処理 手札リセット
+                fbms.resetHands(playerIndex: game.dtnkPlayerIndex,
+                                playerID: game.players[game.dtnkPlayerIndex].id,
+                                baseselectedCards: game.players[game.dtnkPlayerIndex].hand) { result in
+                }
+                // rate up
+                let ascendingRate = game.ascendingRate * 2
+                fbms.setAscendingRate(ascendingRate: ascendingRate) { result in }
+                // 次の人へ
+                let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+                // dtnkIndexをrevengerに変更
+                fbms.setDTNKInfo(Index: challengerIndex, dtnkPlayer: challenger) { result in }
+                let revengerIndex = challengerIndex
+                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: revengerIndex, challengers: challengers)
+                return
+            }
+        }
+        
+        // 終了(最小値がダメだった場合) 次の人へ
+        if (minimun > dtnkCardNumber) {
+            // overしたら次の人へ
+            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                log("end:\(challengerIndex)  next challenger")
+                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+            }
+            return
+        }
+        
+        // 最小の方が小さい場合
+        if (minimun < dtnkCardNumber) {
             // チャンスあり 一枚引く
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
                 fbms.drawCard(playerID: challenger.id) { result in
@@ -168,31 +210,46 @@ class GameObserber {
                     self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
                 }
             }
+        }
+        // チャンスがあれば引く
+        if (dtnkCardNumber - handSum) > 0 {
+            // チャンスあり 一枚引く
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+//                fbms.drawCard(playerID: challenger.id) { result in
+//                    log("challenger \(challenger.side-1) draw")
+//                    // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+//                    self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+//                }
+//            }
             // loop
         } else if (dtnkCardNumber - handSum) == 0 {
-            // リベンジ成功 animation
-            log("revenge")
-            // 処理
-            appState.gameUIState.players[dtnkIndex].hand.removeAll()
-            // Viewも
-
-            // 次の人へ
-            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-//            print("\(nextChallenger!) : \(dtnkCardNumber) : \(challengerIndex) : \(challengers)")
-            // dtnkIndexをrevengerに変更
-            let revengerIndex = challengerIndex
-            self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: revengerIndex, challengers: challengers)
-            return
+//            // リベンジ成功 animation
+//            log("revenge chellenging")
+//            // 処理 手札リセット
+//            fbms.resetHands(playerIndex: game.dtnkPlayerIndex,
+//                            playerID: game.players[game.dtnkPlayerIndex].id,
+//                            baseselectedCards: game.players[game.dtnkPlayerIndex].hand) { result in
+//            }
+//            // rate up
+//            let ascendingRate = game.ascendingRate * 2
+//            fbms.setAscendingRate(ascendingRate: ascendingRate) { result in }
+//            // 次の人へ
+//            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+////            print("\(nextChallenger!) : \(dtnkCardNumber) : \(challengerIndex) : \(challengers)")
+//            // dtnkIndexをrevengerに変更
+//            let revengerIndex = challengerIndex
+//            self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: revengerIndex, challengers: challengers)
+//            return
 
         } else {
-            // overしたら次の人へ
-            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                log("next challenger")
-                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
-                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
-            }
-            return
+//            // overしたら次の人へ
+//            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                log("next challenger")
+//                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+//                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+//            }
+//            return
         }
         
     }

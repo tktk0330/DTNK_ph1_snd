@@ -2,16 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleExecutable</key>
-	<string></string>
-	<key>CFBundleIdentifier</key>
-	<string></string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>MPLUS1p-Bold.ttf</string>
+		<string>MPLUS1p-ExtraBold.ttf</string>
+		<string>MPLUS1p-Black.ttf</string>
 		<string>DS-DIGIB.TTF</string>
 		<string>AlfaSlabOne-Regular.ttf</string>
 	</array>

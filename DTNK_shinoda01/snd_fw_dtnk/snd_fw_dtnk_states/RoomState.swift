@@ -12,7 +12,6 @@ class RoomState: ObservableObject {
     @Published var error_message = ""
     @Published var startFlg = false // realtime
 
-        
     /**
      参加
      */

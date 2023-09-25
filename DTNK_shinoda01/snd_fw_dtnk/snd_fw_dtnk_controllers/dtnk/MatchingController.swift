@@ -54,7 +54,7 @@ class MatchingController {
         // UIStateの作成（フロント）
         appState.gameUIState.players = quick
         // DBに保存
-        print(gameInfo.initialRate)
+        log("\(gameInfo.initialRate)")
         FirebaseManager.shared.setGameInfo(item: gameInfo, roomID: roomID) { gameID in
             if (gameID != nil) {
                 // matchingflgをOKに設定　その後遷移

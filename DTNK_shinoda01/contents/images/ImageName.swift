@@ -9,6 +9,7 @@ enum ImageName {
         case dtnk02 = "dtnk-2"
         case challenge01 = "chalenge-1"
         case challenge02 = "chalenge-2"
+        case setting = "setting"
     }
     
     enum Splash: String {
@@ -38,7 +39,6 @@ enum ImageName {
         case sound = "option-sound"
         case se = "option-se"
         case vibration = "option-vibration"
-
     }
 
     enum Card: String {

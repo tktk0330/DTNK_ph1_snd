@@ -44,9 +44,9 @@ struct GameFriendEventController {
 
         fbms.drawCard(playerID: playerID) { result in
             if result {
-                print("Draw")
+                log("Draw")
             } else {
-                print("draw失敗")
+                log("draw失敗")
                 appState.gameUIState.turnFlg = 0
             }
         }
@@ -144,7 +144,7 @@ struct GameFriendEventController {
             guard checDtnk(myside: Index) else {
                 return
             }
-            
+            game.dtnkFlg = 1
             // TODO: 音バイブ
             fbms.setGamePhase(gamePhase: .dtnk) { result in }
             fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
@@ -157,6 +157,34 @@ struct GameFriendEventController {
             }
         }
     }
+    
+    // どてんこ返し（即時）
+    func revengeQuick(Index: Int, dtnkPlayer: Player_f) {
+        // dtnkは１ゲーム１人１回
+        if game.dtnkFlg != 1 {
+            
+            game.dtnkFlg = 1
+            // TODO: 音バイブ
+            fbms.setLasrPlayerIndex(lastPlayerIndex: game.dtnkPlayerIndex) { result in }
+            // 手札リセット
+            fbms.resetHands(playerIndex: game.dtnkPlayerIndex,
+                            playerID: game.players[game.dtnkPlayerIndex].id,
+                            baseselectedCards: game.players[game.dtnkPlayerIndex].hand) { result in
+                if result {
+                    fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
+                    fbms.setGamePhase(gamePhase: .revenge) { result in }
+
+                }
+            }
+            // TODO: ロジック修正？
+            // アニメーションが終わったら参加可否を問う
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                // 可否
+                fbms.setGamePhase(gamePhase: .q_challenge) { result in }
+            }
+        }
+    }
+
     
     /**
      challengeするかしないかを報告

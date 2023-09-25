@@ -155,10 +155,10 @@ struct RevengeAnnounce: View {
             ZStack {
                 Rectangle()
                     .fill(Color.yellow.opacity(0.8))
-                    .frame(width: UIScreen.main.bounds.width, height: 160)
+                    .frame(width: UIScreen.main.bounds.width, height: 120)
                 VStack(spacing: 10) {
                     Text("どてんこ返し")
-                        .font(.custom(FontName.font01, size: 30))
+                        .font(.custom(FontName.MP_Bl, size: 40))
                         .foregroundColor(.dtnkBlue)
                 }
             }
@@ -222,7 +222,7 @@ struct RegenerationDeck: View {
                     .frame(width: UIScreen.main.bounds.width, height: 160)
                 VStack(spacing: 10) {
                     Text("デッキ再生成")
-                        .font(.custom(FontName.font01, size: 30))
+                        .font(.custom(FontName.MP_EB, size: 30))
                         .foregroundColor(.dtnkBlue)
                 }
             }
