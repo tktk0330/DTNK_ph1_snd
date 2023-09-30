@@ -74,31 +74,6 @@ class RoomFirebaseManager {
             completion(gameBase)
         }
     }
-
-    /**
-     matchingFlgの監視
-     */
-    func observeMatchingFlg(roomID: String) {
-        let roomRef = database.reference().child("rooms").child(roomID)
-        let matchingFlgRef = roomRef.child("matchingFlg")
-        // matchingFlgの値の変更を監視
-        matchingFlgRef.observe(.value) { snapshot in
-            if let matchingFlg = snapshot.value as? Int {
-                if matchingFlg == 1 {
-                    // stateの設定
-                    self.retrieveGameInfo(forRoom: roomID) { gameBase in
-                        appState.gameUIState.players = gameBase!.players
-                        
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        // 遷移
-                        Router().pushBasePage(pageId: .dtnkMain_friends)
-                        appState.room.roommode = .base
-                    }
-                }
-            }
-        }
-    }
     
     /**
      Game開始の送信
@@ -149,14 +124,29 @@ class RoomFirebaseManager {
      GameStates OK
      ボタンを押したらmatchingFlgをOKにする
      */
-    func updateMatchingFlg(roomID: String){
+    func updateMatchingFlg(roomID: String, value: Int, completion: @escaping (Bool) -> Void) {
         let roomRef = database.reference().child("rooms").child(roomID)
-        // ルームのmatchingFlgを「1」に更新
-        roomRef.child("matchingFlg").setValue(1) { error, _ in
+        // OK:1 Exist:2
+        roomRef.child("matchingFlg").setValue(value) { error, _ in
             if let error = error {
                 log("Failed to update room status: \(error.localizedDescription)", level: .error)
+                completion(false)
             } else {
+                completion(true)
             }
+        }
+    }
+    /**
+     matchingFlgの監視
+     */
+    func observeMatchingFlg(roomID: String, completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("matchingFlg")
+        ref.observe(.value) { (snapshot) in
+            guard let matchingFlg = snapshot.value as? Int else {
+                log("error", level: .error)
+                return
+            }
+            completion(matchingFlg)
         }
     }
         
@@ -178,7 +168,7 @@ class RoomFirebaseManager {
                 }
                 participantsRef.setValue(participants) { (error, _) in
                     if let error = error {
-                        print("Failed to join room: \(error.localizedDescription)")
+                        log("Failed to join room: \(error.localizedDescription)", level: .error)
                         completion(false)
                     } else {
                         completion(true)

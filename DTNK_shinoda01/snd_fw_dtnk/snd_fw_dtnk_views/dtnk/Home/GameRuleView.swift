@@ -18,6 +18,154 @@ struct Rule: Identifiable {
     let imageNames: [String] // 画像ファイル名の配列
 }
 
+struct RuleDetail: Identifiable {
+    let id = UUID()
+    let title: String
+    let details: [Detail]
+}
+
+enum Detail {
+    case item(String)
+    case text(String)
+    case image(String)
+}
+
+let ruleInfo = [
+    RuleDetail(title: "概要",
+               details: [
+                .item("どてんことは"),
+                .text("""
+                        ・プレイ推奨人数は４人
+                        ・使用カードは52~56(Jorkerは４枚まで追加可能)
+                        ・場のカードに対し、１枚だけ出す場合は同じ数字、同じスートのカードを出すことができる。複数枚出す場合は、出すカードの数字の合計が場と同じ、場と同じ数字、先頭が場と同じスートで出すカード全て同数字である時出すことができる。
+                        ・場の数字と手札の合計数字が一致した時「どてんこ」と宣言し、勝者となることができる。「どてんこ」を宣言された時に、場の一番上のカードを出していた人が負けになる。
+                        """),
+                .item("流れ"),
+                .text("""
+                      １　各プレイヤーに手札を２枚ずつ配布する。
+                      ２　山札の一番上のカードをめくり、場の初めのカードを決めます。
+                      ３　出せるカードがある場合は、早いもの順でカードを出す。一番はじめにカードを出した人から時計回りにゲームを開始します。
+                    　※　一番初めの山札からめくったカードに対して「どてんこ」（この場合は「しょてんこ」という）した場合、その人以外全員が敗者となる。
+                      ４　ターンが回ってきたプレイヤーは以下の行動ができる。
+                        ①　手札に出せるカードがあるので出す
+                        ②　手札に出せるカードがあるけど、カードを引き、出す
+                        ③　手札に出せるカードがあるけど、カードを引き、パス
+                        ④　手札に出せるカードがないので、カードを引き、出せるようになったので出す
+                        ⑤　手札に出せるカードがないので、カードを引き、出せるようになったけどパス
+                        ⑥　手札に出せるカードがないので、カードを引き、出せるようにならなかったのでパス
+                    　※　カードを引けるのは１ターン１枚です
+                    　※　カードを引かずにパスはできません
+                      ５　山札がなくなったら、場の一番上のカードだけを残し、他を山札に加えて再生成します
+                      ６　誰かが「どてんこ」をする、または「バースト」をしたらチャレンジフェーズへ移動します。
+                      ７　チャレンジフェーズではどてんこのチャンスがある人が、山札からカードを１枚ずつ引いていく。全てのプレイヤーのチャンスがなくなったら、点数計算フェーズへ移動（バーストの場合はチャレンジフェーズはない）
+                      ８　点数計算フェーズではそのゲームでのスコアを確定させる。山札の１番下のカードを確認する。特殊カードが出た場合レート上昇や勝敗の逆転が発生し、特殊カード以外のカードになるまで捲る。カードが確定後、スコアを計算し、次のゲームへ移る。
+                    """),
+                
+               ]
+              ),
+    RuleDetail(title: "イベント",
+               details: [
+                .item("イベント"),
+                .text("""
+                      ・どてんこ
+                      →　誰かが出した場のカードの数字と、自分の手札の合計数字が一致した時「どてんこ」と宣言できる。
+                      図示する
+                      ・しょてんこ
+                      →　１番はじめに山札から捲られたカードの数字と、自分の手札の合計数字が一致した時「どしょてんこ」と宣言できる。
+                      図示する
+                      ・どてんこ返し
+                      →　誰かがどてんこを宣言した際、別のプレイヤーもどてんこできる状態であった場合、「どてんこ返し」と宣言し、勝者を上書きすることができる。この場合、勝者が最後に「どてんこ返し」した人、敗者が１つ前に「どてんこ」した人である。
+                      図示する
+                      ・チャレンジ
+                      →　どてんこが確定した時、チャレンジフェーズに移ります。どてんこが発生した場の数字に対し、自分の手札の合計が小さい場合、チャレンジに参加することができます。どてんこした人から時計回りにチャレンジを実施する。山札の上からカードを１枚ずつ引いていく。新規に追加されたカードによって場のカードと手札の合計が一致した場合、「どてんこ返し」が発生する。手札の数字の合計が場の数字より大きくなるまで（どてんこの可能性がなくなるまで）山札から引き続ける。この際どてんこ返しされた人は、手札をリセットし、チャレンジに参加する。誰もどてんこチャンスがなくなった時に、チャレンジフェーズが終了し、点数計算フェーズに移行する
+                      図示する
+                      ・バースト
+                      →　手札が７枚の時パスをするとバーストとなり自分の１人負けとなる。
+                      敗者：自分、勝者：その他全員。
+                      ・ゲームスコアの決定
+                      →　点数計算フェーズでは、ゲームスコアを計算する。スコア下記の掛け算によって算出される
+                      ①　初期レート
+                      ②　上昇レート
+                      ③　山札裏のカード数字
+                      特殊カードによってレートが上昇するイベントがある。
+                    """)
+                ]
+               ),
+    RuleDetail(title: "カード",
+               details: [
+                .item("使用カード"),
+                .text("""
+                      Jorker
+                      手札：-1 0 1のいずれかとして扱うことができる
+                      例　図示
+                      ゲームゲーム開始フェーズ：レートを✖️２する
+                      点数計算フェーズ：  レートを✖️２する
+
+                      １、２
+                      手札：その数字として扱う
+                      ゲームゲーム開始フェーズ：レートを✖️２する
+                      点数計算フェーズ：  レートを✖️２する
+
+                      黒３
+                      手札：その数字として扱う
+                      ゲームゲーム開始フェーズ：その数字として扱う
+                      点数計算フェーズ：  勝敗を無条件で逆転させる
+
+                      ダイヤ３
+                      手札：その数字として扱う
+                      ゲームゲーム開始フェーズ：その数字として扱う
+                      点数計算フェーズ：  数字を30として扱う
+                      その他のカードはそのカードの意味のまま利用する。
+                    """)
+               ]
+               ),
+]
+
+let optionInfo = [
+    RuleDetail(title: "ゲーム数",
+               details: [
+                .text("""
+                    ラウンド(1/2/3/5/10)を選べます。
+                """),
+                ]
+               ),
+    RuleDetail(title: "ジョーカー枚数",
+               details: [
+                .text("""
+                    Jorkerの枚数(0/2/4)を選べます。
+                """),
+                ]
+               ),
+    RuleDetail(title: "レート",
+               details: [
+                .text("""
+                   初期レート(1/2/5/10/50/100)を選べます。
+                """),
+                ]
+               ),
+    RuleDetail(title: "スコア上限",
+               details: [
+                .text("""
+                    上限(あり入力/なし)を選べます。
+                """),
+                ]
+               ),
+    RuleDetail(title: "重ねレートアップ",
+               details: [
+                .text("""
+                    重なった時のレートアップ(3/4/なし)を選べます
+                """),
+                ]
+               ),
+    RuleDetail(title: "デッキサイクル",
+               details: [
+                .text("""
+                    デッキリミット(1/3/5/なし)を選べます。
+                """),
+                ]
+               ),
+    ]
+
 let infos = [
     Info(title: "概要", details:"""
         プレイ推奨人数：４人
@@ -112,13 +260,13 @@ struct BorderedListView<Content: View>: View {
 }
 
 struct InfoListView: View {
-    let info: Info
+    let info: RuleDetail
     @State private var isExpanded = false
     
     var body: some View {
         VStack(alignment: .leading) {
             
-            // tite
+            // title
             Button(action: {
                 withAnimation {
                     isExpanded.toggle()
@@ -141,122 +289,40 @@ struct InfoListView: View {
                 BorderedListView(content: AnyView(
                     VStack(alignment: .leading, spacing: 7) {
                         
-                        // 文字列を改行で分割して各行を処理する
-                        let lines = info.details.components(separatedBy: "\n\n")
-                        
-                        ForEach(lines.indices, id: \.self) { index in
-                            let line = lines[index]
+                        ForEach(info.details.indices, id: \.self) { index in
+                            let detail = info.details[index]
                             
-                            let displayTextOnly = info.imageNames.isEmpty
-                            
-                            if displayTextOnly {
-                                Text(line)
-                                    .font(.subheadline)
+                            switch detail {
+                            case .item(let item):
+                                Text(item)
+                                    .font(.custom(FontName.MP_Bo, size: 15))
+                                    .foregroundColor(Color.blue)
+                                    .fontWeight(.bold)
+                                    .padding(.top, 7)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .lineSpacing(10)
+                            case .text(let text):
+                                Text(text)
+                                    .font(.custom(FontName.MP_Bo, size: 15))
                                     .foregroundColor(Color.white)
                                     .fontWeight(.bold)
                                     .padding(.top, 7)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                            } else {
-                                VStack {
-                                    Text(line)
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.white)
-                                        .fontWeight(.bold)
-                                        .padding(.top, 7)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    if index < info.imageNames.count {
-                                        Image(info.imageNames[index])
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(maxHeight: 200)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                        .padding() // 詳細横
-                ))
-                .background(Color.plusAutoBlack.opacity(0.3))
-            }
-        }
-    }
-}
-    
-struct RuleListView: View {
-    let rule: Rule
-    @State private var isExpanded = false
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            
-            // tite
-            Button(action: {
-                withAnimation {
-                    isExpanded.toggle()
-                }
-            }) {
-                HStack {
-                    Text("　　" + rule.title)
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        .frame(height: 50)
-                    
-                    Spacer()
-                    
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(.white)
-                        .frame(width: 50)
-                }
-            }
-            if isExpanded {
-                BorderedListView(content: AnyView(
-                    VStack(alignment: .leading, spacing: 7) {
-
-                        // 文字列を改行で分割して各行を処理する
-                        let lines = rule.details.components(separatedBy: "\n\n")
-                        
-                        ForEach(lines.indices, id: \.self) { index in
-                            let line = lines[index]
-                            
-                            let displayTextOnly = rule.imageNames.isEmpty
-                            
-                            if displayTextOnly {
-                                Text(line)
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
+                                    .lineSpacing(10)
+                            case .image(let imageName):
+                                Image(imageName)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxHeight: 200)
                                     .padding(.top, 7)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                            } else {
-                                VStack {
-                                    Text(line)
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.white)
-                                        .fontWeight(.bold)
-                                        .padding(.top, 7)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    if index < rule.imageNames.count {
-                                        Image(rule.imageNames[index])
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(maxHeight: 200)
-                                    }
-                                }
-                                
                             }
                         }
                     }
-                        .padding()
+                        .padding() // padding around details
                 ))
-                .background(Color.plusAutoBlack.opacity(0.3))
+                .background(Color.black.opacity(0.3))
             }
         }
     }
@@ -274,12 +340,10 @@ struct RuleScreen: View {
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.06, alignment: .leading)
-                    .background(
-                        Color.dtnkGreen01
-                    )
+                    .background(Color.white.opacity(0.3))
 
-                ForEach(infos.indices, id: \.self) { index in
-                    InfoListView(info: infos[index])
+                ForEach(ruleInfo.indices, id: \.self) { index in
+                    InfoListView(info: ruleInfo[index])
                     if index < infos.count - 1 {
                         CustomDivider()
                     }
@@ -291,12 +355,10 @@ struct RuleScreen: View {
                     .foregroundColor(Color.white)
                     .fontWeight(.bold)
                     .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.06, alignment: .leading)
-                    .background(
-                        Color.dtnkGreen01
-                    )
+                    .background(Color.white.opacity(0.3))
 
-                ForEach(rules.indices, id: \.self) { index in
-                    RuleListView(rule: rules[index])
+                ForEach(optionInfo.indices, id: \.self) { index in
+                    InfoListView(info: optionInfo[index])
                     if index < rules.count - 1 {
                         CustomDivider()
                     }
@@ -353,7 +415,7 @@ struct GameRuleView: View {
                         ))
                     }
                 }
-                .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.65)
+                .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.7)
                 .position(x:  Constants.scrWidth / 2, y: geo.size.height * 0.60)
             }
         }

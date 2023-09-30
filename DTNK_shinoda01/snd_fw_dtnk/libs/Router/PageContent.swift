@@ -41,6 +41,8 @@ struct PageContent: View {
                 ShopView()
             case .gameSetting:
                 GameSettingView()
+            case .selectJoinType:
+                SelectJoinTypeView()
             }
         }
     }

@@ -116,7 +116,7 @@ struct Btnwb01: View {
     }
 }
 
-
+// ゲーム種類ボタン
 struct Btnlgb: View {
     
     var imageName: String
@@ -126,6 +126,7 @@ struct Btnlgb: View {
     var btnHeight: CGFloat
     var judge: Bool // vsbot vsfriendで画像大きさ変える
     
+    
     var body: some View {
         
         HStack (spacing: 20) {
@@ -133,7 +134,7 @@ struct Btnlgb: View {
             Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: judge ? 70 : 100, height: judge ? 70 : 100)
+                .frame(width: judge ? Constants.scrWidth * 0.2 : Constants.scrWidth * 0.3, height: judge ? Constants.scrWidth * 0.2 : Constants.scrWidth * 0.3)
 
             Text(btnText)
                 .font(.custom(FontName.font01, size: btnTextSize))

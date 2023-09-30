@@ -78,6 +78,18 @@ struct GameEventView: View {
             if game.gamePhase == .waiting {
                 WaitingView()
             }
+            if game.gameMode == .option {
+                GameHelpView()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
+            if game.gameMode == .rule {
+                GameHelpUnitView()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
+            if game.gameMode == .exit {
+                GameExitView()
+                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+            }
         }
     }
 }

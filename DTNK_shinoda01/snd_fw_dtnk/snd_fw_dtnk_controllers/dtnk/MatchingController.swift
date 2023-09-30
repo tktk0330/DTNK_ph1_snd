@@ -57,8 +57,8 @@ class MatchingController {
         log("\(gameInfo.initialRate)")
         FirebaseManager.shared.setGameInfo(item: gameInfo, roomID: roomID) { gameID in
             if (gameID != nil) {
-                // matchingflgをOKに設定　その後遷移
-                RoomFirebaseManager.shared.updateMatchingFlg(roomID: roomID)
+                // matchingflgを1に設定　その後遷移
+                RoomFirebaseManager.shared.updateMatchingFlg(roomID: roomID, value: 1)  { result in }
             } else {
                 log("Failed to save game info", level: .error)
             }

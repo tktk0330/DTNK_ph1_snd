@@ -236,11 +236,11 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("gamePhase")
         ref.observe(.value) { (snapshot) in
             guard let gamePhaseValue = snapshot.value as? Int else {
-                print("Could not cast snapshot value to an integer")
+//                log("Could not cast snapshot value to an integer")
                 return
             }
             guard let gamePhase = GamePhase(rawValue: gamePhaseValue) else {
-                print("Invalid gamePhase value: \(gamePhaseValue)")
+//                log("Invalid gamePhase value: \(gamePhaseValue)")
                 return
             }
             completion(gamePhase)
@@ -276,13 +276,13 @@ class FirebaseManager {
 
         indexRef.observe(.value) { (snapshot) in
             guard let newindex = snapshot.value as? Int else {
-                print("Could not cast snapshot value to an integer")
+//                log("Could not cast snapshot value to an integer")
                 return
             }
 
             playerRef.observeSingleEvent(of: .value) { (playerSnapshot) in
                 guard let playerData = playerSnapshot.value as? [String: Any] else {
-                    print("Could not cast snapshot value to dictionary")
+//                    log("Could not cast snapshot value to dictionary")
                     completion(newindex, nil) // indexは有効ですが、Playerデータは無効な場合
                     return
                 }
@@ -321,7 +321,7 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("rateUpCard")
         ref.observe(.value) { (snapshot) in
             guard let currentplayerIndex = snapshot.value as? String else {
-                print("Could not cast snapshot value to an integer")
+//                log("Could not cast snapshot value to an integer")
                 return
             }
             completion(currentplayerIndex)
@@ -335,7 +335,7 @@ class FirebaseManager {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.child("currentPlayerIndex").setValue(currentplayerIndex) { error, _ in
             if let error = error {
-                print("Failed to update room status: \(error.localizedDescription)")
+                log("Failed to update room status: \(error.localizedDescription)")
             } else {
                 completion(true)
             }
@@ -348,7 +348,7 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("currentPlayerIndex")
         ref.observe(.value) { (snapshot) in
             guard let currentplayerIndex = snapshot.value as? Int else {
-                print("Could not cast snapshot value to an integer")
+                log("Could not cast snapshot value to an integer")
                 return
             }
             completion(currentplayerIndex)
@@ -403,7 +403,7 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("burstPlayerIndex")
         ref.observe(.value) { (snapshot) in
             guard let burstPlayerIndex = snapshot.value as? Int else {
-                print("Could not cast snapshot value to an integer")
+                log("Could not cast snapshot value to an integer")
                 return
             }
             completion(burstPlayerIndex)
@@ -604,7 +604,7 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("gameNum")
         ref.observe(.value) { (snapshot) in
             guard let gameNum = snapshot.value as? Int else {
-                print("Could not cast snapshot value to an integer")
+                log("Could not cast snapshot value to an integer")
                 return
             }
             completion(gameNum)

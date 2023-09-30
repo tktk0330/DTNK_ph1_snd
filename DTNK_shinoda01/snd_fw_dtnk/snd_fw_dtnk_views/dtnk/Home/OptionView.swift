@@ -85,7 +85,7 @@ struct OptionView: View {
                         account.loginUser.se.toggle()
                         HomeController().updateOption(keyPath: \.se, item: "se", value: account.loginUser.se)
                     }) {
-                        optionUnitView(ImageName: ImageName.Option.se.rawValue, optionName: "Se")
+                        optionUnitView(ImageName: ImageName.Option.se.rawValue, optionName: "SE")
                             .modifier(optionUnitModifier(color: account.loginUser.se))
                     }
                     .buttonStyle(PressBtn())

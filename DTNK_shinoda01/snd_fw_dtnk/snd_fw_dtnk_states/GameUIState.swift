@@ -6,6 +6,8 @@ import SwiftUI
 
 class GameUIState: ObservableObject {
     
+    // mode
+    @Published var gameMode: GameMode = .base
     // ID
     @Published var gameID: String = ""
     // Game
@@ -15,7 +17,7 @@ class GameUIState: ObservableObject {
     // vsInfo
     @Published var gamevsInfo: vsInfo?
     // ゲーム状態を示す
-    @Published var gamePhase: GamePhase = .dealcard {
+    @Published var gamePhase: GamePhase = .base {
         didSet {
             gamePhaseAction(vsInfo: gamevsInfo!, phase: gamePhase)
         }
@@ -94,7 +96,44 @@ class GameUIState: ObservableObject {
     @Published var dtnkFlg: Int = 0        // 0: no 1: dtnked
     @Published var regenerationDeckFlg: Int = 0        // 0: no 1: dtnked
 
-
+    func resetItem() {
+        gameMode = .base
+        gameID = ""
+        gameNum = 1
+        gameTarget = 1
+        gamevsInfo = .vsBot
+        gamePhase = .base
+        deck = []
+        cardUI = cards
+        table = []
+        jorker = 2
+        players.forEach { $0.reset() }
+        myside = 99
+        currentPlayerIndex = Constants.stnkCode
+        lastPlayerIndex = Constants.stnkCode
+        dtnkPlayer = nil
+        dtnkPlayerIndex = Constants.stnkCode
+        burstPlayer = nil
+        burstPlayerIndex = Constants.burstCode
+        firstAnswers = Array(repeating: FirstAnswers.initial, count: 4)
+        challengeAnswers = Array(repeating: ChallengeAnswer.initial, count: 4)
+        nextGameAnnouns = Array(repeating: NextGameAnnouns.initial, count: 4)
+        decisionScoreCards = []
+        initialRate = 1
+        ascendingRate = 1
+        winners = []
+        losers = []
+        gameScore = 1
+        rateUpCard = nil
+        initialPlayerIndex = nil
+        revengerIndex = []
+        counter = false
+        startFlag = false
+        AnnounceFlg = false
+        turnFlg = 0
+        dtnkFlg = 0
+        regenerationDeckFlg = 0
+    }
 
     /**
      Botのターンを回す
@@ -161,6 +200,9 @@ class GameUIState: ObservableObject {
                 log("\(phase)")
             case .waiting:
                 log("\(phase)")
+            case .base:
+                log("\(phase)")
+
             }
             
         case .vsFriend:
@@ -203,6 +245,9 @@ class GameUIState: ObservableObject {
                 log("\(phase)")
             case .waiting:
                 log("\(phase)")
+            case .base:
+                log("\(phase)")
+
             }
         }
     }

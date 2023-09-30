@@ -21,3 +21,13 @@ enum RoomMode: Int {
     case pop = 1
     case waiting = 2
 }
+
+/**
+RoomType
+参加タイプ
+*/
+enum RoomType: Int {
+    case base = 0
+    case create = 1
+    case participate = 2
+}

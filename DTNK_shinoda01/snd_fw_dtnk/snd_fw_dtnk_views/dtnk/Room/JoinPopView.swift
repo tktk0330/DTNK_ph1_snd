@@ -34,17 +34,14 @@ struct JoinPopView: View {
                             .fontWeight(.bold)
                             .bold()
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.90, height: geo.size.height * 0.25)
-                    .background(
-                        Color.black.opacity(0.90)
-                    )
+                    .frame(width: Constants.scrWidth * 0.90, height: geo.size.height * 0.25)
+                    .background(Color.black.opacity(0.90))
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.white, lineWidth: 3)
                     )
                     .position(x: geo.size.width / 2, y: geo.size.height / 2)
-
                         
                     HStack(spacing: 40) {
                         Button(action: {
@@ -72,7 +69,6 @@ struct JoinPopView: View {
             }
         }
         .edgesIgnoringSafeArea(.all)
-        .frame(maxWidth: .infinity,
-               maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

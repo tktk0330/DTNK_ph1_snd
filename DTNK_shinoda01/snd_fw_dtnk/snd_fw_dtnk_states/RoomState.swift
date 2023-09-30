@@ -10,6 +10,7 @@ class RoomState: ObservableObject {
     @Published var roommode: RoomMode = .base
     @Published var roomData = Room(roomID: "", roomName: "", hostID: "", participants: [])
     @Published var error_message = ""
+    @Published var type: RoomType = .base
     @Published var startFlg = false // realtime
 
     /**
@@ -84,6 +85,19 @@ class RoomState: ObservableObject {
             }
         }
         
-        RoomFirebaseManager.shared.observeMatchingFlg(roomID: roomID)
+        // マッチングしたらゲームへ
+        RoomFirebaseManager.shared.observeMatchingFlg(roomID: roomID) { result in
+            if result == 1 {
+                // stateの設定
+                RoomFirebaseManager().retrieveGameInfo(forRoom: roomID) { gameBase in
+                    appState.gameUIState.players = gameBase!.players
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    // 遷移
+                    Router().pushBasePage(pageId: .dtnkMain_friends)
+                    appState.room.roommode = .base
+                }
+            }
+        }
     }
 }

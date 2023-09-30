@@ -8,6 +8,38 @@ import SwiftUI
 // Bot Friend共通
 struct GameMainController {
     
+    func setMode(mode: GameMode) {
+        appState.gameUIState.gameMode = mode
+    }
+    
+    func exitRoom(info: vsInfo) {
+                
+        Router().pushBasePage(pageId: .home)
+        self.setMode(mode: .base)
+
+        // 退出処理
+        if info == .vsBot {
+            // gameUIStateの初期化
+            appState.matching = nil
+            appState.gameUIState.resetItem()
+        } else {
+            // 退出アナウンス
+            RoomFirebaseManager().updateMatchingFlg(roomID: appState.room.roomData.roomID, value: 2) { result in
+                if result {
+                    // gameUIStateの初期化
+                    appState.matching = nil
+                    appState.gameUIState.resetItem()
+                }
+            }
+        }
+    }
+    func exitRoomParticipate() {
+        Router().pushBasePage(pageId: .home)
+        self.setMode(mode: .base)
+        // gameUIStateの初期化
+        appState.matching = nil
+        appState.gameUIState.resetItem()
+    }
 }
 
 class GameBotController {

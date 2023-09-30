@@ -22,5 +22,5 @@ enum PageId: Int, JSONSerializable {
     case option
     case shop
     case gameSetting
-    
+    case selectJoinType
 }

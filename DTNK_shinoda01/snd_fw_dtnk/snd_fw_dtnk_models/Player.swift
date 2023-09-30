@@ -63,3 +63,13 @@ class Player_f: Identifiable {
         self.icon_url = icon_url
     }
 }
+extension Player_f {
+    func reset() {
+        self.hand = []
+        self.selectedCards = []
+        self.score = 0
+        self.rank = 0
+    }
+}
+
+

@@ -6,8 +6,8 @@ import RealmSwift
 
 struct HomeController {
     
-    func onTapPlay() {
-        Router().pushBasePage(pageId: .gameSetting)
+    func onTapPlay(page: PageId) {
+        Router().pushBasePage(pageId: page)
     }
     
     func onTapStart(gamenum: Int, rate: Int, jorker: Int) {
@@ -34,6 +34,10 @@ struct HomeController {
     
     func onTapBack(){
         Router().pushBasePage(pageId: .home)
+    }
+    
+    func selectGameType(gameType: RoomType) {
+        appState.room.type = gameType
     }
     
     // 入室時処理
@@ -146,7 +150,6 @@ struct HomeController {
         
         completion(true)
     }
-
     
     // ライフの回復
     func recoverLife(completion: @escaping (Bool) -> Void) {

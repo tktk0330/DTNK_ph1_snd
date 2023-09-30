@@ -103,10 +103,6 @@ struct MatchingView: View {
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.55)
                 
-                if room.roommode == .waiting {
-                    WaitingLoadingView()
-                }
-
                 // gameStartBtn
                 if matching.players.count == 4 {
                     if appState.account.loginUser.userID == room.roomData.hostID {
@@ -119,6 +115,11 @@ struct MatchingView: View {
                         .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
                     }
                 }
+                
+                if room.roommode == .waiting {
+                    WaitingLoadingView()
+                }
+
             }
             .onAppear {
                 if matching.vsInfo == 01 {

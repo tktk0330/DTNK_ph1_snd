@@ -174,7 +174,7 @@ struct GameFriendView: View {
                     } else{
                         game.players[s].hand = []
                     }
-                    print("Index: \(s)  hand: \(game.players[s].hand)")
+                    log("Index: \(s)  hand: \(game.players[s].hand)")
                 }
         }
         // lastPlayerIndex
@@ -190,7 +190,6 @@ struct GameFriendView: View {
         fbms.observeBurstPlayerIndex() { Index in
             game.burstPlayerIndex = Index!
         }
-
         // 初期回答
         fbms.observeFirstAnswers() { firstAnswers in
             game.firstAnswers = firstAnswers
@@ -232,6 +231,12 @@ struct GameFriendView: View {
         }
         fbms.observeAscendingRate() { rate in
             game.ascendingRate = rate!
+        }
+        RoomFirebaseManager.shared.observeMatchingFlg(roomID: room.roomData.roomID) { result in
+            if result == 2 {
+                // 誰かが退出したのでゲームを終了する
+                game.gameMode = .exit
+            }
         }
     }
 }

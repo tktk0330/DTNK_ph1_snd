@@ -13,6 +13,7 @@ struct Header: View {
         GameRateView(game: game, geo: geo)
         // option
         Button(action: {
+            game.gameMode = .option
         }) {
             Image(ImageName.Common.setting.rawValue)
                 .resizable()

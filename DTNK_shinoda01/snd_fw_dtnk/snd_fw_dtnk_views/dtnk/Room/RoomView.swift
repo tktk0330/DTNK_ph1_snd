@@ -24,10 +24,9 @@ struct RoomView: View {
                     .frame(maxWidth: .infinity, maxHeight: 50)
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025 + keyboardHeight * 0.8)
                 
-                
                 // back
                 Button(action: {
-                    Router().setBasePages(stack: [.gameSetting])
+                    Router().setBasePages(stack: [.home])
                 }) {
                     Image(ImageName.Common.back.rawValue)
                         .resizable()
@@ -58,21 +57,22 @@ struct RoomView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.40 + keyboardHeight)
 
                 VStack(spacing: 50) {
-                    Button(action: {
-                        onTapCreate()
-                    }) {
-                        Btnwb(btnText: "Create", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                    if room.type == .create {
+                        Button(action: {
+                            onTapCreate()
+                        }) {
+                            Btnwb(btnText: "Create", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                        }
+                        .buttonStyle(PressBtn())
+                    } else if room.type == .participate {
+                        
+                        Button(action: {
+                            onTapSearch()
+                        }) {
+                            Btnwb(btnText: "Search", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                        }
+                        .buttonStyle(PressBtn())
                     }
-                    .buttonStyle(PressBtn())
-
-                    
-                    Button(action: {
-                        onTapSearch()
-                    }) {
-                        Btnwb(btnText: "Search", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
-                    }
-                    .buttonStyle(PressBtn())
-
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60 + keyboardHeight)
                 

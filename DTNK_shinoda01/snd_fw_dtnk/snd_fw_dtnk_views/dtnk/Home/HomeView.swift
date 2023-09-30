@@ -37,7 +37,7 @@ struct HomeView: View {
                 VStack (spacing: 40){
                     Button(action: {
                         home.vsInfo = .vsBot
-                        HomeController().onTapPlay()
+                        HomeController().onTapPlay(page: .gameSetting)
                     }) {
                         Btnlgb(imageName: ImageName.Home.vsbots.rawValue, btnText: "ひとりでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120, judge: true)
                     }
@@ -45,7 +45,7 @@ struct HomeView: View {
                     
                     Button(action: {
                         home.vsInfo = .vsFriend
-                        HomeController().onTapPlay()
+                        HomeController().onTapPlay(page: .selectJoinType)
                     }) {
                         Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120, judge: false)
                     }

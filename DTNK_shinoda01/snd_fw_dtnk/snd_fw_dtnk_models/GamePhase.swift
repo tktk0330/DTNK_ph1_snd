@@ -2,12 +2,19 @@
 
 
 import SwiftUI
-import Foundation
 
 enum vsInfo: Int {
     case vsBot = 0
     case vsFriend = 1
 }
+
+enum GameMode: Int {
+    case base = 0
+    case option = 1
+    case rule = 2
+    case exit = 3
+}
+
 
 enum GamePhaseOrigine: Int {
     case playing = 0
@@ -32,6 +39,7 @@ enum GamePhase: Int {
     case decisionrate = 12
     case result = 13
     case waiting = 50
-    case other = 99
+    case other = 98
+    case base = 99
 }
 
