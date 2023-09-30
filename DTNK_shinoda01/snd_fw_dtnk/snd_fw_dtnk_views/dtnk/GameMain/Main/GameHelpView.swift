@@ -3,6 +3,29 @@
 
 import SwiftUI
 
+
+struct GameHelpGroupView: View {
+    
+    var game: GameUIState
+    var geo: GeometryProxy
+    
+    var body: some View {
+        if game.gameMode == .option {
+            GameHelpView()
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+        }
+        if game.gameMode == .rule {
+            GameHelpUnitView()
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+        }
+        if game.gameMode == .exit {
+            GameExitView()
+                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
+        }
+    }
+}
+
+
 struct GameHelpView: View {
     var body: some View {
         ZStack {

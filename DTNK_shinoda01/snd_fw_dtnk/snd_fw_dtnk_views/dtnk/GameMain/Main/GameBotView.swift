@@ -20,7 +20,6 @@ struct GameBotView: View {
             GameButtonView(game: game, myside: myside, geo: geo)
             Header(game: game, geo: geo)
             GameEventView(game: game, myside: myside, geo: geo)
-
             Group {
                 // レートアップアナウンス
                 if game.rateUpCard != nil {
@@ -52,11 +51,14 @@ struct GameBotView: View {
                     .id(game.regenerationDeckFlg)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
+                // スコア
+                if game.gamePhase == .decisionrate {
+                    DecisionScoreView()
+                }
+
             }
-            // スコア
-            if game.gamePhase == .decisionrate {
-                DecisionScoreView()
-            }
+            GameHelpGroupView(game: game, geo: geo)
+
         }
         .gameBackground()
         .onAppear {

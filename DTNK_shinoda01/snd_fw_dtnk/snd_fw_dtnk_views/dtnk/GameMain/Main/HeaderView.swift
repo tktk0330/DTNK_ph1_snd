@@ -9,7 +9,8 @@ struct Header: View {
     
     var body: some View {
         
-        AdTestView(geo: geo)
+        BunnerView(geo: geo)
+
         GameRateView(game: game, geo: geo)
         // option
         Button(action: {

@@ -8,8 +8,8 @@ struct SelectJoinTypeView: View {
         GeometryReader { geo in
             ZStack{
                 
-                AdTestView(geo: geo)
-                
+                BunnerView(geo: geo)
+
                 // back
                 Button(action: {
                     Router().setBasePages(stack: [.home])

@@ -6,12 +6,8 @@ import SwiftUI
 struct TopView: View {
     var body: some View {
         GeometryReader { geo in
-            // 広告用
-            Rectangle()
-                .foregroundColor(Color.white.opacity(0.3))
-                .shadow(color: .gray, radius: 10, x: 0, y: 5)
-                .frame(maxWidth: .infinity, maxHeight: 50)
-                .position(x: Constants.scrWidth / 2, y: geo.size.height * 0.025)
+
+            BunnerView(geo: geo)
 
             Text("DOTENKO")
                 .font(.custom(FontName.font01, size: Constants.scrWidth * 0.15))

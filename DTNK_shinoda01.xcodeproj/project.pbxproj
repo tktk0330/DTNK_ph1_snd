@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B8F23E65C2009EB760848DD /* Pods_DTNK_shinoda01.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */; };
 		5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */; };
 		5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0522A761F1B00E59A69 /* CustomFont.swift */; };
 		5D51C0552A7620A800E59A69 /* ButtonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0542A7620A800E59A69 /* ButtonText.swift */; };
@@ -147,6 +148,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DTNK_shinoda01.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.release.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.release.xcconfig"; sourceTree = "<group>"; };
+		5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.debug.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.debug.xcconfig"; sourceTree = "<group>"; };
 		5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AlfaSlabOne-Regular.ttf"; sourceTree = "<group>"; };
 		5D51C0512A761C9C00E59A69 /* DTNK-shinoda01-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DTNK-shinoda01-Info.plist"; sourceTree = SOURCE_ROOT; };
 		5D51C0522A761F1B00E59A69 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
@@ -293,6 +297,7 @@
 				5D8FA3292A482B960079F260 /* FirebaseAnalytics in Frameworks */,
 				5D51C0582A76756300E59A69 /* RealmSwift in Frameworks */,
 				5D8FA32B2A482B960079F260 /* FirebaseAuth in Frameworks */,
+				1B8F23E65C2009EB760848DD /* Pods_DTNK_shinoda01.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +317,8 @@
 			children = (
 				5D8FA2432A4814AD0079F260 /* DTNK_shinoda01 */,
 				5D8FA2422A4814AD0079F260 /* Products */,
+				D89B90EF5119BDD7C016FD2F /* Pods */,
+				9DAC571EE57D801CC05CEF88 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -743,6 +750,23 @@
 			path = GameSetting;
 			sourceTree = "<group>";
 		};
+		9DAC571EE57D801CC05CEF88 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D89B90EF5119BDD7C016FD2F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */,
+				4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -750,9 +774,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5D8FA24F2A4814AF0079F260 /* Build configuration list for PBXNativeTarget "DTNK_shinoda01" */;
 			buildPhases = (
+				8F31F070185F293ED78A4EAF /* [CP] Check Pods Manifest.lock */,
 				5D8FA23D2A4814AD0079F260 /* Sources */,
 				5D8FA23E2A4814AD0079F260 /* Frameworks */,
 				5D8FA23F2A4814AD0079F260 /* Resources */,
+				8557513F66A48B5BE2075D7C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -825,6 +851,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8557513F66A48B5BE2075D7C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F31F070185F293ED78A4EAF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DTNK_shinoda01-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5D8FA23D2A4814AD0079F260 /* Sources */ = {
@@ -1014,6 +1082,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1067,6 +1136,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1076,6 +1146,7 @@
 		};
 		5D8FA2502A4814AF0079F260 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1107,6 +1178,7 @@
 		};
 		5D8FA2512A4814AF0079F260 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

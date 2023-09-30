@@ -76,6 +76,8 @@ struct GameFriendView: View {
                     DecisionScoreView()
                 }
             }
+            GameHelpGroupView(game: game, geo: geo)
+
         }
         .gameBackground()
         .onAppear {

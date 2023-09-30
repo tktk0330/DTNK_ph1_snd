@@ -1,27 +1,78 @@
-//
-//  AdMobBannerView.swift
-//  DTNK_shinoda01
-//
-//  Created by Takuma Shinoda on 2023/09/25.
-//
+/**
+ 広告関連
+ */
+
 
 import SwiftUI
+import GoogleMobileAds
 
-struct AdMobBannerView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct AdTestView: View {
+// バナー広告
+struct BunnerView: View {
     var geo: GeometryProxy
+    @EnvironmentObject private var sceneDelegate: MySceneDelegate
+
     var body: some View {
-        // 広告用
-        Rectangle()
-            .foregroundColor(Color.white.opacity(0.3))
-            .frame(maxWidth: .infinity, maxHeight: 50)
-            .background(Color.casinoGreen)
-            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+        if let vc = sceneDelegate.myWindow?.rootViewController {
+            AdMobBannerView(viewController: vc, windowScene: sceneDelegate.windowScene)
+                .frame(width: 320, height: 50)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+        }
+
     }
 }
 
+struct AdMobBannerView: UIViewRepresentable {
+    let viewController: UIViewController
+    let windowScene: UIWindowScene?
+                
+    func makeCoordinator() -> Coordinator {
+        .init()
+    }
+    
+    func makeUIView(context: Context) -> GADBannerView {
+        let bannerView = GADBannerView()
+        bannerView.delegate = context.coordinator
+        bannerView.rootViewController = viewController
+        // TODO: 本番用へ
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        let request = GADRequest()
+        request.scene = windowScene
+        bannerView.load(request)
+        return bannerView
+    }
+    
+    func updateUIView(_ bannerView: GADBannerView, context: Context) {
+    }
+        
+    class Coordinator: NSObject, GADBannerViewDelegate {
+        func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+        }
+    }
+}
+
+class MySceneDelegate: NSObject, UIWindowSceneDelegate, ObservableObject {
+    var windowScene: UIWindowScene?
+    var myWindow: UIWindow? {
+        windowScene?.keyWindow
+    }
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        windowScene = scene as? UIWindowScene
+    }
+}
+
+extension AppDelegate {
+    func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        let configuration = UISceneConfiguration(
+            name: nil,
+            sessionRole: connectingSceneSession.role)
+        if connectingSceneSession.role == .windowApplication {
+            configuration.delegateClass = MySceneDelegate.self
+        }
+        return configuration
+    }
+}
