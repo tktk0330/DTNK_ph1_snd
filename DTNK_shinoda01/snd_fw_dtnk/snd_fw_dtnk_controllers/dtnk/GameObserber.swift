@@ -24,7 +24,7 @@ class GameObserber {
      */
     func checkHost() -> Bool {
         guard let currentUserId = Auth.auth().currentUser?.uid, currentUserId == hostID else {
-            print("You're not authorized to use this method!")
+            log("You're not authorized to use this method!")
             return false
         }
         return true

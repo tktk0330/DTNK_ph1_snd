@@ -3,6 +3,7 @@
 
 import SwiftUI
 import Firebase
+import FirebaseAuth
 import FirebaseDatabase
 import RealmSwift
 import GoogleMobileAds

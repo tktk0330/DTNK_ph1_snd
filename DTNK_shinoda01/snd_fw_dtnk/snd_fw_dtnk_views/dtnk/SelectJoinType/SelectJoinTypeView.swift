@@ -28,7 +28,7 @@ struct SelectJoinTypeView: View {
                         HomeController().onTapPageBtn(page: .gameSetting)
                         HomeController().selectGameType(gameType: .create)
                     }) {
-                        Btnwb(btnText: "ルームを作る", btnTextSize: 30, btnWidth: Constants.scrWidth * 0.8, btnHeight: 60)
+                        Btn_jt_gb(btnText: "ルームを作る", btnTextSize: 30, btnWidth: Constants.scrWidth * 0.8, btnHeight: 60)
                     }
                     .buttonStyle(PressBtn())
 
@@ -37,12 +37,12 @@ struct SelectJoinTypeView: View {
                         HomeController().onTapPageBtn(page: .room)
                         HomeController().selectGameType(gameType: .participate)
                     }) {
-                        Btnwb(btnText: "ルームに参加する", btnTextSize: 30, btnWidth:  Constants.scrWidth * 0.8, btnHeight: 60)
+                        Btn_jt_gb(btnText: "ルームに参加する", btnTextSize: 30, btnWidth:  Constants.scrWidth * 0.8, btnHeight: 60)
                     }
                     .buttonStyle(PressBtn())
 
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.60 )
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.50)
             }
         }
     }
