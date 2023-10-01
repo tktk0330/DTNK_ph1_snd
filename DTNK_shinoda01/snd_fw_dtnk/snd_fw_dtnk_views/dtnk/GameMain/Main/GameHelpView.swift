@@ -3,7 +3,6 @@
 
 import SwiftUI
 
-
 struct GameHelpGroupView: View {
     
     var game: GameUIState
@@ -25,7 +24,6 @@ struct GameHelpGroupView: View {
     }
 }
 
-
 struct GameHelpView: View {
     var body: some View {
         ZStack {
@@ -38,18 +36,21 @@ struct GameHelpView: View {
             
             VStack(spacing: 40) {
                 Button(action: {
+                    SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                     GameMainController().setMode(mode: .rule)
                 }) {
                     Btngo(btnText: "ルールを確認する", btnTextSize: 20, btnWidth: Constants.scrWidth * 0.6, btnHeight: 60)
                 }
                 
                 Button(action: {
+                    SoundMng.shared.playSound(soundName: SoundName.SE.btn_negative.rawValue)
                     GameMainController().exitRoom(info: appState.gameUIState.gamevsInfo!)
                 }) {
                     Btngo(btnText: "ルームを退出する", btnTextSize: 20, btnWidth: Constants.scrWidth * 0.6, btnHeight: 60)
                 }
                 
                 Button(action: {
+                    SoundMng.shared.playSound(soundName: SoundName.SE.btn_negative.rawValue)
                     GameMainController().setMode(mode: .base)
                 }) {
                     Btngo(btnText: "ゲームに戻る", btnTextSize: 20, btnWidth: Constants.scrWidth * 0.6, btnHeight: 60)

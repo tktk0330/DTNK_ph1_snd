@@ -14,18 +14,10 @@ struct OptionView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
+                // admob
                 BunnerView(geo: geo)
-
                 // back
-                Button(action: {
-                    Router().setBasePages(stack: [.home])
-                }) {
-                    Image(ImageName.Common.back.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40)
-                }
-                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10 + keyboardHeight)
+                BackButton(backPage: .home, geo: geo, keyboardHeight: keyboardHeight)
                 
                 // title
                 Text("Option")
@@ -39,6 +31,7 @@ struct OptionView: View {
                     
                     Button(action: {
                         home.mode = .edittingIcon
+                        SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                     }) {
                         Image(appState.account.loginUser.iconURL)
                             .resizable()

@@ -15,6 +15,7 @@ struct Header: View {
         // option
         Button(action: {
             game.gameMode = .option
+            SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
         }) {
             Image(ImageName.Common.setting.rawValue)
                 .resizable()

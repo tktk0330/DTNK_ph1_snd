@@ -5,8 +5,10 @@ import SwiftUI
 import RealmSwift
 
 struct HomeController {
-    
-    func onTapPlay(page: PageId) {
+   
+    // 画面遷移
+    func onTapPageBtn(page: PageId) {
+        SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
         Router().pushBasePage(pageId: page)
     }
     
@@ -17,6 +19,7 @@ struct HomeController {
     }
     
     func onTapBackMode(){
+        SoundMng.shared.playSound(soundName: SoundName.SE.btn_negative.rawValue)
         appState.home.mode = .noEditting
     }
     
@@ -27,11 +30,7 @@ struct HomeController {
     func onTapNickname(){
         appState.home.mode = .edittingNickname
     }
-    
-    func onTapPageBtn(page: PageId) {
-        Router().pushBasePage(pageId: page)
-    }
-    
+        
     func onTapBack(){
         Router().pushBasePage(pageId: .home)
     }
@@ -66,6 +65,7 @@ struct HomeController {
      */
     // 名前変更
     func updateName(newName: String) {
+        SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
         // FB
         HomeFireBaseMng().upDateUserName(newUsername: newName) { result in
             if result {
@@ -105,6 +105,7 @@ struct HomeController {
     
     // Option設定変更
     func updateOption(keyPath: WritableKeyPath<User, Bool>, item: String, value: Bool) {
+        SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
         appState.account.loginUser[keyPath: keyPath] = value
         RealmMng().updateOptionRealm(item: item, value: value)
     }

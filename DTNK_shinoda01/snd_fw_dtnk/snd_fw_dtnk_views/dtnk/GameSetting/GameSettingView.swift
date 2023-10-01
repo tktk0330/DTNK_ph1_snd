@@ -15,16 +15,8 @@ struct GameSettingView: View {
                 BunnerView(geo: geo)
                 
                 // back
-                Button(action: {
-                    Router().setBasePages(stack: [.home])
-                }) {
-                    Image(ImageName.Common.back.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40)
-                }
-                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
-                
+                BackButton(backPage: .home, geo: geo)
+
                 // title
                 Text("GameSetting")
                     .font(.custom(FontName.font01, size: 35))
@@ -95,6 +87,7 @@ struct GameSettingView: View {
                     Button(action: {
                         // TODO: ライフ処理
                         HomeController().onTapStart(gamenum: account.loginUser.gameNum, rate: account.loginUser.gameRate, jorker: account.loginUser.gameJorker)
+                        SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                     }) {
                         Btnwb(btnText: "Start", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
                     }
@@ -104,6 +97,7 @@ struct GameSettingView: View {
                     Button(action: {
                         // TODO: ライフ処理
                         Router().pushBasePage(pageId: .room)
+                        SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                     }) {
                         Btnwb(btnText: "Next", btnTextSize: 30, btnWidth: 200, btnHeight: 50)
                     }

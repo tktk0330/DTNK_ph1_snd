@@ -20,16 +20,7 @@ struct RoomView: View {
                 BunnerView(geo: geo)
                 
                 // back
-                Button(action: {
-                    Router().setBasePages(stack: [.home])
-                }) {
-                    Image(ImageName.Common.back.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40)
-                }
-                .frame(maxHeight: 40)
-                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10 + keyboardHeight)
+                BackButton(backPage: .home, geo: geo, keyboardHeight: keyboardHeight)
 
                 // title
                 Text("Room")

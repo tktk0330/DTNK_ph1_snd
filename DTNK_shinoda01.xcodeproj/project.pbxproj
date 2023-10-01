@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1B8F23E65C2009EB760848DD /* Pods_DTNK_shinoda01.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */; };
+		5D30DE822AC95EB400AA2909 /* btn-positive.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */; };
+		5D30DE832AC95EB400AA2909 /* casino-bgm.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */; };
+		5D30DE842AC95EB400AA2909 /* card-action.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE802AC95EB400AA2909 /* card-action.wav */; };
+		5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE812AC95EB400AA2909 /* btn-negative.wav */; };
+		5D30DE872AC9710C00AA2909 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30DE862AC9710C00AA2909 /* BackButton.swift */; };
 		5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */; };
 		5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0522A761F1B00E59A69 /* CustomFont.swift */; };
 		5D51C0552A7620A800E59A69 /* ButtonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0542A7620A800E59A69 /* ButtonText.swift */; };
@@ -146,6 +151,11 @@
 		18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DTNK_shinoda01.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.release.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.release.xcconfig"; sourceTree = "<group>"; };
 		5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.debug.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.debug.xcconfig"; sourceTree = "<group>"; };
+		5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "btn-positive.wav"; sourceTree = "<group>"; };
+		5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "casino-bgm.wav"; sourceTree = "<group>"; };
+		5D30DE802AC95EB400AA2909 /* card-action.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "card-action.wav"; sourceTree = "<group>"; };
+		5D30DE812AC95EB400AA2909 /* btn-negative.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "btn-negative.wav"; sourceTree = "<group>"; };
+		5D30DE862AC9710C00AA2909 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AlfaSlabOne-Regular.ttf"; sourceTree = "<group>"; };
 		5D51C0512A761C9C00E59A69 /* DTNK-shinoda01-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DTNK-shinoda01-Info.plist"; sourceTree = SOURCE_ROOT; };
 		5D51C0522A761F1B00E59A69 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
@@ -294,6 +304,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D30DE7D2AC95E6A00AA2909 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				5D30DE812AC95EB400AA2909 /* btn-negative.wav */,
+				5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */,
+				5D30DE802AC95EB400AA2909 /* card-action.wav */,
+				5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */,
+				5D98720E2AAB49110031A57C /* dtnk01.wav */,
+			);
+			path = sound;
+			sourceTree = "<group>";
+		};
 		5D51C0592A7695DE00E59A69 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -572,6 +594,7 @@
 				5D8FA2DB2A48253C0079F260 /* TargetPlayerView.swift */,
 				5D8FA2D72A48251B0079F260 /* ViewComponents.swift */,
 				5DCD27C12A8E4E6800778980 /* WaitingView.swift */,
+				5D30DE862AC9710C00AA2909 /* BackButton.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -708,7 +731,7 @@
 		5D9872102AAB491A0031A57C /* music */ = {
 			isa = PBXGroup;
 			children = (
-				5D98720E2AAB49110031A57C /* dtnk01.wav */,
+				5D30DE7D2AC95E6A00AA2909 /* sound */,
 				5D9872112AAB4A210031A57C /* SoundMng.swift */,
 				5D9872132AAB5D8A0031A57C /* SoundName.swift */,
 			);
@@ -821,12 +844,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D30DE842AC95EB400AA2909 /* card-action.wav in Resources */,
+				5D30DE832AC95EB400AA2909 /* casino-bgm.wav in Resources */,
 				5D98720F2AAB49110031A57C /* dtnk01.wav in Resources */,
 				5D8FA3262A482B3F0079F260 /* GoogleService-Info.plist in Resources */,
+				5D30DE822AC95EB400AA2909 /* btn-positive.wav in Resources */,
 				5DC02E5A2ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf in Resources */,
 				5D8FA24C2A4814AF0079F260 /* Preview Assets.xcassets in Resources */,
 				5DC02E5C2ABEAFE9009E84A5 /* MPLUS1p-Black.ttf in Resources */,
 				5DC02E5B2ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf in Resources */,
+				5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */,
 				5D8FA2652A481CDA0079F260 /* DS-DIGIB.TTF in Resources */,
 				5D8FA2492A4814AF0079F260 /* Assets.xcassets in Resources */,
 				5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */,
@@ -882,6 +909,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D30DE872AC9710C00AA2909 /* BackButton.swift in Sources */,
 				5DC02E662AC16B90009E84A5 /* GameButtonView.swift in Sources */,
 				5DCD27BC2A86591100778980 /* ChallengeAnswerModel.swift in Sources */,
 				5D98721A2AB5709F0031A57C /* LifeView.swift in Sources */,

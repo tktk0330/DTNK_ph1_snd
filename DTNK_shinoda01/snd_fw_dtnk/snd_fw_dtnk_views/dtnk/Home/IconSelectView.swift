@@ -121,6 +121,7 @@ struct IconSelectView: View {
 
                         Button(action: {
                             HomeController().updateIcon(iconURL: iconURL)
+                            SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                         }) {
                             Btnwb(btnText: "更新", btnTextSize: 20, btnWidth: 120, btnHeight: 50)
 

@@ -320,8 +320,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "955"
             endingLineNumber = "955"
-            landmarkName = "GameBotController"
-            landmarkType = "3">
+            landmarkName = "checkMultipleCards(table:playCard:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -512,8 +512,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "321"
             endingLineNumber = "321"
-            landmarkName = "GameBotController"
-            landmarkType = "3">
+            landmarkName = "checkBotHand(Index:player:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "101FB3D6-C20F-49A9-B7A5-6D391E82D00E - 3ab415990a81f638"
