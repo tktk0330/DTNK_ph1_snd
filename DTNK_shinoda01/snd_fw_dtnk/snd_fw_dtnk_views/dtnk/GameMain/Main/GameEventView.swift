@@ -37,7 +37,7 @@ struct GameEventView: View {
         }
         // CountDown
         if game.gamePhase == .countdown {
-            Countdown02View()
+            StartCountdownView()
                 .scaleEffect(2.0)
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
         }

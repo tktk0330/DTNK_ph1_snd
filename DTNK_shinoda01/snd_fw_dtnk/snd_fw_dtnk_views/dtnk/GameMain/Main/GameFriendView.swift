@@ -83,6 +83,7 @@ struct GameFriendView: View {
         .onAppear {
             // サイド設定
             game.myside = self.myside
+            GameMainController().initFunction()
             // ゲーム情報取得
             fbm.getGameInfo(from: room.roomData.roomID) { info in
                 game.gameID = info!.gameID

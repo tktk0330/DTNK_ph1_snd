@@ -8,12 +8,17 @@ import SwiftUI
 // Bot Friend共通
 struct GameMainController {
     
+    func initFunction() {
+        BgmMng.shared.playSound(bgmName: SoundName.BGM.game_main.rawValue)
+    }
+    
     func setMode(mode: GameMode) {
         appState.gameUIState.gameMode = mode
     }
     
     func exitRoom(info: vsInfo) {
-                
+        
+        BgmMng.shared.stopSound()
         Router().pushBasePage(pageId: .home)
         self.setMode(mode: .base)
 
@@ -33,12 +38,35 @@ struct GameMainController {
             }
         }
     }
+    
     func exitRoomParticipate() {
         Router().pushBasePage(pageId: .home)
         self.setMode(mode: .base)
         // gameUIStateの初期化
         appState.matching = nil
         appState.gameUIState.resetItem()
+    }
+    
+    // 強制パス処理
+    func timeLimitAction() {
+        if appState.gameUIState.gamevsInfo == .vsBot {
+                        
+        } else {
+            if appState.gameUIState.turnFlg == 0 {
+                
+                GameFriendEventController().draw(playerID: appState.gameUIState.players[appState.gameUIState.myside].id,
+                                                 playerIndex: appState.gameUIState.myside)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    GameFriendEventController().pass(passPayerIndex: appState.gameUIState.myside,
+                                                     playersCount: appState.gameUIState.players.count)
+                }
+
+            } else {
+                GameFriendEventController().pass(passPayerIndex: appState.gameUIState.myside,
+                                                 playersCount: appState.gameUIState.players.count)
+            }
+        }
     }
 }
 

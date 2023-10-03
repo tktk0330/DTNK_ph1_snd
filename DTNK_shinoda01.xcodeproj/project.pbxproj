@@ -13,6 +13,7 @@
 		5D30DE842AC95EB400AA2909 /* card-action.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE802AC95EB400AA2909 /* card-action.wav */; };
 		5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE812AC95EB400AA2909 /* btn-negative.wav */; };
 		5D30DE872AC9710C00AA2909 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30DE862AC9710C00AA2909 /* BackButton.swift */; };
+		5D30DE892AC979E600AA2909 /* BgmMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30DE882AC979E600AA2909 /* BgmMng.swift */; };
 		5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */; };
 		5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0522A761F1B00E59A69 /* CustomFont.swift */; };
 		5D51C0552A7620A800E59A69 /* ButtonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0542A7620A800E59A69 /* ButtonText.swift */; };
@@ -156,6 +157,7 @@
 		5D30DE802AC95EB400AA2909 /* card-action.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "card-action.wav"; sourceTree = "<group>"; };
 		5D30DE812AC95EB400AA2909 /* btn-negative.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "btn-negative.wav"; sourceTree = "<group>"; };
 		5D30DE862AC9710C00AA2909 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		5D30DE882AC979E600AA2909 /* BgmMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BgmMng.swift; sourceTree = "<group>"; };
 		5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AlfaSlabOne-Regular.ttf"; sourceTree = "<group>"; };
 		5D51C0512A761C9C00E59A69 /* DTNK-shinoda01-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DTNK-shinoda01-Info.plist"; sourceTree = SOURCE_ROOT; };
 		5D51C0522A761F1B00E59A69 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
@@ -732,6 +734,7 @@
 			isa = PBXGroup;
 			children = (
 				5D30DE7D2AC95E6A00AA2909 /* sound */,
+				5D30DE882AC979E600AA2909 /* BgmMng.swift */,
 				5D9872112AAB4A210031A57C /* SoundMng.swift */,
 				5D9872132AAB5D8A0031A57C /* SoundName.swift */,
 			);
@@ -1025,6 +1028,7 @@
 				5D8FA2D02A4824CE0079F260 /* Flip.swift in Sources */,
 				5D8FA29A2A4820FD0079F260 /* SplashController.swift in Sources */,
 				5D8FA2672A481D010079F260 /* BlinkEffect.swift in Sources */,
+				5D30DE892AC979E600AA2909 /* BgmMng.swift in Sources */,
 				5D8FA2942A4820B90079F260 /* MatchingController.swift in Sources */,
 				5D8FA2BA2A48237A0079F260 /* GameScore.swift in Sources */,
 				5D8FA2FD2A4827100079F260 /* MatchingView.swift in Sources */,

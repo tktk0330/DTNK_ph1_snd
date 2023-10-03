@@ -24,8 +24,6 @@ struct CardView: View {
                     selectedCards.append(card)
                 }
             }
-//            .animation(.easeInOut(duration: 0.5))
-
     }
 }
 
@@ -150,6 +148,7 @@ struct N_CardView: View {
         .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
         .offset(y: selectedCards.contains(card) ? -20 : 0)
         .onTapGesture {
+            SoundMng.shared.playSound(soundName: SoundName.SE.card_action.rawValue)
             if appState.gameUIState.gamePhase != .decisioninitialplayer {
                 withAnimation(.easeInOut(duration: 0.0)) {
                     // 自分の手札のみTap可能

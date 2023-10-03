@@ -11,7 +11,7 @@ class SoundMng {
     func dtnkSound() {
         
         // check
-        guard appState.account.loginUser.sound else { return }
+        guard appState.account.loginUser.se else { return }
 
         guard let url = Bundle.main.url(forResource: SoundName.SE.dtnk.rawValue, withExtension: "wav") else {
             log("Sound file not found.")
@@ -33,6 +33,9 @@ class SoundMng {
     }
     
     func playSound(soundName: String) {
+        
+        guard appState.account.loginUser.se else { return }
+        
         guard let url = Bundle.main.url(forResource: soundName, withExtension: "wav") else {
             log("音声ファイルが見つかりません")
             return

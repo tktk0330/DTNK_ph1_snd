@@ -64,6 +64,7 @@ struct GameBotView: View {
         .onAppear {
             game.myside = self.myside
             game.gamePhase = .dealcard
+            GameMainController().initFunction()
         }
     }
 }

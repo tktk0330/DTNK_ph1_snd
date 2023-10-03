@@ -72,6 +72,7 @@ struct GameButtonView: View {
                 
             } else if game.turnFlg == 0 {
                 Button(action: {
+                    SoundMng.shared.playSound(soundName: SoundName.SE.card_action.rawValue)
                     if game.gamevsInfo == .vsBot {
                         GameBotController().playerDrawCard(Index: myside)
                     } else {
@@ -97,7 +98,7 @@ struct GameButtonView: View {
 
             }
             
-            // testようにボタンとして動かしておく
+            // MyIcon
             Button(action: {
                 if game.gamevsInfo == .vsBot {
                     GameBotController().playerDtnk(Index: myside)
@@ -106,15 +107,33 @@ struct GameButtonView: View {
                 }
 
             }) {
-                Image(game.players[myside].icon_url)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 60)
-                    .cornerRadius(10)
-                    .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+                ZStack{
+                    Image(game.players[myside].icon_url)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .overlay(
+                            Group {
+                                if game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
+                                    Rectangle().foregroundColor(.black).opacity(0.7)
+                                } else {
+                                    Rectangle().opacity(0)
+                                }
+                            }
+                        )
+                        .frame(width: 60)
+                        .cornerRadius(10)
+                        .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+
+                    if game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
+                        // ターンカウントダウン
+                        CountdownView()
+                            .frame(width: 60)
+                    }
+                }
             }
             
             Button(action: {
+                SoundMng.shared.playSound(soundName: SoundName.SE.card_action.rawValue)
                 if game.gamevsInfo == .vsBot {
                     let selectedCards: [N_Card] = game.players[myside].selectedCards
                     let cardIds: [CardId] = selectedCards.map { $0.id }
