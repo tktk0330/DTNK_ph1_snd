@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B8F23E65C2009EB760848DD /* Pods_DTNK_shinoda01.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */; };
 		5D30DE822AC95EB400AA2909 /* btn-positive.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */; };
 		5D30DE832AC95EB400AA2909 /* casino-bgm.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */; };
 		5D30DE842AC95EB400AA2909 /* card-action.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE802AC95EB400AA2909 /* card-action.wav */; };
 		5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5D30DE812AC95EB400AA2909 /* btn-negative.wav */; };
 		5D30DE872AC9710C00AA2909 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30DE862AC9710C00AA2909 /* BackButton.swift */; };
 		5D30DE892AC979E600AA2909 /* BgmMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30DE882AC979E600AA2909 /* BgmMng.swift */; };
+		5D30DE8B2ACEEC0F00AA2909 /* NetworkMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30DE8A2ACEEC0F00AA2909 /* NetworkMng.swift */; };
 		5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */; };
 		5D51C0532A761F1B00E59A69 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0522A761F1B00E59A69 /* CustomFont.swift */; };
 		5D51C0552A7620A800E59A69 /* ButtonText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D51C0542A7620A800E59A69 /* ButtonText.swift */; };
@@ -144,20 +144,21 @@
 		5DDB61E82A55841F00EB03F7 /* GameFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */; };
 		5DDB61EC2A5DA06B00EB03F7 /* ConvertJSONMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */; };
 		5DDB61F02A62609600EB03F7 /* GameUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB61EF2A62609600EB03F7 /* GameUIState.swift */; };
+		5DE3DEB42AD0361C0072182E /* NetworkWaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE3DEB32AD0361C0072182E /* NetworkWaitingView.swift */; };
+		7517924502FD2EFA15D78E1B /* Pods_DTNK_shinoda01.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8ED11FB575D9AFE5D8ED4B /* Pods_DTNK_shinoda01.framework */; };
 		CA5C5DF22A794497006D7C01 /* BurstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5C5DF12A794497006D7C01 /* BurstView.swift */; };
 		CA5C5DF82A794E21006D7C01 /* BurstCoutionViewswift.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5C5DF72A794E21006D7C01 /* BurstCoutionViewswift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DTNK_shinoda01.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.release.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.release.xcconfig"; sourceTree = "<group>"; };
-		5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.debug.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.debug.xcconfig"; sourceTree = "<group>"; };
+		4C8ED11FB575D9AFE5D8ED4B /* Pods_DTNK_shinoda01.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DTNK_shinoda01.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "btn-positive.wav"; sourceTree = "<group>"; };
 		5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "casino-bgm.wav"; sourceTree = "<group>"; };
 		5D30DE802AC95EB400AA2909 /* card-action.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "card-action.wav"; sourceTree = "<group>"; };
 		5D30DE812AC95EB400AA2909 /* btn-negative.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "btn-negative.wav"; sourceTree = "<group>"; };
 		5D30DE862AC9710C00AA2909 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		5D30DE882AC979E600AA2909 /* BgmMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BgmMng.swift; sourceTree = "<group>"; };
+		5D30DE8A2ACEEC0F00AA2909 /* NetworkMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMng.swift; sourceTree = "<group>"; };
 		5D51C04F2A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AlfaSlabOne-Regular.ttf"; sourceTree = "<group>"; };
 		5D51C0512A761C9C00E59A69 /* DTNK-shinoda01-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DTNK-shinoda01-Info.plist"; sourceTree = SOURCE_ROOT; };
 		5D51C0522A761F1B00E59A69 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
@@ -290,6 +291,9 @@
 		5DDB61E72A55841F00EB03F7 /* GameFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFriendView.swift; sourceTree = "<group>"; };
 		5DDB61EB2A5DA06B00EB03F7 /* ConvertJSONMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertJSONMng.swift; sourceTree = "<group>"; };
 		5DDB61EF2A62609600EB03F7 /* GameUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUIState.swift; sourceTree = "<group>"; };
+		5DE3DEB32AD0361C0072182E /* NetworkWaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkWaitingView.swift; sourceTree = "<group>"; };
+		AD32BDE8C2F925A8D2B8F49A /* Pods-DTNK_shinoda01.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.debug.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.debug.xcconfig"; sourceTree = "<group>"; };
+		BDE196C4ABCA82568258307B /* Pods-DTNK_shinoda01.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DTNK_shinoda01.release.xcconfig"; path = "Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01.release.xcconfig"; sourceTree = "<group>"; };
 		CA5C5DF12A794497006D7C01 /* BurstView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstView.swift; sourceTree = "<group>"; };
 		CA5C5DF72A794E21006D7C01 /* BurstCoutionViewswift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurstCoutionViewswift.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -299,7 +303,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B8F23E65C2009EB760848DD /* Pods_DTNK_shinoda01.framework in Frameworks */,
+				7517924502FD2EFA15D78E1B /* Pods_DTNK_shinoda01.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,7 +336,7 @@
 				5D8FA2432A4814AD0079F260 /* DTNK_shinoda01 */,
 				5D8FA2422A4814AD0079F260 /* Products */,
 				D89B90EF5119BDD7C016FD2F /* Pods */,
-				9DAC571EE57D801CC05CEF88 /* Frameworks */,
+				7C7EF1F3D6FC956544615829 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -442,6 +446,7 @@
 				5DCD27C82A9B6C1700778980 /* Constants.swift */,
 				5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */,
 				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
+				5D30DE8A2ACEEC0F00AA2909 /* NetworkMng.swift */,
 			);
 			path = snd_fw_dtnk_common;
 			sourceTree = "<group>";
@@ -745,6 +750,7 @@
 			isa = PBXGroup;
 			children = (
 				5DC02E6C2AC17937009E84A5 /* CommonModifire.swift */,
+				5DE3DEB32AD0361C0072182E /* NetworkWaitingView.swift */,
 			);
 			path = Modifire;
 			sourceTree = "<group>";
@@ -766,10 +772,10 @@
 			path = GameSetting;
 			sourceTree = "<group>";
 		};
-		9DAC571EE57D801CC05CEF88 /* Frameworks */ = {
+		7C7EF1F3D6FC956544615829 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				18AEE67230C9C6D44F1B289C /* Pods_DTNK_shinoda01.framework */,
+				4C8ED11FB575D9AFE5D8ED4B /* Pods_DTNK_shinoda01.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -777,8 +783,8 @@
 		D89B90EF5119BDD7C016FD2F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */,
-				4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */,
+				AD32BDE8C2F925A8D2B8F49A /* Pods-DTNK_shinoda01.debug.xcconfig */,
+				BDE196C4ABCA82568258307B /* Pods-DTNK_shinoda01.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -790,19 +796,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5D8FA24F2A4814AF0079F260 /* Build configuration list for PBXNativeTarget "DTNK_shinoda01" */;
 			buildPhases = (
-				8F31F070185F293ED78A4EAF /* [CP] Check Pods Manifest.lock */,
+				B5424D4BB543A69BD1DBE539 /* [CP] Check Pods Manifest.lock */,
 				5D8FA23D2A4814AD0079F260 /* Sources */,
 				5D8FA23E2A4814AD0079F260 /* Frameworks */,
 				5D8FA23F2A4814AD0079F260 /* Resources */,
-				8557513F66A48B5BE2075D7C /* [CP] Embed Pods Frameworks */,
+				3B4307C2E5233D70B8981FE2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = DTNK_shinoda01;
-			packageProductDependencies = (
-			);
 			productName = DTNK_shinoda01;
 			productReference = 5D8FA2412A4814AD0079F260 /* DTNK_shinoda01.app */;
 			productType = "com.apple.product-type.application";
@@ -831,8 +835,6 @@
 				Base,
 			);
 			mainGroup = 5D8FA2382A4814AD0079F260;
-			packageReferences = (
-			);
 			productRefGroup = 5D8FA2422A4814AD0079F260 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -866,7 +868,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8557513F66A48B5BE2075D7C /* [CP] Embed Pods Frameworks */ = {
+		3B4307C2E5233D70B8981FE2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -883,7 +885,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DTNK_shinoda01/Pods-DTNK_shinoda01-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F31F070185F293ED78A4EAF /* [CP] Check Pods Manifest.lock */ = {
+		B5424D4BB543A69BD1DBE539 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -963,6 +965,7 @@
 				5DC02E6D2AC17937009E84A5 /* CommonModifire.swift in Sources */,
 				5D8FA2CA2A4824780079F260 /* ChallengePopView.swift in Sources */,
 				5D8FA2CE2A4824A30079F260 /* Figure.swift in Sources */,
+				5D30DE8B2ACEEC0F00AA2909 /* NetworkMng.swift in Sources */,
 				5D8FA2EC2A4826360079F260 /* HomeView.swift in Sources */,
 				5D8FA2A42A48218A0079F260 /* GameSystemState.swift in Sources */,
 				5D9872072AA99F430031A57C /* IconSelectView.swift in Sources */,
@@ -1000,6 +1003,7 @@
 				5D8FA2692A481D100079F260 /* ShineColor.swift in Sources */,
 				5D8FA27E2A481E600079F260 /* LoadingState.swift in Sources */,
 				5DC02E6F2AC1B5EC009E84A5 /* GameHelpView.swift in Sources */,
+				5DE3DEB42AD0361C0072182E /* NetworkWaitingView.swift in Sources */,
 				5D8FA29C2A4821160079F260 /* TopController.swift in Sources */,
 				5D8FA2B22A4823040079F260 /* Card.swift in Sources */,
 				5D8FA2AE2A48229E0079F260 /* AccountUser.swift in Sources */,
@@ -1046,6 +1050,7 @@
 		5D8FA24D2A4814AF0079F260 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1109,6 +1114,7 @@
 		5D8FA24E2A4814AF0079F260 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1166,7 +1172,7 @@
 		};
 		5D8FA2502A4814AF0079F260 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5AE4E9A84860D4D889528EF1 /* Pods-DTNK_shinoda01.debug.xcconfig */;
+			baseConfigurationReference = AD32BDE8C2F925A8D2B8F49A /* Pods-DTNK_shinoda01.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1198,7 +1204,7 @@
 		};
 		5D8FA2512A4814AF0079F260 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4AB9AD0ED420A143AD5FB322 /* Pods-DTNK_shinoda01.release.xcconfig */;
+			baseConfigurationReference = BDE196C4ABCA82568258307B /* Pods-DTNK_shinoda01.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

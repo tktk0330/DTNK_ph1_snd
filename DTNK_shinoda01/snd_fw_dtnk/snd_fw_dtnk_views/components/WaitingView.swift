@@ -9,7 +9,7 @@ struct WaitingView: View {
             ZStack {
                 VStack(spacing: 30) {
                     Text("対戦相手を待っています")
-                        .font(.custom(FontName.font01, size: 20))
+                        .font(.custom(FontName.MP_EB, size: 20))
                         .foregroundColor(Color.white)
                         .fontWeight(.bold)
                     ProgressView()
