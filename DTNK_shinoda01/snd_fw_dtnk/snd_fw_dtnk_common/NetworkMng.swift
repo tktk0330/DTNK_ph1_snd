@@ -2,7 +2,6 @@
  ネットワーク接続確認
  */
 
-
 import SwiftUI
 import Network
 
@@ -11,8 +10,7 @@ class NetworkManager: ObservableObject {
     private var disconnectTimer: Timer?
 
     @Published var isConnected: Bool = false
-    @Published var showDisconnectPrompt: Bool = false  // この名前を変更
-
+    @Published var showDisconnectPrompt: Bool = false
     init() {
         monitor = NWPathMonitor()
         
@@ -20,7 +18,7 @@ class NetworkManager: ObservableObject {
             DispatchQueue.main.async {
                 if path.status == .satisfied {
                     self?.isConnected = true
-                    self?.stopDisconnectTimer()
+                    self?.stopDisconnectTimer() // この行を追加します。ネットワークが復帰した場合、タイマーをキャンセルします。
                 } else {
                     self?.isConnected = false
                     self?.startDisconnectTimer()

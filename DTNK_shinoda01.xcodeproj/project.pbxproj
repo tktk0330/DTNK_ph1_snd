@@ -447,6 +447,7 @@
 				5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */,
 				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
 				5D30DE8A2ACEEC0F00AA2909 /* NetworkMng.swift */,
+				5DE3DEB32AD0361C0072182E /* NetworkWaitingView.swift */,
 			);
 			path = snd_fw_dtnk_common;
 			sourceTree = "<group>";
@@ -750,7 +751,6 @@
 			isa = PBXGroup;
 			children = (
 				5DC02E6C2AC17937009E84A5 /* CommonModifire.swift */,
-				5DE3DEB32AD0361C0072182E /* NetworkWaitingView.swift */,
 			);
 			path = Modifire;
 			sourceTree = "<group>";

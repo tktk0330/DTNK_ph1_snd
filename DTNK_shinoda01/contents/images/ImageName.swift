@@ -26,6 +26,12 @@ enum ImageName {
         case healbox = "box-yellow"
     }
     
+    enum Rule: String {
+        case syohtenko = "game-bot"
+        case dotenko = "rule_dtnk"
+        case challenge = "box-yellow"
+    }
+    
     enum Setting: String {
         case gameNum = "setting-gamenum"
         case gameJorker = "setting-jorker"
