@@ -309,6 +309,12 @@ class GameUIState: ObservableObject {
         self.players[0].selectedCards = []
         completion(true)
     }
+    
+    
+    func deleteGamedate() {
+        GameObserber(hostID: appState.room.roomData.hostID).deleteGamedata() { result in
+        }
+    }
 }
 
 var cards: [N_Card] = [

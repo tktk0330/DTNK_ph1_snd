@@ -10,6 +10,7 @@ struct GameResultController {
         appState.gamesystem = nil
         appState.resultState = nil
         
+        
         Router().pushBasePage(pageId: .home)
     }
 

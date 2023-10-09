@@ -117,6 +117,7 @@
 		5D9872162AB0AAF70031A57C /* GameSettingUnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872152AB0AAF70031A57C /* GameSettingUnitView.swift */; };
 		5D9872182AB3C6BC0031A57C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872172AB3C6BC0031A57C /* AppDelegate.swift */; };
 		5D98721A2AB5709F0031A57C /* LifeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872192AB5709E0031A57C /* LifeView.swift */; };
+		5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */; };
 		5DC02E5A2ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DC02E572ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf */; };
 		5DC02E5B2ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DC02E582ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf */; };
 		5DC02E5C2ABEAFE9009E84A5 /* MPLUS1p-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DC02E592ABEAFE9009E84A5 /* MPLUS1p-Black.ttf */; };
@@ -264,6 +265,7 @@
 		5D9872152AB0AAF70031A57C /* GameSettingUnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingUnitView.swift; sourceTree = "<group>"; };
 		5D9872172AB3C6BC0031A57C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D9872192AB5709E0031A57C /* LifeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeView.swift; sourceTree = "<group>"; };
+		5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingModeView.swift; sourceTree = "<group>"; };
 		5DC02E572ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-ExtraBold.ttf"; sourceTree = "<group>"; };
 		5DC02E582ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-Bold.ttf"; sourceTree = "<group>"; };
 		5DC02E592ABEAFE9009E84A5 /* MPLUS1p-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-Black.ttf"; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 			isa = PBXGroup;
 			children = (
 				5D8FA2FC2A4827100079F260 /* MatchingView.swift */,
+				5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */,
 			);
 			path = Matching;
 			sourceTree = "<group>";
@@ -974,6 +977,7 @@
 				5DDB61E52A53FF3A00EB03F7 /* GameInfoModel.swift in Sources */,
 				5D8FA28C2A48205A0079F260 /* GameEventController.swift in Sources */,
 				5DC02E722AC7F86D009E84A5 /* SelectJoinTypeView.swift in Sources */,
+				5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */,
 				5D8FA26B2A481D200079F260 /* PhotosView.swift in Sources */,
 				5DC02E602AC16630009E84A5 /* OtherIconView.swift in Sources */,
 				5D8FA2882A4820020079F260 /* BattleSelectController.swift in Sources */,

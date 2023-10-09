@@ -85,9 +85,9 @@ class RoomState: ObservableObject {
             }
         }
         
-        // マッチングしたらゲームへ
         RoomFirebaseManager.shared.observeMatchingFlg(roomID: roomID) { result in
             if result == 1 {
+                // マッチングしたらゲームへ
                 // stateの設定
                 RoomFirebaseManager().retrieveGameInfo(forRoom: roomID) { gameBase in
                     appState.gameUIState.players = gameBase!.players
@@ -97,6 +97,9 @@ class RoomState: ObservableObject {
                     Router().pushBasePage(pageId: .dtnkMain_friends)
                     appState.room.roommode = .base
                 }
+            } else if result == 2 {
+                // ホストがゲームを取りやめたのでHomeへ
+                appState.room.roommode = .exit
             }
         }
     }

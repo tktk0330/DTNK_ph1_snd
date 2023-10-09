@@ -32,6 +32,10 @@ enum ImageName {
         case challenge = "box-yellow"
     }
     
+    enum Result: String {
+        case arrow = "result-arrow-lg"
+    }
+    
     enum Setting: String {
         case gameNum = "setting-gamenum"
         case gameJorker = "setting-jorker"

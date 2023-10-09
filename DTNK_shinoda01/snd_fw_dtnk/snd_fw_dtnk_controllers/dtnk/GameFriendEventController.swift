@@ -16,7 +16,7 @@ struct GameFriendEventController {
      */
     func checkTurn(myside: Int) -> Bool {
         guard myside == appState.gameUIState.currentPlayerIndex || appState.gameUIState.currentPlayerIndex == 99 else {
-            print("not your turn!")
+            log("not your turn!")
             return false
         }
         return true
@@ -67,6 +67,10 @@ struct GameFriendEventController {
         }
         if selectCrads.isEmpty {
             log("\(passPayerIndex): カードを選択してください")
+            return
+        }
+        if game.gamePhase == .ratefirst {
+            log("初期配置中です")
             return
         }
         if GameBotController().checkMultipleCards(table: game.table.last!, playCard: cardIds) {

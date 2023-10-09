@@ -143,7 +143,7 @@ class RoomFirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("matchingFlg")
         ref.observe(.value) { (snapshot) in
             guard let matchingFlg = snapshot.value as? Int else {
-                log("error", level: .error)
+                log("observeMatchingFlg error", level: .error)
                 return
             }
             completion(matchingFlg)
@@ -186,7 +186,7 @@ class RoomFirebaseManager {
     func leaveRoom(roomID: String, participantID: String, completion: @escaping (Bool) -> Void) {
         let roomRef = database.reference().child("rooms").child(roomID)
         
-        // パートicipantとルーム情報を取得して更新する
+        // participantとルーム情報を取得して更新する
         roomRef.observeSingleEvent(of: .value) { (snapshot) in
             guard var roomData = snapshot.value as? [String: Any],
                   var participants = roomData["participants"] as? [[String: Any]] else {
@@ -194,7 +194,7 @@ class RoomFirebaseManager {
                 completion(false)
                 return
             }
-            
+        
             // パートicipantを検索して削除する
             for (index, participant) in participants.enumerated() {
                 if let id = participant["id"] as? String, id == participantID {
@@ -202,12 +202,11 @@ class RoomFirebaseManager {
                     break
                 }
             }
-            
             // 更新した参加者リストを保存する
             roomData["participants"] = participants
             roomRef.setValue(roomData) { (error, _) in
                 if let error = error {
-                    print("Failed to leave room: \(error.localizedDescription)")
+                    log("Failed to leave room: \(error.localizedDescription)")
                     completion(false)
                 } else {
                     completion(true)

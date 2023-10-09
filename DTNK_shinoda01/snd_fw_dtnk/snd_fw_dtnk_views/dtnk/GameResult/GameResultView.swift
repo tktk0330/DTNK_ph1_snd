@@ -75,6 +75,12 @@ struct GameResultView: View {
                 Button(action: {
                     // Home画面へ
                     GameResultController().onTapPlay()
+                    if game.gamevsInfo == .vsBot {
+                        
+                    } else {
+                        // ゲームデータ削除
+                        game.deleteGamedate()
+                    }
                 }) {
                     Text("Home")
                         .font(.custom(FontName.font01, size: UIScreen.main.bounds.width * 0.10))

@@ -822,6 +822,11 @@ class GameBotController {
             log("\(Index): あなたのターンではないです")
             return
         }
+        if game.gamePhase == .ratefirst {
+            log("\(Index): 初期配置中です")
+            return
+        }
+        
         if checkMultipleCards(table: game.table.last!, playCard: cards) {
             if game.gamePhase != .main {
                 game.gamePhase = .main

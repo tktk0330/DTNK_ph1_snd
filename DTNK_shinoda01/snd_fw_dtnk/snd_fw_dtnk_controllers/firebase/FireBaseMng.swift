@@ -376,7 +376,7 @@ class FirebaseManager {
         let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("lastPlayerIndex")
         ref.observe(.value) { (snapshot) in
             guard let lastPlayerIndex = snapshot.value as? Int else {
-                log("error", level: .error)
+                log("observeLastPlayerIndex error", level: .error)
                 return
             }
             completion(lastPlayerIndex)
@@ -752,6 +752,19 @@ class FirebaseManager {
                 print("Error resetting game state: \(error.localizedDescription)")
             } else {
                 print("Game state reset successfully!")
+            }
+        }
+    }
+    
+    // 部屋の削除
+    func deleteGamedata(roomID: String, completion: @escaping (Bool) -> Void) {
+        
+        let ref = database.reference().child("rooms").child(roomID)
+        ref.removeValue { error, _ in
+            if let error = error {
+                log("データの削除に失敗しました: \(error)", level: .error)
+            } else {
+                log("データが正常に削除されました")
             }
         }
     }

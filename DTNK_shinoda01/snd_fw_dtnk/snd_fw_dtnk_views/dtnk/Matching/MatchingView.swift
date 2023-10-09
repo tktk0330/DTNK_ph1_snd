@@ -65,12 +65,32 @@ struct MatchingView: View {
         GeometryReader { geo in
             ZStack{
                 BunnerView(geo: geo)
-
+                
                 // back
-                // TODO: 戻るときのロジック＆アナウンス
                 Button(action: {
-                    //                    MatchingController().backMatching(room: room.roomData, user: appState.account.loginUser)
-                    Router().setBasePages(stack: [.room])
+                    
+                    Router().setBasePages(stack: [.home])
+                    
+                    // 友達対戦の時
+                    if !room.roomData.hostID.isEmpty && room.roomData.hostID == appState.account.loginUser.userID {
+                        // matchingflgを2に設定
+                        RoomFirebaseManager.shared.updateMatchingFlg(roomID: room.roomData.roomID, value: 2)  { result in
+                            if result {
+                                FirebaseManager.shared.deleteGamedata(roomID: room.roomData.roomID) { result in
+                                }
+                            }
+                        }
+                    } else if !room.roomData.hostID.isEmpty {
+                        RoomFirebaseManager.shared.leaveRoom(roomID: room.roomData.roomID, participantID: appState.account.loginUser.userID) { result in
+                            if result {
+                                log("ルーム退出しました")
+                            } else {
+                                log("ルーム退出エラー", level: .error)
+                            }
+                        }
+                        
+                    }
+                    
                 }) {
                     Image(ImageName.Common.back.rawValue)
                         .resizable()
@@ -114,6 +134,9 @@ struct MatchingView: View {
                 if room.roommode == .waiting {
                     WaitingLoadingView()
                 }
+                if room.roommode == .exit {
+                    RoomExitView()
+                }
 
             }
             .onAppear {
@@ -123,7 +146,6 @@ struct MatchingView: View {
                     // 参加者の監視
                     room.updateParticipants(roomID: room.roomData.roomID)
                 }
-//                MatchingController().vsFriendsMatching()
             }
             .onDisappear {
 

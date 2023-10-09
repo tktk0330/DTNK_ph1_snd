@@ -465,4 +465,16 @@ class GameObserber {
         }
         return orderedRanks
     }
+    
+    // ゲームデータ削除
+    func deleteGamedata(completion: @escaping (Bool) -> Void) {
+        guard checkHost() else {
+            return
+        }
+        fbms.deleteGamedata(roomID: appState.room.roomData.roomID) { result in
+            if result {
+                completion(true)
+            }
+        }
+    }
 }
