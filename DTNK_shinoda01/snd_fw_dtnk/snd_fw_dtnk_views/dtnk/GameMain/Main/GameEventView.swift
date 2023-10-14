@@ -60,7 +60,8 @@ struct GameEventView: View {
             }
             // BurstView
             if game.gamePhase == .burst {
-                BurstView(text: "BURST")
+                BurstView()
+                    .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.5)
             }
             // チャレンジ可否ポップ
             if game.gamePhase == .q_challenge {

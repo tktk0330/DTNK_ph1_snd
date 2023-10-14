@@ -118,6 +118,9 @@
 		5D9872182AB3C6BC0031A57C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872172AB3C6BC0031A57C /* AppDelegate.swift */; };
 		5D98721A2AB5709F0031A57C /* LifeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872192AB5709E0031A57C /* LifeView.swift */; };
 		5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */; };
+		5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A72AD99E5400AEE412 /* burst01.gif */; };
+		5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */; };
+		5DB5B5AE2ADA41A100AEE412 /* GifName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5AD2ADA41A100AEE412 /* GifName.swift */; };
 		5DC02E5A2ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DC02E572ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf */; };
 		5DC02E5B2ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DC02E582ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf */; };
 		5DC02E5C2ABEAFE9009E84A5 /* MPLUS1p-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DC02E592ABEAFE9009E84A5 /* MPLUS1p-Black.ttf */; };
@@ -266,6 +269,9 @@
 		5D9872172AB3C6BC0031A57C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D9872192AB5709E0031A57C /* LifeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeView.swift; sourceTree = "<group>"; };
 		5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingModeView.swift; sourceTree = "<group>"; };
+		5DB5B5A72AD99E5400AEE412 /* burst01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = burst01.gif; sourceTree = "<group>"; };
+		5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifMng.swift; sourceTree = "<group>"; };
+		5DB5B5AD2ADA41A100AEE412 /* GifName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifName.swift; sourceTree = "<group>"; };
 		5DC02E572ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-ExtraBold.ttf"; sourceTree = "<group>"; };
 		5DC02E582ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-Bold.ttf"; sourceTree = "<group>"; };
 		5DC02E592ABEAFE9009E84A5 /* MPLUS1p-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-Black.ttf"; sourceTree = "<group>"; };
@@ -375,6 +381,7 @@
 		5D8FA2522A481AD30079F260 /* contents */ = {
 			isa = PBXGroup;
 			children = (
+				5DB5B5A62AD99E0A00AEE412 /* animation */,
 				5D9872102AAB491A0031A57C /* music */,
 				5D8FA2542A481B710079F260 /* designs */,
 				5D8FA2552A481B830079F260 /* extensions */,
@@ -750,6 +757,16 @@
 			path = music;
 			sourceTree = "<group>";
 		};
+		5DB5B5A62AD99E0A00AEE412 /* animation */ = {
+			isa = PBXGroup;
+			children = (
+				5DB5B5A72AD99E5400AEE412 /* burst01.gif */,
+				5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */,
+				5DB5B5AD2ADA41A100AEE412 /* GifName.swift */,
+			);
+			path = animation;
+			sourceTree = "<group>";
+		};
 		5DC02E6B2AC1791B009E84A5 /* Modifire */ = {
 			isa = PBXGroup;
 			children = (
@@ -862,6 +879,7 @@
 				5DC02E5C2ABEAFE9009E84A5 /* MPLUS1p-Black.ttf in Resources */,
 				5DC02E5B2ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf in Resources */,
 				5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */,
+				5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */,
 				5D8FA2652A481CDA0079F260 /* DS-DIGIB.TTF in Resources */,
 				5D8FA2492A4814AF0079F260 /* Assets.xcassets in Resources */,
 				5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */,
@@ -920,6 +938,7 @@
 				5D30DE872AC9710C00AA2909 /* BackButton.swift in Sources */,
 				5DC02E662AC16B90009E84A5 /* GameButtonView.swift in Sources */,
 				5DCD27BC2A86591100778980 /* ChallengeAnswerModel.swift in Sources */,
+				5DB5B5AE2ADA41A100AEE412 /* GifName.swift in Sources */,
 				5D98721A2AB5709F0031A57C /* LifeView.swift in Sources */,
 				5D8FA25E2A481C570079F260 /* ArrayExttension.swift in Sources */,
 				5D8FA3162A48282E0079F260 /* RateView.swift in Sources */,
@@ -1039,6 +1058,7 @@
 				5D30DE892AC979E600AA2909 /* BgmMng.swift in Sources */,
 				5D8FA2942A4820B90079F260 /* MatchingController.swift in Sources */,
 				5D8FA2BA2A48237A0079F260 /* GameScore.swift in Sources */,
+				5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */,
 				5D8FA2FD2A4827100079F260 /* MatchingView.swift in Sources */,
 				5D8FA2782A481DDA0079F260 /* Router.swift in Sources */,
 				5D8FA28A2A4820220079F260 /* BotController.swift in Sources */,

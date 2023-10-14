@@ -154,8 +154,10 @@ struct GameFriendView: View {
         for s in 0..<game.players.count {
             // rank & score
             fbms.observeRankAndScore(playerIndex: String(s)) { rank, score in
-                game.players[s].rank = rank
-                game.players[s].score = score
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                    game.players[s].rank = rank
+                    game.players[s].score = score
+                }
             }
             // hand
             fbms.observeHandInfo (
@@ -218,16 +220,16 @@ struct GameFriendView: View {
             if let result = resultItem {
                 appState.subState = SubState(resultItem: result)
                 game.gameScore = resultItem!.gameScore
-            } else {
-//                print("Error retrieving result item.")
             }
         }
         fbms.observeGameNum() { gameNum in
             game.gameNum = gameNum!
         }
         fbms.observeWinnersLosers() { winners, losers in
-            game.winners = winners
-            game.losers = losers
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                game.winners = winners
+                game.losers = losers
+            }
         }
         fbms.observeRateUpCard() { cardsImage in
             game.rateUpCard = cardsImage

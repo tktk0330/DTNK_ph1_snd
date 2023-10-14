@@ -379,21 +379,36 @@ class GameBotController {
      Botがチャレンジするかどうか
      */
     func moveChallengeBot() {
+        
+        // 初期化
+        game.challengeAnswers = Array(repeating: ChallengeAnswer.initial, count: 4)
         let table = game.table.last!
         // Botplayer
         let numbers = [1, 2, 3]
         var ans: ChallengeAnswer = .nochallenge
         
         for number in numbers {
-            let bot = game.players[number]
-            let botHand = calculatePossibleSums(cards: bot.hand)
-            for hand in botHand {
-                if hand <= table.number() {
-                    ans = .challenge
+            if number == game.dtnkPlayerIndex {
+                // dtnkerだったらチャレンジ必須
+                ans = .challenge
+            } else {
+                // その他
+                let bot = game.players[number]
+                let botHand = calculatePossibleSums(cards: bot.hand)
+                for hand in botHand {
+                    if hand == table.number() {
+                        // どてんこ返し
+                        revengeFirst(Index: number)
+                        return
+                    } else if hand < table.number() {
+                        // チャレンジする
+                        ans = .challenge
+                    }
                 }
             }
             game.challengeAnswers[number] = ans
         }
+        print("\(game.challengeAnswers)")
     }
     
     /**
@@ -900,7 +915,7 @@ class GameBotController {
             game.burstPlayer = game.players[Index]
             game.burstPlayerIndex = Index
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0 ) { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0 ) { [self] in
                 game.gamePhase = .decisionrate_pre
             }
         }
@@ -931,7 +946,7 @@ class GameBotController {
                 game.dtnkPlayer = game.players[Index]
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    DispatchQueue.main.async { [self] in // メインスレッドでUIの更新を行う
+                    DispatchQueue.main.async { [self] in
                         game.gamePhase = .q_challenge
                     }
                 }
@@ -941,6 +956,27 @@ class GameBotController {
         }
     }
     
+    
+    // TODO: 下記２種リファクタリング
+    // どてんこ返し in main
+    func revengeFirst(Index: Int) {
+        // Vib & SE
+        SoundMng.shared.dtnkSound()
+        game.gamePhase = .dtnk
+
+        // 入れ替え
+        let quickIndex = game.dtnkPlayerIndex
+        _ = game.dtnkPlayer
+        game.lastPlayerIndex = quickIndex
+        game.dtnkPlayerIndex = Index
+        game.dtnkPlayer = game.players[Index]
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
+            game.gamePhase = .q_challenge
+        }
+        
+    }
+
+    // どてんこ返し in challenge
     func revenge(Index: Int) {
         // Vib & SE
         
@@ -1024,9 +1060,7 @@ class GameBotController {
             }
             sums = newSums
         }
-        // 13以下を返す
         return Array(sums).sorted()
-//        return Array(sums).sorted().filter { $0 < 13 }
     }
 
     // カードが全て同じカードかどうか

@@ -69,7 +69,7 @@ class CountDownViewModel: ObservableObject {
 
     func nextTurn() {
         timer?.invalidate()
-        if appState.gameUIState.myside == appState.gameUIState.currentPlayerIndex {
+        if ((appState.gameUIState.gamePhase == .gamefirst_sub || appState.gameUIState.gamePhase == .main) &&  appState.gameUIState.myside == appState.gameUIState.currentPlayerIndex) {
             startTimer()
         } else {
             remainingSeconds = Constants.turnTime

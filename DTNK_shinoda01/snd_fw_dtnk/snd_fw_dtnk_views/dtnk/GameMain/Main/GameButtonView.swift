@@ -113,7 +113,7 @@ struct GameButtonView: View {
                         .aspectRatio(contentMode: .fit)
                         .overlay(
                             Group {
-                                if game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
+                                if appState.gameUIState.gamePhase == .main && game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
                                     Rectangle().foregroundColor(.black).opacity(0.7)
                                 } else {
                                     Rectangle().opacity(0)
@@ -124,7 +124,7 @@ struct GameButtonView: View {
                         .cornerRadius(10)
                         .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
 
-                    if game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
+                    if appState.gameUIState.gamePhase == .main && game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
                         // ターンカウントダウン
                         CountdownView()
                             .frame(width: 60)

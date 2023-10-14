@@ -362,7 +362,6 @@ class GameObserber {
         // 勝者・敗者を決める
         if game.currentPlayerIndex == Constants.stnkCode || game.lastPlayerIndex == Constants.stnkCode {
             // しょてんこの場合
-            // しょてんこの場合
             let winner = game.players[game.dtnkPlayerIndex]
             game.winners.append(winner)
             let losers = game.players.enumerated().compactMap { index, player in
