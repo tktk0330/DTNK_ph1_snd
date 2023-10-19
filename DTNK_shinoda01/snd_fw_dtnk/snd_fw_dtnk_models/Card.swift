@@ -315,7 +315,7 @@ extension CardId {
         case .spade13, .heart13, .diamond13, .club13:
             return 13
         case .blackJorker1, .whiteJorker1, .blackJorker2, .whiteJorker2:
-            return 1
+            return 0
         case .back:
             return 900
         }

@@ -358,12 +358,13 @@ class GameBotController {
         if resultFirst == Constants.dtnkCode && game.lastPlayerIndex != Index {
             // ランダムで数秒待ってどてんこ
             let random = Int.random(in: 0..<5)
-            DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(random)) { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(random)) { [self] in
                 let resultSecond = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
                 if resultSecond  == Constants.dtnkCode && game.lastPlayerIndex != Index {
                     dtnk(Index: Index)
-                    log("\(player.name) dtnk")
+                    log("\(Index): dtnk")
                 } else {
+                    log("\(Index): やっぱりどてんこできません")
                     return
                 }
             }
@@ -910,12 +911,12 @@ class GameBotController {
             }
         }
         // Burstするとき
-        if (game.gamePhase == .decisionrate_pre || game.gamePhase == .main) && game.players[Index].hand.count == Constants.burstCount {
+        if (game.gamePhase == .gamefirst_sub || game.gamePhase == .main) && game.players[Index].hand.count == Constants.burstCount {
             game.gamePhase = .burst
             game.burstPlayer = game.players[Index]
             game.burstPlayerIndex = Index
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0 ) { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) { [self] in
                 game.gamePhase = .decisionrate_pre
             }
         }
@@ -1065,9 +1066,13 @@ class GameBotController {
 
     // カードが全て同じカードかどうか
     func areAllCardIdsTheSame(cards: [CardId]) -> Bool {
-        guard !cards.isEmpty else { return false }  // 空の配列はfalseとする
-        let firstValue = cards[0].number()
-        
+        // 空の配列はfalseとする
+        guard !cards.isEmpty else { return false }
+        // Jorkerでない数字要素取得
+        let firstNonZeroIndex = cards.firstIndex(where: { $0.number() != 0 }) ?? 0
+        // Jorkerでない数字と他の手札が一致するか
+        let firstValue = cards[firstNonZeroIndex].number()
+        // 先頭がJorkerではない
         for card in cards {
             if card.number() != firstValue && card.suit() != .all {
                 return false

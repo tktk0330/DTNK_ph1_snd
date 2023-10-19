@@ -55,8 +55,8 @@ struct GameEventView: View {
                 DTNKView(text: "DOTENKO")
             }
             // バースト注意文言
-            if  game.players[myside].hand.count == Constants.burstCount && game.gamePhase == .main {
-                BurstCoutionView(text: "Burst Caution!").position(x: geo.size.width * 0.68, y: geo.size.height * 1.08)
+            if  game.players[myside].hand.count == Constants.burstCount && (game.gamePhase == .gamefirst_sub || game.gamePhase == .main) {
+                BurstCoutionView(text:"Burst Caution").position(x: geo.size.width * 0.68, y: geo.size.height * 1.08)
             }
             // BurstView
             if game.gamePhase == .burst {

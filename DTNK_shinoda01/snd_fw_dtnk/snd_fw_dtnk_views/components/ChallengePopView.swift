@@ -23,17 +23,20 @@ struct ChallengePopView: View {
                 .padding(5)
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.35)
             
-            if game.dtnkPlayerIndex == game.myside || game.dtnkFlg == 1 {
+            if game.gamevsInfo == .vsFriend && (game.dtnkPlayerIndex == game.myside || game.dtnkFlg == 1) {
                 
                 WaitingChallengePopView()
                     .onAppear{
                         //　vsFriend 他の人が決まるまで待機
                         if game.gamevsInfo == .vsFriend {
                             GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
-                        } else {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
-                                game.challengeAnswers[game.myside] = .challenge
-                            }
+                        }
+                    }
+            } else if game.gamevsInfo == .vsBot  && game.dtnkPlayerIndex == game.myside {
+                WaitingChallengePopView()
+                    .onAppear{
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+                            game.challengeAnswers[game.myside] = .challenge
                         }
                     }
             } else {
