@@ -1,5 +1,5 @@
 /**
- vsBotの関数
+ 
  
  */
 
@@ -357,7 +357,7 @@ class GameBotController {
         let resultFirst = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
         if resultFirst == Constants.dtnkCode && game.lastPlayerIndex != Index {
             // ランダムで数秒待ってどてんこ
-            let random = Int.random(in: 0..<5)
+            let random = Int.random(in: 0..<3)
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(random)) { [self] in
                 let resultSecond = dtnkJudge(myside: Index, playerAllCards: player.hand, table: game.table)
                 if resultSecond  == Constants.dtnkCode && game.lastPlayerIndex != Index {
@@ -754,6 +754,7 @@ class GameBotController {
     /**
      カードを再生成する
      */
+    
     func regenerationDeck() {
         DispatchQueue.main.async { [self] in
             // アナウンス
@@ -935,6 +936,7 @@ class GameBotController {
     
     func dtnk(Index: Int) {
         // dtnkは１ゲーム１人１回
+        
         if game.dtnkFlg != 1 {
             // Vib & SE
             SoundMng.shared.dtnkSound()
@@ -946,7 +948,7 @@ class GameBotController {
                 game.dtnkPlayerIndex = Index
                 game.dtnkPlayer = game.players[Index]
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                     DispatchQueue.main.async { [self] in
                         game.gamePhase = .q_challenge
                     }

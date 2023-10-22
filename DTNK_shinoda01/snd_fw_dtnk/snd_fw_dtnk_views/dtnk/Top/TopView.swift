@@ -7,8 +7,6 @@ struct TopView: View {
     var body: some View {
         GeometryReader { geo in
 
-            BunnerView(geo: geo)
-
             Text("DOTENKO")
                 .font(.custom(FontName.font01, size: Constants.scrWidth * 0.15))
                 .foregroundColor(Color.white)

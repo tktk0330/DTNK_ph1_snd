@@ -27,7 +27,7 @@ class GameUIState: ObservableObject {
     @Published var table: [CardId] = [] {
         didSet {
             if gamevsInfo == .vsBot {
-                checkBotDtnk()
+//                checkBotDtnk()
             }
         }
     }

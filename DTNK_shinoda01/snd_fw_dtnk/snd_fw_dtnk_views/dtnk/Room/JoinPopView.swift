@@ -45,12 +45,14 @@ struct JoinPopView: View {
                         
                     HStack(spacing: 40) {
                         Button(action: {
+                            room.error_message = ""
                             RoomController().onCloseMenu()
                         }) {
                             Btnwb(btnText: "Cansel", btnTextSize: 20, btnWidth: 120, btnHeight: 50)
                         }
                         
                         Button(action: {
+                            room.error_message = ""
                             // 参加処理
                             room.join(user: appState.account.loginUser)
                         }) {

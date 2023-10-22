@@ -15,8 +15,6 @@ struct GameRuleView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                // admob
-                BunnerView(geo: geo)
                 // back
                 BackButton(backPage: .home, geo: geo)
                 

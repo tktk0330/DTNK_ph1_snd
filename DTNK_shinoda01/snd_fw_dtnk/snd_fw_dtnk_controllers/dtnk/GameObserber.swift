@@ -211,47 +211,6 @@ class GameObserber {
                 }
             }
         }
-        // チャンスがあれば引く
-        if (dtnkCardNumber - handSum) > 0 {
-            // チャンスあり 一枚引く
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-//                fbms.drawCard(playerID: challenger.id) { result in
-//                    log("challenger \(challenger.side-1) draw")
-//                    // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
-//                    self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
-//                }
-//            }
-            // loop
-        } else if (dtnkCardNumber - handSum) == 0 {
-//            // リベンジ成功 animation
-//            log("revenge chellenging")
-//            // 処理 手札リセット
-//            fbms.resetHands(playerIndex: game.dtnkPlayerIndex,
-//                            playerID: game.players[game.dtnkPlayerIndex].id,
-//                            baseselectedCards: game.players[game.dtnkPlayerIndex].hand) { result in
-//            }
-//            // rate up
-//            let ascendingRate = game.ascendingRate * 2
-//            fbms.setAscendingRate(ascendingRate: ascendingRate) { result in }
-//            // 次の人へ
-//            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-////            print("\(nextChallenger!) : \(dtnkCardNumber) : \(challengerIndex) : \(challengers)")
-//            // dtnkIndexをrevengerに変更
-//            let revengerIndex = challengerIndex
-//            self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: revengerIndex, challengers: challengers)
-//            return
-
-        } else {
-//            // overしたら次の人へ
-//            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                log("next challenger")
-//                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
-//                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
-//            }
-//            return
-        }
-        
     }
     
     /**
@@ -280,6 +239,7 @@ class GameObserber {
         guard checkHost() else {
             return
         }
+        print("act")
         // challengeに移す
         fbms.setGamePhase(gamePhase: .challenge) { result in }
     }

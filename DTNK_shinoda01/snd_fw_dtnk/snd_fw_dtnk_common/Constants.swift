@@ -34,7 +34,7 @@ struct Constants {
     static let burstCount = 7
     
     // MARK: - TurnTime
-    static let turnTime = 10
+    static let turnTime = 30
 
     // MARK: - DotenkoCode
     static let dtnkCode = 50

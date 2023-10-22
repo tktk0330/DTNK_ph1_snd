@@ -11,9 +11,7 @@ struct GameSettingView: View {
     
     var body: some View {
         GeometryReader { geo in
-            ZStack{
-                BunnerView(geo: geo)
-                
+            ZStack{                
                 // back
                 BackButton(backPage: .home, geo: geo)
 

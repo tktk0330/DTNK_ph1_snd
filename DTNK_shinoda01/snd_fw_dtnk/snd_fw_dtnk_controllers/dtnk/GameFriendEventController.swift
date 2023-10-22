@@ -166,9 +166,10 @@ struct GameFriendEventController {
     func revengeQuick(Index: Int, dtnkPlayer: Player_f) {
         // dtnkは１ゲーム１人１回
         if game.dtnkFlg != 1 {
-            
+            fbms.setGamePhase(gamePhase: .revenge) { result in }
             game.dtnkFlg = 1
-            // TODO: 音バイブ
+            
+            // 勝敗入れ替え
             fbms.setLasrPlayerIndex(lastPlayerIndex: game.dtnkPlayerIndex) { result in }
             // 手札リセット
             fbms.resetHands(playerIndex: game.dtnkPlayerIndex,
@@ -176,19 +177,22 @@ struct GameFriendEventController {
                             baseselectedCards: game.players[game.dtnkPlayerIndex].hand) { result in
                 if result {
                     fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
-                    fbms.setGamePhase(gamePhase: .revenge) { result in }
-
+                    // ChallengeAnswer初期化
+                    initializeChallengeAnswers() { result in
+                        if result {
+                            // アニメーションが終わったら参加可否を問う
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                                // 可否
+                                fbms.setGamePhase(gamePhase: .q_challenge) { result in }
+                            }
+                        } else {
+                            log("", level: .error)
+                        }
+                    }
                 }
-            }
-            // TODO: ロジック修正？
-            // アニメーションが終わったら参加可否を問う
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                // 可否
-                fbms.setGamePhase(gamePhase: .q_challenge) { result in }
             }
         }
     }
-
     
     /**
      challengeするかしないかを報告
@@ -196,6 +200,21 @@ struct GameFriendEventController {
     func moveChallenge(index: Int, ans: ChallengeAnswer) {
         fbms.setChallengeAnswer(index: index, answer: ans) { result in }
     }
+    // どてんこ返しの際ChallengeAnswe初期化
+    func initializeChallengeAnswers(completion: @escaping (Bool) -> Void) {
+        for index in 0...3 {
+            fbms.setChallengeAnswer(index: index, answer: .initial) { setResult in
+                if setResult {
+                } else {
+                    log("initializeChallengeAnswers", level: .error)
+                    completion(false)
+                }
+            }
+        }
+        completion(true)
+    }
+
+    
     /**
      準備ができているかを報告
      */

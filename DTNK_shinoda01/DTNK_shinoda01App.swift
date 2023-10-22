@@ -26,6 +26,8 @@ struct DTNK_shinoda01App: SwiftUI.App {
                         exit(0)  // ユーザーが終了ボタンをクリックしたときのアクション
                     }
                 }
+                // admob
+                BunnerView()
             }
             .background(Color.casinoGreen.ignoresSafeArea())
         }

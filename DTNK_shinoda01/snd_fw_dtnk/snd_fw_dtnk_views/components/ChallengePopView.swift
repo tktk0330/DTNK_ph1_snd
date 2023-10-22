@@ -16,7 +16,7 @@ struct ChallengePopView: View {
                 .aspectRatio(contentMode: .fit)
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.20)
 
-            Text("説明文をここに書いてください")
+            Text("追加でカードを引くことでどてんこ返しできる可能性があります。")
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)

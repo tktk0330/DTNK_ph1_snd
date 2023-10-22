@@ -7,8 +7,6 @@ struct SelectJoinTypeView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack{
-                
-                BunnerView(geo: geo)
 
                 // back
                 BackButton(backPage: .home, geo: geo)

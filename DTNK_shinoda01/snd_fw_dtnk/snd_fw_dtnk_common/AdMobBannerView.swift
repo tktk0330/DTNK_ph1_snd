@@ -8,14 +8,13 @@ import GoogleMobileAds
 
 // バナー広告
 struct BunnerView: View {
-    var geo: GeometryProxy
     @EnvironmentObject private var sceneDelegate: MySceneDelegate
 
     var body: some View {
         if let vc = sceneDelegate.myWindow?.rootViewController {
             AdMobBannerView(viewController: vc, windowScene: sceneDelegate.windowScene)
                 .frame(width: 320, height: 50)
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.025)
+                .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.025)
         }
 
     }

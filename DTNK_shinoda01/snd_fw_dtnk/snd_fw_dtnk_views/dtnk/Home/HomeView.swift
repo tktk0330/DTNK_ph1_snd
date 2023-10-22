@@ -18,15 +18,21 @@ struct HomeView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack{
-                BunnerView(geo: geo)
-
                 // Account
                 AccountView()
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
-                       
-                // Life
-                LifeView()
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.27)
+                      
+//                ZStack {
+//                    // Life
+//                    LifeView()
+//                    Text("ComingSoon")
+//                        .font(.custom(FontName.font01, size: Constants.scrWidth * 0.1))
+//                        .fontWeight(.bold)
+//                        .foregroundColor(Color.white)
+//                        .rotationEffect(.degrees(10))
+//
+//                }
+//                .position(x: Constants.scrWidth / 2, y:  geo.size.height * 0.27)
                 
                 // Game List
                 VStack (spacing: 40){

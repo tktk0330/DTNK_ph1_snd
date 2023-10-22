@@ -63,9 +63,7 @@ struct MatchingView: View {
 
     var body: some View {
         GeometryReader { geo in
-            ZStack{
-                BunnerView(geo: geo)
-                
+            ZStack{                
                 // back
                 Button(action: {
                     

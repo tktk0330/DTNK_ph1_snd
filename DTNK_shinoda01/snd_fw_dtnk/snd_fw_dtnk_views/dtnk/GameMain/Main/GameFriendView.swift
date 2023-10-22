@@ -43,16 +43,6 @@ struct GameFriendView: View {
                     }
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
-                // revenge
-                if !game.revengerIndex.isEmpty {
-                    RevengeAnnounce() {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            GameBotController().revenge()
-                        }
-                    }
-                    .id(game.revengerIndex)
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
-                }
                 // デッキ再生成
                 if game.regenerationDeckFlg == 1 {
                     RegenerationDeck() {
@@ -204,6 +194,7 @@ struct GameFriendView: View {
         }
         // challengeAnswers
         fbms.observeChallengeAnswer() { challengeAnswers in
+            print("\(challengeAnswers)")
             game.challengeAnswers = challengeAnswers
             if challengeAnswers.allSatisfy({ $0 != .initial }) {
                 gameObserber.challengeAnswers()
@@ -236,6 +227,7 @@ struct GameFriendView: View {
         }
         fbms.observeAscendingRate() { rate in
             game.ascendingRate = rate!
+            print("\(game.ascendingRate)")
         }
         RoomFirebaseManager.shared.observeMatchingFlg(roomID: room.roomData.roomID) { result in
             if result == 2 {

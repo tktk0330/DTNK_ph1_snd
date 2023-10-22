@@ -12,8 +12,6 @@ struct GameResultView: View {
         
         GeometryReader { geo in
             ZStack(alignment: .center) {
-                BunnerView(geo: geo)
-
                 // title
                 Text("Result")
                     .font(.custom(FontName.font01, size: UIScreen.main.bounds.width * 0.15))
@@ -76,7 +74,8 @@ struct GameResultView: View {
                     // Home画面へ
                     GameResultController().onTapPlay()
                     if game.gamevsInfo == .vsBot {
-                        
+                        appState.matching = nil
+                        game.resetItem()
                     } else {
                         // ゲームデータ削除
                         game.deleteGamedate()

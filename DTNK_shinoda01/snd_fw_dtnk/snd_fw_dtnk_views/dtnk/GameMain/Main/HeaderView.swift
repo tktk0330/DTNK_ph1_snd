@@ -8,8 +8,6 @@ struct Header: View {
     var geo: GeometryProxy
     
     var body: some View {
-        
-        BunnerView(geo: geo)
 
         GameRateView(game: game, geo: geo)
         // option

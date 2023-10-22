@@ -476,7 +476,7 @@ class FirebaseManager {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         gameInfoRef.child("challengeAnswer/\(index)").setValue(answer.rawValue) { error, _ in
             if let error = error {
-                print("Failed: \(error.localizedDescription)")
+                log("Failed: \(error.localizedDescription)", level: .error)
             } else {
                 completion(true)
             }
@@ -490,7 +490,7 @@ class FirebaseManager {
         let challengeAnswerRef = gameInfoRef.child("challengeAnswer")
         challengeAnswerRef.observe(.value) { (snapshot) in
             guard let rawValues = snapshot.value as? [Int] else {
-                print("Could not cast snapshot value to [Int]")
+                log("Could not cast snapshot value to [Int]")
                 return
             }
             let answers = rawValues.compactMap { ChallengeAnswer(rawValue: $0) }
