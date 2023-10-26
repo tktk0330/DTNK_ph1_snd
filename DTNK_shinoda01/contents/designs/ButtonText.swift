@@ -167,7 +167,7 @@ struct Btnlgb: View {
                 .frame(width: judge ? Constants.scrWidth * 0.2 : Constants.scrWidth * 0.3, height: judge ? Constants.scrWidth * 0.2 : Constants.scrWidth * 0.3)
 
             Text(btnText)
-                .font(.custom(FontName.font01, size: btnTextSize))
+                .font(.custom(FontName.MP_Bl, size: btnTextSize))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .bold()

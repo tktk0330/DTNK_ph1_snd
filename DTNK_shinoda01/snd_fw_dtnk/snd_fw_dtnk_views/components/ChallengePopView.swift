@@ -20,10 +20,10 @@ struct ChallengePopView: View {
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
-                .padding(5)
-                .position(x: geo.size.width / 2, y: geo.size.height * 0.35)
+                .padding(20)
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.40)
             
-            if game.gamevsInfo == .vsFriend && (game.dtnkPlayerIndex == game.myside || game.dtnkFlg == 1) {
+            if game.gamevsInfo == .vsFriend && (game.dtnkPlayerIndex == game.myside || game.dtnkFlg[0] == 1) {
                 
                 WaitingChallengePopView()
                     .onAppear{
@@ -32,7 +32,7 @@ struct ChallengePopView: View {
                             GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
                         }
                     }
-            } else if game.gamevsInfo == .vsBot  && game.dtnkPlayerIndex == game.myside {
+            } else if game.gamevsInfo == .vsBot && game.dtnkFlg[game.myside] == 1 {
                 WaitingChallengePopView()
                     .onAppear{
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
@@ -59,7 +59,7 @@ struct ChallengePopView: View {
                             if game.gamevsInfo == .vsFriend {
                                 GameFriendEventController().revengeQuick(Index: game.myside, dtnkPlayer: game.players[game.myside])
                             } else {
-                                GameBotController().dtnk(Index: game.myside)
+                                GameBotController().revengeFirst(Index: game.myside)
                             }
                         }) {
                             Btnaction(btnText: "どてんこ返し", btnTextSize: 10, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)

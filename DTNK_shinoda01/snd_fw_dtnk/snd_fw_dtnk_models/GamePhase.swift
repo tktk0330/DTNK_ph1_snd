@@ -32,9 +32,12 @@ enum GamePhase: Int {
     case main = 7
     case dtnk = 8
     case burst = 15
+    case revenge_invitable = 23
     case revenge = 14
     case q_challenge = 9
+    case startChallenge = 20
     case challenge = 10
+    case endChallenge = 21
     case decisionrate_pre = 11
     case decisionrate = 12
     case result = 13

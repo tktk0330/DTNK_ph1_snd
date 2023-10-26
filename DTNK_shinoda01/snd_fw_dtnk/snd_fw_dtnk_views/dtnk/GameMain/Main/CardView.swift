@@ -122,7 +122,7 @@ struct N_CardView: View {
     
     // カードが表か裏かを示す変数（例）
     var isFaceUp: Bool {
-        if appState.gameUIState.gamePhase == .challenge || isMyHandCard || location == .table {
+        if appState.gameUIState.gamePhase == .challenge || appState.gameUIState.gamePhase == .endChallenge || isMyHandCard || location == .table {
             return true
         }
         return Constants.cardFaceUp

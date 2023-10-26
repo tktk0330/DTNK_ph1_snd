@@ -8,6 +8,7 @@
  log("これは警告メッセージです", level: .warning) // 出力される
  log("これはエラーメッセージです", level: .error) // 出力される
  */
+import Foundation
 
 enum LogLevel: Int {
     case info = 1
@@ -30,7 +31,7 @@ func log(_ message: String, level: LogLevel = .info) {
         case .error:
             prefix = "[ERROR]"
         }
-        print("\(prefix) \(message)")
+        print("\(Date.currentTime) \(prefix) \(message)")
     }
     #endif
 }

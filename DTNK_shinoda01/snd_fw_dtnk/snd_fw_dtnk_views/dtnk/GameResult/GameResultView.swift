@@ -76,9 +76,15 @@ struct GameResultView: View {
                     if game.gamevsInfo == .vsBot {
                         appState.matching = nil
                         game.resetItem()
+                        BgmMng.shared.stopSound()
+
                     } else {
                         // ゲームデータ削除
                         game.deleteGamedate()
+                        appState.matching = nil
+                        game.resetItem()
+                        BgmMng.shared.stopSound()
+
                     }
                 }) {
                     Text("Home")

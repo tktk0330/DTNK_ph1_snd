@@ -157,7 +157,7 @@ class GameObserber {
         }
         // 手札とどてんこカードを比較
         let challenger = appState.gameUIState.players[challengerIndex]
-        let handSum = countHand(hand: challenger.hand)
+        _ = countHand(hand: challenger.hand)
         // 手札がとりえる値
         let handSumPos = GameBotController().calculatePossibleSums(cards: challenger.hand)
         // 最小値

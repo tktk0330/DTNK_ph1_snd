@@ -20,8 +20,9 @@ struct HomeView: View {
             ZStack{
                 // Account
                 AccountView()
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.15)
-                      
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.25)
+                     
+                // Ph2
 //                ZStack {
 //                    // Life
 //                    LifeView()
@@ -40,7 +41,7 @@ struct HomeView: View {
                         home.vsInfo = .vsBot
                         HomeController().onTapPageBtn(page: .gameSetting)
                     }) {
-                        Btnlgb(imageName: ImageName.Home.vsbots.rawValue, btnText: "ひとりでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120, judge: true)
+                        Btnlgb(imageName: ImageName.Home.vsbots.rawValue, btnText: "ひとりでDOTENKO", btnTextSize: 25, btnWidth: Constants.scrWidth * 0.90, btnHeight: 120, judge: true)
                     }
                     .buttonStyle(PressBtn())
                     
@@ -48,11 +49,11 @@ struct HomeView: View {
                         home.vsInfo = .vsFriend
                         HomeController().onTapPageBtn(page: .selectJoinType)
                     }) {
-                        Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.90, btnHeight: 120, judge: false)
+                        Btnlgb(imageName:  ImageName.Home.vsfriends.rawValue, btnText: "みんなでDOTENKO", btnTextSize: 25, btnWidth: Constants.scrWidth * 0.90, btnHeight: 120, judge: false)
                     }
                     .buttonStyle(PressBtn())
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.58)
+                .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.58)
 
                 // Info List
                 HStack(spacing: 20) {
@@ -70,15 +71,16 @@ struct HomeView: View {
                     }
                     .buttonStyle(PressBtn())
 
-                    Button(action: {
-                        HomeController().onTapPageBtn(page: .shop)
-                    }) {
-                        Btnwb(btnText: "Shop", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
-                    }
-                    .buttonStyle(PressBtn())
+                    // Ph2
+//                    Button(action: {
+//                        HomeController().onTapPageBtn(page: .shop)
+//                    }) {
+//                        Btnwb(btnText: "Shop", btnTextSize: 15, btnWidth: 100, btnHeight: 40)
+//                    }
+//                    .buttonStyle(PressBtn())
 
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.90)
+                .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.90)
             }
         }
         .onAppear {

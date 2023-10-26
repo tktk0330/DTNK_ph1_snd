@@ -143,12 +143,12 @@ struct GameFriendEventController {
     
     func dtnk(Index: Int, dtnkPlayer: Player_f) {
         // dtnkは１ゲーム１人１回
-        if game.dtnkFlg != 1 {
+        if game.dtnkFlg[0] != 1 {
             
             guard checDtnk(myside: Index) else {
                 return
             }
-            game.dtnkFlg = 1
+            game.dtnkFlg[0] = 1
             // TODO: 音バイブ
             fbms.setGamePhase(gamePhase: .dtnk) { result in }
             fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
@@ -165,9 +165,9 @@ struct GameFriendEventController {
     // どてんこ返し（即時）
     func revengeQuick(Index: Int, dtnkPlayer: Player_f) {
         // dtnkは１ゲーム１人１回
-        if game.dtnkFlg != 1 {
+        if game.dtnkFlg[0] != 1 {
             fbms.setGamePhase(gamePhase: .revenge) { result in }
-            game.dtnkFlg = 1
+            game.dtnkFlg[0] = 1
             
             // 勝敗入れ替え
             fbms.setLasrPlayerIndex(lastPlayerIndex: game.dtnkPlayerIndex) { result in }
@@ -249,7 +249,7 @@ struct GameFriendEventController {
         game.startFlag = false   // startBtn
         game.AnnounceFlg = false // 実行中 true 非表示中　false
         game.turnFlg = 0         // 0: canDraw 1: canPass
-        game.dtnkFlg = 0         // 0: no 1: dtnked
+        game.dtnkFlg = Array(repeating: 0, count: 4)         // 0: no 1: dtnked
     }
 }
 

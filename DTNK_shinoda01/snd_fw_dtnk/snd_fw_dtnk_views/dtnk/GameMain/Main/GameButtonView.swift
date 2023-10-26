@@ -58,7 +58,7 @@ struct GameButtonView: View {
         
         HStack(spacing: 15) {
             
-            if game.gamePhase == .dealcard || game.gamePhase == .countdown || game.gamePhase == .gamefirst  {
+            if game.gamePhase == .dealcard || game.gamePhase == .countdown || game.gamePhase == .gamefirst || game.gamePhase == .ratefirst {
                 Button(action: {
                     if game.gamevsInfo == .vsBot {
                         GameBotController().initPass(Index: myside)
@@ -100,6 +100,7 @@ struct GameButtonView: View {
             
             // MyIcon
             Button(action: {
+                // TODO: test
                 if game.gamevsInfo == .vsBot {
                     GameBotController().playerDtnk(Index: myside)
                 } else {

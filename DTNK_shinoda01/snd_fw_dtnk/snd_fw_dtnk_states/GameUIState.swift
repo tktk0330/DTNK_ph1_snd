@@ -19,6 +19,7 @@ class GameUIState: ObservableObject {
     // ゲーム状態を示す
     @Published var gamePhase: GamePhase = .base {
         didSet {
+            print("\(gamePhase)")
             gamePhaseAction(vsInfo: gamevsInfo!, phase: gamePhase)
         }
     }
@@ -27,7 +28,7 @@ class GameUIState: ObservableObject {
     @Published var table: [CardId] = [] {
         didSet {
             if gamevsInfo == .vsBot {
-//                checkBotDtnk()
+                checkBotDtnk()
             }
         }
     }
@@ -64,7 +65,7 @@ class GameUIState: ObservableObject {
     @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
         didSet {
             if gamevsInfo == .vsBot && challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
-                gamePhase = .challenge
+                gamePhase = .startChallenge
             }
         }
     }
@@ -93,8 +94,17 @@ class GameUIState: ObservableObject {
     @Published var startFlag: Bool = false // startBtn
     @Published var AnnounceFlg = false     // 実行中 true 非表示中　false
     @Published var turnFlg: Int = 0        // 0: canDraw 1: canPass
-    @Published var dtnkFlg: Int = 0        // 0: no 1: dtnked
+    @Published var dtnkFlg: [Int] = Array(repeating: 0, count: 4)        // 0: no 1: dtnked
     @Published var regenerationDeckFlg: Int = 0        // 0: no 1: dtnked
+    // Announce
+    @Published var showChallengeAnnounce: Bool = false     // アナウンス表示のフラグ
+    @Published var announceText: String = ""     // アナウンステキスト
+
+    func triggerAnnouncement(text: String) {
+        announceText = text
+        showChallengeAnnounce = true
+    }
+
 
     func resetItem() {
         gameMode = .base
@@ -131,7 +141,7 @@ class GameUIState: ObservableObject {
         startFlag = false
         AnnounceFlg = false
         turnFlg = 0
-        dtnkFlg = 0
+        dtnkFlg = Array(repeating: 0, count: 4)
         regenerationDeckFlg = 0
     }
 
@@ -166,43 +176,20 @@ class GameUIState: ObservableObject {
                         startFlag = true
                     }
                 }
-            case .gamenum:
-                log("\(phase)")
-            case .countdown:
-                log("\(phase)")
             case .ratefirst:
                 GameBotController().firstCard()
             case .gamefirst:
                 GameBotController().BotGameInit()
             case .decisioninitialplayer:
                 GameBotController().endFlip()
-            case .gamefirst_sub:
-                log("\(phase)")
-            case .main:
-                log("\(phase)")
-            case .dtnk:
-                log("\(phase)")
-            case .burst:
-                log("\(phase)")
-            case .revenge:
-                log("\(phase)")
             case .q_challenge:
                 GameBotController().moveChallengeBot()
             case .challenge:
                 GameBotController().challengeEvent()
             case .decisionrate_pre:
                 GameBotController().preparationFinalPhase()
-            case .decisionrate:
+            default:
                 log("\(phase)")
-            case .result:
-                log("\(phase)")
-            case .other:
-                log("\(phase)")
-            case .waiting:
-                log("\(phase)")
-            case .base:
-                log("\(phase)")
-
             }
             
         case .vsFriend:
@@ -211,43 +198,14 @@ class GameUIState: ObservableObject {
                 GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { [self] result in
                     startFlag = true
                 }
-            case .gamenum:
-                log("\(phase)")
-            case .countdown:
-                log("\(phase)")
             case .ratefirst:
                 GameObserber(hostID: appState.room.roomData.hostID).firstCard()
-            case .gamefirst:
-                log("\(phase)")
-            case .decisioninitialplayer:
-                log("\(phase)")
-            case .gamefirst_sub:
-                log("\(phase)")
-            case .main:
-                log("\(phase)")
-            case .dtnk:
-                log("\(phase)")
-            case .burst:
-                log("\(phase)")
-            case .revenge:
-                log("\(phase)")
-            case .q_challenge:
-                log("\(phase)")
             case .challenge:
                 GameObserber(hostID: appState.room.roomData.hostID).challengeEvent()
             case .decisionrate_pre:
                 GameObserber(hostID: appState.room.roomData.hostID).preparationFinalPhase()
-            case .decisionrate:
+            default:
                 log("\(phase)")
-            case .result:
-                log("\(phase)")
-            case .other:
-                log("\(phase)")
-            case .waiting:
-                log("\(phase)")
-            case .base:
-                log("\(phase)")
-
             }
         }
     }
@@ -303,9 +261,8 @@ class GameUIState: ObservableObject {
         self.winners = []
         self.losers = []
         self.gameScore = resetItem.gameScore
-        
         self.turnFlg = 0
-        self.dtnkFlg = 0
+        self.dtnkFlg = Array(repeating: 0, count: 4)
         self.players[0].selectedCards = []
         completion(true)
     }

@@ -386,10 +386,13 @@ class GameBotController {
         let table = game.table.last!
         // Botplayer
         let numbers = [1, 2, 3]
-        var ans: ChallengeAnswer = .nochallenge
-        
         for number in numbers {
-            if number == game.dtnkPlayerIndex {
+            var ans: ChallengeAnswer = .nochallenge
+            
+            if game.dtnkFlg[number] == 1 {
+                // dtnkしていればチャレンジ
+                ans = .challenge
+            } else if number == game.dtnkPlayerIndex {
                 // dtnkerだったらチャレンジ必須
                 ans = .challenge
             } else {
@@ -409,7 +412,7 @@ class GameBotController {
             }
             game.challengeAnswers[number] = ans
         }
-        print("\(game.challengeAnswers)")
+        log("\(game.challengeAnswers)")
     }
     
     /**
@@ -503,6 +506,7 @@ class GameBotController {
             return value.rawValue > 1 ? index : nil
         }
         
+        // 誰もいなかったらスコア決定へ
         if challengeplayers.isEmpty {
             game.gamePhase = .decisionrate_pre
             return
@@ -511,7 +515,10 @@ class GameBotController {
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
         let dtnkCardNumber = game.table.last?.number()
         // 手札とどてんこカードを比較して、行動する 3
-        challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+        game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name) のChallenge")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
+            challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+        }
     }
     
     // 次のプレイヤーを返す
@@ -548,7 +555,7 @@ class GameBotController {
         // 自分がdtnkIndexだったら終了
         if challengerIndex == dtnkIndex {
             log("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
-            game.gamePhase = .decisionrate_pre
+            game.gamePhase = .endChallenge
             return
         }
         // 手札とどてんこカードを比較
@@ -578,20 +585,35 @@ class GameBotController {
         
         // 終了(最小値がダメだった場合)
         if (minimun > dtnkCardNumber) {
+            log("\(challengerIndex): のチャレンジ　　オーバーした")
             // overしたら次の人へ
             let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                log("next challenger")
-                // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
-                self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+            
+            // 次がdtnkIndexだったら終了
+            if nextChallenger == dtnkIndex {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
+                    game.gamePhase = .endChallenge
+                }
+                return
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
+                    log("next challenger")
+                    log("\(nextChallenger!): のチャレンジ")
+                    game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name) のChallenge")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
+                        // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
+                        self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
+                    }
+                }
+                return
             }
-            return
         }
         
         // 最小の方が小さい場合
         if (minimun < dtnkCardNumber) {
+            log("\(challengerIndex): のチャレンジ　　可能性あるので引く")
             // チャンスあり 一枚引く
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
                 drawCard(Index: challengerIndex)
                 // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
                 self.challengeIndex(challengerIndex: challengerIndex, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
@@ -599,6 +621,7 @@ class GameBotController {
             }
         }
     }
+    
     
     // どてんこ返し
     func revenge() {
@@ -824,7 +847,7 @@ class GameBotController {
      カードを出す
      */
     func playCards(Index: Int, cards: [CardId]) {
-        log("card: \(cards)", level: .debug)
+        log("card: \(cards)", level: .info)
         let cardsToPlay = cards
         
         if game.table.isEmpty {
@@ -935,15 +958,14 @@ class GameBotController {
     }
     
     func dtnk(Index: Int) {
-        // dtnkは１ゲーム１人１回
-        
-        if game.dtnkFlg != 1 {
+        // dtnk/即時返しは１ゲーム１人１回
+        if game.dtnkFlg[Index] != 1 {
             // Vib & SE
             SoundMng.shared.dtnkSound()
 
             DispatchQueue.main.async { [self] in
                 game.gamePhase = .dtnk
-                game.dtnkFlg = 1
+                game.dtnkFlg[Index] = 1
                 // 処理
                 game.dtnkPlayerIndex = Index
                 game.dtnkPlayer = game.players[Index]
@@ -963,26 +985,37 @@ class GameBotController {
     // TODO: 下記２種リファクタリング
     // どてんこ返し in main
     func revengeFirst(Index: Int) {
-        // Vib & SE
-        SoundMng.shared.dtnkSound()
-        game.gamePhase = .dtnk
-
-        // 入れ替え
-        let quickIndex = game.dtnkPlayerIndex
-        _ = game.dtnkPlayer
-        game.lastPlayerIndex = quickIndex
-        game.dtnkPlayerIndex = Index
-        game.dtnkPlayer = game.players[Index]
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
-            game.gamePhase = .q_challenge
+        // dtnk/即時返しは１ゲーム１人１回
+        if game.dtnkFlg[Index] != 1 {
+            game.dtnkFlg[Index] = 1
+            log("\(Index): どてんこ返し")
+            // Vib & SE
+            SoundMng.shared.dtnkSound()
+            game.gamePhase = .revenge_invitable
+            
+            // やられた人の手札リセット
+            todeck(card: game.players[game.dtnkPlayerIndex].hand)
+            appState.gameUIState.players[game.dtnkPlayerIndex].hand.removeAll()
+            tohands(Index: game.dtnkPlayerIndex)
+            
+            // 入れ替え
+            let quickIndex = game.dtnkPlayerIndex
+            _ = game.dtnkPlayer
+            game.lastPlayerIndex = quickIndex
+            game.dtnkPlayerIndex = Index
+            game.dtnkPlayer = game.players[Index]
+            game.ascendingRate = game.ascendingRate * 2
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [self] in
+                game.gamePhase = .q_challenge
+            }
+        } else {
+            log("\(Index): どてんこ済みです")
         }
-        
     }
 
     // どてんこ返し in challenge
     func revenge(Index: Int) {
         // Vib & SE
-        
         game.gamePhase = .revenge
         // 入れ替え
         let quickIndex = game.dtnkPlayerIndex
@@ -1028,15 +1061,15 @@ class GameBotController {
         // 合計が一緒
         var sum: Bool = false
         let sumResult = calculatePossibleSums(cards: playCard)
-//        log("\(sumResult)")
         for sumdata in sumResult {
             if sumdata == table.number() {
                 sum = true
             }
         }
-        // テーブルと全部同じ数字
+        // 手札が全部同じ数字かどうか
         var same: Bool = false
         let sameResult = areAllCardIdsTheSame(cards: playCard)
+        // テーブルと同じ数字または同じスート
         if sameResult {
             same = checkSingleCard(table: table, playCard: playCard.first!)
         }
@@ -1071,7 +1104,7 @@ class GameBotController {
         // 空の配列はfalseとする
         guard !cards.isEmpty else { return false }
         // Jorkerでない数字要素取得
-        let firstNonZeroIndex = cards.firstIndex(where: { $0.number() != 0 }) ?? 0
+        let firstNonZeroIndex = cards.firstIndex(where: { $0.number() != 100 }) ?? 0
         // Jorkerでない数字と他の手札が一致するか
         let firstValue = cards[firstNonZeroIndex].number()
         // 先頭がJorkerではない

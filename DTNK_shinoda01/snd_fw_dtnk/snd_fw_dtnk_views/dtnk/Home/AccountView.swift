@@ -20,7 +20,7 @@ struct AccountView: View {
                 .frame(width: 50, height: 50)
           
             Text(myNickname)
-                .font(.custom(FontName.font01, size: 30))
+                .font(.custom(FontName.MP_Bl, size: 30))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .bold()

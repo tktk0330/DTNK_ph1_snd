@@ -56,6 +56,8 @@ struct Constants {
     
     // MARK: - NGFlg
     static let ngFlg = 0
-
+    
+    // MARK: - AnnounceTime
+    static let announceTime = 0
 
 }

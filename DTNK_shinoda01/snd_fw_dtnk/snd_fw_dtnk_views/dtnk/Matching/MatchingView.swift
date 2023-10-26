@@ -21,14 +21,15 @@ struct MatchingView: View {
                 .frame(width: 60, height: 60)
             
             Text(nickname)
-                .font(.custom(FontName.font01, size: 40))
+                .font(.custom(FontName.MP_Bo, size: 40))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .padding(5)
+                .lineLimit(1)
+                .minimumScaleFactor(0.2)
                 .frame(width: 200)
-
         }
-        .frame(width: UIScreen.main.bounds.width * 0.9, height: 80)
+        .frame(width: Constants.scrWidth * 0.9, height: 80)
         .cornerRadius(25)
         .background(
             RoundedRectangle(cornerRadius: 25)

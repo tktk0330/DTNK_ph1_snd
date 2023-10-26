@@ -21,16 +21,29 @@ struct GameBotView: View {
             Header(game: game, geo: geo)
             GameEventView(game: game, myside: myside, geo: geo)
             Group {
-                // レートアップアナウンス
-                if game.rateUpCard != nil {
-                    RateUpAnnounce(cardImage: game.rateUpCard!) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            GameBotController().firstCard()
+                
+                // Challenge関連
+                // 開始
+                if game.gamePhase == .startChallenge {
+                    ChallengeActionAnnounce(text: "Challenge ZONE\nStart") {
+                        // チャレンジへ
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            game.gamePhase = .challenge
                         }
                     }
-                    .id(game.rateUpCard)
-                    .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }
+                // Challenger
+                if game.showChallengeAnnounce == true {
+                    ChallengeActionAnnounce(text: game.announceText) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            game.showChallengeAnnounce = false
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
+                // Over
+                
                 // revenge
                 if !game.revengerIndex.isEmpty {
                     RevengeAnnounce() {
@@ -39,6 +52,29 @@ struct GameBotView: View {
                         }
                     }
                     .id(game.revengerIndex)
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
+
+                // 終了
+                if game.gamePhase == .endChallenge  {
+                    ChallengeActionAnnounce(text: "Challenge ZONE\nEnd") {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // 最終結果へ
+                            game.gamePhase = .decisionrate_pre
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
+
+                
+                // レートアップアナウンス
+                if game.rateUpCard != nil {
+                    RateUpAnnounce(cardImage: game.rateUpCard!) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            GameBotController().firstCard()
+                        }
+                    }
+                    .id(game.rateUpCard)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
                 }
                 // デッキ再生成
