@@ -248,6 +248,61 @@ class FirebaseManager {
     }
     
     /**
+     NextChallengerIndexのセット
+     */
+    func setNextChallengerIndex(nextChallengerIndex: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("nextChallengerIndex").setValue(nextChallengerIndex) { error, _ in
+            if let error = error {
+                log("Failed to update room status: \(error.localizedDescription)", level: .error)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     NextChallengerIndexの取得（リアルタイム）
+     */
+    func observeNextChallengerIndex(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("nextChallengerIndex")
+        ref.observe(.value) { (snapshot) in
+            guard let nextChallengerIndex = snapshot.value as? Int else {
+                log("Could not cast snapshot value to an integer")
+                return
+            }
+            completion(nextChallengerIndex)
+        }
+    }
+    
+    /**
+     NextChallengerIndexのセット
+     */
+    func setRevengerIndex(revengerIndex: Int, completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("revengerIndex").setValue(revengerIndex) { error, _ in
+            if let error = error {
+                log("Failed to update room status: \(error.localizedDescription)", level: .error)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     NextChallengerIndexの取得（リアルタイム）
+     */
+    func observesetRevengerIndex(completion: @escaping (Int?) -> Void) {
+        let ref = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID).child("revengerIndex")
+        ref.observe(.value) { (snapshot) in
+            guard let revengerIndex = snapshot.value as? Int else {
+                log("Could not cast snapshot value to an integer")
+                return
+            }
+            completion(revengerIndex)
+        }
+    }
+
+    
+    /**
      DTNKInfoのセット　Index  Player
      */
     func setDTNKInfo(Index: Int, dtnkPlayer: Player_f, completion: @escaping (Bool) -> Void) {

@@ -44,8 +44,8 @@ struct GameBotView: View {
                 }
                 // Over
                 
-                // revenge
-                if !game.revengerIndex.isEmpty {
+                // どてんこ返し(in challenge)
+                if game.revengerIndex != nil {
                     RevengeAnnounce() {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             GameBotController().revenge()

@@ -56,9 +56,8 @@ struct GameEventView: View {
                     .id(UUID())
             }
             // Revenge_invintable
-            if game.gamePhase == .revenge_invitable {
+            if game.gamePhase == .revengeInMain {
                 DTNKView(text: "どてんこ返し")
-                    .id(UUID())
             }
             // バースト注意文言
             if  game.players[myside].hand.count == Constants.burstCount && (game.gamePhase == .gamefirst_sub || game.gamePhase == .main) {

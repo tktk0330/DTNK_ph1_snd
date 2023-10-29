@@ -571,8 +571,7 @@ class GameBotController {
             if value == dtnkCardNumber {
                 // リベンジ処理
                 log("どてんこ返し：\(challengerIndex) → \(dtnkIndex)")
-                game.revengerIndex.append(challengerIndex)
-                game.revengerIndex.append(dtnkIndex)
+                game.revengerIndex = challengerIndex
                 // 手札処理
                 DispatchQueue.main.async { [self] in
                     todeck(card: game.players[dtnkIndex].hand)
@@ -599,6 +598,7 @@ class GameBotController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
                     log("next challenger")
                     log("\(nextChallenger!): のチャレンジ")
+                    // nextChallengerAnnounce
                     game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name) のChallenge")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
                         // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
@@ -626,12 +626,13 @@ class GameBotController {
     // どてんこ返し
     func revenge() {
         // 倍にして勝敗逆に
+        let revengerdIndex = game.dtnkPlayerIndex
         game.ascendingRate += game.ascendingRate
-        game.dtnkPlayerIndex = game.revengerIndex[0]
-        game.dtnkPlayer = game.players[game.revengerIndex[0]]
-        game.lastPlayerIndex = game.revengerIndex[1]
+        game.dtnkPlayerIndex = game.revengerIndex!
+        game.dtnkPlayer = game.players[game.revengerIndex!]
+        game.lastPlayerIndex = revengerdIndex
         // 空にする
-        game.revengerIndex.removeAll()
+        game.revengerIndex = nil
         challengeEvent()
     }
     
@@ -991,7 +992,7 @@ class GameBotController {
             log("\(Index): どてんこ返し")
             // Vib & SE
             SoundMng.shared.dtnkSound()
-            game.gamePhase = .revenge_invitable
+            game.gamePhase = .revengeInMain
             
             // やられた人の手札リセット
             todeck(card: game.players[game.dtnkPlayerIndex].hand)
@@ -1016,7 +1017,7 @@ class GameBotController {
     // どてんこ返し in challenge
     func revenge(Index: Int) {
         // Vib & SE
-        game.gamePhase = .revenge
+        game.gamePhase = .revengeInChallenge
         // 入れ替え
         let quickIndex = game.dtnkPlayerIndex
         _ = game.dtnkPlayer

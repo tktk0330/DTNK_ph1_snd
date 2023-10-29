@@ -54,10 +54,12 @@ struct ChallengePopView: View {
                         Btnaction(btnText: "辞退", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                     }
                     // 返せる時
-                    if GameBotController().dtnkJudge(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) == Constants.dtnkCode {
+                    if GameBotController().dtnkJudge(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) != Constants.dtnkCode {
                         Button(action: {
                             if game.gamevsInfo == .vsFriend {
-                                GameFriendEventController().revengeQuick(Index: game.myside, dtnkPlayer: game.players[game.myside])
+//                                GameFriendEventController().revengeQuick(Index: game.myside, dtnkPlayer: game.players[game.myside])
+                                GameFriendEventController().revengeInMain(Index: game.myside)
+
                             } else {
                                 GameBotController().revengeFirst(Index: game.myside)
                             }

@@ -85,10 +85,12 @@ class GameUIState: ObservableObject {
     @Published var gameScore: Int = 1
     // レートアップカード
     @Published var rateUpCard: String? = nil
+    // Next Challenger
+    @Published var nextChallengerIndex: Int? = nil
     // initialFlipの仮変数
     @Published var initialPlayerIndex: Int? = nil
-    // どてんこ返し [返した人　返された人]
-    @Published var revengerIndex: [Int] = []
+    // どてんこ返し [返した人]
+    @Published var revengerIndex: Int? = nil
     // FB必要なし
     @Published var counter: Bool = false   // カウンター
     @Published var startFlag: Bool = false // startBtn
@@ -104,7 +106,6 @@ class GameUIState: ObservableObject {
         announceText = text
         showChallengeAnnounce = true
     }
-
 
     func resetItem() {
         gameMode = .base
@@ -136,7 +137,7 @@ class GameUIState: ObservableObject {
         gameScore = 1
         rateUpCard = nil
         initialPlayerIndex = nil
-        revengerIndex = []
+        revengerIndex = nil
         counter = false
         startFlag = false
         AnnounceFlg = false
@@ -267,10 +268,17 @@ class GameUIState: ObservableObject {
         completion(true)
     }
     
-    
     func deleteGamedate() {
         GameObserber(hostID: appState.room.roomData.hostID).deleteGamedata() { result in
         }
+    }
+    
+    func setGamePhase (gamePhase: GamePhase) {
+        GameObserber(hostID: appState.room.roomData.hostID).setGamePhase(gamePhase: gamePhase)
+    }
+    
+    func revengeInChallenge() {
+        GameObserber(hostID: appState.room.roomData.hostID).revengeInChallenge()
     }
 }
 

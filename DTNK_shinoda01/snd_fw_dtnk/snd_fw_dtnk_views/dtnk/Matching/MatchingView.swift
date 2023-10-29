@@ -139,6 +139,8 @@ struct MatchingView: View {
 
             }
             .onAppear {
+                room.roommode = .base
+
                 if matching.vsInfo == 01 {
                     MatchingController().onRequest()
                 } else {

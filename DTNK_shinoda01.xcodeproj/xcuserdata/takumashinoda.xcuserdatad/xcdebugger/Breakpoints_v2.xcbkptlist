@@ -14,8 +14,8 @@
             filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/firebase/FireBaseMng.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "802"
-            endingLineNumber = "802"
+            startingLineNumber = "857"
+            endingLineNumber = "857"
             landmarkName = "moveTopCardToTable(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -66,134 +66,6 @@
             endingLineNumber = "32"
             landmarkName = "InitialFlipPartsView"
             landmarkType = "14">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A8AAA704-4FA2-48DE-A422-64DB06095BE4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_states/GameUIState.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
-            landmarkName = "botTurnAction(Index:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5BFA8A99-A9EE-4E12-926B-D126D876C0F4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "322"
-            endingLineNumber = "322"
-            landmarkName = "decideWinnersLosers(completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "02FF5835-6F33-4C65-9F24-C9AE83BC8080"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
-            landmarkName = "decideWinnersLosers(completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "02FF5835-6F33-4C65-9F24-C9AE83BC8080 - 2daf97712f5c841"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.GameObserber.decideWinnersLosers(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "309"
-                  endingLineNumber = "309"
-                  offsetFromSymbolStart = "1220">
-               </Location>
-               <Location
-                  uuid = "02FF5835-6F33-4C65-9F24-C9AE83BC8080 - 2daf97712f5c841"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DTNK_shinoda01.GameObserber.decideWinnersLosers(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameObserber.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "309"
-                  endingLineNumber = "309"
-                  offsetFromSymbolStart = "1236">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8C249752-A15E-4D71-ACA5-067039497461"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameMainController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "botAction(Index:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "8C249752-A15E-4D71-ACA5-067039497461 - c878789890d9e171"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in DTNK_shinoda01.GameBotController.botAction(Index: Swift.Int, completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameMainController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "67"
-                  endingLineNumber = "67"
-                  offsetFromSymbolStart = "3036">
-               </Location>
-               <Location
-                  uuid = "8C249752-A15E-4D71-ACA5-067039497461 - 380711da26134c7e"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in DTNK_shinoda01.GameBotController.botAction(Index: Swift.Int, completion: (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameMainController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "68"
-                  endingLineNumber = "68"
-                  offsetFromSymbolStart = "1112">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -321,70 +193,6 @@
             startingLineNumber = "15"
             endingLineNumber = "15"
             landmarkName = "generateGameInfo(players:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9B18A54D-91EC-476D-806A-8D52DA67A56D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_views/components/ChallengePopView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "9B18A54D-91EC-476D-806A-8D52DA67A56D - 5c58670b798ee0b8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 () -&gt; () in closure #2 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Button&lt;DTNK_shinoda01.Btnaction&gt;, SwiftUI._ConditionalContent&lt;SwiftUI.Button&lt;DTNK_shinoda01.Btnaction&gt;, SwiftUI.Button&lt;DTNK_shinoda01.Btnaction&gt;&gt;)&gt; in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.position(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.position(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, SwiftUI._ConditionalContent&lt;&lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.position(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0&gt;)&gt; in DTNK_shinoda01.ChallengePopView.body.getter : some"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_views/components/ChallengePopView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "364">
-               </Location>
-               <Location
-                  uuid = "9B18A54D-91EC-476D-806A-8D52DA67A56D - 5c58670b798ee0b8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 () -&gt; () in closure #2 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Button&lt;DTNK_shinoda01.Btnaction&gt;, SwiftUI._ConditionalContent&lt;SwiftUI.Button&lt;DTNK_shinoda01.Btnaction&gt;, SwiftUI.Button&lt;DTNK_shinoda01.Btnaction&gt;&gt;)&gt; in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.position(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.position(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, SwiftUI._ConditionalContent&lt;&lt;&lt;opaque return type of SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.position(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0&gt;)&gt; in DTNK_shinoda01.ChallengePopView.body.getter : some"
-                  moduleName = "DTNK_shinoda01"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/takumashinoda/Desktop/DTNK_shinoda01/DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_views/components/ChallengePopView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "328">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F7B7C1D5-C663-4144-9665-B4ACB435DE16"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DTNK_shinoda01/snd_fw_dtnk/snd_fw_dtnk_controllers/dtnk/GameFriendEventController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "revengeQuick(Index:dtnkPlayer:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

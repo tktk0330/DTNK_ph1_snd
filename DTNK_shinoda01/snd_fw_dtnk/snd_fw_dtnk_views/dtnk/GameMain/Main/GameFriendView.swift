@@ -30,8 +30,54 @@ struct GameFriendView: View {
             GameButtonView(game: game, myside: myside, geo: geo)
             Header(game: game, geo: geo)
             GameEventView(game: game, myside: myside, geo: geo, fbms: fbms)
-            
             Group {
+                
+                // Challenge関連
+                // 開始
+                if game.gamePhase == .startChallenge {
+                    ChallengeActionAnnounce(text: "Challenge ZONE\nStart") {
+                        // チャレンジへ
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            game.setGamePhase(gamePhase: .challenge)
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
+                // Challenger
+                if game.nextChallengerIndex != nil {
+                    ChallengeActionAnnounce(text: "\(game.players[game.nextChallengerIndex!].name) のChallenge") {
+                        // チャレンジへ
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            game.nextChallengerIndex = nil
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+
+                }
+                // Over
+                
+                // どてんこ返し(in challenge)
+                if game.revengerIndex != nil {
+                    RevengeAnnounce() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            game.revengeInChallenge()
+                        }
+                    }
+                    .id(game.revengerIndex)
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
+                
+                // 終了
+                if game.gamePhase == .endChallenge  {
+                    ChallengeActionAnnounce(text: "Challenge ZONE\nEnd") {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // 最終結果へ
+                            game.setGamePhase(gamePhase: .decisionrate_pre)
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
+                
                 // レートアップアナウンス
                 if game.rateUpCard != nil {
                     RateUpAnnounce(cardImage: game.rateUpCard!) {
@@ -52,14 +98,6 @@ struct GameFriendView: View {
                     }
                     .id(game.regenerationDeckFlg)
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
-                }
-                
-                if game.gamePhase == .revenge {
-                    RevengeView(text: "どてんこ返し") {
-                        game.ascendingRate += game.ascendingRate
-                        log("新しい勝敗　勝者：\(game.dtnkPlayerIndex)   敗者：\(game.lastPlayerIndex)")
-                        
-                    }
                 }
                 // スコア
                 if appState.subState != nil && game.gamePhase == .decisionrate {
@@ -141,6 +179,19 @@ struct GameFriendView: View {
                 game.currentPlayerIndex = currentPlayerIndex!
             }
         }
+        // nextChallengerIndex
+        fbms.observeNextChallengerIndex() { nextChallengerIndex in
+            if (nextChallengerIndex != nil) {
+                game.nextChallengerIndex = nextChallengerIndex!
+            }
+        }
+        // revengerIndex
+        fbms.observesetRevengerIndex() { revengerIndex in
+            if (revengerIndex != nil) {
+                game.revengerIndex = revengerIndex!
+            }
+        }
+
         for s in 0..<game.players.count {
             // rank & score
             fbms.observeRankAndScore(playerIndex: String(s)) { rank, score in

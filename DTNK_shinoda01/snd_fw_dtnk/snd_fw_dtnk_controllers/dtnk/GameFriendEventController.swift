@@ -27,7 +27,7 @@ struct GameFriendEventController {
      */
     func checDtnk(myside: Int) -> Bool {
         guard myside != appState.gameUIState.lastPlayerIndex || appState.gameUIState.currentPlayerIndex == 99 else {
-            print("can not dtnk!")
+            log("can not dtnk!")
             return false
         }
         return true
@@ -143,12 +143,12 @@ struct GameFriendEventController {
     
     func dtnk(Index: Int, dtnkPlayer: Player_f) {
         // dtnkは１ゲーム１人１回
-        if game.dtnkFlg[0] != 1 {
+        if game.dtnkFlg[Index] != 1 {
             
             guard checDtnk(myside: Index) else {
                 return
             }
-            game.dtnkFlg[0] = 1
+            game.dtnkFlg[Index] = 1
             // TODO: 音バイブ
             fbms.setGamePhase(gamePhase: .dtnk) { result in }
             fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
@@ -162,11 +162,45 @@ struct GameFriendEventController {
         }
     }
     
+    // revenge in main
+    func revengeInMain(Index: Int) {
+        // dtnkは１ゲーム１人１回
+        if game.dtnkFlg[Index] != 1 {
+            game.dtnkFlg[Index] = 1
+
+            // TODO: 音バイブ
+            fbms.setGamePhase(gamePhase: .revengeInMain) { result in }
+            // 勝敗逆転
+            fbms.setLasrPlayerIndex(lastPlayerIndex: game.dtnkPlayerIndex) { result in }
+            fbms.setDTNKInfo(Index: Index, dtnkPlayer: game.players[Index]) { result in }
+            
+            // 処理 手札リセット
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
+                fbms.resetHands(playerIndex: game.lastPlayerIndex,
+                                playerID: game.players[game.lastPlayerIndex].id,
+                                baseselectedCards: game.players[game.lastPlayerIndex].hand) { result in
+                }
+            }
+            
+            // アニメーション終わったら再度参加可否
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                // 可否
+                fbms.setGamePhase(gamePhase: .q_challenge) { result in }
+                // レート倍
+                let ascendingRate = game.ascendingRate * 2
+                fbms.setAscendingRate(ascendingRate: ascendingRate) { result in }
+            }
+            
+        } else {
+            log("\(Index): dtnk済み")
+        }
+    }
+    
     // どてんこ返し（即時）
     func revengeQuick(Index: Int, dtnkPlayer: Player_f) {
         // dtnkは１ゲーム１人１回
         if game.dtnkFlg[0] != 1 {
-            fbms.setGamePhase(gamePhase: .revenge) { result in }
+            fbms.setGamePhase(gamePhase: .revengeInMain) { result in }
             game.dtnkFlg[0] = 1
             
             // 勝敗入れ替え
