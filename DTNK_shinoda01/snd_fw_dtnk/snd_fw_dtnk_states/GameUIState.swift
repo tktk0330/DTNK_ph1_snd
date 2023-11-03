@@ -19,7 +19,6 @@ class GameUIState: ObservableObject {
     // ゲーム状態を示す
     @Published var gamePhase: GamePhase = .base {
         didSet {
-            print("\(gamePhase)")
             gamePhaseAction(vsInfo: gamevsInfo!, phase: gamePhase)
         }
     }
@@ -65,7 +64,12 @@ class GameUIState: ObservableObject {
     @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
         didSet {
             if gamevsInfo == .vsBot && challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
-                gamePhase = .startChallenge
+                if challengeAnswers[dtnkPlayerIndex] == ChallengeAnswer.challenge &&
+                   challengeAnswers.enumerated().allSatisfy({ ($0.offset == dtnkPlayerIndex) || ($0.element != ChallengeAnswer.challenge) }) {
+                    gamePhase = .noChallenge
+                } else {
+                    gamePhase = .startChallenge
+                }
             }
         }
     }

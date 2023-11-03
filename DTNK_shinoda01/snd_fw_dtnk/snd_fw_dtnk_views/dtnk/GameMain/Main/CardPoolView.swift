@@ -20,7 +20,7 @@ struct CardPoolView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: Constants.otherCardWidth)
-                .offset(CGSize(width: UIScreen.main.bounds.width * -0.09, height: -Constants.scrHeight * 0.046))
+                .offset(CGSize(width: UIScreen.main.bounds.width * -0.09, height: -Constants.scrHeight * 0.01))
         }
         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
     }

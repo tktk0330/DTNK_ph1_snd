@@ -96,7 +96,7 @@ struct MatchingView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 40)
                 }
-                .position(x: UIScreen.main.bounds.width * 0.10, y:  geo.size.height * 0.10)
+                .position(x: Constants.scrWidth * 0.10, y:  geo.size.height * 0.13)
                 
                 // title
                 Text("Matching")

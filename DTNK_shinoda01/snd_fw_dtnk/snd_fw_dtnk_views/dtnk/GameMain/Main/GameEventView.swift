@@ -38,7 +38,7 @@ struct GameEventView: View {
         // CountDown
         if game.gamePhase == .countdown {
             StartCountdownView()
-                .scaleEffect(2.0)
+                .scaleEffect(3.0)
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
         }
         // 仮想View 初期カード設置
@@ -50,14 +50,28 @@ struct GameEventView: View {
         
         
         Group {
-            // DTNK View
             if game.gamePhase == .dtnk {
-                DTNKView(text: "DOTENKO")
-                    .id(UUID())
+                if game.lastPlayerIndex == 99 {
+                    GifViewCloser(gifName: GifName.Game.stnk.rawValue) {
+                        
+                    }
+                    .scaleEffect(0.42)
+                    .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.5)
+                } else {
+                    GifViewCloser(gifName: GifName.Game.dtnk.rawValue) {
+                        
+                    }
+                    .scaleEffect(0.6)
+                    .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.5)
+                }
             }
-            // Revenge_invintable
+            // RevengeinMain
             if game.gamePhase == .revengeInMain {
-                DTNKView(text: "どてんこ返し")
+                GifViewCloser(gifName: GifName.Game.revenge.rawValue) {
+                    
+                }
+                .scaleEffect(0.75)
+                .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.5)
             }
             // バースト注意文言
             if  game.players[myside].hand.count == Constants.burstCount && (game.gamePhase == .gamefirst_sub || game.gamePhase == .main) {

@@ -14,7 +14,7 @@ struct BunnerView: View {
         if let vc = sceneDelegate.myWindow?.rootViewController {
             AdMobBannerView(viewController: vc, windowScene: sceneDelegate.windowScene)
                 .frame(width: 320, height: 50)
-                .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.025)
+                .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.040)
         }
 
     }

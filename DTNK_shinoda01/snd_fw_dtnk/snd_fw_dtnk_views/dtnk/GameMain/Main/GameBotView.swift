@@ -46,15 +46,12 @@ struct GameBotView: View {
                 
                 // どてんこ返し(in challenge)
                 if game.revengerIndex != nil {
-                    RevengeAnnounce() {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            GameBotController().revenge()
-                        }
+                    GifViewCloser(gifName: GifName.Game.revengeInChallenge.rawValue) {
+                        GameBotController().revenge()
                     }
-                    .id(game.revengerIndex)
+                    .scaleEffect(0.7)
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }
-
                 // 終了
                 if game.gamePhase == .endChallenge  {
                     ChallengeActionAnnounce(text: "Challenge ZONE\nEnd") {
@@ -65,8 +62,16 @@ struct GameBotView: View {
                     }
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }
-
-                
+                // 誰もチャレンジしない
+                if game.gamePhase == .noChallenge  {
+                    ChallengeActionAnnounce(text: "No\nChallenge ZONE", textColor: .dtnkLightRed) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // 最終結果へ
+                            game.gamePhase = .decisionrate_pre
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
                 // レートアップアナウンス
                 if game.rateUpCard != nil {
                     RateUpAnnounce(cardImage: game.rateUpCard!) {

@@ -22,7 +22,7 @@ struct MovingImage: View {
                     .frame(width: geometry.size.width)
                 }
             }
-            .offset(x: self.offset, y:  geometry.size.height * 0.08)
+            .offset(x: self.offset, y:  geometry.size.height * 0.11)
             .onAppear {
                 self.offset = geometry.size.width
             }
@@ -33,6 +33,5 @@ struct MovingImage: View {
                 }
             }
         }
-//        .frame(height: 50) // Adjust the height
     }
 }

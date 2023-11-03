@@ -4,8 +4,9 @@
 enum GifName {
     enum Game: String {
         case burtst = "burst01"
-        case dtnk = "dtnk01"
-        case stnk = "stnk01"
-        case revenge = "revenge01"
+        case dtnk = "dotenko03"
+        case stnk = "shotenko02"
+        case revenge = "revenge00"
+        case revengeInChallenge = "revenge01"
     }
 }

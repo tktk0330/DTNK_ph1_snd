@@ -62,7 +62,8 @@ struct GameResultView: View {
                                 .foregroundColor(Color.white)
                                 .fontWeight(.bold)
                                 .padding(5)
-                                .minimumScaleFactor(0.3)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.2)
                                 .frame(width: geo.size.width * 0.3)
                         }
                     }

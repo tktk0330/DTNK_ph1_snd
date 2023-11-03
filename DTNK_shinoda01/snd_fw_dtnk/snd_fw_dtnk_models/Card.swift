@@ -121,9 +121,9 @@ extension CardId {
         
         switch location {
         case .deck:
-            return CGSize(width: UIScreen.main.bounds.width * -space, height: -Constants.scrHeight * 0.046)
+            return CGSize(width: UIScreen.main.bounds.width * -space, height: -Constants.scrHeight * 0.01)
         case .table:
-            return CGSize(width: UIScreen.main.bounds.width * space, height: -Constants.scrHeight * 0.046)
+            return CGSize(width: UIScreen.main.bounds.width * space, height: -Constants.scrHeight * 0.01)
         case .hand(let playerIndex, let cardIndex):
             let cardSpacingDegrees: Double = playerIndex == game!.myside ? 30 : 10
             var prex = CGFloat(0)
@@ -147,15 +147,15 @@ extension CardId {
             }
             // 自分のサイドの次のプレイヤーの座標(左)
             else if playerIndex == (game!.myside + 1) % game!.players.count {
-                return CGSize(width: -y - resize, height: x - Constants.scrHeight * 0.16)
+                return CGSize(width: -y - resize, height: x - Constants.scrHeight * 0.12)
             }
             // 自分のサイドの次の次のプレイヤーの座標(正面)
             else if playerIndex == (game!.myside + 2) % game!.players.count {
-                return CGSize(width: -x, height: y - Constants.scrHeight * 0.35)
+                return CGSize(width: -x, height: y - Constants.scrHeight * 0.31)
             }
             // 自分のサイドの次の次の次のプレイヤーの座標(右)
             else if playerIndex == (game!.myside + 3) % game!.players.count {
-                return CGSize(width: y + resize, height: -x - Constants.scrHeight * 0.16)
+                return CGSize(width: y + resize, height: -x - Constants.scrHeight * 0.12)
             }
             else {
                 return .zero

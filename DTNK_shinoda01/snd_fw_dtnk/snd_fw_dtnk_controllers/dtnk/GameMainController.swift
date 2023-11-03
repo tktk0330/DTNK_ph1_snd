@@ -68,6 +68,36 @@ struct GameMainController {
             }
         }
     }
+    
+    // チャレンジモード関連以外か
+    func judgeChallenge(gamePase: GamePhase) -> Bool {
+        switch gamePase {
+        case .startChallenge, .challenge, .endChallenge, .revengeInMain, .revengeInChallenge, .q_challenge, .noChallenge:
+            return false
+        default:
+            return true
+        }
+    }
+
+    // Challengeに参加できるか
+    func judgeChallengeJoin(myside: Int, playerAllCards: [CardId], table: [CardId]) -> Int {
+        // tableが空だったらだめ
+        if table.isEmpty {
+            return Constants.ngCode
+        }
+        // 手札がとりえる値
+        let possibleSum = GameBotController().calculatePossibleSums(cards: playerAllCards)
+        for sum in possibleSum {
+            if sum == table.last!.number() {
+                return Constants.dtnkCode
+            } else if sum < table.last!.number() {
+                return Constants.challengeCode
+            }
+        }
+        return Constants.ngCode
+
+    }
+
 }
 
 class GameBotController {
@@ -386,35 +416,38 @@ class GameBotController {
         let table = game.table.last!
         // Botplayer
         let numbers = [1, 2, 3]
-        for number in numbers {
-            var ans: ChallengeAnswer = .nochallenge
-            
-            if game.dtnkFlg[number] == 1 {
-                // dtnkしていればチャレンジ
-                ans = .challenge
-            } else if number == game.dtnkPlayerIndex {
-                // dtnkerだったらチャレンジ必須
-                ans = .challenge
-            } else {
-                // その他
-                let bot = game.players[number]
-                let botHand = calculatePossibleSums(cards: bot.hand)
-                for hand in botHand {
-                    if hand == table.number() {
-                        // どてんこ返し
-                        revengeFirst(Index: number)
-                        return
-                    } else if hand < table.number() {
-                        // チャレンジする
-                        ans = .challenge
+        
+        // 各numberを1秒間隔で処理する
+        for (index, number) in numbers.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) + 1) { [self] in
+                var ans: ChallengeAnswer = .nochallenge
+                
+                if game.dtnkFlg[number] == 1 {
+                    // dtnkしていればチャレンジ
+                    ans = .challenge
+                } else if number == game.dtnkPlayerIndex {
+                    // dtnkerだったらチャレンジ必須
+                    ans = .challenge
+                } else {
+                    // その他
+                    let bot = game.players[number]
+                    let botHand = calculatePossibleSums(cards: bot.hand)
+                    for hand in botHand {
+                        if hand == table.number() {
+                            // どてんこ返し
+                            self.revengeFirst(Index: number)
+                            return
+                        } else if hand < table.number() {
+                            // チャレンジする
+                            ans = .challenge
+                        }
                     }
                 }
+                game.challengeAnswers[number] = ans
             }
-            game.challengeAnswers[number] = ans
         }
-        log("\(game.challengeAnswers)")
     }
-    
+
     /**
      ゲーム中でなかったら処理しない
      */
@@ -504,12 +537,6 @@ class GameBotController {
         // 参加者を取得 [0,2,3]
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
             return value.rawValue > 1 ? index : nil
-        }
-        
-        // 誰もいなかったらスコア決定へ
-        if challengeplayers.isEmpty {
-            game.gamePhase = .decisionrate_pre
-            return
         }
         // 次のIndexを決める 3
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
@@ -784,14 +811,18 @@ class GameBotController {
             // アナウンス
             game.regenerationDeckFlg = 1
             //deckに戻す　一番上だけ残す
-            let lastCard = game.table.last!
-            var remainingCards = Array(game.table.dropLast())
-            remainingCards.shuffle()
-            game.deck.append(contentsOf: remainingCards)
-            game.table = [lastCard]
-            // view
-            todeck(card: game.deck)
-            totable(card: game.table)
+            if let lastCard = game.table.last {
+                var remainingCards = Array(game.table.dropLast())
+                remainingCards.shuffle()
+                game.deck.append(contentsOf: remainingCards)
+                game.table = [lastCard]
+                // view
+                todeck(card: game.deck)
+                totable(card: game.table)
+            } else {
+                // エラーハンドリング、例えばエラーメッセージの表示など
+                log("regenerationDeck ", level: .error)
+            }
         }
     }
 
@@ -901,14 +932,19 @@ class GameBotController {
         if Index == game.myside {
             game.turnFlg = 1
         }
-        let drawnCard = game.deck.removeLast()
-        game.players[Index].hand.append(drawnCard)
-        tohands(Index: Index)
-        // deck再生成
-        if game.deck.count < 1 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
-                regenerationDeck()
+        
+        if let drawnCard = game.deck.popLast() {
+            game.players[Index].hand.append(drawnCard)
+            tohands(Index: Index)
+            // deck再生成
+            if game.deck.count < 1 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                    regenerationDeck()
+                }
             }
+
+        } else {
+            log("drawCard Can't remove last element from an empty collection", level: .error)
         }
     }
     

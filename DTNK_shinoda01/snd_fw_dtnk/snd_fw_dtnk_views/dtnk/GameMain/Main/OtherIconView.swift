@@ -17,7 +17,7 @@ struct OtherPlayerIconsView: View {
             Text(game.players[(myside + 1) % game.players.count].name)
                 .modifier(IconTextModifier())
         }
-        .position(x: Constants.scrWidth * 0.30, y:  geo.size.height * 0.27)
+        .position(x: Constants.scrWidth * 0.30, y:  geo.size.height * 0.30)
 
         // center
         ZStack(alignment: .bottom) {
@@ -25,7 +25,7 @@ struct OtherPlayerIconsView: View {
             Text(game.players[(myside + 2) % game.players.count].name)
                 .modifier(IconTextModifier())
         }
-        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.22)
+        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.26)
         
         // right
         ZStack(alignment: .bottom) {
@@ -33,7 +33,7 @@ struct OtherPlayerIconsView: View {
             Text(game.players[(myside + 3) % game.players.count].name)
                 .modifier(IconTextModifier())
         }
-        .position(x: Constants.scrWidth * 0.70, y:  geo.size.height * 0.27)
+        .position(x: Constants.scrWidth * 0.70, y:  geo.size.height * 0.30)
 
     }
 }

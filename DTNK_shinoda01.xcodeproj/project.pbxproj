@@ -118,6 +118,15 @@
 		5D9872182AB3C6BC0031A57C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872172AB3C6BC0031A57C /* AppDelegate.swift */; };
 		5D98721A2AB5709F0031A57C /* LifeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9872192AB5709E0031A57C /* LifeView.swift */; };
 		5DB1E7D12AE95EE500E96E17 /* DateExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1E7D02AE95EE400E96E17 /* DateExtention.swift */; };
+		5DB1E7D92AF1389600E96E17 /* dotenko01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7D82AF1389600E96E17 /* dotenko01.gif */; };
+		5DB1E7DB2AF13C7300E96E17 /* shotenko01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7DA2AF13C7300E96E17 /* shotenko01.gif */; };
+		5DB1E7DD2AF13EDE00E96E17 /* dotenko02.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7DC2AF13EDE00E96E17 /* dotenko02.gif */; };
+		5DB1E7DF2AF28D5400E96E17 /* dotenko03.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7DE2AF28D5400E96E17 /* dotenko03.gif */; };
+		5DB1E7E12AF28D7600E96E17 /* shotenko02.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7E02AF28D7600E96E17 /* shotenko02.gif */; };
+		5DB1E7E52AF290E600E96E17 /* revenge00.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7E42AF290E600E96E17 /* revenge00.gif */; };
+		5DB1E7E72AF2917E00E96E17 /* revenge01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7E62AF2917E00E96E17 /* revenge01.gif */; };
+		5DB1E7E92AF4924100E96E17 /* pikon.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7E82AF4924100E96E17 /* pikon.wav */; };
+		5DB1E7EB2AF4925000E96E17 /* don.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EA2AF4925000E96E17 /* don.wav */; };
 		5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */; };
 		5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A72AD99E5400AEE412 /* burst01.gif */; };
 		5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */; };
@@ -270,6 +279,15 @@
 		5D9872172AB3C6BC0031A57C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D9872192AB5709E0031A57C /* LifeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeView.swift; sourceTree = "<group>"; };
 		5DB1E7D02AE95EE400E96E17 /* DateExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtention.swift; sourceTree = "<group>"; };
+		5DB1E7D82AF1389600E96E17 /* dotenko01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dotenko01.gif; sourceTree = "<group>"; };
+		5DB1E7DA2AF13C7300E96E17 /* shotenko01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = shotenko01.gif; sourceTree = "<group>"; };
+		5DB1E7DC2AF13EDE00E96E17 /* dotenko02.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dotenko02.gif; sourceTree = "<group>"; };
+		5DB1E7DE2AF28D5400E96E17 /* dotenko03.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dotenko03.gif; sourceTree = "<group>"; };
+		5DB1E7E02AF28D7600E96E17 /* shotenko02.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = shotenko02.gif; sourceTree = "<group>"; };
+		5DB1E7E42AF290E600E96E17 /* revenge00.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = revenge00.gif; sourceTree = "<group>"; };
+		5DB1E7E62AF2917E00E96E17 /* revenge01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = revenge01.gif; sourceTree = "<group>"; };
+		5DB1E7E82AF4924100E96E17 /* pikon.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikon.wav; sourceTree = "<group>"; };
+		5DB1E7EA2AF4925000E96E17 /* don.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = don.wav; sourceTree = "<group>"; };
 		5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingModeView.swift; sourceTree = "<group>"; };
 		5DB5B5A72AD99E5400AEE412 /* burst01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = burst01.gif; sourceTree = "<group>"; };
 		5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifMng.swift; sourceTree = "<group>"; };
@@ -327,6 +345,8 @@
 				5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */,
 				5D30DE802AC95EB400AA2909 /* card-action.wav */,
 				5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */,
+				5DB1E7EA2AF4925000E96E17 /* don.wav */,
+				5DB1E7E82AF4924100E96E17 /* pikon.wav */,
 				5D98720E2AAB49110031A57C /* dtnk01.wav */,
 			);
 			path = sound;
@@ -763,6 +783,13 @@
 		5DB5B5A62AD99E0A00AEE412 /* animation */ = {
 			isa = PBXGroup;
 			children = (
+				5DB1E7D82AF1389600E96E17 /* dotenko01.gif */,
+				5DB1E7DC2AF13EDE00E96E17 /* dotenko02.gif */,
+				5DB1E7DE2AF28D5400E96E17 /* dotenko03.gif */,
+				5DB1E7DA2AF13C7300E96E17 /* shotenko01.gif */,
+				5DB1E7E02AF28D7600E96E17 /* shotenko02.gif */,
+				5DB1E7E42AF290E600E96E17 /* revenge00.gif */,
+				5DB1E7E62AF2917E00E96E17 /* revenge01.gif */,
 				5DB5B5A72AD99E5400AEE412 /* burst01.gif */,
 				5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */,
 				5DB5B5AD2ADA41A100AEE412 /* GifName.swift */,
@@ -874,13 +901,22 @@
 			files = (
 				5D30DE842AC95EB400AA2909 /* card-action.wav in Resources */,
 				5D30DE832AC95EB400AA2909 /* casino-bgm.wav in Resources */,
+				5DB1E7EB2AF4925000E96E17 /* don.wav in Resources */,
 				5D98720F2AAB49110031A57C /* dtnk01.wav in Resources */,
+				5DB1E7DF2AF28D5400E96E17 /* dotenko03.gif in Resources */,
+				5DB1E7E72AF2917E00E96E17 /* revenge01.gif in Resources */,
 				5D8FA3262A482B3F0079F260 /* GoogleService-Info.plist in Resources */,
 				5D30DE822AC95EB400AA2909 /* btn-positive.wav in Resources */,
 				5DC02E5A2ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf in Resources */,
+				5DB1E7D92AF1389600E96E17 /* dotenko01.gif in Resources */,
 				5D8FA24C2A4814AF0079F260 /* Preview Assets.xcassets in Resources */,
 				5DC02E5C2ABEAFE9009E84A5 /* MPLUS1p-Black.ttf in Resources */,
 				5DC02E5B2ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf in Resources */,
+				5DB1E7E52AF290E600E96E17 /* revenge00.gif in Resources */,
+				5DB1E7DD2AF13EDE00E96E17 /* dotenko02.gif in Resources */,
+				5DB1E7E12AF28D7600E96E17 /* shotenko02.gif in Resources */,
+				5DB1E7DB2AF13C7300E96E17 /* shotenko01.gif in Resources */,
+				5DB1E7E92AF4924100E96E17 /* pikon.wav in Resources */,
 				5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */,
 				5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */,
 				5D8FA2652A481CDA0079F260 /* DS-DIGIB.TTF in Resources */,

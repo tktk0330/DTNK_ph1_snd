@@ -24,6 +24,10 @@ struct DecisionScoreView: View {
                         if step >= 2 {
                             Text(sub.resultItem.winners.count > 1 ? "ALL" : sub.resultItem.winners[0].name)
                                 .modifier(DecisionScoreViewModifier(fontSize: 20))
+                                .onAppear{
+                                    SoundMng.shared.playSound(soundName: SoundName.SE.donaction.rawValue)
+                                }
+
                         } else {
                             Text("")
                                 .modifier(DecisionScoreViewModifier(fontSize: 20))
@@ -80,6 +84,10 @@ struct DecisionScoreView: View {
                         if step >= 3 {
                             Text("✖︎ \(sub.resultItem.ascendingRate)")
                                 .modifier(DecisionScoreViewModifier(fontSize: 20))
+                                .onAppear{
+                                    SoundMng.shared.playSound(soundName: SoundName.SE.donaction.rawValue)
+                                }
+
                         }
                     }
                     HStack() {
@@ -88,6 +96,10 @@ struct DecisionScoreView: View {
                         if step >= 4 {
                             Text("✖︎ \(sub.resultItem.decisionScoreCards.last!.rate()[1])")
                                 .modifier(DecisionScoreViewModifier(fontSize: 20))
+                                .onAppear{
+                                    SoundMng.shared.playSound(soundName: SoundName.SE.donaction.rawValue)
+                                }
+
                         }
                     }
                 }
@@ -103,6 +115,9 @@ struct DecisionScoreView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(.trailing, geo.size.width * 0.1)
+                    .onAppear{
+                        SoundMng.shared.playSound(soundName: SoundName.SE.donaction.rawValue)
+                    }
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
                 }
                 
@@ -110,6 +125,7 @@ struct DecisionScoreView: View {
                 Button(action: {
                     // 途中結果へ
                     GameFriendEventController().onTapOKButton(gamePhase: .result)
+                    SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                 }) {
                     Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 50, btnColor: Color.clear)
                 }

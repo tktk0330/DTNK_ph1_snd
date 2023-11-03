@@ -38,6 +38,7 @@ enum GamePhase: Int {
     case startChallenge = 20
     case challenge = 10
     case endChallenge = 21
+    case noChallenge = 22
     case decisionrate_pre = 11
     case decisionrate = 12
     case result = 13

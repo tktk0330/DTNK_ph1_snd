@@ -12,7 +12,7 @@ struct GameRateView: View {
     var body: some View {
         RateView(gamenum: game.gameNum, rate: game.initialRate, magnification: game.ascendingRate)
             .background(Color.casinoGreen)
-            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.09)
+            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.12)
     }
 }
 

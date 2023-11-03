@@ -147,6 +147,7 @@ struct N_CardView: View {
         .rotationEffect(Angle(degrees: card.id.angle(for: location, total: card.id.total(for: card.location))))
         .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
         .offset(y: selectedCards.contains(card) ? -20 : 0)
+        .scaleEffect(!GameMainController().judgeChallenge(gamePase: appState.gameUIState.gamePhase) && isMyHandCard ? 1.3 : 1)
         .onTapGesture {
             SoundMng.shared.playSound(soundName: SoundName.SE.card_action.rawValue)
             if appState.gameUIState.gamePhase != .decisioninitialplayer {

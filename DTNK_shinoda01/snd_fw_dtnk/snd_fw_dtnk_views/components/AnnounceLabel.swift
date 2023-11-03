@@ -272,6 +272,7 @@ struct ChallengeActionAnnounce: View {
     var stoptime01 = 2.0// 中央
     var stoptime02 = 1.0
     let text: String
+    var textColor = Color.dtnkBlue
     // アニメーション終了時のコールバックを追加
     var onEnd: (() -> Void)? = nil
 
@@ -285,7 +286,7 @@ struct ChallengeActionAnnounce: View {
                 VStack(spacing: 10) {
                     Text(text)
                         .font(.custom(FontName.font01, size: 30))
-                        .foregroundColor(.dtnkBlue)
+                        .foregroundColor(textColor)
                         .multilineTextAlignment(.center)
                 }
             }

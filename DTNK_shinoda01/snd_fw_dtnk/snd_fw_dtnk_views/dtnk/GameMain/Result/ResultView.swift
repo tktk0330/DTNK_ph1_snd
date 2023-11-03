@@ -22,7 +22,7 @@ struct ResultView: View {
                     .font(.custom(FontName.font01, size: 30))
                     .foregroundColor(Color.white)
                     .padding(5)
-                    .position(x: UIScreen.main.bounds.width * 0.50, y:  geo.size.height * 0.10)
+                    .position(x: UIScreen.main.bounds.width * 0.50, y:  geo.size.height * 0.13)
                 
                 MidResultItem(player: game.players[(game.myside + 1) % game.players.count])
                     .position(x: UIScreen.main.bounds.width * 0.2, y:  geo.size.height * 0.45)
@@ -38,6 +38,8 @@ struct ResultView: View {
                 
                 // 次へボタン
                 Button(action: {
+                    SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
+
                     if game.gamevsInfo == .vsFriend {
                         // 次ゲームに向けた処理
                         if appState.gameUIState.gameNum == appState.gameUIState.gameTarget {

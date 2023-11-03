@@ -10,6 +10,8 @@ enum ImageName {
         case challenge01 = "chalenge-1"
         case challenge02 = "chalenge-2"
         case setting = "setting"
+        case dtnkBtn = "dotenkoOFF"
+        case stnkBtn = "shotenkoOFF"
     }
     
     enum Splash: String {

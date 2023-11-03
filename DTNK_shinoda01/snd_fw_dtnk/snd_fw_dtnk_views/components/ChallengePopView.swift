@@ -16,7 +16,7 @@ struct ChallengePopView: View {
                 .aspectRatio(contentMode: .fit)
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.20)
 
-            Text("追加でカードを引くことでどてんこ返しできる可能性があります。")
+            Text("追加でカードを引くことでどてんこ返しできる可能性があります")
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
@@ -24,7 +24,7 @@ struct ChallengePopView: View {
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.40)
             
             if game.gamevsInfo == .vsFriend && (game.dtnkPlayerIndex == game.myside || game.dtnkFlg[0] == 1) {
-                
+                // どてんこ済みの場合
                 WaitingChallengePopView()
                     .onAppear{
                         //　vsFriend 他の人が決まるまで待機
@@ -54,20 +54,20 @@ struct ChallengePopView: View {
                         Btnaction(btnText: "辞退", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                     }
                     // 返せる時
-                    if GameBotController().dtnkJudge(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) != Constants.dtnkCode {
+                    if GameMainController().judgeChallengeJoin(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) == Constants.dtnkCode {
+                        
                         Button(action: {
                             if game.gamevsInfo == .vsFriend {
-//                                GameFriendEventController().revengeQuick(Index: game.myside, dtnkPlayer: game.players[game.myside])
                                 GameFriendEventController().revengeInMain(Index: game.myside)
-
                             } else {
                                 GameBotController().revengeFirst(Index: game.myside)
                             }
                         }) {
-                            Btnaction(btnText: "どてんこ返し", btnTextSize: 10, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                            Btnaction(btnText: "Revenge", btnTextSize: 10, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                         }
+
                         
-                    } else {
+                    } else if GameMainController().judgeChallengeJoin(myside: game.myside, playerAllCards: game.players[game.myside].hand, table: game.table) == Constants.challengeCode {
                         // 参加する
                         Button(action: {
                             game.gamePhase = .waiting

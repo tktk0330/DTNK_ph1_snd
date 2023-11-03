@@ -22,7 +22,7 @@ struct HomeView: View {
                 AccountView()
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.25)
                      
-                // Ph2
+                // TODO: Ph2
 //                ZStack {
 //                    // Life
 //                    LifeView()
@@ -56,7 +56,7 @@ struct HomeView: View {
                 .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.58)
 
                 // Info List
-                HStack(spacing: 20) {
+                HStack(spacing: 40) {
                     Button(action: {
                         HomeController().onTapPageBtn(page: .rule)
                     }) {
@@ -71,7 +71,7 @@ struct HomeView: View {
                     }
                     .buttonStyle(PressBtn())
 
-                    // Ph2
+                    // TODO: Ph2
 //                    Button(action: {
 //                        HomeController().onTapPageBtn(page: .shop)
 //                    }) {

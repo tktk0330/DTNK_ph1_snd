@@ -48,6 +48,9 @@ struct Constants {
     // MARK: - RevengeCode
     static let revengeCode = 77
     
+    // MARK: - RevengeCode
+    static let challengeCode = 66
+    
     // MARK: - NGCode
     static let ngCode = 00
     

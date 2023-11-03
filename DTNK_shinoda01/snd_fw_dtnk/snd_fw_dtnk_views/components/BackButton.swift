@@ -23,7 +23,7 @@ struct BackButton: View {
                     .frame(width: 40)
             }
             .frame(maxHeight: 40)
-            .position(x: Constants.scrWidth * 0.10, y:  geo.size.height * 0.10 + keyboardHeight)
+            .position(x: Constants.scrWidth * 0.10, y:  geo.size.height * 0.13 + keyboardHeight)
         }
     }
 }

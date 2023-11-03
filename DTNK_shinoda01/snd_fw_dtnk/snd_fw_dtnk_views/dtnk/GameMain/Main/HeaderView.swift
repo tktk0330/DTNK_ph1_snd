@@ -11,15 +11,18 @@ struct Header: View {
 
         GameRateView(game: game, geo: geo)
         // option
-        Button(action: {
-            game.gameMode = .option
-            SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
-        }) {
-            Image(ImageName.Common.setting.rawValue)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 30)
+        if game.gamePhase != .startChallenge && game.gamePhase != .challenge && game.gamePhase != .endChallenge {
+            
+            Button(action: {
+                game.gameMode = .option
+                SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
+            }) {
+                Image(ImageName.Common.setting.rawValue)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 30)
+            }
+            .position(x: Constants.scrWidth * 0.1, y: geo.size.height * 0.20)
         }
-        .position(x: Constants.scrWidth * 0.1, y: geo.size.height * 0.16)
     }
 }
