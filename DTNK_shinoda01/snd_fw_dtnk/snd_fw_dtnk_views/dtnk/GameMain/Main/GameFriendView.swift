@@ -64,7 +64,7 @@ struct GameFriendView: View {
                     .onAppear{
                         SoundMng.shared.playSound(soundName: SoundName.SE.revengeInChallenge.rawValue)
                     }
-                    .scaleEffect(0.7)
+                    .scaleEffect(0.6)
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }
                 

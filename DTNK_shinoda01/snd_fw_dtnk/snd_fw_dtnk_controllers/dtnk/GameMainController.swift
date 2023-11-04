@@ -72,7 +72,7 @@ struct GameMainController {
     // チャレンジモード関連以外か
     func judgeChallenge(gamePase: GamePhase) -> Bool {
         switch gamePase {
-        case .startChallenge, .challenge, .endChallenge, .revengeInMain, .revengeInChallenge, .q_challenge, .noChallenge:
+        case .startChallenge, .challenge, .endChallenge, .revengeInMain, .revengeInChallenge, .q_challenge, .noChallenge, .decisionrate_pre, .decisionrate:
             return false
         default:
             return true

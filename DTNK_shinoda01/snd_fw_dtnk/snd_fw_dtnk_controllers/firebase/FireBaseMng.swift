@@ -851,7 +851,7 @@ class FirebaseManager {
             // データの更新
             gameInfoRef.setValue(gameInfo) { error, _ in
                 if let error = error {
-                    print(error.localizedDescription)
+                    log(error.localizedDescription, level: .error)
                     completion(nil)
                 } else {
                     completion(drawnCardValue)
@@ -874,6 +874,7 @@ class FirebaseManager {
                 return
             }
             // デッキからカードを引く
+            deck.shuffle()
             let drawnCard = deck.removeLast()
             // デッキの更新
             gameInfo["deck"] = deck
@@ -890,7 +891,7 @@ class FirebaseManager {
             // データの更新
             gameInfoRef.setValue(gameInfo) { error, _ in
                 if let error = error {
-                    print(error.localizedDescription)
+                    log(error.localizedDescription, level: .error)
                     completion(false)
                 } else {
                     completion(true)
