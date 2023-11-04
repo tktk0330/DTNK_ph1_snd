@@ -45,7 +45,7 @@ struct GameFriendView: View {
                 }
                 // Challenger
                 if game.nextChallengerIndex != nil {
-                    ChallengeActionAnnounce(text: "\(game.players[game.nextChallengerIndex!].name) のChallenge") {
+                    ChallengeActionAnnounce(text: "\(game.players[game.nextChallengerIndex!].name)のChallenge") {
                         // チャレンジへ
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             game.nextChallengerIndex = nil
@@ -58,12 +58,13 @@ struct GameFriendView: View {
                 
                 // どてんこ返し(in challenge)
                 if game.revengerIndex != nil {
-                    RevengeAnnounce() {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            game.revengeInChallenge()
-                        }
+                    GifViewCloser(gifName: GifName.Game.revengeInChallenge.rawValue) {
+                        game.revengeInChallenge()
                     }
-                    .id(game.revengerIndex)
+                    .onAppear{
+                        SoundMng.shared.playSound(soundName: SoundName.SE.revengeInChallenge.rawValue)
+                    }
+                    .scaleEffect(0.7)
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }
                 
@@ -77,14 +78,23 @@ struct GameFriendView: View {
                     }
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }
-                
+                // 誰もチャレンジしない
+                if game.gamePhase == .noChallenge  {
+                    ChallengeActionAnnounce(text: "No\nChallenge ZONE", textColor: .dtnkLightRed) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // 最終結果へ
+                            game.gamePhase = .decisionrate_pre
+                        }
+                    }
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                }
                 // レートアップアナウンス
                 if game.rateUpCard != nil {
                     RateUpAnnounce(cardImage: game.rateUpCard!) {
+                        game.rateUpCard = nil
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             gameObserber.firstCard()
                             game.ascendingRate += game.ascendingRate
-                            game.rateUpCard = nil
                         }
                     }
                     .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
@@ -194,12 +204,12 @@ struct GameFriendView: View {
 
         for s in 0..<game.players.count {
             // rank & score
-            fbms.observeRankAndScore(playerIndex: String(s)) { rank, score in
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                    game.players[s].rank = rank
-                    game.players[s].score = score
-                }
-            }
+//            fbms.observeRankAndScore(playerIndex: String(s)) { rank, score in
+//                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+//                    game.players[s].rank = rank
+//                    game.players[s].score = score
+//                }
+//            }
             // hand
             fbms.observeHandInfo (
                 playerIndex: String(s)) { cards in
@@ -232,7 +242,7 @@ struct GameFriendView: View {
             game.dtnkPlayerIndex = Index!
             game.dtnkPlayer = player
         }
-        // DTNKInfo
+        // burstPlayerIndex
         fbms.observeBurstPlayerIndex() { Index in
             game.burstPlayerIndex = Index!
         }
@@ -245,11 +255,7 @@ struct GameFriendView: View {
         }
         // challengeAnswers
         fbms.observeChallengeAnswer() { challengeAnswers in
-            print("\(challengeAnswers)")
             game.challengeAnswers = challengeAnswers
-            if challengeAnswers.allSatisfy({ $0 != .initial }) {
-                gameObserber.challengeAnswers()
-            }
         }
         fbms.observeNextGameAnnouns() { announce in
             game.nextGameAnnouns = announce
@@ -267,18 +273,17 @@ struct GameFriendView: View {
         fbms.observeGameNum() { gameNum in
             game.gameNum = gameNum!
         }
-        fbms.observeWinnersLosers() { winners, losers in
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                game.winners = winners
-                game.losers = losers
-            }
-        }
+//        fbms.observeWinnersLosers() { winners, losers in
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+//                game.winners = winners
+//                game.losers = losers
+//            }
+//        }
         fbms.observeRateUpCard() { cardsImage in
             game.rateUpCard = cardsImage
         }
         fbms.observeAscendingRate() { rate in
             game.ascendingRate = rate!
-            print("\(game.ascendingRate)")
         }
         RoomFirebaseManager.shared.observeMatchingFlg(roomID: room.roomData.roomID) { result in
             if result == 2 {

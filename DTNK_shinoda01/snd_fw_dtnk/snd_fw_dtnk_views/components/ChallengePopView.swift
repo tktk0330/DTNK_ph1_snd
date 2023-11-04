@@ -16,22 +16,27 @@ struct ChallengePopView: View {
                 .aspectRatio(contentMode: .fit)
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.20)
 
-            Text("追加でカードを引くことでどてんこ返しできる可能性があります")
+            Text("追加でカードを引くことでREVENGEできる可能性があります")
                 .font(.system(size: 20))
                 .foregroundColor(Color.white)
                 .fontWeight(.bold)
                 .padding(20)
-                .position(x: geo.size.width / 2, y: geo.size.height * 0.40)
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.50)
             
-            if game.gamevsInfo == .vsFriend && (game.dtnkPlayerIndex == game.myside || game.dtnkFlg[0] == 1) {
+            if game.gamevsInfo == .vsFriend && (game.dtnkPlayerIndex == game.myside || game.dtnkFlg[game.myside] == 1) {
                 // どてんこ済みの場合
-                WaitingChallengePopView()
-                    .onAppear{
-                        //　vsFriend 他の人が決まるまで待機
-                        if game.gamevsInfo == .vsFriend {
-                            GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
-                        }
+                Button(action: {
+                    game.gamePhase = .waiting
+                    if game.gamevsInfo == .vsFriend {
+                        GameFriendEventController().moveChallenge(index: appState.gameUIState.myside, ans: .challenge)
+                    } else {
+                        GameBotController().moveChallenge(Index: game.myside, ans: .challenge)
                     }
+                }) {
+                    Btnaction(btnText: "参加", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                }
+                .position(x: geo.size.width / 2, y: geo.size.height * 0.75)
+                
             } else if game.gamevsInfo == .vsBot && game.dtnkFlg[game.myside] == 1 {
                 WaitingChallengePopView()
                     .onAppear{
@@ -63,7 +68,7 @@ struct ChallengePopView: View {
                                 GameBotController().revengeFirst(Index: game.myside)
                             }
                         }) {
-                            Btnaction(btnText: "Revenge", btnTextSize: 10, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                            Btnaction(btnText: "REVENGE", btnTextSize: 20, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
                         }
 
                         
@@ -83,9 +88,8 @@ struct ChallengePopView: View {
                 }
                 .position(x: geo.size.width / 2, y: geo.size.height * 0.75)
             }
-            
         }
-        .frame(width: 350, height: 350)
+        .frame(width: 350, height: 400)
         .background(Color.black.opacity(0.85))
         .cornerRadius(20)
         .overlay(

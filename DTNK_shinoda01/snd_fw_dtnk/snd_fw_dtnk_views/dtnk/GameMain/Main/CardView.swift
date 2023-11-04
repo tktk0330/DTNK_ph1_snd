@@ -113,7 +113,7 @@ struct FlipCardView: View {
 }
 
 /**
- 
+ 基本カード表示
  */
 struct N_CardView: View {
     var card: N_Card

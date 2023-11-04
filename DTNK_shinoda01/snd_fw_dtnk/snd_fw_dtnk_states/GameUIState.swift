@@ -63,12 +63,24 @@ class GameUIState: ObservableObject {
     // チャレンジ通知
     @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
         didSet {
-            if gamevsInfo == .vsBot && challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
-                if challengeAnswers[dtnkPlayerIndex] == ChallengeAnswer.challenge &&
-                   challengeAnswers.enumerated().allSatisfy({ ($0.offset == dtnkPlayerIndex) || ($0.element != ChallengeAnswer.challenge) }) {
-                    gamePhase = .noChallenge
-                } else {
-                    gamePhase = .startChallenge
+            print("\(challengeAnswers)")
+            if challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
+                if gamevsInfo == .vsBot {
+                    // BOT
+                    if challengeAnswers[dtnkPlayerIndex] == ChallengeAnswer.challenge &&
+                        challengeAnswers.enumerated().allSatisfy({ ($0.offset == dtnkPlayerIndex) || ($0.element != ChallengeAnswer.challenge) }) {
+                        gamePhase = .noChallenge
+                    } else {
+                        gamePhase = .startChallenge
+                    }
+                } else if gamevsInfo == .vsFriend {
+                    // Friend
+                    if challengeAnswers[dtnkPlayerIndex] == ChallengeAnswer.challenge &&
+                        challengeAnswers.enumerated().allSatisfy({ ($0.offset == dtnkPlayerIndex) || ($0.element != ChallengeAnswer.challenge) }) {
+                        resultChallengeAnswers(gamePhase: .noChallenge)
+                    } else {
+                        resultChallengeAnswers(gamePhase: .startChallenge)
+                    }
                 }
             }
         }
@@ -283,6 +295,10 @@ class GameUIState: ObservableObject {
     
     func revengeInChallenge() {
         GameObserber(hostID: appState.room.roomData.hostID).revengeInChallenge()
+    }
+    
+    func resultChallengeAnswers (gamePhase: GamePhase) {
+        GameObserber(hostID: appState.room.roomData.hostID).challengeAnswers(gamePhase: gamePhase)
     }
 }
 

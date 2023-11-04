@@ -55,7 +55,7 @@ struct GameEventView: View {
                     GifViewCloser(gifName: GifName.Game.stnk.rawValue) {
                         
                     }
-                    .scaleEffect(0.42)
+                    .scaleEffect(0.6)
                     .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.5)
                 } else {
                     GifViewCloser(gifName: GifName.Game.dtnk.rawValue) {
@@ -70,7 +70,7 @@ struct GameEventView: View {
                 GifViewCloser(gifName: GifName.Game.revenge.rawValue) {
                     
                 }
-                .scaleEffect(0.75)
+                .scaleEffect(0.80)
                 .position(x: Constants.scrWidth * 0.5, y: Constants.scrHeight * 0.5)
             }
             // バースト注意文言

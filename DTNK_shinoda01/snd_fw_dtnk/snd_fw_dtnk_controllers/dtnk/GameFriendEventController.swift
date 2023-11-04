@@ -155,7 +155,7 @@ struct GameFriendEventController {
             
             // TODO: ロジック修正？
             // アニメーションが終わったら参加可否を問う
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 // 可否
                 fbms.setGamePhase(gamePhase: .q_challenge) { result in }
             }
@@ -166,6 +166,9 @@ struct GameFriendEventController {
     func revengeInMain(Index: Int) {
         // dtnkは１ゲーム１人１回
         if game.dtnkFlg[Index] != 1 {
+            // ChallengeAnswer初期化
+            initializeChallengeAnswers() { result in}
+            
             game.dtnkFlg[Index] = 1
 
             // TODO: 音バイブ
@@ -196,38 +199,6 @@ struct GameFriendEventController {
         }
     }
     
-    // どてんこ返し（即時）
-    func revengeQuick(Index: Int, dtnkPlayer: Player_f) {
-        // dtnkは１ゲーム１人１回
-        if game.dtnkFlg[0] != 1 {
-            fbms.setGamePhase(gamePhase: .revengeInMain) { result in }
-            game.dtnkFlg[0] = 1
-            
-            // 勝敗入れ替え
-            fbms.setLasrPlayerIndex(lastPlayerIndex: game.dtnkPlayerIndex) { result in }
-            // 手札リセット
-            fbms.resetHands(playerIndex: game.dtnkPlayerIndex,
-                            playerID: game.players[game.dtnkPlayerIndex].id,
-                            baseselectedCards: game.players[game.dtnkPlayerIndex].hand) { result in
-                if result {
-                    fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
-                    // ChallengeAnswer初期化
-                    initializeChallengeAnswers() { result in
-                        if result {
-                            // アニメーションが終わったら参加可否を問う
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                                // 可否
-                                fbms.setGamePhase(gamePhase: .q_challenge) { result in }
-                            }
-                        } else {
-                            log("", level: .error)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     /**
      challengeするかしないかを報告
      */
@@ -247,7 +218,6 @@ struct GameFriendEventController {
         }
         completion(true)
     }
-
     
     /**
      準備ができているかを報告
@@ -285,5 +255,28 @@ struct GameFriendEventController {
         game.turnFlg = 0         // 0: canDraw 1: canPass
         game.dtnkFlg = Array(repeating: 0, count: 4)         // 0: no 1: dtnked
     }
+    
+    // 順位決定
+    func calculateRanks() {
+        let sortedPlayers = game.players.sorted(by: { $0.score > $1.score })
+        
+        var currentRank = 1
+        var previousScore: Int? = nil
+        
+        for player in sortedPlayers {
+            if let previousScore = previousScore, player.score == previousScore {
+                // 前のプレイヤーと同じスコアの場合、現在の順位を維持
+            } else {
+                currentRank = game.players.filter { $0.score > player.score }.count + 1
+            }
+            
+            if let index = game.players.firstIndex(where: { $0.id == player.id }) {
+                game.players[index].rank = currentRank
+            }
+            
+            previousScore = player.score
+        }
+    }
+
 }
 

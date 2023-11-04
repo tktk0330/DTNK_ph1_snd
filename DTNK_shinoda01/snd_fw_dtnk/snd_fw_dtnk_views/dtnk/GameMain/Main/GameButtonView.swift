@@ -30,6 +30,7 @@ struct GameButtonView: View {
                     }
                     .buttonStyle(PressBtn())
                     .onAppear{
+                        VibrateMng.vibrate(type: .defaultVibration)
                         SoundMng.shared.playSound(soundName: SoundName.SE.possible_dtnk.rawValue)
                     }
 
@@ -49,6 +50,7 @@ struct GameButtonView: View {
                     }
                     .buttonStyle(PressBtn())
                     .onAppear{
+                        VibrateMng.vibrate(type: .defaultVibration)
                         SoundMng.shared.playSound(soundName: SoundName.SE.possible_dtnk.rawValue)
                     }
                 }

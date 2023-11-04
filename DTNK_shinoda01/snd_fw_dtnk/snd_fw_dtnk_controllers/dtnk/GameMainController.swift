@@ -81,6 +81,8 @@ struct GameMainController {
 
     // Challengeに参加できるか
     func judgeChallengeJoin(myside: Int, playerAllCards: [CardId], table: [CardId]) -> Int {
+        var result = Constants.ngCode
+
         // tableが空だったらだめ
         if table.isEmpty {
             return Constants.ngCode
@@ -91,13 +93,27 @@ struct GameMainController {
             if sum == table.last!.number() {
                 return Constants.dtnkCode
             } else if sum < table.last!.number() {
-                return Constants.challengeCode
+                result = Constants.challengeCode
             }
         }
-        return Constants.ngCode
-
+        return result
     }
-
+    
+    // playerにスコア払出し
+    func updateScores(with winners: [Player_f], losers: [Player_f], gameScore: Int) {
+        
+        for winner in winners {
+            if let index = appState.gameUIState.players.firstIndex(where: { $0.id == winner.id }) {
+                appState.gameUIState.players[index].score += gameScore * losers.count
+            }
+        }
+        
+        for loser in losers {
+            if let index = appState.gameUIState.players.firstIndex(where: { $0.id == loser.id }) {
+                appState.gameUIState.players[index].score -= gameScore * winners.count
+            }
+        }
+    }
 }
 
 class GameBotController {
@@ -542,7 +558,7 @@ class GameBotController {
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
         let dtnkCardNumber = game.table.last?.number()
         // 手札とどてんこカードを比較して、行動する 3
-        game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name) のChallenge")
+        game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name)\nのChallenge")
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
             challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
         }
@@ -626,7 +642,7 @@ class GameBotController {
                     log("next challenger")
                     log("\(nextChallenger!): のチャレンジ")
                     // nextChallengerAnnounce
-                    game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name) のChallenge")
+                    game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name)\nのChallenge")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
                         // カードを引いた後の処理が終わったら再度challengeIndexを呼び出し
                         self.challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber, dtnkIndex: dtnkIndex, challengers: challengers)
@@ -866,7 +882,7 @@ class GameBotController {
             return result
         }
         // しょてんこ可能として返す
-        if game.currentPlayerIndex == Constants.stnkCode {
+        if game.lastPlayerIndex == Constants.stnkCode {
             return Constants.stnkCode
         }
         // 通常どてんこ可能として返す
@@ -1027,7 +1043,7 @@ class GameBotController {
             game.dtnkFlg[Index] = 1
             log("\(Index): どてんこ返し")
             // Vib & SE
-            SoundMng.shared.dtnkSound()
+            SoundMng.shared.playSound(soundName: SoundName.SE.revengeInMain.rawValue)
             game.gamePhase = .revengeInMain
             
             // やられた人の手札リセット

@@ -292,14 +292,15 @@ class GameObserber {
     }
     
     /**
-     challengeAnswersが揃ったらchallengeに移す
+     challengeAnswersが揃ったら次に移す
+     誰かチャレンジいる：startChallenge
+     チャレンジがdtnkerだけ：noChallenge
      */
-    func challengeAnswers() {
+    func challengeAnswers(gamePhase: GamePhase) {
         guard checkHost() else {
             return
         }
-        // challengeに移す
-        fbms.setGamePhase(gamePhase: .startChallenge) { result in }
+        fbms.setGamePhase(gamePhase: gamePhase) { result in }
     }
     /**
      nextGameAnnounceが揃ったら次のゲームへ
@@ -448,12 +449,12 @@ class GameObserber {
      */
     func scoreCalculate() -> [Int] {
         // Score移動
-        for winner in game.winners {
-            winner.score += game.gameScore * game.losers.count
-        }
-        for loser in game.losers {
-            loser.score -= game.gameScore * game.winners.count
-        }
+//        for winner in game.winners {
+//            winner.score += game.gameScore * game.losers.count
+//        }
+//        for loser in game.losers {
+//            loser.score -= game.gameScore * game.winners.count
+//        }
         // rank計算
         return calculateRanks(players: game.players)
     }

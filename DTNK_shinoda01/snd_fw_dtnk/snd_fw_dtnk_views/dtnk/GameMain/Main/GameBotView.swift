@@ -49,6 +49,9 @@ struct GameBotView: View {
                     GifViewCloser(gifName: GifName.Game.revengeInChallenge.rawValue) {
                         GameBotController().revenge()
                     }
+                    .onAppear{
+                        SoundMng.shared.playSound(soundName: SoundName.SE.revengeInChallenge.rawValue)
+                    }
                     .scaleEffect(0.7)
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                 }

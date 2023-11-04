@@ -127,6 +127,9 @@
 		5DB1E7E72AF2917E00E96E17 /* revenge01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7E62AF2917E00E96E17 /* revenge01.gif */; };
 		5DB1E7E92AF4924100E96E17 /* pikon.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7E82AF4924100E96E17 /* pikon.wav */; };
 		5DB1E7EB2AF4925000E96E17 /* don.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EA2AF4925000E96E17 /* don.wav */; };
+		5DB1E7ED2AF4F34100E96E17 /* rateup.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EC2AF4F34000E96E17 /* rateup.wav */; };
+		5DB1E7EF2AF50C6A00E96E17 /* revengeInMain.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */; };
+		5DB1E7F12AF50C7000E96E17 /* revengeInChallenge.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */; };
 		5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */; };
 		5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A72AD99E5400AEE412 /* burst01.gif */; };
 		5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */; };
@@ -288,6 +291,9 @@
 		5DB1E7E62AF2917E00E96E17 /* revenge01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = revenge01.gif; sourceTree = "<group>"; };
 		5DB1E7E82AF4924100E96E17 /* pikon.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pikon.wav; sourceTree = "<group>"; };
 		5DB1E7EA2AF4925000E96E17 /* don.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = don.wav; sourceTree = "<group>"; };
+		5DB1E7EC2AF4F34000E96E17 /* rateup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rateup.wav; sourceTree = "<group>"; };
+		5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = revengeInMain.wav; sourceTree = "<group>"; };
+		5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = revengeInChallenge.wav; sourceTree = "<group>"; };
 		5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingModeView.swift; sourceTree = "<group>"; };
 		5DB5B5A72AD99E5400AEE412 /* burst01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = burst01.gif; sourceTree = "<group>"; };
 		5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifMng.swift; sourceTree = "<group>"; };
@@ -344,9 +350,12 @@
 				5D30DE812AC95EB400AA2909 /* btn-negative.wav */,
 				5D30DE7E2AC95EB200AA2909 /* btn-positive.wav */,
 				5D30DE802AC95EB400AA2909 /* card-action.wav */,
+				5DB1E7EC2AF4F34000E96E17 /* rateup.wav */,
 				5D30DE7F2AC95EB300AA2909 /* casino-bgm.wav */,
+				5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */,
 				5DB1E7EA2AF4925000E96E17 /* don.wav */,
 				5DB1E7E82AF4924100E96E17 /* pikon.wav */,
+				5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */,
 				5D98720E2AAB49110031A57C /* dtnk01.wav */,
 			);
 			path = sound;
@@ -907,6 +916,7 @@
 				5DB1E7E72AF2917E00E96E17 /* revenge01.gif in Resources */,
 				5D8FA3262A482B3F0079F260 /* GoogleService-Info.plist in Resources */,
 				5D30DE822AC95EB400AA2909 /* btn-positive.wav in Resources */,
+				5DB1E7EF2AF50C6A00E96E17 /* revengeInMain.wav in Resources */,
 				5DC02E5A2ABEAFE9009E84A5 /* MPLUS1p-ExtraBold.ttf in Resources */,
 				5DB1E7D92AF1389600E96E17 /* dotenko01.gif in Resources */,
 				5D8FA24C2A4814AF0079F260 /* Preview Assets.xcassets in Resources */,
@@ -914,11 +924,13 @@
 				5DC02E5B2ABEAFE9009E84A5 /* MPLUS1p-Bold.ttf in Resources */,
 				5DB1E7E52AF290E600E96E17 /* revenge00.gif in Resources */,
 				5DB1E7DD2AF13EDE00E96E17 /* dotenko02.gif in Resources */,
+				5DB1E7ED2AF4F34100E96E17 /* rateup.wav in Resources */,
 				5DB1E7E12AF28D7600E96E17 /* shotenko02.gif in Resources */,
 				5DB1E7DB2AF13C7300E96E17 /* shotenko01.gif in Resources */,
 				5DB1E7E92AF4924100E96E17 /* pikon.wav in Resources */,
 				5D30DE852AC95EB400AA2909 /* btn-negative.wav in Resources */,
 				5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */,
+				5DB1E7F12AF50C7000E96E17 /* revengeInChallenge.wav in Resources */,
 				5D8FA2652A481CDA0079F260 /* DS-DIGIB.TTF in Resources */,
 				5D8FA2492A4814AF0079F260 /* Assets.xcassets in Resources */,
 				5D51C0502A761B2B00E59A69 /* AlfaSlabOne-Regular.ttf in Resources */,

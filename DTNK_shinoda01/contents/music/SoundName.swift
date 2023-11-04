@@ -10,7 +10,9 @@ enum SoundName {
         case card_action = "card-action"
         case donaction = "don"
         case possible_dtnk = "pikon"
-
+        case rateup = "rateup"
+        case revengeInMain = "revengeInMain"
+        case revengeInChallenge = "revengeInChallenge"
     }
     
     enum BGM: String {

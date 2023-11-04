@@ -102,12 +102,13 @@ struct RateUpAnnounce: View {
 
     // アニメーションを制御する関数
     func startAnimation() {
+        // SE
+        SoundMng.shared.playSound(soundName: SoundName.SE.rateup.rawValue)
         // 既にアニメーションが開始されていたら、再度実行しない
         guard !animationStarted else { return }
         
         // アニメーション開始フラグをセット
         animationStarted = true
-        log("開始") // 開始の出力
         
         // 左から中央に動く
         withAnimation(Animation.linear(duration: self.duration)) {
