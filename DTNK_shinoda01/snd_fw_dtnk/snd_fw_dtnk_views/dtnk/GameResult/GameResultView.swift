@@ -85,7 +85,6 @@ struct GameResultView: View {
                         appState.matching = nil
                         game.resetItem()
                         BgmMng.shared.stopSound()
-
                     }
                 }) {
                     Text("Home")

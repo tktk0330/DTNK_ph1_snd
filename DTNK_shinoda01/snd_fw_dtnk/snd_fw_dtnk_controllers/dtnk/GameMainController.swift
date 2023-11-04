@@ -34,6 +34,9 @@ struct GameMainController {
                     // gameUIStateの初期化
                     appState.matching = nil
                     appState.gameUIState.resetItem()
+                    // 削除
+                    appState.gameUIState.deleteGamedate()
+
                 }
             }
         }
