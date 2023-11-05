@@ -56,7 +56,7 @@ struct HomeView: View {
                 .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.58)
 
                 // Info List
-                HStack(spacing: 40) {
+                HStack(spacing: 50) {
                     Button(action: {
                         HomeController().onTapPageBtn(page: .rule)
                     }) {

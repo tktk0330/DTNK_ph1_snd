@@ -1,5 +1,6 @@
-
-
+/**
+ ルーム選択画面
+ */
 
 import SwiftUI
 

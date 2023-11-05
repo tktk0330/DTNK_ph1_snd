@@ -27,8 +27,6 @@ extension View {
     }
 }
 
-
-
 struct PlayerScoreModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -39,5 +37,17 @@ struct PlayerScoreModifier: ViewModifier {
                     .fill(Color.casinoShadow)
                     .frame(width: UIScreen.main.bounds.width * 0.405, height: Constants.scrHeight * 0.0248)
             )
+    }
+}
+
+
+struct PageTitleModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.custom(FontName.font01, size: 45))
+            .foregroundColor(Color.white)
+            .fontWeight(.bold)
+            .padding(5)
+        
     }
 }

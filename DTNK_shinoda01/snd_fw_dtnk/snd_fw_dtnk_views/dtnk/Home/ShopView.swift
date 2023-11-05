@@ -13,10 +13,7 @@ struct ShopView: View {
 
                 // title
                 Text("Shop")
-                    .font(.custom(FontName.font01, size: 45))
-                    .foregroundColor(Color.white)
-                    .fontWeight(.bold)
-                    .padding(5)
+                    .modifier(PageTitleModifier())
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
             }
         }

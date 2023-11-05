@@ -11,7 +11,7 @@ struct Header: View {
 
         GameRateView(game: game, geo: geo)
         // option
-        if game.gamePhase != .startChallenge && game.gamePhase != .challenge && game.gamePhase != .endChallenge {
+        if game.gamePhase == .main {
             
             Button(action: {
                 game.gameMode = .option

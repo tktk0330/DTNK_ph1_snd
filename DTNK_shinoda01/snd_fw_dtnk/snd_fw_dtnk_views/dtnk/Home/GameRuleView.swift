@@ -4,9 +4,6 @@
 
 import SwiftUI
 
-/**
- ゲームルール
- */
 struct GameRuleView: View {
     
     @State private var isRule1Expanded = false
@@ -20,10 +17,7 @@ struct GameRuleView: View {
                 
                 // title
                 Text("Rule")
-                    .font(.custom(FontName.font01, size: 45))
-                    .foregroundColor(Color.white)
-                    .fontWeight(.bold)
-                    .padding(5)
+                    .modifier(PageTitleModifier())
                     .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.15)
 
                 // 内容
@@ -163,19 +157,19 @@ struct InfoListView: View {
     }
 }
 
-struct Info: Identifiable {
-    let id = UUID()
-    let title: String
-    let details: String
-    let imageNames: [String] // 画像ファイル名の配列
-}
-
-struct Rule: Identifiable {
-    let id = UUID()
-    let title: String
-    let details: String
-    let imageNames: [String] // 画像ファイル名の配列
-}
+//struct Info: Identifiable {
+//    let id = UUID()
+//    let title: String
+//    let details: String
+//    let imageNames: [String] // 画像ファイル名の配列
+//}
+//
+//struct Rule: Identifiable {
+//    let id = UUID()
+//    let title: String
+//    let details: String
+//    let imageNames: [String] // 画像ファイル名の配列
+//}
 
 struct RuleDetail: Identifiable {
     let id = UUID()

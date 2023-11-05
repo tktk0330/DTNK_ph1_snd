@@ -38,7 +38,7 @@ struct GameEventView: View {
         // CountDown
         if game.gamePhase == .countdown {
             StartCountdownView()
-                .scaleEffect(3.0)
+                .scaleEffect(1.0)
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
         }
         // 仮想View 初期カード設置

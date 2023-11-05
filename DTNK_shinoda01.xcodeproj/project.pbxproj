@@ -44,8 +44,6 @@
 		5D8FA2802A481E6E0079F260 /* RoutingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA27F2A481E6E0079F260 /* RoutingState.swift */; };
 		5D8FA2822A481EC70079F260 /* JSONSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2812A481EC70079F260 /* JSONSerializable.swift */; };
 		5D8FA2862A481FA50079F260 /* FireBaseMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2852A481FA50079F260 /* FireBaseMng.swift */; };
-		5D8FA2882A4820020079F260 /* BattleSelectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2872A4820020079F260 /* BattleSelectController.swift */; };
-		5D8FA28A2A4820220079F260 /* BotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2892A4820220079F260 /* BotController.swift */; };
 		5D8FA28C2A48205A0079F260 /* GameEventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA28B2A48205A0079F260 /* GameEventController.swift */; };
 		5D8FA28E2A4820710079F260 /* GameMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA28D2A4820710079F260 /* GameMainController.swift */; };
 		5D8FA2902A48209E0079F260 /* GameResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA28F2A48209E0079F260 /* GameResultController.swift */; };
@@ -208,8 +206,6 @@
 		5D8FA27F2A481E6E0079F260 /* RoutingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingState.swift; sourceTree = "<group>"; };
 		5D8FA2812A481EC70079F260 /* JSONSerializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSerializable.swift; sourceTree = "<group>"; };
 		5D8FA2852A481FA50079F260 /* FireBaseMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireBaseMng.swift; sourceTree = "<group>"; };
-		5D8FA2872A4820020079F260 /* BattleSelectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleSelectController.swift; sourceTree = "<group>"; };
-		5D8FA2892A4820220079F260 /* BotController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotController.swift; sourceTree = "<group>"; };
 		5D8FA28B2A48205A0079F260 /* GameEventController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEventController.swift; sourceTree = "<group>"; };
 		5D8FA28D2A4820710079F260 /* GameMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMainController.swift; sourceTree = "<group>"; };
 		5D8FA28F2A48209E0079F260 /* GameResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResultController.swift; sourceTree = "<group>"; };
@@ -609,8 +605,6 @@
 		5D8FA2842A481F750079F260 /* dtnk */ = {
 			isa = PBXGroup;
 			children = (
-				5D8FA2872A4820020079F260 /* BattleSelectController.swift */,
-				5D8FA2892A4820220079F260 /* BotController.swift */,
 				5D8FA28B2A48205A0079F260 /* GameEventController.swift */,
 				5D51C05E2A793CED00E59A69 /* GameFriendEventController.swift */,
 				5D8FA28D2A4820710079F260 /* GameMainController.swift */,
@@ -1051,7 +1045,6 @@
 				5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */,
 				5D8FA26B2A481D200079F260 /* PhotosView.swift in Sources */,
 				5DC02E602AC16630009E84A5 /* OtherIconView.swift in Sources */,
-				5D8FA2882A4820020079F260 /* BattleSelectController.swift in Sources */,
 				5DDB61DF2A4CF6E700EB03F7 /* RoomState.swift in Sources */,
 				5D8FA2EE2A4826440079F260 /* GameRuleView.swift in Sources */,
 				5D8FA3122A48280F0079F260 /* HeaderView.swift in Sources */,
@@ -1113,7 +1106,6 @@
 				5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */,
 				5D8FA2FD2A4827100079F260 /* MatchingView.swift in Sources */,
 				5D8FA2782A481DDA0079F260 /* Router.swift in Sources */,
-				5D8FA28A2A4820220079F260 /* BotController.swift in Sources */,
 				5D8FA2802A481E6E0079F260 /* RoutingState.swift in Sources */,
 				5D8FA2E62A4825DC0079F260 /* SplashView.swift in Sources */,
 				5D8FA31A2A4828670079F260 /* DecisionView.swift in Sources */,

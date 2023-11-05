@@ -19,9 +19,15 @@ struct StartCountdownView: View {
                 
             } else {
                 VStack {
-                    Text("\(game.remainingSeconds)")
-                        .foregroundColor(game.remainingSeconds <= 3 ? .red : .black)
-                        .font(.custom(FontName.font02, size: 150))
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.black.opacity(0.7))
+                            .frame(width: UIScreen.main.bounds.width, height: 130)
+                        
+                        Text("\(game.remainingSeconds)")
+                            .foregroundColor(game.remainingSeconds <= 3 ? .red : .white)
+                            .font(.custom(FontName.font02, size: 150))
+                    }
                 }
                 .onAppear {
                     startCountdown()

@@ -27,9 +27,5 @@ struct RoomController {
                 appState.room.roommode = .base
             }
         }
-    }
-    
-    
-    
-    
+    }    
 }

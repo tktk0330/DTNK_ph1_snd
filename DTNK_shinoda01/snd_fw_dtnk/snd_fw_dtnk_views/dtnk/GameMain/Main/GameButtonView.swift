@@ -132,8 +132,25 @@ struct GameButtonView: View {
                             CountdownView()
                                 .frame(width: 60)
                         }
+                        
+                        if game.dtnkPlayerIndex == game.myside {
+                            Text("DOTENKO")
+                                .font(.custom(FontName.font01, size: 12))
+                                .foregroundColor(Color.dtnkLightRed)
+                                .frame(width: 80, height: 20)
+                                .background(Color.black.opacity(0.70))
+                                .offset(y: -30)
+                        } else if game.lastPlayerIndex == game.myside && game.dtnkPlayer != nil {
+                            Text("LOSER!?")
+                                .font(.custom(FontName.font01, size: 12))
+                                .foregroundColor(Color.dtnkBlue)
+                                .frame(width: 80, height: 20)
+                                .background(Color.black.opacity(0.70))
+                                .offset(y: -30)
+                        }
                     }
                 }
+                .frame(width: 80)
                 
                 Button(action: {
                     SoundMng.shared.playSound(soundName: SoundName.SE.card_action.rawValue)

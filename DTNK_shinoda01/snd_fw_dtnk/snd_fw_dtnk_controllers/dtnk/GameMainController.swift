@@ -164,174 +164,41 @@ class GameBotController {
         let time03: Double = 0.8
         //　パスするまでに考える時間
         let time04: Double = 0.8
-
-        // 自分のターンになって次の処理をするまでの時間
-        DispatchQueue.main.asyncAfter(deadline: .now() + time01) { [self] in
-            // 出せる時
-            if !playCards.isEmpty {
-                playCards.shuffle()
-                let random = Int.random(in: 0..<100)
-                
-                if random < 70  {
-                    guard judgeInGame() else {
-                        completion(false)
-                        return
-                    }
-                    log("\(Index): ① 出せるからすぐ出す", level: .debug)
-                    log("\( playCards.first!)")
-                    game.table.append(contentsOf: playCards.first!)
-                    game.players[Index].hand.removeAll(where: { playCards.first!.contains($0)})
-                    game.lastPlayerIndex = Index
-                    DispatchQueue.main.async { [self] in
-                        totable(card: playCards.first!)
-                        tohands(Index: Index)
-                    }
-                    //　パスするまでの時間
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+        
+        
+        // どてんこできるか
+        var dtnkJudge = dtnkJudge(myside: Index, playerAllCards: game.players[Index].hand, table: game.table)
+        
+        if dtnkJudge == Constants.dtnkCode && game.lastPlayerIndex != Index {
+            // 自分のターンになって次の処理をするまでの時間
+            DispatchQueue.main.asyncAfter(deadline: .now() + time01) { [self] in
+                // どてんこ
+                dtnk(Index: Index)
+                completion(true)
+                return
+            }
+        } else {
+            // 自分のターンになって次の処理をするまでの時間
+            DispatchQueue.main.asyncAfter(deadline: .now() + time01) { [self] in
+                // 出せる時
+                if !playCards.isEmpty {
+                    playCards.shuffle()
+                    let random = Int.random(in: 0..<100)
+                    
+                    if random < 70  {
                         guard judgeInGame() else {
                             completion(false)
                             return
                         }
-                        // 次のターンへ
-                        pass(Index: Index)
-                        completion(true)
-                    }
-                } else if random < 90 {
-                    guard judgeInGame() else {
-                        completion(false)
-                        return
-                    }
-                    log("\(Index): ② 出せるけど引いて出す", level: .debug)
-                    // ② 出せるけど引いて出す
-                    // カードを引く前に考える時間
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
-                        guard judgeInGame() else {
-                            completion(false)
-                            return
-                        }
-                        drawCard(Index: Index)
-                    }
-                    // カードを出すまでに考える時間
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time03 + 0.3) { [self] in
-                        guard judgeInGame() else {
-                            completion(false)
-                            return
-                        }
+                        log("\(Index): ① 出せるからすぐ出す", level: .debug)
                         log("\( playCards.first!)")
                         game.table.append(contentsOf: playCards.first!)
-                        game.players[Index].hand.removeAll(where: { playCards.first!.contains($0) })
+                        game.players[Index].hand.removeAll(where: { playCards.first!.contains($0)})
                         game.lastPlayerIndex = Index
                         DispatchQueue.main.async { [self] in
                             totable(card: playCards.first!)
                             tohands(Index: Index)
                         }
-                    }
-                    //　パスするまでの時間
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time04 + 0.5) { [self] in
-                        guard judgeInGame() else {
-                            completion(false)
-                            return
-                        }
-                        // 次のターンへ
-                        pass(Index: Index)
-                        completion(true)
-                    }
-                } else {
-                    guard judgeInGame() else {
-                        completion(false)
-                        return
-                    }
-                    log("\(Index): ③ 出せるけど引くそして出さない", level: .debug)
-                    // カードを引く前に考える時間
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
-                        guard judgeInGame() else {
-                            completion(false)
-                            return
-                        }
-                        drawCard(Index: Index)
-                    }
-                    //　パスするまでの時間
-                    DispatchQueue.main.asyncAfter(deadline: .now() + time04 + 0.3) { [self] in
-                        guard judgeInGame() else {
-                            completion(false)
-                            return
-                        }
-                        // 次のターンへ
-                        pass(Index: Index)
-                        completion(true)
-                    }
-                }
-                
-            } else {
-                // 出せない時
-                // カードを引く前に考える時間
-                DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
-                    guard judgeInGame() else {
-                        completion(false)
-                        return
-                    }
-                    drawCard(Index: Index)
-                    
-                    let allPatern = generateAllCombinations(cards: game.players[Index].hand)
-                    for cards in allPatern {
-                        let result = checkMultipleCards(table: game.table.last!, playCard: cards)
-                        if result {
-                            playCards.append(cards)
-                        }
-                    }
-                    
-                    // 出せる時
-                    if !playCards.isEmpty {
-                        playCards.shuffle()
-                        let random = Int.random(in: 0..<100)
-                        if random < 80 {
-                            guard judgeInGame() else {
-                                completion(false)
-                                return
-                            }
-                            log("\(Index): ④ 出せないので引く、出せるので出す", level: .debug)
-                            // カードを出すまでに考える時間
-                            DispatchQueue.main.asyncAfter(deadline: .now() + time03) { [self] in
-                                guard judgeInGame() else {
-                                    completion(false)
-                                    return
-                                }
-                                log("\( playCards.first!)")
-                                game.table.append(contentsOf: playCards.first!)
-                                game.players[Index].hand.removeAll(where: { playCards.first!.contains($0) })
-                                game.lastPlayerIndex = Index
-                                DispatchQueue.main.async { [self] in
-                                    totable(card: playCards.first!)
-                                    tohands(Index: Index)
-                                }
-                            }
-                            //　パスするまでの時間
-                            DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
-                                guard judgeInGame() else {
-                                    completion(false)
-                                    return
-                                }
-                                // 次のターンへ
-                                pass(Index: Index)
-                                completion(true)
-                            }
-                            
-                        } else {
-                            log("\(Index): ⑤ 出せないので引く、出せるけどパス", level: .debug)
-                            //　パスするまでの時間
-                            DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
-                                guard judgeInGame() else {
-                                    completion(false)
-                                    return
-                                }
-                                // 次のターンへ
-                                pass(Index: Index)
-                                completion(true)
-                            }
-                        }
-                        
-                    } else {
-                        log("\(Index): ⑥ 出せないので引く、出せないのでパス", level: .debug)
                         //　パスするまでの時間
                         DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
                             guard judgeInGame() else {
@@ -341,6 +208,153 @@ class GameBotController {
                             // 次のターンへ
                             pass(Index: Index)
                             completion(true)
+                        }
+                    } else if random < 90 {
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
+                        log("\(Index): ② 出せるけど引いて出す", level: .debug)
+                        // ② 出せるけど引いて出す
+                        // カードを引く前に考える時間
+                        DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
+                            drawCard(Index: Index)
+                        }
+                        // カードを出すまでに考える時間
+                        DispatchQueue.main.asyncAfter(deadline: .now() + time03 + 0.3) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
+                            log("\( playCards.first!)")
+                            game.table.append(contentsOf: playCards.first!)
+                            game.players[Index].hand.removeAll(where: { playCards.first!.contains($0) })
+                            game.lastPlayerIndex = Index
+                            DispatchQueue.main.async { [self] in
+                                totable(card: playCards.first!)
+                                tohands(Index: Index)
+                            }
+                        }
+                        //　パスするまでの時間
+                        DispatchQueue.main.asyncAfter(deadline: .now() + time04 + 0.5) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
+                            // 次のターンへ
+                            pass(Index: Index)
+                            completion(true)
+                        }
+                    } else {
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
+                        log("\(Index): ③ 出せるけど引くそして出さない", level: .debug)
+                        // カードを引く前に考える時間
+                        DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
+                            drawCard(Index: Index)
+                        }
+                        //　パスするまでの時間
+                        DispatchQueue.main.asyncAfter(deadline: .now() + time04 + 0.3) { [self] in
+                            guard judgeInGame() else {
+                                completion(false)
+                                return
+                            }
+                            // 次のターンへ
+                            pass(Index: Index)
+                            completion(true)
+                        }
+                    }
+                    
+                } else {
+                    // 出せない時
+                    // カードを引く前に考える時間
+                    DispatchQueue.main.asyncAfter(deadline: .now() + time02) { [self] in
+                        guard judgeInGame() else {
+                            completion(false)
+                            return
+                        }
+                        drawCard(Index: Index)
+                        
+                        let allPatern = generateAllCombinations(cards: game.players[Index].hand)
+                        for cards in allPatern {
+                            let result = checkMultipleCards(table: game.table.last!, playCard: cards)
+                            if result {
+                                playCards.append(cards)
+                            }
+                        }
+                        
+                        // 出せる時
+                        if !playCards.isEmpty {
+                            playCards.shuffle()
+                            let random = Int.random(in: 0..<100)
+                            if random < 80 {
+                                guard judgeInGame() else {
+                                    completion(false)
+                                    return
+                                }
+                                log("\(Index): ④ 出せないので引く、出せるので出す", level: .debug)
+                                // カードを出すまでに考える時間
+                                DispatchQueue.main.asyncAfter(deadline: .now() + time03) { [self] in
+                                    guard judgeInGame() else {
+                                        completion(false)
+                                        return
+                                    }
+                                    log("\( playCards.first!)")
+                                    game.table.append(contentsOf: playCards.first!)
+                                    game.players[Index].hand.removeAll(where: { playCards.first!.contains($0) })
+                                    game.lastPlayerIndex = Index
+                                    DispatchQueue.main.async { [self] in
+                                        totable(card: playCards.first!)
+                                        tohands(Index: Index)
+                                    }
+                                }
+                                //　パスするまでの時間
+                                DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                                    guard judgeInGame() else {
+                                        completion(false)
+                                        return
+                                    }
+                                    // 次のターンへ
+                                    pass(Index: Index)
+                                    completion(true)
+                                }
+                                
+                            } else {
+                                log("\(Index): ⑤ 出せないので引く、出せるけどパス", level: .debug)
+                                //　パスするまでの時間
+                                DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                                    guard judgeInGame() else {
+                                        completion(false)
+                                        return
+                                    }
+                                    // 次のターンへ
+                                    pass(Index: Index)
+                                    completion(true)
+                                }
+                            }
+                            
+                        } else {
+                            log("\(Index): ⑥ 出せないので引く、出せないのでパス", level: .debug)
+                            //　パスするまでの時間
+                            DispatchQueue.main.asyncAfter(deadline: .now() + time04) { [self] in
+                                guard judgeInGame() else {
+                                    completion(false)
+                                    return
+                                }
+                                // 次のターンへ
+                                pass(Index: Index)
+                                completion(true)
+                            }
                         }
                     }
                 }
@@ -1105,11 +1119,16 @@ class GameBotController {
         return result
     }
     
-    // カードが出せるか：単体
-    func checkSingleCard(table: CardId, playCard: CardId) -> Bool {
-        
+    // 複数出す場合の先頭がテーブルと一致しているか
+    func checkTopCard(table: CardId, playCard: CardId) -> Bool {
         // 同じ数字　同じスート　どちらかがJorker
         return playCard.number() == table.number() || playCard.suit() == table.suit() || playCard.suit() == .all || table.suit() == .all
+    }
+    
+    // カードが出せるか：単品
+    func checkSingleCard(table: CardId, playCard: CardId) -> Bool {
+        // 同じ数字　同じスート　どちらかがJorker
+        return playCard.number() == table.number() || playCard.suit() == table.suit() || table.suit() == .all
     }
     
     // カードが出せるか：複数
@@ -1127,7 +1146,7 @@ class GameBotController {
         let sameResult = areAllCardIdsTheSame(cards: playCard)
         // テーブルと同じ数字または同じスート
         if sameResult {
-            same = checkSingleCard(table: table, playCard: playCard.first!)
+            same = checkTopCard(table: table, playCard: playCard.first!)
         }
         
         // if single

@@ -4,12 +4,13 @@
 import SwiftUI
 import AVFoundation
 
-class SoundMng {
+class SoundMng: NSObject{
     static let shared = SoundMng()
-    private var audioPlayer: AVAudioPlayer?
+//    private var audioPlayer: AVAudioPlayer?
+    private var audioPlayers: [AVAudioPlayer] = []
+
 
     func dtnkSound() {
-        
         // check
         guard appState.account.loginUser.se else { return }
 
@@ -19,21 +20,24 @@ class SoundMng {
         }
 
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
-            
-            // 5秒後に音声を停止する
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-                self?.audioPlayer?.stop()
-            }
+            let audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayers.append(audioPlayer)
+            audioPlayer.delegate = self
+            audioPlayer.play()
 
+            // 5秒後にこの特定の音声を停止する
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                audioPlayer.stop()
+                if let index = self.audioPlayers.firstIndex(of: audioPlayer) {
+                    self.audioPlayers.remove(at: index)
+                }
+            }
         } catch {
             print("Error:", error.localizedDescription)
         }
     }
-    
+
     func playSound(soundName: String) {
-        
         guard appState.account.loginUser.se else { return }
         
         guard let url = Bundle.main.url(forResource: soundName, withExtension: "wav") else {
@@ -42,10 +46,23 @@ class SoundMng {
         }
 
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
+            let audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayers.append(audioPlayer)
+            
+            // オーディオが終了したら、配列から削除
+            audioPlayer.delegate = self
+            audioPlayer.play()
+            
         } catch {
             log("音声の再生に失敗しました: \(error)", level: .error)
+        }
+    }
+}
+
+extension SoundMng: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        if let index = audioPlayers.firstIndex(of: player) {
+            audioPlayers.remove(at: index)
         }
     }
 }

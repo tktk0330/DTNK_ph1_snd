@@ -27,27 +27,4 @@ struct AccountView: View {
                 .padding()
         }
     }
-    /**
-     編集保存
-     */
-    // TODO: 移動
-    private func saveUserData(userID: String, name: String, iconURL: String) {
-        let ref = Database.database().reference().child("users").child(userID)
-        
-        let userData: [String: Any] = [
-            "name": name,
-            "iconURL": iconURL
-        ]
-        
-        ref.setValue(userData) { (error, _) in
-            if let error = error {
-                log("ユーザーデータの保存に失敗しました: \(error.localizedDescription)")
-            } else {
-                log("ユーザーデータをFirebase Realtime Databaseに保存しました")
-                // 編集された名前とアイコンのURLを反映
-                appState.account.loginUser?.name = name
-                appState.account.loginUser?.iconURL = iconURL
-            }
-        }
-    }
 }

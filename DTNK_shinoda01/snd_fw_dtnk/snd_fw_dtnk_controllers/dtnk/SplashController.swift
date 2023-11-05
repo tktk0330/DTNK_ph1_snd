@@ -3,9 +3,9 @@
 
 import SwiftUI
 import Foundation
-import Firebase
-import FirebaseDatabase
-import RealmSwift
+//import Firebase
+//import FirebaseDatabase
+//import RealmSwift
 
 struct SplashController {
     

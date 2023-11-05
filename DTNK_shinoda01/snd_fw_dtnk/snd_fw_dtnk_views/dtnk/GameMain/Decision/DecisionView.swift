@@ -127,13 +127,11 @@ struct DecisionScoreView: View {
                 Color.black.opacity(0.98)
             )
             .onAppear {
-                // スコア代入
-                GameMainController().updateScores(with: sub.resultItem.winners, losers: sub.resultItem.losers, gameScore: sub.resultItem.gameScore)
-                GameFriendEventController().calculateRanks()
-                print("\(game.players[0].rank)")
-                print("\(game.players[1].rank)")
-                print("\(game.players[2].rank)")
-                print("\(game.players[3].rank)")
+                if game.gamevsInfo == .vsFriend {
+                    // スコア代入
+                    GameMainController().updateScores(with: sub.resultItem.winners, losers: sub.resultItem.losers, gameScore: sub.resultItem.gameScore)
+                    GameFriendEventController().calculateRanks()
+                }
 
                 // 仮想デッキ作成
                 quickDeck = sub.resultItem.decisionScoreCards
@@ -153,6 +151,7 @@ struct DecisionScoreView: View {
         }
     }
     
+    // カードを引く
     func addCards() {
         if let drawnCard = quickDeck.first {
             plus = plus + 1

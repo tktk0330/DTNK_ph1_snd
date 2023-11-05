@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct OtherPlayerIconsView: View {
-    var game: GameUIState
+    @ObservedObject var game: GameUIState // あなたのゲームの型に変更してください
     var myside: Int
     var geo: GeometryProxy
     var imageSize: CGFloat = 50
@@ -13,7 +13,7 @@ struct OtherPlayerIconsView: View {
         
         // left
         ZStack(alignment: .bottom) {
-            OtherPlayerIcon(imageName: game.players[(myside + 1) % game.players.count].icon_url)
+            OtherPlayerIcon(game: game, playerIndex: (myside + 1) % game.players.count, imageName: game.players[(myside + 1) % game.players.count].icon_url)
             Text(game.players[(myside + 1) % game.players.count].name)
                 .modifier(IconTextModifier())
         }
@@ -21,7 +21,7 @@ struct OtherPlayerIconsView: View {
 
         // center
         ZStack(alignment: .bottom) {
-            OtherPlayerIcon(imageName: game.players[(myside + 2) % game.players.count].icon_url)
+            OtherPlayerIcon(game: game, playerIndex: (myside + 2) % game.players.count, imageName: game.players[(myside + 2) % game.players.count].icon_url)
             Text(game.players[(myside + 2) % game.players.count].name)
                 .modifier(IconTextModifier())
         }
@@ -29,7 +29,7 @@ struct OtherPlayerIconsView: View {
         
         // right
         ZStack(alignment: .bottom) {
-            OtherPlayerIcon(imageName: game.players[(myside + 3) % game.players.count].icon_url)
+            OtherPlayerIcon(game: game, playerIndex: (myside + 3) % game.players.count, imageName: game.players[(myside + 3) % game.players.count].icon_url)
             Text(game.players[(myside + 3) % game.players.count].name)
                 .modifier(IconTextModifier())
         }
@@ -39,15 +39,35 @@ struct OtherPlayerIconsView: View {
 }
 
 struct OtherPlayerIcon: View {
+    @ObservedObject var game: GameUIState // あなたのゲームの型に変更してください
+    let playerIndex: Int
     var imageName: String
 
     var body: some View {
-        Image(imageName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 50)
-            .cornerRadius(10)
-            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+        ZStack {
+            Image(imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 50)
+                .cornerRadius(10)
+                .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+            
+            if game.dtnkPlayerIndex == playerIndex {
+                Text("DOTENKO")
+                    .font(.custom(FontName.font01, size: 12))
+                    .foregroundColor(Color.dtnkLightRed)
+                    .frame(width: 80, height: 20)
+                    .background(Color.black.opacity(0.70))
+                    .offset(y: -30)
+            } else if game.lastPlayerIndex == playerIndex && game.dtnkPlayer != nil {
+                Text("LOSER!?")
+                    .font(.custom(FontName.font01, size: 12))
+                    .foregroundColor(Color.dtnkBlue)
+                    .frame(width: 80, height: 20)
+                    .background(Color.black.opacity(0.70))
+                    .offset(y: -30)
+            }
+        }
     }
 }
 
