@@ -8,6 +8,7 @@ struct OptionView: View {
     
     @StateObject var home: HomeState = appState.home
     @StateObject var account: AccountState = appState.account
+    @State private var iconURL = appState.account.loginUser.iconURL
     @State private var text: String = ""
     @State private var keyboardHeight: CGFloat = 0
     
@@ -28,12 +29,7 @@ struct OptionView: View {
                         home.mode = .edittingIcon
                         SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                     }) {
-                        Image(appState.account.loginUser.iconURL)
-                            .resizable()
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 50, height: 50)
-                            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+                        IconView(iconURL: iconURL, size: 50)
                     }
                     .buttonStyle(PressBtn())
                     

@@ -12,13 +12,9 @@ struct AccountView: View {
     
     var body: some View {
         HStack {
-            
-            Image(myIconUrl)
-                .resizable()
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 50, height: 50)
-          
+                        
+            IconView(iconURL: myIconUrl, size: 60)
+
             Text(myNickname)
                 .font(.custom(FontName.MP_Bl, size: 30))
                 .foregroundColor(Color.white)

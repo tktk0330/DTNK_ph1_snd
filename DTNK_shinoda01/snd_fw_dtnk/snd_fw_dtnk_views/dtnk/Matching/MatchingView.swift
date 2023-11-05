@@ -13,12 +13,8 @@ struct MatchingView: View {
     func item(nickname: String, iconUrl: String) -> some View {
                 
         return HStack {
-            Image(iconUrl)
-                .resizable()
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .aspectRatio(contentMode: .fit)
-                .padding(5)
-                .frame(width: 60, height: 60)
+            
+            IconView(iconURL: iconUrl, size: 60)
             
             Text(nickname)
                 .font(.custom(FontName.MP_Bo, size: 40))

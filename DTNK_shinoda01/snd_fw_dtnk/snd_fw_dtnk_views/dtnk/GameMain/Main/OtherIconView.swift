@@ -45,12 +45,8 @@ struct OtherPlayerIcon: View {
 
     var body: some View {
         ZStack {
-            Image(imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 50)
-                .cornerRadius(10)
-                .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
+            
+            IconView(iconURL: imageName, size: 50)
             
             if game.dtnkPlayerIndex == playerIndex {
                 Text("DOTENKO")

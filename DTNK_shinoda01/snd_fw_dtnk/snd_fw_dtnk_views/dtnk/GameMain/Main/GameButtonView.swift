@@ -104,16 +104,15 @@ struct GameButtonView: View {
                 // MyIcon
                 Button(action: {
                     // TODO: test
-                    if game.gamevsInfo == .vsBot {
-                        GameBotController().playerDtnk(Index: myside)
-                    } else {
-                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
-                    }
+//                    if game.gamevsInfo == .vsBot {
+//                        GameBotController().playerDtnk(Index: myside)
+//                    } else {
+//                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
+//                    }
                 }) {
                     ZStack{
-                        Image(game.players[myside].icon_url)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
+                        
+                        IconView(iconURL: game.players[myside].icon_url, size: 60)
                             .overlay(
                                 Group {
                                     if appState.gameUIState.gamePhase == .main && game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
@@ -123,9 +122,6 @@ struct GameButtonView: View {
                                     }
                                 }
                             )
-                            .frame(width: 60)
-                            .cornerRadius(10)
-                            .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
                         
                         if appState.gameUIState.gamePhase == .main && game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
                             // ターンカウントダウン

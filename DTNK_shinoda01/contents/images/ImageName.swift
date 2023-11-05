@@ -51,6 +51,8 @@ enum ImageName {
         case sound = "option-sound"
         case se = "option-se"
         case vibration = "option-vibration"
+        case camera = "camera"
+
     }
 
     enum Card: String {
