@@ -6,10 +6,23 @@ import AVFoundation
 
 class SoundMng: NSObject{
     static let shared = SoundMng()
-//    private var audioPlayer: AVAudioPlayer?
     private var audioPlayers: [AVAudioPlayer] = []
 
 
+    private override init() {
+        super.init()
+        setupAudioSession()
+    }
+
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Audio session setup failed: \(error)")
+        }
+    }
+    
     func dtnkSound() {
         // check
         guard appState.account.loginUser.se else { return }

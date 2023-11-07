@@ -74,11 +74,8 @@ struct MidResultItem1: View {
             VStack() {
                 HStack(spacing: 7) {
                     // icon
-                    Image(player.icon_url)
-                        .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40, height: 40)
+                    IconView(iconURL: player.icon_url, size: 40)
+                    
                     Spacer()
                     // name
                     Text(player.name)
@@ -168,11 +165,7 @@ struct MidResultItem: View {
                         .frame(width: geo.size.width * 0.05)
                     
                     // icon
-                    Image(player.icon_url)
-                        .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40, height: 40)
+                    IconView(iconURL: player.icon_url, size: 40)
                 }
 
                 // name

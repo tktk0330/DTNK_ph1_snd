@@ -22,58 +22,63 @@ struct GameBotView: View {
             GameEventView(game: game, myside: myside, geo: geo)
             Group {
                 
-                // Challenge関連
-                // 開始
-                if game.gamePhase == .startChallenge {
-                    ChallengeActionAnnounce(text: "Challenge ZONE\nStart") {
-                        // チャレンジへ
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            game.gamePhase = .challenge
+                ErrorMessageView(showErrorMessage: $game.showErrorMessage, errorMessageText: $game.errorMessageText)
+                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.62)
+
+                Group {
+                    // Challenge関連
+                    // 開始
+                    if game.gamePhase == .startChallenge {
+                        ChallengeActionAnnounce(text: "Challenge ZONE\nStart") {
+                            // チャレンジへ
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                game.gamePhase = .challenge
+                            }
                         }
+                        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                     }
-                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
-                }
-                // Challenger
-                if game.showChallengeAnnounce == true {
-                    ChallengeActionAnnounce(text: game.announceText) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            game.showChallengeAnnounce = false
+                    // Challenger
+                    if game.showChallengeAnnounce == true {
+                        ChallengeActionAnnounce(text: game.announceText) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                game.showChallengeAnnounce = false
+                            }
                         }
+                        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                     }
-                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
-                }
-                // Over
-                
-                // どてんこ返し(in challenge)
-                if game.revengerIndex != nil {
-                    GifViewCloser(gifName: GifName.Game.revengeInChallenge.rawValue) {
-                        GameBotController().revenge()
-                    }
-                    .onAppear{
-                        SoundMng.shared.playSound(soundName: SoundName.SE.revengeInChallenge.rawValue)
-                    }
-                    .scaleEffect(0.7)
-                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
-                }
-                // 終了
-                if game.gamePhase == .endChallenge  {
-                    ChallengeActionAnnounce(text: "Challenge ZONE\nEnd") {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            // 最終結果へ
-                            game.gamePhase = .decisionrate_pre
+                    // Over
+                    
+                    // どてんこ返し(in challenge)
+                    if game.revengerIndex != nil {
+                        GifViewCloser(gifName: GifName.Game.revengeInChallenge.rawValue) {
+                            GameBotController().revenge()
                         }
-                    }
-                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
-                }
-                // 誰もチャレンジしない
-                if game.gamePhase == .noChallenge  {
-                    ChallengeActionAnnounce(text: "No\nChallenge ZONE", textColor: .dtnkLightRed) {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            // 最終結果へ
-                            game.gamePhase = .decisionrate_pre
+                        .onAppear{
+                            SoundMng.shared.playSound(soundName: SoundName.SE.revengeInChallenge.rawValue)
                         }
+                        .scaleEffect(0.7)
+                        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
                     }
-                    .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                    // 終了
+                    if game.gamePhase == .endChallenge  {
+                        ChallengeActionAnnounce(text: "Challenge ZONE\nEnd") {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                // 最終結果へ
+                                game.gamePhase = .decisionrate_pre
+                            }
+                        }
+                        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                    }
+                    // 誰もチャレンジしない
+                    if game.gamePhase == .noChallenge  {
+                        ChallengeActionAnnounce(text: "No\nChallenge ZONE", textColor: .dtnkLightRed) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                // 最終結果へ
+                                game.gamePhase = .decisionrate_pre
+                            }
+                        }
+                        .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+                    }
                 }
                 // レートアップアナウンス
                 if game.rateUpCard != nil {

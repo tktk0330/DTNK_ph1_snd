@@ -58,7 +58,7 @@ struct OtherPlayerIcon: View {
             } else if game.lastPlayerIndex == playerIndex && game.dtnkPlayer != nil {
                 Text("LOSER!?")
                     .font(.custom(FontName.font01, size: 12))
-                    .foregroundColor(Color.dtnkBlue)
+                    .foregroundColor(Color.dtnkLightBlue)
                     .frame(width: 80, height: 20)
                     .background(Color.black.opacity(0.70))
                     .offset(y: -30)

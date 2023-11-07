@@ -7,6 +7,20 @@ import AVFoundation
 class BgmMng {
     static let shared = BgmMng()
     private var audioPlayer: AVAudioPlayer?
+    
+    
+    private init() {
+        setupAudioSession()
+    }
+
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            log("Audio session setup failed: \(error)", level: .error)
+        }
+    }
 
     func playSound(bgmName: String) {
         

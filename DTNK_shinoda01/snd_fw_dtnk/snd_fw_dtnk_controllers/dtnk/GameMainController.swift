@@ -911,24 +911,24 @@ class GameBotController {
     /**
      カードを出す
      */
-    func playCards(Index: Int, cards: [CardId]) {
+    func playCards(Index: Int, cards: [CardId], completion: @escaping (Bool, String?) -> Void) {
         log("card: \(cards)", level: .info)
         let cardsToPlay = cards
         
         if game.table.isEmpty {
-            log("テーブルが空です")
+            completion(false, "テーブルが空です")
             return
         }
         if cardsToPlay.isEmpty {
-            log("\(Index): カードを選択してください")
+            completion(false, "カードを選択してください")
             return
         }
         if game.currentPlayerIndex != Index && game.currentPlayerIndex != 99 {
-            log("\(Index): あなたのターンではないです")
+            completion(false, "It's not your turn.")
             return
         }
         if game.gamePhase == .ratefirst {
-            log("\(Index): 初期配置中です")
+            completion(false, "初期配置中です")
             return
         }
         
@@ -943,11 +943,12 @@ class GameBotController {
             tohands(Index: Index)
             game.players[Index].selectedCards = []
         } else {
-            log("\(Index): それらのカードは出せないです")
+            completion(false, "それらのカードは出せないです")
             return
         }
         // 次への処理
         pass(Index: Index)
+        completion(true, nil)
     }
     
     /**

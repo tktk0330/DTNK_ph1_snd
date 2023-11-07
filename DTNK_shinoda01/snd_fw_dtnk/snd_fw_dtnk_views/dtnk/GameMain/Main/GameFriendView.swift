@@ -273,12 +273,10 @@ struct GameFriendView: View {
         fbms.observeGameNum() { gameNum in
             game.gameNum = gameNum!
         }
-//        fbms.observeWinnersLosers() { winners, losers in
-//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-//                game.winners = winners
-//                game.losers = losers
-//            }
-//        }
+        fbms.observeWinnersLosers() { winners, losers in
+            game.winners = winners
+            game.losers = losers
+        }
         fbms.observeRateUpCard() { cardsImage in
             game.rateUpCard = cardsImage
         }

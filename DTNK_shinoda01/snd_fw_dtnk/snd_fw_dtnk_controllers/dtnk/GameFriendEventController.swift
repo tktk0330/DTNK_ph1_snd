@@ -55,22 +55,23 @@ struct GameFriendEventController {
     /**
      出す
      */
-    func play(playerID: String, selectCrads: [N_Card], passPayerIndex: Int, completion: @escaping (Bool) -> Void) {
+    func play(playerID: String, selectCrads: [N_Card], passPayerIndex: Int, completion: @escaping (Bool, String?) -> Void) {
         let cardIds: [CardId] = selectCrads.map { $0.id }
         
         guard checkTurn(myside: passPayerIndex) else {
+            completion(false, "It's not your turn.")
             return
         }
         if game.table.isEmpty {
-            log("テーブルが空です")
+            completion(false, "テーブルが空です")
             return
         }
         if selectCrads.isEmpty {
-            log("\(passPayerIndex): カードを選択してください")
+            completion(false, "\(passPayerIndex): カードを選択してください")
             return
         }
         if game.gamePhase == .ratefirst {
-            log("初期配置中です")
+            completion(false, "初期配置中です")
             return
         }
         if GameBotController().checkMultipleCards(table: game.table.last!, playCard: cardIds) {
@@ -81,11 +82,11 @@ struct GameFriendEventController {
                     if game.gamePhase == .gamefirst || game.gamePhase == .gamefirst_sub {
                         fbms.setGamePhase(gamePhase: .main) { result in }
                     }
-                    completion(true)
+                    completion(true, nil)
                 }
             }
         } else {
-            log("\(passPayerIndex): それらのカードは出せないです")
+            completion(false, "\(passPayerIndex): それらのカードは出せないです")
             return
         }
     }

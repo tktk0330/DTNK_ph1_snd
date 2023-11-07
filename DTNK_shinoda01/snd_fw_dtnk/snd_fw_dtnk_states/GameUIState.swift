@@ -118,6 +118,10 @@ class GameUIState: ObservableObject {
     @Published var showChallengeAnnounce: Bool = false     // アナウンス表示のフラグ
     @Published var announceText: String = ""     // アナウンステキスト
 
+    // error
+    @Published var showErrorMessage = false
+    @Published var errorMessageText = ""  // エラーメッセージのテキストを管理
+    
     func triggerAnnouncement(text: String) {
         announceText = text
         showChallengeAnnounce = true

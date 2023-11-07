@@ -41,13 +41,9 @@ struct GameResultView: View {
                                 .padding(5)
                                 .frame(width: geo.size.width * 0.1)
 
-                            Image(player.icon_url)
-                                .resizable()
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 50, height: 50)
+                            IconView(iconURL: player.icon_url, size: 50)
                                 .frame(width: geo.size.width * 0.1)
-
+                            
                             Text(player.name)
                                 .font(.custom(FontName.font01, size: 30))
                                 .foregroundColor(Color.white)

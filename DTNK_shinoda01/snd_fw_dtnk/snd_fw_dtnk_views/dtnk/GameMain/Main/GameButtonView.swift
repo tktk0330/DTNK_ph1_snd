@@ -109,6 +109,9 @@ struct GameButtonView: View {
 //                    } else {
 //                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
 //                    }
+//                    game.errorMessageText = "新しいエラーメッセージ"
+//                    game.showErrorMessage = true
+
                 }) {
                     ZStack{
                         
@@ -127,6 +130,7 @@ struct GameButtonView: View {
                             // ターンカウントダウン
                             CountdownView()
                                 .frame(width: 60)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                         
                         if game.dtnkPlayerIndex == game.myside {
@@ -139,7 +143,7 @@ struct GameButtonView: View {
                         } else if game.lastPlayerIndex == game.myside && game.dtnkPlayer != nil {
                             Text("LOSER!?")
                                 .font(.custom(FontName.font01, size: 12))
-                                .foregroundColor(Color.dtnkBlue)
+                                .foregroundColor(Color.dtnkLightBlue)
                                 .frame(width: 80, height: 20)
                                 .background(Color.black.opacity(0.70))
                                 .offset(y: -30)
@@ -153,12 +157,21 @@ struct GameButtonView: View {
                     if game.gamevsInfo == .vsBot {
                         let selectedCards: [N_Card] = game.players[myside].selectedCards
                         let cardIds: [CardId] = selectedCards.map { $0.id }
-                        GameBotController().playCards(Index: myside, cards: cardIds)
+                        GameBotController().playCards(Index: myside, cards: cardIds) { result, msg in
+                            if result {
+        
+                            } else {
+                                game.showErrorMessage = true
+                                game.errorMessageText = msg!
+                            }
+                        }
                     } else {
-                        GameFriendEventController().play(playerID: game.players[myside].id, selectCrads: game.players[myside].selectedCards, passPayerIndex: myside) { result in
+                        GameFriendEventController().play(playerID: game.players[myside].id, selectCrads: game.players[myside].selectedCards, passPayerIndex: myside) { result, msg in
                             if result {
                                 game.players[myside].selectedCards = []
                             } else {
+                                game.showErrorMessage = true
+                                game.errorMessageText = msg!
                             }
                         }
                     }

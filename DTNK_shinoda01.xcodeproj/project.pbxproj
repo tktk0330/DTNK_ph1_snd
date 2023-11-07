@@ -128,6 +128,7 @@
 		5DB1E7ED2AF4F34100E96E17 /* rateup.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EC2AF4F34000E96E17 /* rateup.wav */; };
 		5DB1E7EF2AF50C6A00E96E17 /* revengeInMain.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */; };
 		5DB1E7F12AF50C7000E96E17 /* revengeInChallenge.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */; };
+		5DB1E8102AF9306A00E96E17 /* GameErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1E80F2AF9306A00E96E17 /* GameErrorMessageView.swift */; };
 		5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */; };
 		5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A72AD99E5400AEE412 /* burst01.gif */; };
 		5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */; };
@@ -290,6 +291,7 @@
 		5DB1E7EC2AF4F34000E96E17 /* rateup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rateup.wav; sourceTree = "<group>"; };
 		5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = revengeInMain.wav; sourceTree = "<group>"; };
 		5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = revengeInChallenge.wav; sourceTree = "<group>"; };
+		5DB1E80F2AF9306A00E96E17 /* GameErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameErrorMessageView.swift; sourceTree = "<group>"; };
 		5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingModeView.swift; sourceTree = "<group>"; };
 		5DB5B5A72AD99E5400AEE412 /* burst01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = burst01.gif; sourceTree = "<group>"; };
 		5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifMng.swift; sourceTree = "<group>"; };
@@ -492,6 +494,7 @@
 		5D8FA2592A481BDC0079F260 /* snd_fw_dtnk_views */ = {
 			isa = PBXGroup;
 			children = (
+				5DB1E80E2AF9304000E96E17 /* error */,
 				5D8FA2C32A4823EE0079F260 /* components */,
 				5D8FA2C42A4824010079F260 /* dtnk */,
 			);
@@ -783,6 +786,14 @@
 			path = music;
 			sourceTree = "<group>";
 		};
+		5DB1E80E2AF9304000E96E17 /* error */ = {
+			isa = PBXGroup;
+			children = (
+				5DB1E80F2AF9306A00E96E17 /* GameErrorMessageView.swift */,
+			);
+			path = error;
+			sourceTree = "<group>";
+		};
 		5DB5B5A62AD99E0A00AEE412 /* animation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1009,6 +1020,7 @@
 				5D8FA31E2A48288A0079F260 /* ScoreItem.swift in Sources */,
 				5D9872042AA997BC0031A57C /* RealmMng.swift in Sources */,
 				5D8FA2CC2A48248B0079F260 /* Countdown.swift in Sources */,
+				5DB1E8102AF9306A00E96E17 /* GameErrorMessageView.swift in Sources */,
 				5DB1E7D12AE95EE500E96E17 /* DateExtention.swift in Sources */,
 				5DC02E5E2AC16564009E84A5 /* ScoreBarView.swift in Sources */,
 				5D8FA2762A481DCE0079F260 /* PageContent.swift in Sources */,
@@ -1251,6 +1263,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DTNK-shinoda01-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1283,6 +1296,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DTNK-shinoda01-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

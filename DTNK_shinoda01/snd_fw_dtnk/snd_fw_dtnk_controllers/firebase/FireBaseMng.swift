@@ -309,7 +309,7 @@ class FirebaseManager {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
         let playersJSON = cjm.player_fJSON(player: dtnkPlayer)
         let valuesToUpdate: [String: Any] = [
-            "dtnkIndex": Index,
+            "dtnkPlayerIndex": Index,
             "dtnkPlayer": playersJSON,
         ]
         gameInfoRef.updateChildValues(valuesToUpdate) { error, _ in
@@ -326,7 +326,7 @@ class FirebaseManager {
      */
     func observeDTNKInfo(completion: @escaping (Int?, Player_f?) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        let indexRef = gameInfoRef.child("dtnkIndex")
+        let indexRef = gameInfoRef.child("dtnkPlayerIndex")
         let playerRef = gameInfoRef.child("dtnkPlayer")
 
         indexRef.observe(.value) { (snapshot) in
