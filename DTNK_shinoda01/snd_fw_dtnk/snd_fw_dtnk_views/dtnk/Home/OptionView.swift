@@ -8,7 +8,6 @@ struct OptionView: View {
     
     @StateObject var home: HomeState = appState.home
     @StateObject var account: AccountState = appState.account
-    @State private var iconURL = appState.account.loginUser.iconURL
     @State private var text: String = ""
     @State private var keyboardHeight: CGFloat = 0
     
@@ -29,7 +28,7 @@ struct OptionView: View {
                         home.mode = .edittingIcon
                         SoundMng.shared.playSound(soundName: SoundName.SE.btn_positive.rawValue)
                     }) {
-                        IconView(iconURL: iconURL, size: 50)
+                        IconView(iconURL: appState.account.loginUser.iconURL, size: 60)
                     }
                     .buttonStyle(PressBtn())
                     

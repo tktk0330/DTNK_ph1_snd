@@ -99,8 +99,6 @@ struct IconSelectView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 70, height: 70)
-
-//                                Btnaction(btnText: "?", btnTextSize: 15, btnWidth:  70, btnHeight: 70, btnColor: Color.dtnkLightBlue)
                             }
                             .sheet(isPresented: $showingImagePicker, onDismiss: uploadImageToFirebase) {
                                 ImagePicker(image: $selectedImage)
@@ -173,7 +171,7 @@ struct IconSelectView: View {
         deleteUserImageFromFirebase { error in
             // オブジェクトが存在しないエラー以外のエラーをチェック
             if let error = error, (error as NSError).code != StorageErrorCode.objectNotFound.rawValue {
-                print("Failed to delete previous image: \(error.localizedDescription)")
+                log("Failed to delete previous image: \(error.localizedDescription)")
                 uploadInProgress = false
                 return
             }
@@ -184,30 +182,19 @@ struct IconSelectView: View {
             storageRef.putData(data, metadata: nil) { (metadata, error) in
                 self.uploadInProgress = false
                 if error != nil {
-                    print("Failed to upload to Firebase Storage")
+                    log("Failed to upload to Firebase Storage")
                     return
                 }
 
-//                storageRef.downloadURL { (url, error) in
-//                    if let downloadURL = url {
-//                        self.iconURL = downloadURL.absoluteString
-//                        self.downloadImage(url: self.iconURL)
-//                        print("Successfully uploaded to Firebase Storage. URL: \(self.iconURL)")
-//                        updateAppStateIconURL(with: self.iconURL) // これを追加
-//
-//                    } else {
-//                        print("Failed to get download URL")
-//                    }
-//                }
                 storageRef.downloadURL { (url, error) in
                     if let downloadURL = url {
                         self.iconURL = downloadURL.absoluteString
                         ImageCache.shared.removeImage(forKey: self.iconURL) // キャッシュを削除
                         self.downloadImage(url: self.iconURL)
-                        print("Successfully uploaded to Firebase Storage. URL: \(self.iconURL)")
+                        log("Successfully uploaded to Firebase Storage. URL: \(self.iconURL)")
                         updateAppStateIconURL(with: self.iconURL)
                     } else {
-                        print("Failed to get download URL")
+                        log("Failed to get download URL")
                     }
                 }
 
@@ -217,15 +204,12 @@ struct IconSelectView: View {
 
     // この新しいメソッドで appState の iconURL を更新します。
     func updateAppStateIconURL(with url: String) {
-        appState.account.loginUser.iconURL = url
         iconURL = url
-        print("\(iconURL)")
     }
 
-    
     func downloadImage(url: String) {
         guard let imageURL = URL(string: url) else {
-            print("Invalid URL.")
+            log("Invalid URL.", level: .error)
             return
         }
 
@@ -233,10 +217,9 @@ struct IconSelectView: View {
             if let data = data, let uiImage = UIImage(data: data) {
                 DispatchQueue.main.async {
                     self.userImage = Image(uiImage: uiImage)
-                    appState.account.loginUser.iconURL = iconURL
                 }
             } else {
-                print("Failed to download image.")
+                log("Failed to download image.", level: .error)
             }
         }.resume()
     }

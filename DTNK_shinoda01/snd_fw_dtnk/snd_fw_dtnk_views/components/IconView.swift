@@ -1,9 +1,11 @@
-
-
+/**
+ アイコン画像の表示
+ */
 
 import SwiftUI
 
 struct IconView: View {
+    
     var iconURL: String
     var size: CGFloat
 
@@ -15,13 +17,15 @@ struct IconView: View {
         iconImage
             .resizable()
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .aspectRatio(contentMode: .fit) // この行で画像のアスペクト比が保たれます。
+            .aspectRatio(contentMode: .fit)
             .frame(width: size, height: size)
             .shadow(color: Color.casinoShadow, radius: 1, x: 0, y: 10)
             .onAppear {
-                if iconURL.starts(with: "https://firebasestorage.googleapis.com") {
-                    downloadImage(url: iconURL)
-                }
+                loadImage(url: iconURL)
+            }
+            .onChange(of: iconURL) { newURL in
+                imageCache.removeImage(forKey: newURL)
+                loadImage(url: newURL)
             }
     }
 
