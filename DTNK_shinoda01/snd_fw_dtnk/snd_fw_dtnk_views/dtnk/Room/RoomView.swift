@@ -16,7 +16,14 @@ struct RoomView: View {
 
     var body: some View {
         GeometryReader { geo in
-            ZStack{                
+            ZStack{
+                
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
+
                 // back
                 BackButton(backPage: .home, geo: geo, keyboardHeight: keyboardHeight)
 
@@ -81,7 +88,6 @@ struct RoomView: View {
                 keyboardHeight = 0
             }
         }
-
     }
     
     /**
@@ -89,10 +95,9 @@ struct RoomView: View {
      挙動としては作成して検索かけて遷移
      */
     func onTapCreate() {
-                
-        if text.isEmpty {
-            message = "ルーム名を入れてください"
-            return
+        
+        guard validateText(text) else {
+            return // バリデーションエラーがある場合は処理を終了
         }
         room.roommode = .waiting
 
@@ -130,11 +135,11 @@ struct RoomView: View {
      検索
      */
     func onTapSearch() {
-        if text.isEmpty {
-            message = "ルーム名を入れてください"
-            return
-        }
         
+        guard validateText(text) else {
+            return // バリデーションエラーがある場合は処理を終了
+        }
+
         room.roommode = .waiting
 
         let roomName = text
@@ -151,4 +156,33 @@ struct RoomView: View {
             }
         }
     }
+    
+    // キーボードを隠す
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    // バリデーションチェック
+    private func validateText(_ text: String) -> Bool {
+        if text.isEmpty {
+            self.message = "ルーム名を入れてください"
+            return false
+        }
+        // 許可される文字セットを定義: 英数字、ひらがな、カタカナ、漢字
+        let allowedCharacters = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "ぁ-んァ-ン一-龥"))
+        if text.rangeOfCharacter(from: allowedCharacters.inverted) != nil {
+            // 文字列に許可されていない記号が含まれている場合
+            self.message = "ルーム名に不正な文字が含まれています"
+            return false
+        }
+        if text.count > 10 {
+            self.message = "ルーム名は10文字以下で入力してください"
+            return false
+        }
+        
+        // ここでエラーをクリアします
+        self.message = ""
+        return true
+    }
+
 }

@@ -16,7 +16,7 @@ struct GameEventView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
         }
         // 開始ボタン
-        if game.startFlag && !game.AnnounceFlg {
+        if game.startFlag && !game.AnnounceFlg && appState.room.roomData.hostID == game.players[myside].id {
             Button(action: {
                 if game.gamevsInfo == .vsBot {
                     game.startFlag = false
@@ -35,6 +35,22 @@ struct GameEventView: View {
             .blinkEffect(animating: true)
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
         }
+        
+        if game.startFlag && !game.AnnounceFlg && game.gamePhase == .dealcard && appState.room.roomData.hostID != game.players[myside].id {
+            ZStack {
+                Rectangle()
+                    .fill(Color.black.opacity(0.7))
+                    .frame(width: UIScreen.main.bounds.width, height: 130)
+                
+                Text("Hostがゲームを開始するまでお待ちください")
+                    .font(.custom(FontName.MP_Bo, size: 15))
+                    .foregroundColor(Color.white)
+                    .padding(5)
+                    .blinkEffect(animating: true)
+                    .position(x: Constants.scrWidth * 0.5, y: geo.size.height * 0.5)
+            }
+        }
+
         // CountDown
         if game.gamePhase == .countdown {
             StartCountdownView()

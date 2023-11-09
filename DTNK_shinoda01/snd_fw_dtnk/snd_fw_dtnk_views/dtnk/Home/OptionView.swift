@@ -10,10 +10,19 @@ struct OptionView: View {
     @StateObject var account: AccountState = appState.account
     @State private var text: String = ""
     @State private var keyboardHeight: CGFloat = 0
+    @State private var message: String = ""
+
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
+                
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
+
                 // back
                 BackButton(backPage: .home, geo: geo, keyboardHeight: keyboardHeight)
                 
@@ -41,20 +50,30 @@ struct OptionView: View {
                         
                         
                         Button(action: {
+                            guard validateText(text) else {
+                                return // バリデーションエラーがある場合は処理を終了
+                            }
+
                             HomeController().updateName(newName: text)
                         }) {
                             Btnaction(btnText: "更新", btnTextSize: 15, btnWidth:  70, btnHeight: 35, btnColor: Color.dtnkLightBlue)
                         }
                         .buttonStyle(PressBtn())
                     }
+                    
+                    Text(message)
+                        .foregroundColor(Color.red)
+                        .padding(5)
+                        .frame(width: 300)
+
                 }
-                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.28 + keyboardHeight * 2)
+                .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.32 + keyboardHeight * 2)
             }
             
             ZStack{
                 Rectangle()
                     .foregroundColor(Color.casinolightgreen)
-                    .frame(height: 410)
+                    .frame(height: 400)
                     .edgesIgnoringSafeArea(.top)
                 
                 VStack(spacing: 30) {
@@ -88,7 +107,7 @@ struct OptionView: View {
 
                 }
             }
-            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.65 + keyboardHeight * 5)
+            .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.72 + keyboardHeight * 5)
             
             // アイコン変更
             if home.mode == .edittingIcon {
@@ -107,6 +126,35 @@ struct OptionView: View {
             }
         }
     }
+    
+    // キーボードを隠す
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+
+    // バリデーションチェック
+    private func validateText(_ text: String) -> Bool {
+        if text.isEmpty {
+            self.message = "名前を入力してください"
+            return false
+        }
+        // 許可される文字セットを定義: 英数字、ひらがな、カタカナ、漢字
+        let allowedCharacters = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "ぁ-んァ-ン一-龥"))
+        if text.rangeOfCharacter(from: allowedCharacters.inverted) != nil {
+            // 文字列に許可されていない記号が含まれている場合
+            self.message = "名前に不正な文字が含まれています"
+            return false
+        }
+        if text.count > 10 {
+            self.message = "名前は10文字以下で入力してください"
+            return false
+        }
+        
+        // ここでエラーをクリアします
+        self.message = ""
+        return true
+    }
+
 }
 
 // 項目View

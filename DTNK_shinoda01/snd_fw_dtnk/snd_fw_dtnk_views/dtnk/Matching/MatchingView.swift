@@ -62,7 +62,7 @@ struct MatchingView: View {
         GeometryReader { geo in
             ZStack{
                 
-                if matching.vsInfo == 02 {
+                if matching.vsInfo == 02 && !room.startFlg {
                     // back
                     Button(action: {
                         
@@ -116,6 +116,7 @@ struct MatchingView: View {
                 }
                 .position(x: UIScreen.main.bounds.width / 2, y: geo.size.height * 0.55)
                 
+                
                 // gameStartBtn
                 if matching.players.count == 4 {
                     if appState.account.loginUser.userID == room.roomData.hostID {
@@ -126,6 +127,13 @@ struct MatchingView: View {
                             Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
                         }
                         .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
+                    } else {
+                        Text("Hostがゲームを開始するまでお待ちください")
+                            .font(.custom(FontName.MP_Bo, size: 15))
+                            .foregroundColor(Color.white)
+                            .padding(5)
+                            .blinkEffect(animating: true)
+                            .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.25)
                     }
                 }
                 
@@ -141,8 +149,10 @@ struct MatchingView: View {
                 room.roommode = .base
 
                 if matching.vsInfo == 01 {
+                    // vs Bot
                     MatchingController().onRequest()
                 } else {
+                    // vs Friend
                     // 参加者の監視
                     room.updateParticipants(roomID: room.roomData.roomID)
                 }
