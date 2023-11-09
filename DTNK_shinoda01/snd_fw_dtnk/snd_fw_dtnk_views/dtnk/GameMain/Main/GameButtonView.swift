@@ -104,14 +104,11 @@ struct GameButtonView: View {
                 // MyIcon
                 Button(action: {
                     // TODO: test
-//                    if game.gamevsInfo == .vsBot {
-//                        GameBotController().playerDtnk(Index: myside)
-//                    } else {
-//                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
-//                    }
-//                    game.errorMessageText = "新しいエラーメッセージ"
-//                    game.showErrorMessage = true
-
+                    if game.gamevsInfo == .vsBot {
+                        GameBotController().playerDtnk(Index: myside)
+                    } else {
+                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
+                    }
                 }) {
                     ZStack{
                         
@@ -120,8 +117,12 @@ struct GameButtonView: View {
                                 Group {
                                     if appState.gameUIState.gamePhase == .main && game.currentPlayerIndex == game.myside && game.gamevsInfo == .vsFriend {
                                         Rectangle().foregroundColor(.black).opacity(0.7)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+
                                     } else {
                                         Rectangle().opacity(0)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+
                                     }
                                 }
                             )
@@ -130,7 +131,6 @@ struct GameButtonView: View {
                             // ターンカウントダウン
                             CountdownView()
                                 .frame(width: 60)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                         
                         if game.dtnkPlayerIndex == game.myside {

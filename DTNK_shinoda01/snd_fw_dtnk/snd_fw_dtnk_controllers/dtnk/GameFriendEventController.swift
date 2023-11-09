@@ -37,9 +37,14 @@ struct GameFriendEventController {
      引く
      */
     func draw(playerID: String, playerIndex: Int) {
+        
         guard checkTurn(myside: playerIndex) else {
             return
         }
+        if game.gamePhase != .main {
+            return
+        }
+
         appState.gameUIState.turnFlg = 1
 
         fbms.drawCard(playerID: playerID) { result in
@@ -59,7 +64,7 @@ struct GameFriendEventController {
         let cardIds: [CardId] = selectCrads.map { $0.id }
         
         guard checkTurn(myside: passPayerIndex) else {
-            completion(false, "It's not your turn.")
+            completion(false, "あなたのターンではないです")
             return
         }
         if game.table.isEmpty {
@@ -86,7 +91,7 @@ struct GameFriendEventController {
                 }
             }
         } else {
-            completion(false, "\(passPayerIndex): それらのカードは出せないです")
+            completion(false, "それらのカードは出せないです")
             return
         }
     }

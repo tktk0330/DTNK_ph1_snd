@@ -221,9 +221,10 @@ class FirebaseManager {
      */
     func setGamePhase(gamePhase: GamePhase, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        log("★★★★★accessStart★★★★★ : setGamePhase : \(gamePhase), \(gamePhase.rawValue)", level: .debug)
         gameInfoRef.child("gamePhase").setValue(gamePhase.rawValue) { error, _ in
             if let error = error {
-                print("Failed to update room status: \(error.localizedDescription)")
+                log("Failed to update room status: \(error.localizedDescription)", level: .error)
             } else {
                 completion(true)
             }
@@ -314,7 +315,7 @@ class FirebaseManager {
         ]
         gameInfoRef.updateChildValues(valuesToUpdate) { error, _ in
             if let error = error {
-                print("Failed to update DTNK info: \(error.localizedDescription)")
+                log("Failed to update DTNK info: \(error.localizedDescription)", level: .error)
                 completion(false)
             } else {
                 completion(true)
@@ -695,7 +696,7 @@ class FirebaseManager {
 
         gameInfoRef.updateChildValues(updateData) { error, _ in
             if let error = error {
-                print("Failed: \(error.localizedDescription)")
+                log("Failed: \(error.localizedDescription)", level: .error)
                 completion(false)
             } else {
                 completion(true)

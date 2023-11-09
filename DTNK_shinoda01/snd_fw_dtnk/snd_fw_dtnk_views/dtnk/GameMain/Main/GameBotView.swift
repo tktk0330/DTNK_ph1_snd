@@ -22,6 +22,7 @@ struct GameBotView: View {
             GameEventView(game: game, myside: myside, geo: geo)
             Group {
                 
+                // errorView
                 ErrorMessageView(showErrorMessage: $game.showErrorMessage, errorMessageText: $game.errorMessageText)
                     .position(x: Constants.scrWidth * 0.50, y:  geo.size.height * 0.62)
 

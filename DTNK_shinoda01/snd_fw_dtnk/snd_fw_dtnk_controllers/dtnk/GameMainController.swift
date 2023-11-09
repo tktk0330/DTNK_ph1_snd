@@ -383,6 +383,11 @@ class GameBotController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 * Double(time)) { [self] in
                 let player = game.players[number]
                 // 出せるか判断
+                guard let lastTableCard = game.table.last else {
+                    log("BotGameInit No cards on the table.", level: .error)
+                    return
+                }
+                
                 var initCards = BotInitCard(table: game.table.last!, hand: player.hand)
                 if !initCards.isEmpty {
                     initCards.shuffle()
@@ -575,9 +580,13 @@ class GameBotController {
         let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
         let dtnkCardNumber = game.table.last?.number()
         // 手札とどてんこカードを比較して、行動する 3
-        game.triggerAnnouncement(text: "\(game.players[nextChallenger!].name)\nのChallenge")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
-            challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+        if let challenger = nextChallenger, let cardNumber = dtnkCardNumber {
+            game.triggerAnnouncement(text: "\(game.players[challenger].name)\nのChallenge")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.challengeIndex(challengerIndex: challenger, dtnkCardNumber: cardNumber, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+            }
+        } else {
+            log("challengeEvent", level: .error)
         }
     }
     
@@ -924,7 +933,7 @@ class GameBotController {
             return
         }
         if game.currentPlayerIndex != Index && game.currentPlayerIndex != 99 {
-            completion(false, "It's not your turn.")
+            completion(false, "あなたのターンではないです")
             return
         }
         if game.gamePhase == .ratefirst {
