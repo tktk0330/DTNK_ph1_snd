@@ -87,15 +87,18 @@ class ImageCache {
 
 extension UIImage {
     func croppedToSquare() -> UIImage? {
-        let minLength = min(size.width, size.height)
-        let offsetX = (size.width - minLength) / 2.0
-        let offsetY = (size.height - minLength) / 2.0
-        let squareRectangle = CGRect(x: offsetX, y: offsetY, width: minLength, height: minLength)
-        
-        if let cgImage = cgImage?.cropping(to: squareRectangle) {
-            return UIImage(cgImage: cgImage)
+        // Calculate the position and size of the square crop.
+        let edge = min(size.width, size.height)
+        let rect = CGRect(x: (size.width - edge) / 2.0,
+                          y: (size.height - edge) / 2.0,
+                          width: edge,
+                          height: edge)
+
+        // Perform cropping in a UIGraphicsImageRenderer for better quality.
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: edge, height: edge))
+        let squareImage = renderer.image { _ in
+            draw(in: CGRect(x: -rect.origin.x, y: -rect.origin.y, width: size.width, height: size.height))
         }
-        
-        return nil
+        return squareImage
     }
 }
