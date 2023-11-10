@@ -150,20 +150,22 @@ struct GameFriendEventController {
     func dtnk(Index: Int, dtnkPlayer: Player_f) {
         // dtnkは１ゲーム１人１回
         if game.dtnkFlg[Index] != 1 {
-            
             guard checDtnk(myside: Index) else {
                 return
             }
             game.dtnkFlg[Index] = 1
-            // TODO: 音バイブ
-            fbms.setGamePhase(gamePhase: .dtnk) { result in }
-            fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in }
-            
-            // TODO: ロジック修正？
-            // アニメーションが終わったら参加可否を問う
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                // 可否
-                fbms.setGamePhase(gamePhase: .q_challenge) { result in }
+            fbms.setDTNKInfo(Index: Index, dtnkPlayer: dtnkPlayer) { result in
+                if result {
+                    fbms.setGamePhase(gamePhase: .dtnk) { result in }
+                    // アニメーションが終わったら参加可否を問う
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                        // 可否
+                        fbms.setGamePhase(gamePhase: .q_challenge) { result in }
+                    }
+                } else {
+                    log("\(Index): どてんこ失敗")
+                    return
+                }
             }
         }
     }
@@ -260,6 +262,7 @@ struct GameFriendEventController {
         game.AnnounceFlg = false // 実行中 true 非表示中　false
         game.turnFlg = 0         // 0: canDraw 1: canPass
         game.dtnkFlg = Array(repeating: 0, count: 4)         // 0: no 1: dtnked
+        game.challengers = []
     }
     
     // 順位決定

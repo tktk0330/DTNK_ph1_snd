@@ -42,7 +42,6 @@ struct ConvertJSONMng {
             "side": player.side,
             "name": player.name,
             "icon_url": player.icon_url,
-            //                "hand": player.hand,
             "score": player.score,
             "rank": player.rank,
             "selectedCards": player.selectedCards

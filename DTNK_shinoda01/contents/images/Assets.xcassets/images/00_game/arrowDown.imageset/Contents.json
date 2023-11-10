@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "dtnk-2.png",
+      "filename" : "arrowDown.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "dtnk-2 1.png",
+      "filename" : "arrowDown 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "dtnk-2 2.png",
+      "filename" : "arrowDown 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

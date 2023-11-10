@@ -39,6 +39,7 @@ struct PressBtn: ButtonStyle {
     }
 }
 
+// ColorButton (No Icon)
 struct Btnaction: View {
     var btnText: String
     var btnTextSize: CGFloat
@@ -60,6 +61,34 @@ struct Btnaction: View {
 
     }
 }
+
+// ColorButton (Icon)
+struct BtnactionIcon: View {
+    var image: String
+    var btnText: String
+    var btnTextSize: CGFloat
+    var btnWidth: CGFloat
+    var btnHeight: CGFloat
+    var btnColor: Color
+    
+    var body: some View {
+        
+        HStack(spacing: 5) {
+            Image(image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: btnTextSize)
+            
+            Text(btnText)
+                .font(.custom(FontName.MP_EB, size: btnTextSize))
+        }
+        .frame(width: btnWidth, height: btnHeight)
+        .foregroundColor(Color.white)
+        .background(btnColor)
+        .cornerRadius(10)
+    }
+}
+
 
 struct Btnwb: View {
     var btnText: String

@@ -65,7 +65,7 @@ struct JoinPopView: View {
                 .background(
                     Color.black.opacity(0.50)
                         .onTapGesture {
-                            RoomController().onCloseMenu()
+                            hideKeyboard()
                         }
                 )
             }
@@ -73,4 +73,9 @@ struct JoinPopView: View {
         .edgesIgnoringSafeArea(.all)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+    
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+
 }

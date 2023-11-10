@@ -16,7 +16,7 @@ struct GameEventView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
         }
         // 開始ボタン
-        if game.startFlag && !game.AnnounceFlg && appState.room.roomData.hostID == game.players[myside].id {
+        if game.startFlag && !game.AnnounceFlg && (appState.room.roomData.hostID == game.players[myside].id || game.gamevsInfo == .vsBot ) {
             Button(action: {
                 if game.gamevsInfo == .vsBot {
                     game.startFlag = false
@@ -36,7 +36,7 @@ struct GameEventView: View {
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.5)
         }
         
-        if game.startFlag && !game.AnnounceFlg && game.gamePhase == .dealcard && appState.room.roomData.hostID != game.players[myside].id {
+        if game.gamevsInfo == .vsFriend && game.startFlag && !game.AnnounceFlg && game.gamePhase == .dealcard && appState.room.roomData.hostID != game.players[myside].id {
             ZStack {
                 Rectangle()
                     .fill(Color.black.opacity(0.7))

@@ -3,7 +3,6 @@
 
 import SwiftUI
 
-
 /**
  ゲームState
  id :　ゲーム固有のID
@@ -17,8 +16,6 @@ struct GameLogicState {
 //    let id: String
     var deck: [CardId]
     var sides: [GameSide]
-    
-//    var gamestep: GameStep
 }
 
 /**
@@ -34,7 +31,6 @@ struct GameSide {
     // どてんこ情報とか？
 }
 
-
 /**
  GameSeat
  プレイヤーの番号
@@ -45,15 +41,4 @@ enum GameSeat: Int {
     case s2 = 2
     case s3 = 3
     case s4 = 4
-}
-
-/**
- GameStep
- Game状態
- */
-enum GameStep: Int {
-    
-    case dealcard
-    case main
-    
 }

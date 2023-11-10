@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameButtonView: View {
-    @ObservedObject var game: GameUIState // あなたのゲームの型に変更してください
+    @ObservedObject var game: GameUIState
     var myside: Int
     var geo: GeometryProxy
 
@@ -59,7 +59,7 @@ struct GameButtonView: View {
         .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.80)
         
         if GameMainController().judgeChallenge(gamePase: game.gamePhase) {
-            HStack(spacing: 15) {
+            HStack(spacing: 5) {
                 
                 if game.gamePhase == .dealcard || game.gamePhase == .countdown || game.gamePhase == .gamefirst || game.gamePhase == .ratefirst {
                     Button(action: {
@@ -69,7 +69,7 @@ struct GameButtonView: View {
                             GameFriendEventController().initPass(Index: myside)
                         }
                     }) {
-                        Btnaction(btnText: "出せない", btnTextSize: 20, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+                        BtnactionIcon(image: ImageName.Game.cross.rawValue, btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                     }
                     .buttonStyle(PressBtn())
                     
@@ -82,7 +82,7 @@ struct GameButtonView: View {
                             GameFriendEventController().draw(playerID: game.players[myside].id, playerIndex: myside)
                         }
                     }) {
-                        Btnaction(btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
+                        BtnactionIcon(image: ImageName.Game.arrowDown.rawValue, btnText: "引く", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightYellow)
                     }
                     .buttonStyle(PressBtn())
                     
@@ -95,7 +95,7 @@ struct GameButtonView: View {
                         }
                         
                     }) {
-                        Btnaction(btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
+                        BtnactionIcon(image: ImageName.Game.cross.rawValue,btnText: "パス", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightBlue)
                     }
                     .buttonStyle(PressBtn())
                     
@@ -176,12 +176,13 @@ struct GameButtonView: View {
                         }
                     }
                 }) {
-                    Btnaction(btnText: "出す", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
+                    BtnactionIcon(image: ImageName.Game.arrowUp.rawValue, btnText: "出す", btnTextSize: 25, btnWidth:  UIScreen.main.bounds.width * 0.3, btnHeight: 60, btnColor: Color.dtnkLightRed)
                 }
                 .buttonStyle(PressBtn())
                 
             }
             .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height * 0.92)
+            
         }
     }
 }

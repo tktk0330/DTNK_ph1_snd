@@ -117,6 +117,56 @@ struct GameMainController {
             }
         }
     }
+    
+    
+    //------------------------------------CHALLENGE
+    //------------------------------------CHALLENGE
+    
+    func getNextChallenger(nowIndex: Int, participants: [[Int]]) -> Int? {
+        // 現在のプレイヤーの番号を見つけます。
+        guard let targetIndex = participants.firstIndex(where: { $0[0] == nowIndex }) else {
+            return nil
+        }
+
+        // 次のプレイヤーを探します。
+        var nextIndex = targetIndex
+        repeat {
+            // 次のインデックスを計算（リングバッファのように処理）
+            nextIndex = (nextIndex + 1) % participants.count
+
+            // フラグが0のプレイヤーを見つけたら返す
+            if participants[nextIndex][1] == 0 {
+                return participants[nextIndex][0]
+            }
+        } while nextIndex != targetIndex // 全プレイヤーをチェックし終わるまでループ
+
+        // 全プレイヤーのフラグが0でなければnilを返す
+        return nil
+    }
+
+    // OverしたらFlgを立てる
+    func updateParticipantFlag(Index: Int, challengers: [[Int]]) -> [[Int]] {
+        var updateChallengers = challengers
+        for (index, challenger) in challengers.enumerated() {
+            if challenger[0] == Index {
+                updateChallengers[index][1] = 1
+                break
+            }
+        }
+        return updateChallengers
+    }
+    
+    // OverしてるかCheck
+    func checkIfParticipantFlagIsOne(Index: Int, challengers: [[Int]]) -> Bool {
+        for challenger in challengers {
+            if challenger[0] == Index {
+                return challenger[1] == 1
+            }
+        }
+        return false
+    }
+
+
 }
 
 class GameBotController {
@@ -167,7 +217,7 @@ class GameBotController {
         
         
         // どてんこできるか
-        var dtnkJudge = dtnkJudge(myside: Index, playerAllCards: game.players[Index].hand, table: game.table)
+        let dtnkJudge = dtnkJudge(myside: Index, playerAllCards: game.players[Index].hand, table: game.table)
         
         if dtnkJudge == Constants.dtnkCode && game.lastPlayerIndex != Index {
             // 自分のターンになって次の処理をするまでの時間
@@ -576,8 +626,13 @@ class GameBotController {
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
             return value.rawValue > 1 ? index : nil
         }
+        // 初回0をSet
+        if game.challengers == [] {
+            // ChallengeFlgのSet(Overしたら1にする)[[0,0],[2,0],[3,0]]
+            game.challengers = challengeplayers.map { [$0, 0] }
+        }
         // 次のIndexを決める 3
-        let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
+        let nextChallenger = GameMainController().getNextChallenger(nowIndex: dtnkIndex, participants: game.challengers)
         let dtnkCardNumber = game.table.last?.number()
         // 手札とどてんこカードを比較して、行動する 3
         if let challenger = nextChallenger, let cardNumber = dtnkCardNumber {
@@ -589,19 +644,7 @@ class GameBotController {
             log("challengeEvent", level: .error)
         }
     }
-    
-    // 次のプレイヤーを返す
-    func getNextChallenger(nowIndex: Int, players: [Int]) -> Int? {
-        // targetのインデックスを見つけます。
-        guard let targetIndex = players.firstIndex(of: nowIndex) else {
-            return nil
-        }
-        // 次のインデックスを計算します。
-        let nextIndex = (targetIndex + 1) % players.count
-        // 新しいインデックスのプレイヤーを返します。
-        return players[nextIndex]
-    }
-    
+        
     // 手札の合計を返す
     func countHand(hand: [CardId]) -> Int {
         var sum = 0
@@ -654,8 +697,10 @@ class GameBotController {
         // 終了(最小値がダメだった場合)
         if (minimun > dtnkCardNumber) {
             log("\(challengerIndex): のチャレンジ　　オーバーした")
+            // Flg ON
+            game.challengers = GameMainController().updateParticipantFlag(Index: challengerIndex, challengers: game.challengers)
             // overしたら次の人へ
-            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
+            let nextChallenger = GameMainController().getNextChallenger(nowIndex: challengerIndex, participants: game.challengers)
             
             // 次がdtnkIndexだったら終了
             if nextChallenger == dtnkIndex {
@@ -1151,18 +1196,19 @@ class GameBotController {
                 sum = true
             }
         }
-        // 手札が全部同じ数字かどうか
+        var single: Bool = false
         var same: Bool = false
-        let sameResult = areAllCardIdsTheSame(cards: playCard)
-        // テーブルと同じ数字または同じスート
-        if sameResult {
-            same = checkTopCard(table: table, playCard: playCard.first!)
-        }
-        
-        // if single
-        var single = false
         if playCard.count == 1 {
+            // if single
             single = checkSingleCard(table: table, playCard: playCard.first!)
+            
+        } else {
+            // 手札が全部同じ数字かどうか
+            let sameResult = areAllCardIdsTheSame(cards: playCard)
+            // テーブルと同じ数字または同じスート
+            if sameResult {
+                same = checkTopCard(table: table, playCard: playCard.first!)
+            }
         }
         
         return sum || same || single

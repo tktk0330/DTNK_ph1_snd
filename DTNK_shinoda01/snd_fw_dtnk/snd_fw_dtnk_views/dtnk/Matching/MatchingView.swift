@@ -118,22 +118,24 @@ struct MatchingView: View {
                 
                 
                 // gameStartBtn
-                if matching.players.count == 4 {
-                    if appState.account.loginUser.userID == room.roomData.hostID {
-                        Button(action: {
-                            room.roommode = .waiting
-                            MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
-                        }) {
-                            Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                if matching.vsInfo == 02 {
+                    if matching.players.count == 4 {
+                        if appState.account.loginUser.userID == room.roomData.hostID {
+                            Button(action: {
+                                room.roommode = .waiting
+                                MatchingController().onTapStart(players: matching.players, roomID: room.roomData.roomID)
+                            }) {
+                                Btnwb(btnText: "OK", btnTextSize: 30, btnWidth: 200, btnHeight: 60)
+                            }
+                            .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
+                        } else {
+                            Text("Hostがゲームを開始するまでお待ちください")
+                                .font(.custom(FontName.MP_Bo, size: 15))
+                                .foregroundColor(Color.white)
+                                .padding(5)
+                                .blinkEffect(animating: true)
+                                .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.25)
                         }
-                        .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.90)
-                    } else {
-                        Text("Hostがゲームを開始するまでお待ちください")
-                            .font(.custom(FontName.MP_Bo, size: 15))
-                            .foregroundColor(Color.white)
-                            .padding(5)
-                            .blinkEffect(animating: true)
-                            .position(x: UIScreen.main.bounds.width * 0.5, y: geo.size.height * 0.25)
                     }
                 }
                 

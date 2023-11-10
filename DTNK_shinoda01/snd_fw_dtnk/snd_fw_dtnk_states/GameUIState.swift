@@ -85,6 +85,7 @@ class GameUIState: ObservableObject {
             }
         }
     }
+    @Published var challengers: [[Int]] = []
     // 完了通知
     @Published var nextGameAnnouns: [NextGameAnnouns] = Array(repeating: NextGameAnnouns.initial, count: 4)
     // 裏のカードたち
@@ -148,6 +149,7 @@ class GameUIState: ObservableObject {
         burstPlayerIndex = Constants.burstCode
         firstAnswers = Array(repeating: FirstAnswers.initial, count: 4)
         challengeAnswers = Array(repeating: ChallengeAnswer.initial, count: 4)
+        challengers = []
         nextGameAnnouns = Array(repeating: NextGameAnnouns.initial, count: 4)
         decisionScoreCards = []
         initialRate = 1
@@ -280,6 +282,7 @@ class GameUIState: ObservableObject {
         self.ascendingRate = resetItem.ascendingRate
         self.decisionScoreCards = []
         self.challengeAnswers = resetItem.challengeAnswers.compactMap { ChallengeAnswer(rawValue: $0) }
+        self.challengers = []
         self.nextGameAnnouns = resetItem.nextGameAnnouns.compactMap { NextGameAnnouns(rawValue: $0) }
         self.firstAnswers = resetItem.firstAnswers.compactMap { FirstAnswers(rawValue: $0) }
         self.winners = []

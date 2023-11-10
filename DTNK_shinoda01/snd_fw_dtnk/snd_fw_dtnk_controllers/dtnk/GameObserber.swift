@@ -125,39 +125,32 @@ class GameObserber {
         let challengeplayers = game.challengeAnswers.enumerated().compactMap { (index, value) -> Int? in
             return value.rawValue > 1 ? index : nil
         }
+        // 初回0をSet
+        if game.challengers == [] {
+            // ChallengeFlgのSet(Overしたら1にする)[[0,0],[2,0],[3,0]]
+            game.challengers = challengeplayers.map { [$0, 0] }
+        }
         log("Challenge参加者：　\(challengeplayers)")
 
-        // TODO: Challengerがdtnkerのみだったらアナウンス＋スコアへ
-        if challengeplayers.isEmpty {
-            game.gamePhase = .decisionrate_pre
-            return
-        }
         // 次のIndexを決める 3
-        let nextChallenger = getNextChallenger(nowIndex: dtnkIndex, players: challengeplayers)
+        let nextChallenger = GameMainController().getNextChallenger(nowIndex: dtnkIndex, participants: game.challengers)
         let dtnkCardNumber = game.table.last?.number()
         // nextChallengerIndexSet
-        fbms.setNextChallengerIndex(nextChallengerIndex: nextChallenger!) { result in
-            if result {
-                // 手札とどてんこカードを比較して、行動する 3
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [self] in
-                    challengeIndex(challengerIndex: nextChallenger!, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+        if let nextChallenger = nextChallenger {
+            fbms.setNextChallengerIndex(nextChallengerIndex: nextChallenger) { result in
+                if result {
+                    // 手札とどてんこカードを比較して、行動する 3
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [self] in
+                        challengeIndex(challengerIndex: nextChallenger, dtnkCardNumber: dtnkCardNumber!, dtnkIndex: dtnkIndex, challengers: challengeplayers)
+                    }
+                } else {
+                    log("nextChallenger Set", level: .error)
                 }
-            } else {
-                log("nextChallenger Set", level: .error)
             }
+        } else {
+            // nextChallenger が nil の場合の処理
+            log("No next challenger available")
         }
-    }
-    
-    // 次のプレイヤーを返す
-    func getNextChallenger(nowIndex: Int, players: [Int]) -> Int? {
-        // targetのインデックスを見つけます。
-        guard let targetIndex = players.firstIndex(of: nowIndex) else {
-            return nil
-        }
-        // 次のインデックスを計算します。
-        let nextIndex = (targetIndex + 1) % players.count
-        // 新しいインデックスのプレイヤーを返します。
-        return players[nextIndex]
     }
     
     // 手札の合計を返す
@@ -172,6 +165,8 @@ class GameObserber {
     // 指定したIndexがどてんこカードより大きくなるまで引く
     func challengeIndex(challengerIndex: Int, dtnkCardNumber: Int, dtnkIndex: Int, challengers: [Int]) {
         log("\(challengerIndex) のチャレンジです")
+        log("\(game.challengers)")
+
         // 自分がdtnkIndexだったら終了
         if challengerIndex == dtnkIndex {
             log("end challengerIndex: \(challengerIndex)  dtnkIndex: \(dtnkIndex)")
@@ -211,9 +206,12 @@ class GameObserber {
         // 終了(最小値がダメだった場合) 次の人へ
         if (minimun > dtnkCardNumber) {
             log("\(challengerIndex): のチャレンジ　　オーバーした")
+            // Flg ON
+            game.challengers = GameMainController().updateParticipantFlag(Index: challengerIndex, challengers: game.challengers)
+
             // overしたら次の人へ
-            let nextChallenger = getNextChallenger(nowIndex: challengerIndex, players: challengers)
-            
+            let nextChallenger = GameMainController().getNextChallenger(nowIndex: challengerIndex, participants: game.challengers)
+
             // 次がdtnkIndexだったら終了
             if nextChallenger == dtnkIndex {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [self] in
@@ -486,9 +484,6 @@ class GameObserber {
     
     // ゲームデータ削除
     func deleteGamedata(completion: @escaping (Bool) -> Void) {
-//        guard checkHost() else {
-//            return
-//        }
         fbms.deleteGamedata(roomID: appState.room.roomData.roomID) { result in
             if result {
                 completion(true)

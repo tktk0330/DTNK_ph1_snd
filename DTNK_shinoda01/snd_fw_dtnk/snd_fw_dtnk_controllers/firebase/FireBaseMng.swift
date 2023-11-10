@@ -308,19 +308,36 @@ class FirebaseManager {
      */
     func setDTNKInfo(Index: Int, dtnkPlayer: Player_f, completion: @escaping (Bool) -> Void) {
         let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
-        let playersJSON = cjm.player_fJSON(player: dtnkPlayer)
-        let valuesToUpdate: [String: Any] = [
-            "dtnkPlayerIndex": Index,
-            "dtnkPlayer": playersJSON,
-        ]
-        gameInfoRef.updateChildValues(valuesToUpdate) { error, _ in
+
+        gameInfoRef.runTransactionBlock({ [self] (currentData: MutableData) -> TransactionResult in
+            var value = currentData.value as? [String: Any] ?? [:]
+            let currentDtnkPlayerIndex = value["dtnkPlayerIndex"] as? Int
+            let currentDtnkPlayer = value["dtnkPlayer"] as? [String: Any]
+            
+            let newDtnkPlayer = cjm.player_fJSON(player: dtnkPlayer)
+            
+            // Check if the current player and index are different from the new ones.
+            if currentDtnkPlayerIndex != Index || !NSDictionary(dictionary: currentDtnkPlayer ?? [:]).isEqual(to: newDtnkPlayer) {
+                value["dtnkPlayerIndex"] = Index
+                value["dtnkPlayer"] = newDtnkPlayer
+                
+                // Set the value to the current data.
+                currentData.value = value
+                
+                return TransactionResult.success(withValue: currentData)
+            }
+            
+            // If nothing changed, Firebase will ignore the transaction.
+            return TransactionResult.success(withValue: currentData)
+        }, andCompletionBlock: { error, committed, snapshot in
             if let error = error {
-                log("Failed to update DTNK info: \(error.localizedDescription)", level: .error)
+                // Handle the error
+                print("Error: \(error.localizedDescription)")
                 completion(false)
             } else {
                 completion(true)
             }
-        }
+        })
     }
     /**
      DTNKInfoの取得（リアルタイム） Index  Player
@@ -575,7 +592,7 @@ class FirebaseManager {
         let nextGameAnnounsRef = gameInfoRef.child("nextGameAnnouns")
         nextGameAnnounsRef.observe(.value) { (snapshot) in
             guard let rawValues = snapshot.value as? [Int] else {
-                print("Could not cast snapshot value to [Int]")
+                log("Could not cast snapshot value to [Int]")
                 return
             }
             let answers = rawValues.compactMap { NextGameAnnouns(rawValue: $0) }

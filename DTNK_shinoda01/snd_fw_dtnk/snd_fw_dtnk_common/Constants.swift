@@ -16,7 +16,7 @@ struct Constants {
     static let lifeMax: Int = 5
         
     // MARK: - cardFaceUp
-    static let cardFaceUp: Bool = false
+    static let cardFaceUp: Bool = true
     
     // MARK: - screenWidth
     static let scrWidth = UIScreen.main.bounds.width

@@ -38,6 +38,12 @@ enum ImageName {
         case arrow = "result-arrow-lg"
     }
     
+    enum Game: String {
+        case cross = "cross"
+        case arrowUp = "arrowUp"
+        case arrowDown = "arrowDown"
+    }
+    
     enum Setting: String {
         case gameNum = "setting-gamenum"
         case gameJorker = "setting-jorker"
@@ -52,7 +58,6 @@ enum ImageName {
         case se = "option-se"
         case vibration = "option-vibration"
         case camera = "camera"
-
     }
 
     enum Card: String {

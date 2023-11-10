@@ -95,7 +95,6 @@
 		5D8FA2FD2A4827100079F260 /* MatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA2FC2A4827100079F260 /* MatchingView.swift */; };
 		5D8FA3042A4827860079F260 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA3032A4827860079F260 /* CardView.swift */; };
 		5D8FA3082A4827AA0079F260 /* DTNKView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA3072A4827AA0079F260 /* DTNKView.swift */; };
-		5D8FA30A2A4827B90079F260 /* EffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA3092A4827B90079F260 /* EffectView.swift */; };
 		5D8FA3122A48280F0079F260 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA3112A48280F0079F260 /* HeaderView.swift */; };
 		5D8FA3162A48282E0079F260 /* RateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA3152A48282E0079F260 /* RateView.swift */; };
 		5D8FA31A2A4828670079F260 /* DecisionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8FA3192A4828670079F260 /* DecisionView.swift */; };
@@ -129,6 +128,7 @@
 		5DB1E7EF2AF50C6A00E96E17 /* revengeInMain.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */; };
 		5DB1E7F12AF50C7000E96E17 /* revengeInChallenge.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */; };
 		5DB1E8102AF9306A00E96E17 /* GameErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1E80F2AF9306A00E96E17 /* GameErrorMessageView.swift */; };
+		5DB1E8122AFDAD3800E96E17 /* ChallengeOverIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1E8112AFDAD3800E96E17 /* ChallengeOverIconView.swift */; };
 		5DB5B5A52AD3BD9000AEE412 /* MatchingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */; };
 		5DB5B5A82AD99E5400AEE412 /* burst01.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5DB5B5A72AD99E5400AEE412 /* burst01.gif */; };
 		5DB5B5AC2ADA413C00AEE412 /* GifMng.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */; };
@@ -258,7 +258,6 @@
 		5D8FA2FC2A4827100079F260 /* MatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingView.swift; sourceTree = "<group>"; };
 		5D8FA3032A4827860079F260 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		5D8FA3072A4827AA0079F260 /* DTNKView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTNKView.swift; sourceTree = "<group>"; };
-		5D8FA3092A4827B90079F260 /* EffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectView.swift; sourceTree = "<group>"; };
 		5D8FA3112A48280F0079F260 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		5D8FA3152A48282E0079F260 /* RateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateView.swift; sourceTree = "<group>"; };
 		5D8FA3192A4828670079F260 /* DecisionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionView.swift; sourceTree = "<group>"; };
@@ -292,6 +291,7 @@
 		5DB1E7EE2AF50C6A00E96E17 /* revengeInMain.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = revengeInMain.wav; sourceTree = "<group>"; };
 		5DB1E7F02AF50C7000E96E17 /* revengeInChallenge.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = revengeInChallenge.wav; sourceTree = "<group>"; };
 		5DB1E80F2AF9306A00E96E17 /* GameErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameErrorMessageView.swift; sourceTree = "<group>"; };
+		5DB1E8112AFDAD3800E96E17 /* ChallengeOverIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeOverIconView.swift; sourceTree = "<group>"; };
 		5DB5B5A42AD3BD9000AEE412 /* MatchingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingModeView.swift; sourceTree = "<group>"; };
 		5DB5B5A72AD99E5400AEE412 /* burst01.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = burst01.gif; sourceTree = "<group>"; };
 		5DB5B5AB2ADA413C00AEE412 /* GifMng.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifMng.swift; sourceTree = "<group>"; };
@@ -628,6 +628,7 @@
 			children = (
 				5D8FA2C72A4824510079F260 /* AnnounceLabel.swift */,
 				5D51C0822A7F34E900E59A69 /* ChallengeMovingView.swift */,
+				5DB1E8112AFDAD3800E96E17 /* ChallengeOverIconView.swift */,
 				5D8FA2C92A4824780079F260 /* ChallengePopView.swift */,
 				5D8FA2CB2A48248B0079F260 /* Countdown.swift */,
 				5D8FA2CD2A4824A30079F260 /* Figure.swift */,
@@ -736,7 +737,6 @@
 				CA5C5DF12A794497006D7C01 /* BurstView.swift */,
 				5D8FA3032A4827860079F260 /* CardView.swift */,
 				5D8FA3072A4827AA0079F260 /* DTNKView.swift */,
-				5D8FA3092A4827B90079F260 /* EffectView.swift */,
 				5D8FA3112A48280F0079F260 /* HeaderView.swift */,
 				5D8FA3152A48282E0079F260 /* RateView.swift */,
 				5DC02E5D2AC16564009E84A5 /* ScoreBarView.swift */,
@@ -1014,7 +1014,6 @@
 				5D8FA2622A481C740079F260 /* StringExtension.swift in Sources */,
 				5D8FA31C2A48287B0079F260 /* ResultView.swift in Sources */,
 				5D8FA2722A481DB50079F260 /* NaviWindow.swift in Sources */,
-				5D8FA30A2A4827B90079F260 /* EffectView.swift in Sources */,
 				5DC02E642AC16A6C009E84A5 /* PlayerCardsCountView.swift in Sources */,
 				CA5C5DF82A794E21006D7C01 /* BurstCoutionViewswift.swift in Sources */,
 				5D8FA31E2A48288A0079F260 /* ScoreItem.swift in Sources */,
@@ -1080,6 +1079,7 @@
 				5D8FA2DE2A4825570079F260 /* Vibrate.swift in Sources */,
 				5D8FA2B82A4823660079F260 /* GamePhase.swift in Sources */,
 				5D8FA2A62A48219A0079F260 /* HomeState.swift in Sources */,
+				5DB1E8122AFDAD3800E96E17 /* ChallengeOverIconView.swift in Sources */,
 				5D8FA2692A481D100079F260 /* ShineColor.swift in Sources */,
 				5D8FA27E2A481E600079F260 /* LoadingState.swift in Sources */,
 				5DC02E6F2AC1B5EC009E84A5 /* GameHelpView.swift in Sources */,

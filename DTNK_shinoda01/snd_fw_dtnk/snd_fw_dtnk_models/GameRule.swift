@@ -124,11 +124,6 @@ struct GameRule {
         ]
     }
     
-    static var initialgameStep:  GameStep {
-        return .dealcard
-    }
-    
-    
     static var initialplayers: [Player] {
         
         var players: [Player] = []

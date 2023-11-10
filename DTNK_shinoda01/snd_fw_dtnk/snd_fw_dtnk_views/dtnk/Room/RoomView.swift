@@ -136,6 +136,8 @@ struct RoomView: View {
      */
     func onTapSearch() {
         
+        hideKeyboard()
+        
         guard validateText(text) else {
             return // バリデーションエラーがある場合は処理を終了
         }
