@@ -927,7 +927,7 @@ class GameBotController {
      どてんこできるか
      手札合計が一致していればどてんこ可能
      自分が出したカードに対してだったらリベンジ可能
-     ？？？だったらしょてんこ可能
+     誰も出してないならしょてんこ可能
      */
     func dtnkJudge(myside: Int, playerAllCards: [CardId], table: [CardId]) -> Int {
         var dtnkjudge = false

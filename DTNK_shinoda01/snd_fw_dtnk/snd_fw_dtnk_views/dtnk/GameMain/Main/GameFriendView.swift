@@ -255,9 +255,6 @@ struct GameFriendView: View {
         // 初期回答
         fbms.observeFirstAnswers() { firstAnswers in
             game.firstAnswers = firstAnswers
-            if firstAnswers.allSatisfy({ $0 != .initial }) {
-                gameObserber.firstAnswers()
-            }
         }
         // challengeAnswers
         fbms.observeChallengeAnswer() { challengeAnswers in

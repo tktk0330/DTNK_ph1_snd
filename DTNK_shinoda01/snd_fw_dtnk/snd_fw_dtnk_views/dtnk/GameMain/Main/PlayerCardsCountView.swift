@@ -9,7 +9,7 @@ struct PlayerCardsCountView: View {
     var geo: GeometryProxy
 
     var body: some View {
-        if game.gamePhase != .challenge {
+        if game.gamePhase != .challenge && game.gamePhase != .endChallenge && game.gamePhase != .decisionrate_pre && game.gamePhase != .decisionrate {
             ForEach(0..<4) { index in
                 CardsCountView(cardsCount: game.players[(myside + index) % game.players.count].hand.count)
                     .position(

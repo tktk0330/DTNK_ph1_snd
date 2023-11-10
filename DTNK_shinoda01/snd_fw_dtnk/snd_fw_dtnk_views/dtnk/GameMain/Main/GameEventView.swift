@@ -1,5 +1,6 @@
 
 
+
 import SwiftUI
 
 struct GameEventView: View {
@@ -13,7 +14,15 @@ struct GameEventView: View {
         // ゲーム数アナウンス
         if game.gamePhase == .dealcard {
             GmaeNumAnnounce(gameNum: game.gameNum, gameTarget: game.gameTarget)
-                .position(x: UIScreen.main.bounds.width / 2, y:  geo.size.height / 2)
+                .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+        }
+        // 誰も出せなかった時アナウンス
+        if game.gamePhase == .gamefirst_sub {
+            NothingPlayerAnnounce()
+                .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
+        } else if game.gamePhase == .main && game.lastPlayerIndex == Constants.stnkCode {
+            NothingPlayerAnnounce()
+                .position(x: Constants.scrWidth * 0.50, y:  geo.size.height / 2)
         }
         // 開始ボタン
         if game.startFlag && !game.AnnounceFlg && (appState.room.roomData.hostID == game.players[myside].id || game.gamevsInfo == .vsBot ) {

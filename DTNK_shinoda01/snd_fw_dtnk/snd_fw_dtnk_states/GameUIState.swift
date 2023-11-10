@@ -57,13 +57,14 @@ class GameUIState: ObservableObject {
         didSet {
             if gamevsInfo == .vsBot && firstAnswers.allSatisfy({ $0 == FirstAnswers.pass }) {
                 judgeFirstPlayer()
+            } else if  gamevsInfo == .vsFriend && firstAnswers.allSatisfy({ $0 != .initial }) {
+                GameObserber(hostID: appState.room.roomData.hostID).firstAnswers()
             }
         }
     }
     // チャレンジ通知
     @Published var challengeAnswers: [ChallengeAnswer] = Array(repeating: ChallengeAnswer.initial, count: 4) {
         didSet {
-            print("\(challengeAnswers)")
             if challengeAnswers.allSatisfy({ $0 != ChallengeAnswer.initial }) {
                 if gamevsInfo == .vsBot {
                     // BOT
@@ -220,7 +221,6 @@ class GameUIState: ObservableObject {
             case .dealcard:
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
                     GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { result in
-//                        startFlag = true
                     }
                     startFlag = true
                 }
