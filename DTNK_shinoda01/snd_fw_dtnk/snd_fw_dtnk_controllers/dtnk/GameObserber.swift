@@ -129,6 +129,11 @@ class GameObserber {
         if game.challengers == [] {
             // ChallengeFlgのSet(Overしたら1にする)[[0,0],[2,0],[3,0]]
             game.challengers = challengeplayers.map { [$0, 0] }
+            fbms.setChallengers(challengers: game.challengers) { result in
+                if result {
+                    
+                }
+            }
         }
         log("Challenge参加者：　\(challengeplayers)")
 
@@ -208,7 +213,12 @@ class GameObserber {
             log("\(challengerIndex): のチャレンジ　　オーバーした")
             // Flg ON
             game.challengers = GameMainController().updateParticipantFlag(Index: challengerIndex, challengers: game.challengers)
-
+            fbms.setChallengers(challengers: game.challengers) { result in
+                if result {
+                    
+                }
+            }
+            
             // overしたら次の人へ
             let nextChallenger = GameMainController().getNextChallenger(nowIndex: challengerIndex, participants: game.challengers)
 

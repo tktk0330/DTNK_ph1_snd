@@ -43,10 +43,33 @@ struct OtherPlayerIcon: View {
     let playerIndex: Int
     var imageName: String
 
+    // challengedできるか
+    @State private var showIcon = false
+    var challengeCondition: Bool {
+        (game.gamePhase == .challenge || game.gamePhase == .endChallenge || game.gamePhase == .decisionrate_pre || game.gamePhase == .decisionrate || game.gamePhase == .revengeInChallenge) &&
+        (game.challengeAnswers[playerIndex] == .nochallenge || GameMainController().checkIfParticipantFlagIsOne(Index: playerIndex, challengers: game.challengers))
+    }
+
     var body: some View {
         ZStack {
             
             IconView(iconURL: imageName, size: 50)
+            
+            ZStack {
+                if showIcon {
+                    ChallengeOverIconView()
+                }
+            }
+            .onChange(of: challengeCondition) { newValue in
+                if newValue {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        showIcon = true
+                    }
+                } else {
+                    showIcon = false
+                }
+            }
+            
             
             if game.dtnkPlayerIndex == playerIndex {
                 Text("DOTENKO")

@@ -572,6 +572,37 @@ class FirebaseManager {
     }
 
     /**
+     Challengersrのセット
+     */
+    func setChallengers(challengers: [[Int]], completion: @escaping (Bool) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        gameInfoRef.child("challengers").setValue(challengers) { error, _ in
+            if let error = error {
+                log("Failed: \(error.localizedDescription)", level: .error)
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    /**
+     Challengersrの取得（リアルタイム）
+     */
+    func observeChallengers(completion: @escaping ([[Int]]) -> Void) {
+        let gameInfoRef = database.reference().child("rooms").child(roomID).child("gameInfo").child(gameID)
+        let challengersRef = gameInfoRef.child("challengers")
+        challengersRef.observe(.value) { (snapshot) in
+            guard let rawValues = snapshot.value as? [[Int]] else {
+                log("Could not cast snapshot value to [[Int]]")
+                return
+            }
+            completion(rawValues)
+        }
+    }
+
+
+    
+    /**
      NextGameAnnounsのセット
      */
     func setNextGameAnnouns(index: Int, answer: NextGameAnnouns, completion: @escaping (Bool) -> Void) {
@@ -637,7 +668,7 @@ class FirebaseManager {
 
         winnersRef.observe(.value) { (winnersSnapshot) in
             guard let winnersDatas = winnersSnapshot.value as? [[String: Any]] else {
-//                print("Error getting winnersRef")
+                log("Error getting winnersRef", level: .error)
                 return
             }
             winners = winnersDatas.compactMap { data in
@@ -652,8 +683,7 @@ class FirebaseManager {
 
             losersRef.observe(.value) { (losersSnapshot) in
                 guard let losersDatas = losersSnapshot.value as? [[String: Any]] else {
-                    // TODO: ここ通るけど取得はできてそう
-//                    print("Error getting losersRef \(losersSnapshot)")
+                    log("Error getting losersRef \(losersSnapshot)", level: .error)
                     return
                 }
                 losers = losersDatas.compactMap { data in
@@ -813,6 +843,7 @@ class FirebaseManager {
             "dtnkPlayerIndex": item.dtnkPlayerIndex,
             "firstAnswers": item.firstAnswers,
             "challengeAnswer": item.challengeAnswers,
+            "challengers": item.challengers,
             "nextGameAnnouns": item.nextGameAnnouns,
             "ascendingRate": item.ascendingRate,
             "decisionScoreCards": item.decisionScoreCards,

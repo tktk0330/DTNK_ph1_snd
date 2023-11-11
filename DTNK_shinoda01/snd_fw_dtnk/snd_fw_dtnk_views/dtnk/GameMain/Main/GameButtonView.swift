@@ -1,9 +1,5 @@
 // GameButtonGroupView.swift
 
-//if game.gamevsInfo == .vsBot {
-//} else {
-//}
-//
 
 import SwiftUI
 

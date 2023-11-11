@@ -20,6 +20,8 @@ enum ImageName {
     
     enum Top: String {
         case topicon = "top_icon01"
+        case coin = "coin-2"
+
     }
     
     enum Home: String {

@@ -83,6 +83,8 @@ struct GameResetItem {
     var firstAnswers = Array(repeating: FirstAnswers.initial.rawValue, count: 4)
     // チャレンジプレーヤー
     var challengeAnswers = Array(repeating: ChallengeAnswer.initial.rawValue, count: 4)
+    // チャレンジャーの結果
+    var challengers: [[Int]] = []
     // 次のゲーム行けるか
     var nextGameAnnouns = Array(repeating: NextGameAnnouns.initial.rawValue, count: 4)
     // 勝者

@@ -1,5 +1,6 @@
-
-
+/**
+ NoChallenge Over の人にはアイコン付与
+ */
 
 import SwiftUI
 
@@ -8,8 +9,8 @@ struct ChallengeOverIconView: View {
         Image(ImageName.Game.cross.rawValue)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 50)
-            .padding(20)
+            .frame(width: 30)
+            .padding(10)
             .background(Circle()
                             .fill(Color.blue))
     }

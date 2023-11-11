@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct PlayerCardsCountView: View {
-    @ObservedObject var game: GameUIState // あなたのゲームの型に変更してください
+    @ObservedObject var game: GameUIState
     var myside: Int
     var geo: GeometryProxy
 

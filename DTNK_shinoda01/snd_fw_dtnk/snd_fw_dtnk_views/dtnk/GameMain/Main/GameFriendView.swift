@@ -286,6 +286,10 @@ struct GameFriendView: View {
         fbms.observeAscendingRate() { rate in
             game.ascendingRate = rate!
         }
+        fbms.observeChallengers() { challengers in
+            game.challengers = challengers
+        }
+
         RoomFirebaseManager.shared.observeMatchingFlg(roomID: room.roomData.roomID) { result in
             if result == 2 {
                 // 誰かが退出したのでゲームを終了する
