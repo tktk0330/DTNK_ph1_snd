@@ -68,6 +68,21 @@ struct RuleScreen: View {
                         CustomDivider()
                     }
                 }
+                
+                // section 3
+                Text("  その他")
+                    .font(.custom(FontName.MP_Bl, size: 20))
+                    .foregroundColor(Color.white)
+                    .frame(width: Constants.scrWidth, height: Constants.scrHeight * 0.06, alignment: .leading)
+                    .background(Color.white.opacity(0.3))
+
+                ForEach(helpInfo.indices, id: \.self) { index in
+                    InfoListView(info: helpInfo[index])
+                    if index < helpInfo.count - 1 {
+                        CustomDivider()
+                    }
+                }
+
                 CustomDivider()
             }
         }
@@ -156,20 +171,6 @@ struct InfoListView: View {
         }
     }
 }
-
-//struct Info: Identifiable {
-//    let id = UUID()
-//    let title: String
-//    let details: String
-//    let imageNames: [String] // 画像ファイル名の配列
-//}
-//
-//struct Rule: Identifiable {
-//    let id = UUID()
-//    let title: String
-//    let details: String
-//    let imageNames: [String] // 画像ファイル名の配列
-//}
 
 struct RuleDetail: Identifiable {
     let id = UUID()
@@ -387,7 +388,31 @@ let optionInfo = [
                 """),
                 ]
                ),
-    ]
+]
+
+
+let helpInfo = [
+    RuleDetail(title: "お問い合わせ",
+               details: [
+                .text("""
+                    ご質問・不具合報告は下記よりお願いいたします。
+                
+                """),
+                .customView(AnyView(MainUnitView())),
+                ]
+               ),
+    RuleDetail(title: "レビュー",
+               details: [
+                .text("""
+                    よろしければ評価・ご意見・感想等をお願いいたします。今後の参考にさせていただきます。
+                
+                """),
+                .customView(AnyView(ReviewView())),
+                ]
+               ),
+
+
+]
 
 struct BorderedListView<Content: View>: View {
     let content: Content

@@ -146,6 +146,8 @@
 		5DC02E6D2AC17937009E84A5 /* CommonModifire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC02E6C2AC17937009E84A5 /* CommonModifire.swift */; };
 		5DC02E6F2AC1B5EC009E84A5 /* GameHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC02E6E2AC1B5EC009E84A5 /* GameHelpView.swift */; };
 		5DC02E722AC7F86D009E84A5 /* SelectJoinTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC02E712AC7F86D009E84A5 /* SelectJoinTypeView.swift */; };
+		5DC2ABB82B00A6750044C17C /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2ABB72B00A6750044C17C /* MailView.swift */; };
+		5DC2ABBA2B00AE320044C17C /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2ABB92B00AE320044C17C /* ReviewView.swift */; };
 		5DCD27BC2A86591100778980 /* ChallengeAnswerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */; };
 		5DCD27C02A8D0DAA00778980 /* GameCommonFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */; };
 		5DCD27C22A8E4E6800778980 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD27C12A8E4E6800778980 /* WaitingView.swift */; };
@@ -309,6 +311,8 @@
 		5DC02E6C2AC17937009E84A5 /* CommonModifire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonModifire.swift; sourceTree = "<group>"; };
 		5DC02E6E2AC1B5EC009E84A5 /* GameHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHelpView.swift; sourceTree = "<group>"; };
 		5DC02E712AC7F86D009E84A5 /* SelectJoinTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectJoinTypeView.swift; sourceTree = "<group>"; };
+		5DC2ABB72B00A6750044C17C /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
+		5DC2ABB92B00AE320044C17C /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		5DCD27BB2A86591100778980 /* ChallengeAnswerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeAnswerModel.swift; sourceTree = "<group>"; };
 		5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCommonFunctions.swift; sourceTree = "<group>"; };
 		5DCD27C12A8E4E6800778980 /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
@@ -484,9 +488,11 @@
 				5D8FA2C52A48243E0079F260 /* AnimationReader.swift */,
 				5DCD27C82A9B6C1700778980 /* Constants.swift */,
 				5DCD27BF2A8D0DAA00778980 /* GameCommonFunctions.swift */,
-				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
+				5DC2ABB72B00A6750044C17C /* MailView.swift */,
 				5D30DE8A2ACEEC0F00AA2909 /* NetworkMng.swift */,
 				5DE3DEB32AD0361C0072182E /* NetworkWaitingView.swift */,
+				5D8FA2DD2A4825570079F260 /* Vibrate.swift */,
+				5DC2ABB92B00AE320044C17C /* ReviewView.swift */,
 			);
 			path = snd_fw_dtnk_common;
 			sourceTree = "<group>";
@@ -1043,6 +1049,7 @@
 				5D8FA2862A481FA50079F260 /* FireBaseMng.swift in Sources */,
 				5DC02E6D2AC17937009E84A5 /* CommonModifire.swift in Sources */,
 				5D8FA2CA2A4824780079F260 /* ChallengePopView.swift in Sources */,
+				5DC2ABBA2B00AE320044C17C /* ReviewView.swift in Sources */,
 				5D8FA2CE2A4824A30079F260 /* Figure.swift in Sources */,
 				5D30DE8B2ACEEC0F00AA2909 /* NetworkMng.swift in Sources */,
 				5D8FA2EC2A4826360079F260 /* HomeView.swift in Sources */,
@@ -1090,6 +1097,7 @@
 				5DC02E622AC1674E009E84A5 /* CardPoolView.swift in Sources */,
 				5DCD27CB2A9C022D00778980 /* Log.swift in Sources */,
 				5D8FA3082A4827AA0079F260 /* DTNKView.swift in Sources */,
+				5DC2ABB82B00A6750044C17C /* MailView.swift in Sources */,
 				5D8FA2A82A4821A90079F260 /* MatchingState.swift in Sources */,
 				5D8FA2922A4820AC0079F260 /* HomeController.swift in Sources */,
 				5D8FA3242A4829100079F260 /* GameRule.swift in Sources */,
@@ -1263,7 +1271,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DTNK-shinoda01-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = DOTENKO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1296,7 +1304,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DTNK-shinoda01-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_CFBundleDisplayName = DOTENKO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

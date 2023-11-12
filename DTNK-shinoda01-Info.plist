@@ -2,11 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
-	<key>CFBundleIdentifier</key>
+	<key>CFBundleGetInfoString</key>
 	<string></string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~1458002511</string>
@@ -20,6 +16,10 @@ SKAdNetworkIdentifier</key>
 		<string>MPLUS1p-Black.ttf</string>
 		<string>DS-DIGIB.TTF</string>
 		<string>AlfaSlabOne-Regular.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
 	</array>
 </dict>
 </plist>
