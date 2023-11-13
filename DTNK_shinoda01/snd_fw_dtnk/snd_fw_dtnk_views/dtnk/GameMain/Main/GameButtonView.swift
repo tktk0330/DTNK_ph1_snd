@@ -100,11 +100,11 @@ struct GameButtonView: View {
                 // MyIcon
                 Button(action: {
                     // TODO: test
-                    if game.gamevsInfo == .vsBot {
-                        GameBotController().playerDtnk(Index: myside)
-                    } else {
-                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
-                    }
+//                    if game.gamevsInfo == .vsBot {
+//                        GameBotController().playerDtnk(Index: myside)
+//                    } else {
+//                        GameFriendEventController().playerDtnk(Index: myside, dtnkPlayer: game.players[myside])
+//                    }
                 }) {
                     ZStack{
                         

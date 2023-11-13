@@ -387,7 +387,7 @@ class GameObserber {
         game.winners.removeAll()
         game.losers.removeAll()
         // 勝者・敗者を決める
-        if game.currentPlayerIndex == Constants.stnkCode || game.lastPlayerIndex == Constants.stnkCode {
+        if game.lastPlayerIndex == Constants.stnkCode {
             // しょてんこの場合
             let winner = game.players[game.dtnkPlayerIndex]
             game.winners.append(winner)

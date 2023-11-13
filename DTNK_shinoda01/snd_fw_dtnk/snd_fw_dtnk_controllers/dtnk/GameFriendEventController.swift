@@ -79,7 +79,7 @@ struct GameFriendEventController {
             completion(false, "初期配置中です")
             return
         }
-        if GameBotController().checkMultipleCards(table: game.table.last!, playCard: cardIds) {
+        if GameBotController().checkMultipleCards(table: game.table.last!, playCard: cardIds, classification: Constants.classificationPlayer) {
             fbms.playCards(playerIndex: passPayerIndex, playerID: playerID, baseselectedCards: selectCrads) { result in
                 if result {
                     log("\(passPayerIndex): Play")

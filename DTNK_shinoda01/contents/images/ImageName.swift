@@ -12,6 +12,7 @@ enum ImageName {
         case setting = "setting"
         case dtnkBtn = "dotenkoOFF"
         case stnkBtn = "shotenkoOFF"
+        case horo = "horo"
     }
     
     enum Splash: String {

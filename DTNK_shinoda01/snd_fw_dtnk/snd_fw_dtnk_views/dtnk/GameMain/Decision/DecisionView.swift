@@ -237,14 +237,28 @@ struct DecisionCardsViewUnit: View {
     let degree: Double
     let width: Double
     
+    @State private var isShining = false
+
     var body: some View {
 
         Flip(degree: degree,
-             front:
-                Image(card.imageName())
+             front: ZStack {
+            Image(card.imageName())
                 .resizable()
                 .matchedGeometryEffect(id: card.id, in: namespace)
-                .aspectRatio(contentMode: .fit),
+                .aspectRatio(contentMode: .fit)
+            // ジョーカーの場合、キラキラする画像を追加
+            if card.suit() == .all {
+                Image("horo01") // キラキラする画像
+                    .resizable()
+                    .matchedGeometryEffect(id: card.id, in: namespace)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: width, height: width * 1.5)
+                    .opacity(isShining ? 0.6 : 0.1)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .animation(Animation.easeInOut(duration: 1.3).repeatForever(autoreverses: true), value: isShining)
+            }
+        },
              back:
                 Image(ImageName.Card.back.rawValue)
                 .resizable()

@@ -75,7 +75,7 @@ struct GameMainController {
     // チャレンジモード関連以外か
     func judgeChallenge(gamePase: GamePhase) -> Bool {
         switch gamePase {
-        case .startChallenge, .challenge, .endChallenge, .revengeInMain, .revengeInChallenge, .q_challenge, .noChallenge, .decisionrate_pre, .decisionrate:
+        case .startChallenge, .challenge, .endChallenge, .revengeInMain, .revengeInChallenge, .q_challenge, .noChallenge, .decisionrate_pre, .decisionrate, .dtnk, .burst:
             return false
         default:
             return true
@@ -200,7 +200,7 @@ class GameBotController {
         
         // 出せるパターンに格納
         for cards in allPatern {
-            let result = checkMultipleCards(table: game.table.last!, playCard: cards)
+            let result = checkMultipleCards(table: game.table.last!, playCard: cards, classification: Constants.classificationBot)
             if result {
                 playCards.append(cards)
             }
@@ -337,7 +337,7 @@ class GameBotController {
                         
                         let allPatern = generateAllCombinations(cards: game.players[Index].hand)
                         for cards in allPatern {
-                            let result = checkMultipleCards(table: game.table.last!, playCard: cards)
+                            let result = checkMultipleCards(table: game.table.last!, playCard: cards, classification: Constants.classificationBot)
                             if result {
                                 playCards.append(cards)
                             }
@@ -986,7 +986,7 @@ class GameBotController {
             return
         }
         
-        if checkMultipleCards(table: game.table.last!, playCard: cards) {
+        if checkMultipleCards(table: game.table.last!, playCard: cards, classification: Constants.classificationPlayer) {
             if game.gamePhase != .main {
                 game.gamePhase = .main
             }
@@ -1181,13 +1181,20 @@ class GameBotController {
     }
     
     // カードが出せるか：単品
-    func checkSingleCard(table: CardId, playCard: CardId) -> Bool {
+    func checkSingleCard(table: CardId, playCard: CardId, classification: Int) -> Bool {
+        
         // 同じ数字　同じスート　どちらかがJorker
-        return playCard.number() == table.number() || playCard.suit() == table.suit() || table.suit() == .all
+        if classification == 0 {
+            // botはJorker単品出せないように
+            return playCard.number() == table.number() || playCard.suit() == table.suit() || table.suit() == .all
+        } else {
+            return playCard.number() == table.number() || playCard.suit() == table.suit() || playCard.suit() == .all || table.suit() == .all
+        }
     }
     
     // カードが出せるか：複数
-    func checkMultipleCards(table: CardId, playCard: [CardId]) -> Bool {
+    // classification 区分: 0 bot, 1 Player
+    func checkMultipleCards(table: CardId, playCard: [CardId], classification: Int) -> Bool {
         // 合計が一緒
         var sum: Bool = false
         let sumResult = calculatePossibleSums(cards: playCard)
@@ -1200,7 +1207,7 @@ class GameBotController {
         var same: Bool = false
         if playCard.count == 1 {
             // if single
-            single = checkSingleCard(table: table, playCard: playCard.first!)
+            single = checkSingleCard(table: table, playCard: playCard.first!, classification: classification)
             
         } else {
             // 手札が全部同じ数字かどうか

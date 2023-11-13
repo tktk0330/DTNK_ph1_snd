@@ -599,8 +599,6 @@ class FirebaseManager {
             completion(rawValues)
         }
     }
-
-
     
     /**
      NextGameAnnounsのセット

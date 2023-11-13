@@ -219,7 +219,7 @@ class GameUIState: ObservableObject {
         case .vsFriend:
             switch phase {
             case .dealcard:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
                     GameObserber(hostID: appState.room.roomData.hostID).dealFirst(players: players) { result in
                     }
                     startFlag = true

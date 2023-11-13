@@ -7,7 +7,7 @@ import SwiftUI
 struct Constants {
     
     // MARK: - logLevel
-    static let currentLogLevel: LogLevel = .info // 現在のログレベルを指定
+    static let currentLogLevel: LogLevel = .error // 現在のログレベルを指定
     
     // MARK: - lifeTime
     static let lifeTime: Int = 60
@@ -16,7 +16,7 @@ struct Constants {
     static let lifeMax: Int = 5
         
     // MARK: - cardFaceUp
-    static let cardFaceUp: Bool = true
+    static let cardFaceUp: Bool = false
     
     // MARK: - screenWidth
     static let scrWidth = UIScreen.main.bounds.width
@@ -62,5 +62,15 @@ struct Constants {
     
     // MARK: - AnnounceTime
     static let announceTime = 0
+    
+    /**
+     プレイヤー区分
+     */
+    // MARK: - Classification Bot
+    static let classificationBot = 0
+    
+    // MARK: - Classification Player
+    static let classificationPlayer = 1
+
 
 }

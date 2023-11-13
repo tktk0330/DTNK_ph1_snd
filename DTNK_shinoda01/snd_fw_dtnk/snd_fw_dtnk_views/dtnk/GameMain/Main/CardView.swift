@@ -50,7 +50,6 @@ struct noScaleCardView: View {
                 .aspectRatio(contentMode: .fit)
         )
         .frame(width: width)
-//        .animation(.easeInOut(duration: 0.5))
 
     }
 }
@@ -120,6 +119,8 @@ struct N_CardView: View {
     let location: CardLocation
     @Binding var selectedCards: [N_Card]
     
+    @State private var isShining = false
+
     // カードが表か裏かを示す変数（例）
     var isFaceUp: Bool {
         if appState.gameUIState.gamePhase == .challenge || appState.gameUIState.gamePhase == .endChallenge || isMyHandCard || location == .table {
@@ -132,9 +133,28 @@ struct N_CardView: View {
         ZStack {
             // 表のビュー
             if isFaceUp {
-                Image(card.id.imageName())
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                ZStack {
+                    Image(card.id.imageName())
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth,
+                               height: (isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth) * 1.5)
+                    
+                    // ジョーカーの場合、キラキラ
+                    if card.id.suit() == .all {
+                        Image(ImageName.Common.horo.rawValue)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth,
+                                   height: (isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth) * 1.5)
+                            .opacity(isShining ? 0.6 : 0.1)
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .animation(Animation.easeInOut(duration: 1.3).repeatForever(autoreverses: true), value: isShining)
+                            .onAppear {
+                                isShining.toggle()
+                            }
+                    }
+                }
             }
             // 裏のビュー
             else {
@@ -143,7 +163,8 @@ struct N_CardView: View {
                     .aspectRatio(contentMode: .fit)
             }
         }
-        .frame(width: isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth)
+        .frame(width: isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth,
+               height: (isMyHandCard ? Constants.myCardWidth : Constants.otherCardWidth) * 1.5)
         .rotationEffect(Angle(degrees: card.id.angle(for: location, total: card.id.total(for: card.location))))
         .offset(card.id.location(for: location, total: card.id.total(for: card.location))) // 'total'を引数として渡す
         .offset(y: selectedCards.contains(card) ? -20 : 0)
